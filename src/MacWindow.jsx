@@ -5,7 +5,7 @@ import window from "./Assets/Window.svg";
 
 const StyleContainer = Styled.div`
     position: absolute;
-
+    
     background: url(${window});
     background-repeat: no-repeat;
 
