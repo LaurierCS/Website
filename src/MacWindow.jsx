@@ -4,6 +4,9 @@ import window from "./Assets/Window.svg";
 
 
 const StyleContainer = Styled.div`
+    display: flex;
+    flex-direction: column;    
+
     position: absolute;
     
     background: url(${window});

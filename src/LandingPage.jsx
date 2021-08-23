@@ -88,8 +88,6 @@ const JoinButton = Styled.button`
 `;
 
 const Window = Styled(MacWindow)`
-    display: flex;
-    flex-direction: column;
 
 `;
 
