@@ -3,6 +3,8 @@ import Styled from 'styled-components';
 import logo from './Assets/LCS.png';
 import heroImg from './Assets/nerds.png';
 import MacWindow from './MacWindow';
+import FaqSVG from './FaqBackground';
+
 /*
 font-family: 'Karla', sans-serif;
 font-family: 'Rubik', sans-serif;
@@ -11,7 +13,7 @@ font-family: 'Rubik', sans-serif;
 // The highest parent div
 const RootDiv = Styled.div`
     background: black;
-
+    
 `;
 
 const HeaderDiv = Styled.div`
@@ -20,7 +22,6 @@ const HeaderDiv = Styled.div`
     width: 100%;
     justify-content: felx-start;
     align-items: center;
-
 
 `;
 
@@ -43,8 +44,13 @@ const HeroImage = Styled.img`
 
 `;
 
+const Faq = Styled.div`
+    width: 100%;
+    height: 60em;
+    z-index: 2;
 
-const FaqDiv = Styled.div``;
+    overflow: hidden;
+`;
 
 const TeamDiv = Styled.div``;
 
@@ -69,8 +75,8 @@ const Logo = Styled.img`
 
 // Join our discord button
 const JoinButton = Styled.button`
-    height: 4em;
-    width: 14em;
+    height:4em;
+    width: 12em;
     background: linear-gradient(90deg, #6CB3FF 0%, #89F7FE 100%);
     border-radius: 6px;
     margin-left: auto;
@@ -81,9 +87,39 @@ const JoinButton = Styled.button`
     font-weight: normal;
     font-size: 0.8em;
 
+    transition: transform 250ms;
+
     @media only screen and (max-width: 450px) {
         display: none;
     }
+
+    :hover {
+        transform: translateY(-5px);
+    }
+`;
+
+const HeroButton = Styled.button`
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 0.8em;
+    
+    margin-top: 3em;
+    margin-left: 2em;
+    margin-right: auto;
+    margin-bottom: 3em;
+
+    height:4em;
+    width: 12em;
+    background: linear-gradient(90deg, #6CB3FF 0%, #89F7FE 100%);
+    border-radius: 6px;
+
+    transition: transform 250ms;
+
+    :hover {
+        transform: translateY(-5px);
+    }
+
 `;
 
 const Window = Styled(MacWindow)`
@@ -95,18 +131,16 @@ const Window = Styled(MacWindow)`
     left: 10%;
 
     width: 50%;
-    height: 50%;
     min-width: 200px;
     
-    display: flex;
     display: flex;
     flex-direction: column; 
     align-items: center;
     z-index: 2;
 
-    @media only screen and (max-width: 450px) {
+    @media only screen and (max-width: 700px) {
         width: 85vw;
-        margin-top: 2em;
+        margin-top: 0;
         left: 0;
         right: 0;
         margin-left: auto;
@@ -118,7 +152,7 @@ const HeroTitle = Styled.h1`
     font-family: Rubik;
     font-style: normal;
     font-weight: 500;
-    font-size: clamp(1em, 5vw, 4em);
+    font-size: clamp(2em, 5vw, 4em);
 
     margin-top: 30px;
     margin-left: 0.5em;
@@ -141,14 +175,64 @@ const HeroSubTitle = Styled.p`
     font-family: "Karla";
     font-weight: 200;
     color: white;
-    font-size: clamp(0.3em, 3vw, 1.5em);
+    font-size: clamp(1em, 3vw, 1.5em);
 
     align-self: flex-start;
 `;
 
+const FaqBG = Styled(FaqSVG)`
+    position: absolute;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    margin-top: -100px;
+
+`;
+
+
+
+
+const FaqWindow = Styled(MacWindow)`
+
+    filter: drop-shadow(1px 10px 47px rgba(0, 0, 0, 0.8));
+
+    top: 55em;
+    left: 0;
+    right: 0;
+
+    margin-top: 5em;
+    margin-left: auto;
+    margin-right: auto;
+
+    width: 80%;
+    min-width: 200px;
+    
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    z-index: 2;
+
+    @media only screen and (max-width: 700px) {
+        width: 85vw;
+        margin-top: 0;
+        left: 0;
+        right: 0;
+    }
+`;
+
+const FAQTitle = Styled.h1`
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: 100;
+    font-size: clamp(2em, 5vw, 4em);
+    color: #C7DEF4;
+
+    margin-top: 30px;
+    margin-left: 0.5em;
+    margin-bottom: 0;
+`;
+
 export default function LandingPage() {
-
-
 
     return (
 
@@ -164,14 +248,18 @@ export default function LandingPage() {
                 <Window>
                     <HeroTitle>Interested in joining the Club?</HeroTitle>
                     <HeroSubTitle>Join our Discord for our official announcements about the school year, as well as stay up-to-date all things LCS.</HeroSubTitle>
+                    <HeroButton >Join</HeroButton>
                 </Window>
             </HeroDiv>
 
-            <FaqDiv>
-                <p>
-                    FAQ
-                </p>
-            </FaqDiv>
+            <Faq>
+                <FaqBG>
+                    <FaqWindow>
+                        <FAQTitle>Frequently Asked Questions</FAQTitle>
+
+                    </FaqWindow>
+                </FaqBG>
+            </Faq>
 
             <TeamDiv>
                 <p>
