@@ -18,6 +18,7 @@ const StyleContainer = Styled.div`
     align-items: center;
     z-index: 2;
 
+    min-width: 300px;
     width: ${(props) => props.width};
     height: ${(props) => props.height};
   `;

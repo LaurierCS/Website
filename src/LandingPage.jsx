@@ -91,6 +91,28 @@ const Window = Styled(MacWindow)`
     z-index: 1;
 `;
 
+const HeroTitle = Styled.h1`
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: 500;
+    font-size: clamp(1em, 8vw, 4em);
+
+    margin-bottom: auto;
+    margin-left: 0.5em;
+
+
+    background: linear-gradient(45deg, #6CB3FF, #89F7FE);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -moz-text-fill-color: transparent;
+    -webkit-text-fill-color: transparent;
+
+`;
+
+const HeroSubTitle = Styled.p`
+`;
+
 export default function LandingPage() {
 
 
@@ -107,7 +129,7 @@ export default function LandingPage() {
             <HeroDiv>
                 <HeroImage src={heroImg} />
                 <Window width={"50%"} height={"50%"}>
-                    <Title>tesing 123123123</Title>
+                    <HeroTitle>Interested in joining the Club?</HeroTitle>
                 </Window>
             </HeroDiv>
 
