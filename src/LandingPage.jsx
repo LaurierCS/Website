@@ -83,12 +83,35 @@ const JoinButton = Styled.button`
 
     @media only screen and (max-width: 450px) {
         display: none;
-
     }
 `;
 
 const Window = Styled(MacWindow)`
+    position: absolute;
+        
+    filter: drop-shadow(1px 10px 47px rgba(0, 0, 0, 0.8));
 
+    top: 10em;
+    left: 10%;
+
+    width: 50%;
+    height: 50%;
+    min-width: 200px;
+    
+    display: flex;
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    z-index: 2;
+
+    @media only screen and (max-width: 450px) {
+        width: 85vw;
+        margin-top: 2em;
+        left: 0;
+        right: 0;
+        margin-left: auto;
+        margin-right: auto;
+    }
 `;
 
 const HeroTitle = Styled.h1`
@@ -138,7 +161,7 @@ export default function LandingPage() {
 
             <HeroDiv>
                 <HeroImage src={heroImg} />
-                <Window width={"50%"} height={"50%"}>
+                <Window>
                     <HeroTitle>Interested in joining the Club?</HeroTitle>
                     <HeroSubTitle>Join our Discord for our official announcements about the school year, as well as stay up-to-date all things LCS.</HeroSubTitle>
                 </Window>
