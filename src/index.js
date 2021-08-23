@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
 
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import LandingPage from "./LandingPage";
