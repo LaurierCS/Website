@@ -1,7 +1,8 @@
 import React from 'react';
 import Styled from 'styled-components';
 import logo from './Assets/LCS.png';
-
+import heroImg from './Assets/nerds.png';
+import MacWindow from './MacWindow';
 /*
 font-family: 'Karla', sans-serif;
 font-family: 'Rubik', sans-serif;
@@ -9,12 +10,11 @@ font-family: 'Rubik', sans-serif;
 
 // The highest parent div
 const RootDiv = Styled.div`
-    background: white;
+    background: black;
 
 `;
 
 const HeaderDiv = Styled.div`
-    background: black;
     display: flex;
     height: 6em;
     width: 100%;
@@ -24,7 +24,25 @@ const HeaderDiv = Styled.div`
 
 `;
 
-const HeroDiv = Styled.div``;
+const HeroDiv = Styled.div`
+    width: 100%;
+    height calc(100% - 6em);
+    overflow: hidden;
+`;
+
+const HeroImage = Styled.img`
+    margin-left: 50%;
+    margin-top: 2em;
+    
+    max-height: 90%;
+    width: auto;
+
+    z-index: -1;
+    border-radius: 1em;
+    filter: blur(4px);
+
+`;
+
 
 const FaqDiv = Styled.div``;
 
@@ -69,7 +87,9 @@ const JoinButton = Styled.button`
     }
 `;
 
-
+const Window = Styled(MacWindow)`
+    z-index: 1;
+`;
 
 export default function LandingPage() {
 
@@ -83,7 +103,10 @@ export default function LandingPage() {
             </HeaderDiv>
 
             <HeroDiv>
-
+                <HeroImage src={heroImg} />
+                <Window>
+                    TODO - MAC WINDOW
+                </Window>
             </HeroDiv>
 
             <FaqDiv>
