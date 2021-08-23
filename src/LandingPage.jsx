@@ -93,6 +93,8 @@ const Window = Styled(MacWindow)`
 
 export default function LandingPage() {
 
+
+
     return (
 
         <RootDiv>
@@ -104,8 +106,8 @@ export default function LandingPage() {
 
             <HeroDiv>
                 <HeroImage src={heroImg} />
-                <Window>
-                    TODO - MAC WINDOW
+                <Window width={"50%"} height={"50%"}>
+                    <Title>tesing 123123123</Title>
                 </Window>
             </HeroDiv>
 
