@@ -4,6 +4,7 @@ import logo from './Assets/LCS.png';
 import heroImg from './Assets/nerds.png';
 import MacWindow from './MacWindow';
 import FaqSVG from './FaqBackground';
+import FaqDropdown from './FaqDropdown';
 
 /*
 font-family: 'Karla', sans-serif;
@@ -184,9 +185,11 @@ const FaqBG = Styled(FaqSVG)`
     position: absolute;
     z-index: 0;
     width: 100%;
-    height: 100%;
+    
+    padding-bottom: 4em;
     margin-top: -100px;
 
+    
 `;
 
 
@@ -199,6 +202,8 @@ const FaqWindow = Styled(MacWindow)`
     top: 55em;
     left: 0;
     right: 0;
+
+    padding-bottom: 2em;
 
     margin-top: 5em;
     margin-left: auto;
@@ -227,9 +232,16 @@ const FAQTitle = Styled.h1`
     font-size: clamp(2em, 5vw, 4em);
     color: #C7DEF4;
 
-    margin-top: 30px;
+    margin-top: 50px;
     margin-left: 0.5em;
-    margin-bottom: 0;
+    margin-bottom: 0.5em;
+`;
+
+
+const FaqListContainer = Styled.div`
+    width: 100%;
+    margin-left: 4em;
+
 `;
 
 export default function LandingPage() {
@@ -256,7 +268,13 @@ export default function LandingPage() {
                 <FaqBG>
                     <FaqWindow>
                         <FAQTitle>Frequently Asked Questions</FAQTitle>
-
+                        <FaqListContainer>
+                            <FaqDropdown question="Question number one?" answer="Answer here....." />
+                            <FaqDropdown question="Question number two?" answer="Answer here....." />
+                            <FaqDropdown question="Question number three?" answer="Answer here....." />
+                            <FaqDropdown question="Question number four?" answer="Answer here....." />
+                            <FaqDropdown question="Question number five?" answer="Answer here....." />
+                        </FaqListContainer>
                     </FaqWindow>
                 </FaqBG>
             </Faq>
