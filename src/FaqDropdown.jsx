@@ -13,14 +13,19 @@ const Question = Styled.h1`
     font-size: clamp(1em, 5vw, 2em);
     font-weight: 400;
     color: white;
+    transition: color 0.2s ease;
+
+    :hover{
+        color: #4CC082;
+        transition: color 0.2s ease;
+    }
 
     &.open{
+
         color: #4CC082;
+        transition: color 0.2s ease;
     }
 
-    &.close{
-        color: white;
-    }
 `;
 
 const Answer = Styled.p`
@@ -68,7 +73,7 @@ export default function FaqDropdown({ question, answer }) {
         <StyledDiv>
             <QuestionDiv>
                 <DropIcon onClick={handleClick} className={isActive ? 'open' : ''} />
-                <Question className={isActive ? 'open' : ''} >{question}</Question>
+                <Question onClick={handleClick} className={isActive ? 'open' : ''} >{question}</Question>
             </QuestionDiv>
             {isActive ? <Answer>{answer}</Answer> : null}
         </StyledDiv >

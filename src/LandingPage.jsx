@@ -83,6 +83,8 @@ const JoinButton = Styled.button`
     margin-left: auto;
     margin-right: 2em;
 
+    border: none;
+    
     font-family: Rubik;
     font-style: normal;
     font-weight: normal;
@@ -103,9 +105,11 @@ const HeroButton = Styled.button`
     font-family: Rubik;
     font-style: normal;
     font-weight: normal;
-    font-size: 0.8em;
+    font-size: 1em;
     
-    margin-top: 3em;
+    border: none;
+
+    margin-top: 1em;
     margin-left: 2em;
     margin-right: auto;
     margin-bottom: 3em;
@@ -113,12 +117,13 @@ const HeroButton = Styled.button`
     height:4em;
     width: 12em;
     background: linear-gradient(90deg, #6CB3FF 0%, #89F7FE 100%);
-    border-radius: 6px;
+    border-radius: 10px;
 
     transition: transform 250ms;
 
     :hover {
         transform: translateY(-5px);
+        
     }
 
 `;
