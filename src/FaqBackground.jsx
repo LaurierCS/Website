@@ -4,7 +4,7 @@ import FaqBackgroundSVG from "./Assets/FaqBackground.svg";
 
 const FaqSVG = Styled.div`
     background-image: url(${FaqBackgroundSVG});
-    background-size: auto;
+    background-size: 100%;
 `;
 
 export default function FaqBackground({ className, children }) {
