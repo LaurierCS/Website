@@ -2,6 +2,7 @@ import React from 'react';
 import Styled from 'styled-components';
 import logo from './Assets/LCS.png';
 import heroImg from './Assets/nerds.png';
+import LandingPageFooter from './LandingPageFooter';
 import MacWindow from './MacWindow';
 import FaqSVG from './FaqBackground';
 import FaqDropdown from './FaqDropdown';
@@ -56,22 +57,35 @@ const Faq = Styled.div`
 
 const TeamDiv = Styled.div``;
 
-const Footer = Styled.div``;
+const Footer = Styled(LandingPageFooter)`
+    position: absolute;
+    min - width: 200px;
+
+    filter: drop-shadow(1px 10px 47px rgba(0, 0, 0, 0.8));
+
+    bottom: 10;
+    left: 0;
+    
+    width: 100%;
+    height: 40vh;
+    
+   
+    `;
 
 
 // "LAURIER COMPUTING SOCIETY"
 const Title = Styled.h1`
-    font-family: "Rubik", sans-serif;
-    font-size: 1.5em;
-    font-weight: normal;
-    color: white;
+font - family: "Rubik", sans - serif;
+font - size: 1.5em;
+font - weight: normal;
+color: white;
 `;
 
 const Logo = Styled.img`
-    margin-left: 3em;
-    margin-top: 1em;
-    margin-right 2em;
-    margin-bottom: 1em;
+margin - left: 3em;
+margin - top: 1em;
+margin - right 2em;
+margin - bottom: 1em;
 
 `;
 
@@ -162,18 +176,18 @@ const HeroTitle = Styled.h1`
     font-weight: 500;
     font-size: clamp(2em, 5vw, 4em);
 
-    margin-top: 30px;
-    margin-left: 0.5em;
-    margin-bottom: 0;
+margin - top: 30px;
+margin - left: 0.5em;
+margin - bottom: 0;
 
-    align-self: flex-start;
+align - self: flex - start;
 
-    background: linear-gradient(45deg, #6CB3FF, #89F7FE);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -moz-text-fill-color: transparent;
-    -webkit-text-fill-color: transparent;
+background: linear - gradient(45deg, #6CB3FF, #89F7FE);
+background - clip: text;
+-webkit - background - clip: text;
+-moz - background - clip: text;
+-moz - text - fill - color: transparent;
+-webkit - text - fill - color: transparent;
 
 `;
 
