@@ -98,6 +98,7 @@ const JoinButton = Styled.button`
     }
 
     :hover {
+        cursor: pointer;
         transform: translateY(-5px);
     }
 `;
@@ -124,7 +125,7 @@ const HeroButton = Styled.button`
 
     :hover {
         transform: translateY(-5px);
-
+        cursor: pointer;
     }
 
 `;
