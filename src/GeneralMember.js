@@ -33,9 +33,11 @@ const MemberStyled = styled.div`
   }
   .grid-item {
     .member-content {
-      display: block;
+      display: flex;
       position: relative;
       overflow: hidden;
+      align-items: center;
+      flex-direction: column;
       h6 {
         font-family: Rubik;
         font-style: normal;
@@ -44,12 +46,15 @@ const MemberStyled = styled.div`
         color: white;
         margin-bottom: 0;
         margin-top: 0;
+        text-align: center;
       }
       p {
         font-family: Rubik;
         font-style: normal;
         font-weight: 100;
         color: white;
+        text-align: center;
+        font-size: 0.75rem;
       }
       img {
         width: 4rem;
