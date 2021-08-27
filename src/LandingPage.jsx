@@ -59,9 +59,7 @@ const TeamDiv = Styled.div``;
 
 const Footer = Styled(LandingPageFooter)`
     position: absolute;
-    min - width: 200px;
-
-    filter: drop-shadow(1px 10px 47px rgba(0, 0, 0, 0.8));
+    min-width: 200px;
 
     bottom: 10;
     left: 0;
@@ -75,17 +73,17 @@ const Footer = Styled(LandingPageFooter)`
 
 // "LAURIER COMPUTING SOCIETY"
 const Title = Styled.h1`
-font - family: "Rubik", sans - serif;
-font - size: 1.5em;
-font - weight: normal;
-color: white;
+    font-family: "Rubik", sans-serif;
+    font-size: 1.5em;
+    font-weight: normal;
+    color: white;
 `;
 
 const Logo = Styled.img`
-margin - left: 3em;
-margin - top: 1em;
-margin - right 2em;
-margin - bottom: 1em;
+    margin-left: 3em;
+    margin-top: 1em;
+    margin-right 2em;
+    margin-bottom: 1em;
 
 `;
 
@@ -176,18 +174,18 @@ const HeroTitle = Styled.h1`
     font-weight: 500;
     font-size: clamp(2em, 5vw, 4em);
 
-margin - top: 30px;
-margin - left: 0.5em;
-margin - bottom: 0;
+    margin-top: 30px;
+    margin-left: 0.5em;
+    margin-bottom: 0;
 
-align - self: flex - start;
+    align-self: flex-start;
 
-background: linear - gradient(45deg, #6CB3FF, #89F7FE);
-background - clip: text;
--webkit - background - clip: text;
--moz - background - clip: text;
--moz - text - fill - color: transparent;
--webkit - text - fill - color: transparent;
+    background: linear-gradient(45deg, #6CB3FF, #89F7FE);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -moz-text-fill-color: transparent;
+    -webkit-text-fill-color: transparent;
 
 `;
 

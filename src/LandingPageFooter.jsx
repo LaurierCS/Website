@@ -6,8 +6,8 @@ import footer from "./Assets/Footer.svg";
 const StyleContainer = Styled.div`
     
     background: url(${footer});
-    background-repeat: no-repeat;
-    
+    background-repeat: repeat;
+    background-color: #C7DEF4;
     // border-radius: 0.5em;
     
 
