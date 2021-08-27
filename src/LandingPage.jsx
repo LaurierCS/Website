@@ -5,6 +5,7 @@ import heroImg from './Assets/nerds.png';
 import MacWindow from './MacWindow';
 import FaqSVG from './FaqBackground';
 import FaqDropdown from './FaqDropdown';
+import TeamMember from './TeamMember';
 
 /*
 font-family: 'Karla', sans-serif;
@@ -14,7 +15,7 @@ font-family: 'Rubik', sans-serif;
 // The highest parent div
 const RootDiv = Styled.div`
     background: black;
-    
+
 `;
 
 const HeaderDiv = Styled.div`
@@ -35,7 +36,7 @@ const HeroDiv = Styled.div`
 const HeroImage = Styled.img`
     margin-left: 50%;
     margin-top: 2em;
-    
+
     max-height: 90%;
     width: auto;
 
@@ -84,7 +85,7 @@ const JoinButton = Styled.button`
     margin-right: 2em;
 
     border: none;
-    
+
     font-family: Rubik;
     font-style: normal;
     font-weight: normal;
@@ -97,6 +98,7 @@ const JoinButton = Styled.button`
     }
 
     :hover {
+        cursor: pointer;
         transform: translateY(-5px);
     }
 `;
@@ -106,7 +108,7 @@ const HeroButton = Styled.button`
     font-style: normal;
     font-weight: normal;
     font-size: 1em;
-    
+
     border: none;
 
     margin-top: 1em;
@@ -123,14 +125,14 @@ const HeroButton = Styled.button`
 
     :hover {
         transform: translateY(-5px);
-        
+        cursor: pointer;
     }
 
 `;
 
 const Window = Styled(MacWindow)`
     position: absolute;
-        
+
     filter: drop-shadow(1px 10px 47px rgba(0, 0, 0, 0.8));
 
     top: 10em;
@@ -138,9 +140,9 @@ const Window = Styled(MacWindow)`
 
     width: 50%;
     min-width: 200px;
-    
+
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     align-items: center;
     z-index: 2;
 
@@ -190,11 +192,11 @@ const FaqBG = Styled(FaqSVG)`
     position: absolute;
     z-index: 0;
     width: 100%;
-    
+
     padding-bottom: 4em;
     margin-top: -100px;
 
-    
+
 `;
 
 
@@ -216,9 +218,9 @@ const FaqWindow = Styled(MacWindow)`
 
     width: 80%;
     min-width: 200px;
-    
+
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     align-items: center;
     z-index: 2;
 
@@ -284,11 +286,7 @@ export default function LandingPage() {
                 </FaqBG>
             </Faq>
 
-            <TeamDiv>
-                <p>
-                    Meet the team
-                </p>
-            </TeamDiv>
+            <TeamMember />
 
             <Footer>
                 <p>

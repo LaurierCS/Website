@@ -18,6 +18,7 @@ const Question = Styled.h1`
     :hover{
         color: #4CC082;
         transition: color 0.2s ease;
+        cursor: pointer;
     }
 
     &.open{
@@ -51,6 +52,10 @@ const DropIcon = Styled(Icon)`
     &.open::after{
         transform: rotate(90deg);
         transition: all 0.4s ease;
+    }
+
+    :hover{
+        cursor: pointer;
     }
 `;
 
