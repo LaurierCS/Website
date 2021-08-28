@@ -8,7 +8,11 @@ export default function TeamMember() {
   const MemberContainer = styled.div`
     display: flex;
     width: 80%;
-    margin-left: 10%;
+    
+    margin-left: auto;
+    margin-right: auto;
+
+    padding-bottom: 2em;
     align-items: center;
     flex-direction: column;
     margin-top: 0;
@@ -22,19 +26,20 @@ export default function TeamMember() {
   const PresidentContainer = styled.div`
     display: flex;
     align-items: center;
+    justify-content: center
     flex-direction: row;
+    flex-wrap: wrap;
   `;
   const PresidentDiv1 = styled.div`
     display: flex;
     flex-direction: column;
-    margin: 0;
+    margin: 1em;
     align-items: center;
-    padding-right: 20rem;
   `;
   const PresidentDiv2 = styled.div`
     display: flex;
     flex-direction: column;
-    margin: 0;
+    margin: 1em;
     align-items: center;
   `;
   const PresidentImage = styled.img`
@@ -43,14 +48,29 @@ export default function TeamMember() {
     border-radius: 50%;
     background-color: white;
   `;
+
+  const Title = styled.h1`
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: 100;
+    font-size: clamp(2em, 5vw, 4em);
+    margin-top: 50px;
+    margin-left: 0.5em;
+    margin-bottom: 0.5em;
+  `;
+  const Subheader = styled.h2`
+    text-align: center;
+    padding-bottom: 1em;
+  `;
+
   return (
     <MemberContainer>
-      <h1 className="text-style">Meet the Team</h1>
-      <h3 className="text-style">
+      <Title className="text-style">Meet the Team</Title>
+      <Subheader className="text-style">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae,
         voluptatibus facilis. Assumenda itaque error modi vel. Aliquam alias
         velit cupiditate suscipit.
-      </h3>
+      </Subheader>
       <PresidentContainer>
         <PresidentDiv1>
           <PresidentImage src={UnknownMember} alt="" />
