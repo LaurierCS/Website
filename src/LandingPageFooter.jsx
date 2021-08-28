@@ -30,6 +30,7 @@ const Socials = Styled.div`
    `;
 
 const Animations = Styled.div`
+margin-left: 1em;
  :hover {
         cursor: pointer;
         transform: translateY(-5px);
