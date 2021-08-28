@@ -49,13 +49,11 @@ const HeroImage = Styled.img`
 
 const Faq = Styled.div`
     width: 100%;
-    height: 60em;
+    height: calc(20em + 30vw);
     z-index: 2;
 
     overflow: hidden;
 `;
-
-const TeamDiv = Styled.div``;
 
 const Footer = Styled(LandingPageFooter)`
     position: absolute;
@@ -140,6 +138,13 @@ const HeroButton = Styled.button`
         cursor: pointer;
     }
 
+    @media only screen and (max-width: 300px) {
+        margin-top: 1em;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 3em;
+    }
+
 `;
 
 const Window = Styled(MacWindow)`
@@ -166,6 +171,7 @@ const Window = Styled(MacWindow)`
         margin-left: auto;
         margin-right: auto;
     }
+
 `;
 
 const HeroTitle = Styled.h1`
@@ -210,8 +216,6 @@ const FaqBG = Styled(FaqSVG)`
 
 
 `;
-
-
 
 
 const FaqWindow = Styled(MacWindow)`
@@ -259,7 +263,7 @@ const FAQTitle = Styled.h1`
 
 const FaqListContainer = Styled.div`
     width: 100%;
-    margin-left: 4em;
+    margin-left: clamp(0.5em, 5vw, 3em);
 
 `;
 
