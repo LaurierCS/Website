@@ -69,6 +69,17 @@ const Footer = Styled(LandingPageFooter)`
    
     `;
 
+const FooterTitle = Styled.h1`
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: 400;
+    font-size: clamp(2em, 3vw, 3em);
+
+    margin-top: 2em;
+    
+    align-self: flex-start;
+
+`;
 
 // "LAURIER COMPUTING SOCIETY"
 const Title = Styled.h1`
@@ -196,6 +207,7 @@ const HeroTitle = Styled.h1`
 
 `;
 
+
 const HeroSubTitle = Styled.p`
     margin-left: 1em;
     padding-right: 2em;
@@ -309,7 +321,7 @@ export default function LandingPage() {
                 <div style={{
                     textAlign: 'center',
                 }}>
-                    <h1 >Congrats! You made it to the end!</h1>
+                    <FooterTitle >Congrats! You made it to the end!</FooterTitle>
                     <p style={{
                         position: "absolute",
                         left: 0,
