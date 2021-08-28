@@ -19,11 +19,14 @@ const StyleContainer = Styled.div`
 
   `;
 const Socials = Styled.div`
-    text-align: center;
+    align-items: center;
+    justify-content: center;
+    display: flex;
     margin-top: auto;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: auto;
+    
     :hover {
         cursor: pointer;
         transform: translateY(-5px);
@@ -43,7 +46,7 @@ export default function LandingPageFooter({ width, height, className, children }
 
 
                 <a href="#">
-                    <img src={discord} alt="Discord icon" />
+                    <img src={discord} alt="Discord icon" style={{}} />
                 </a>
                 <a href="#">
                     <img src={instagram} alt="Instagram icon" />
