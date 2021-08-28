@@ -8,6 +8,7 @@ import FaqSVG from './FaqBackground';
 import FaqDropdown from './FaqDropdown';
 import TeamMember from './TeamMember';
 
+
 /*
 font-family: 'Karla', sans-serif;
 font-family: 'Rubik', sans-serif;
@@ -305,11 +306,19 @@ export default function LandingPage() {
             <TeamMember />
 
             <Footer>
-                <p>
-                    footer
-                </p>
+                <div style={{
+                    textAlign: 'center',
+                }}>
+                    <h1 >Congrats! You made it to the end!</h1>
+                    <p style={{
+                        position: "absolute",
+                        left: 0,
+                        bottom: 0,
+                        right: 0,
+                    }}>&copy; 2021 Laurier Computing Society</p>
+                </div>
             </Footer>
 
-        </RootDiv>
+        </RootDiv >
     );
 }
