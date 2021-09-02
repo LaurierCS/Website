@@ -282,13 +282,19 @@ const FaqListContainer = Styled.div`
 
 export default function LandingPage() {
 
+    function handleClick(event) {
+        window.open("https://g0gslyum8od.typeform.com/to/I9RXsuiT").focus();
+    }
+
     return (
 
         <RootDiv>
             <HeaderDiv>
                 <Logo src={logo}></Logo>
                 <Title>LAURIER COMPUTING SOCIETY</Title>
-                <JoinButton>Join our Discord</JoinButton>
+                <JoinButton onClick={handleClick}>
+                    Join
+                </JoinButton>
             </HeaderDiv>
 
             <HeroDiv>
@@ -296,7 +302,7 @@ export default function LandingPage() {
                 <Window>
                     <HeroTitle>Interested in joining the Club?</HeroTitle>
                     <HeroSubTitle>Join our Discord for our official announcements about the school year, as well as stay up-to-date all things LCS.</HeroSubTitle>
-                    <HeroButton >Join</HeroButton>
+                    <HeroButton onClick={handleClick}>Join</HeroButton>
                 </Window>
             </HeroDiv>
 
@@ -330,6 +336,7 @@ export default function LandingPage() {
                     }}>&copy; 2021 Laurier Computing Society</p>
                 </div>
             </Footer>
+
 
         </RootDiv >
     );

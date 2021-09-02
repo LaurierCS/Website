@@ -3,17 +3,29 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import LandingPage from "./LandingPage";
+import UpdateProfile from "./UpdateProfile";
+import Login from "./Login";
+import Dashboard from "./Dashboard";
+import { AuthProvider } from "./Contexts/AuthContext";
+import PrivateRoute from "./PrivateRoute";
+import ForgotPassword from "./ForgotPassword";
+
 
 ReactDOM.render(
     <React.StrictMode>
         <BrowserRouter>
-            <Switch>
-                <Route exact path="/" component={LandingPage} />
-
-                <Route>
-                    <Redirect to="/" />
-                </Route>
-            </Switch>
+            <AuthProvider>
+                <Switch>
+                    <Route exact path="/" component={LandingPage} />
+                    <Route path="/login" component={Login} />
+                    <Route path="/forgot-password" component={ForgotPassword} />
+                    <PrivateRoute path="/dashboard" component={Dashboard} />
+                    <PrivateRoute path="/update-profile" component={UpdateProfile} />
+                    <Route>
+                        <Redirect to="/" />
+                    </Route>
+                </Switch>
+            </AuthProvider>
         </BrowserRouter>
     </React.StrictMode >,
     document.getElementById("root")

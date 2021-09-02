@@ -1,4 +1,5 @@
-import UnknownMember from "./Assets/UnknownMember.png";
+
+const UnknownMember = null;
 
 const data = [
   {
