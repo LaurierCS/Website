@@ -282,6 +282,7 @@ const FaqListContainer = Styled.div`
 
 export default function LandingPage() {
 
+
     function handleClick(event) {
         window.open("https://g0gslyum8od.typeform.com/to/I9RXsuiT").focus();
     }

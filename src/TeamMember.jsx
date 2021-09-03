@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import UnknownMember from "./Assets/UnknownMember.png";
 import GeneralMember from "./GeneralMember";
-import data from "./data";
+import allDocsData from "./data";
+
+//import PresPic1 from "./Assets/nausher.jpg";
+import PresPic2 from "./Assets/daner.jpg";
+
 
 export default function TeamMember() {
   const MemberContainer = styled.div`
@@ -63,6 +67,13 @@ export default function TeamMember() {
     padding-bottom: 1em;
   `;
 
+
+  /*
+  ============= NOTE ================
+  Presidents are hard-coded, and not pulled from db
+  so just keep that in-mind below!
+  ===================================
+  */
   return (
     <MemberContainer>
       <Title className="text-style">Meet the Team</Title>
@@ -88,7 +99,7 @@ export default function TeamMember() {
           </h5>
         </PresidentDiv1>
         <PresidentDiv2>
-          <PresidentImage src={UnknownMember} alt="" />
+          <PresidentImage src={PresPic2} alt="" />
           <h4
             className="text-style"
             style={{ fontSize: "2rem", marginBottom: "0", marginTop: "1.5rem" }}
@@ -102,7 +113,7 @@ export default function TeamMember() {
             Co-President
           </h5>        </PresidentDiv2>
       </PresidentContainer>
-      <GeneralMember data={data} />
+      <GeneralMember data={allDocsData} />
     </MemberContainer>
   );
 }

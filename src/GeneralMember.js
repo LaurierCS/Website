@@ -1,18 +1,37 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { db } from "./API/firebase";
+import { query, collection, getDocs } from "firebase/firestore";
 
 function GeneralMember({ data }) {
+
+  const [docs, setDocsData] = useState([]);
+  const renderCards = async () => {
+    const q = query(collection(db, "team"));
+    const querySnapshot = await getDocs(q);
+
+    const allDocsIds = [];
+    querySnapshot.forEach((doc) => { allDocsIds.push(doc.data()) });
+
+    console.log(allDocsIds);
+    setDocsData(allDocsIds);
+  }
+  useEffect(() => {
+    renderCards();
+  }, []);
+
+
   return (
     <MemberStyled>
-      {data.map((item) => {
+      {docs && docs.map((item, index) => {
         return (
-          <div className="grid-item" key={item.id}>
+          <div className="grid-item" key={index}>
             <div className="member-content">
               <div className="member-image">
-                <img src={item.image} alt="" />
+                <img src={item.pic} alt="" />
               </div>
               <h6>{item.name}</h6>
-              <p>{item.position}</p>
+              <p>{item.role}</p>
             </div>
           </div>
         );
