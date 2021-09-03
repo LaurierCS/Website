@@ -49,43 +49,44 @@ export default function LandingPageFooter({ width, height, className, children }
             <Socials width={width} height={height} className={className} >
 
                 <Animations>
-                    <a href="#">
+                    <a href="https://discord.lauriercs.ca/">
                         <img src={discord} alt="Discord icon" style={{}} />
                     </a>
                 </Animations>
 
                 <Animations>
-                    <a href="#">
+                    <a href="https://www.instagram.com/laurier.cs/">
                         <img src={instagram} alt="Instagram icon" />
                     </a>
                 </Animations>
 
                 <Animations>
-                    <a href="#">
+                    <a href="https://twitter.com/LaurierCS">
                         <img src={twitter} alt="Twitter icon" />
                     </a>
                 </Animations>
 
                 <Animations>
-                    <a href="#">
+                    <a href="https://www.facebook.com/lauriercs/">
                         <img src={facebook} alt="Facebook icon" />
                     </a>
                 </Animations>
 
                 <Animations>
-                    <a href="#">
+                    <a href="https://www.linkedin.com/company/16217398">
                         <img src={linkedin} alt="LinkedIn icon" />
                     </a>
                 </Animations>
 
-                <Animations>
+                {/* <Animations>
                     <a href="#">
                         <img src={youtube} alt="Youtube icon" />
+
                     </a>
-                </Animations>
+                </Animations> */}
 
                 <Animations>
-                    <a href="#">
+                    <a href="https://www.tiktok.com/@lauriercs?">
                         <img src={tiktok} alt="TikTok icon" />
                     </a>
                 </Animations>
