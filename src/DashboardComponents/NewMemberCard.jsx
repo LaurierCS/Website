@@ -18,7 +18,7 @@ const useStyles = makeStyles({
         maxWidth: 250,
     },
     media: {
-        height: 140,
+        height: 100,
     },
 });
 
@@ -37,28 +37,18 @@ export default function NewMemberCard({ handleAdd }) {
     const classes = useStyles();
     const nameRef = useRef();
     const roleRef = useRef();
-    // const picRef = useRef();
-    // const [edit, setEdit] = useState(false);
-    // const [name, setName] = useState("");
-    // const [role, setRole] = useState("");
-    // const [pic, setPic] = useState("");
-    // const docSnap = getDoc(docRef);
-    // function handleClick(event) {
-    //     // save the changes
-    //     const newName = nameRef.current.value;
-    //     const newRole = roleRef.current.value;
-    //     const promises = [];
-    //     promises.push(addDoc(collection(db, "team"), { name: newName, role: newRole }));
-    //     // const newDocs = docs.push(docRef.id);
-    //     // setDocsData(newDocs);
-    //     Promise.all(promises).then((docRef) => {
-    //         // add to the table array
 
-    //     }).catch((error) => {
-    //         alert("Failed to create");
-    //         console.log(error);
-    //     });
-    // }
+    const [name, setName] = useState("name");
+    const [role, setRole] = useState("role");
+
+    function handleNameChange() {
+        setName(nameRef.current.value);
+    }
+
+    function handleRoleChange() {
+        setRole(roleRef.current.value);
+    }
+
     return (
         <Card className={classes.root}>
 
@@ -68,13 +58,16 @@ export default function NewMemberCard({ handleAdd }) {
                 title="Contemplative Reptile"
             />
             <CardContent>
-                <TextField inputRef={nameRef} defaultValue="name" />
-                <TextField inputRef={roleRef} defaultValue="role" />
+                <TextField inputRef={nameRef} onChange={handleNameChange} value={name} />
+                <TextField inputRef={roleRef} onChange={handleRoleChange} value={role} />
                 <p>(add the picture after)</p>
             </CardContent>
 
             <CardActions>
-                <Button variant="contained" size="small" color="primary" onClick={() => handleAdd(nameRef.current.value, roleRef.current.value)}>
+                <Button variant="contained"
+                    size="small"
+                    color="primary"
+                    onClick={() => handleAdd(name, role)}>
                     Add
                 </Button>
             </CardActions>

@@ -7,7 +7,7 @@ import MacWindow from './MacWindow';
 import FaqSVG from './FaqBackground';
 import FaqDropdown from './FaqDropdown';
 import TeamMember from './TeamMember';
-
+import { Link } from "react-router-dom";
 
 /*
 font-family: 'Karla', sans-serif;
@@ -329,13 +329,24 @@ export default function LandingPage() {
                     textAlign: 'center',
                 }}>
                     <FooterTitle >Congrats! You made it to the end!</FooterTitle>
+
                     <p style={{
                         position: "absolute",
                         left: 0,
                         bottom: 0,
                         right: 0,
                     }}>&copy; 2021 Laurier Computing Society</p>
+                    <Link style={{
+                        position: "absolute",
+                        left: 0,
+                        bottom: 0,
+                        right: 0,
+                    }} to="/dashboard">
+                        Dashboard
+                    </Link>
                 </div>
+
+
             </Footer>
 
 

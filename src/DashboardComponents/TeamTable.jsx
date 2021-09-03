@@ -4,6 +4,7 @@ import TeamMemberCard from './TeamMemberCard';
 import { db, storage, updateProfilePicture, } from '../API/firebase';
 import React, { useState, useEffect, useRef } from 'react';
 import { updateDoc, getDoc, getDocs, addDoc, deleteDoc, collection, query } from "firebase/firestore";
+import { Button } from "@material-ui/core";
 
 const CardTable = styled.div`
     width: 100%;
@@ -11,7 +12,6 @@ const CardTable = styled.div`
     display: grid;
     
     grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: auto;
     grid-gap: 1rem;
     margin: 2em;
 
@@ -19,6 +19,7 @@ const CardTable = styled.div`
 
 
 export default function TeamTable() {
+    const [refresh, setRefresh] = useState(false);
 
     const [docs, setDocsData] = useState([]);
     const renderCards = async () => {
@@ -43,24 +44,38 @@ export default function TeamTable() {
     }
 
     function handleAdd(newName, newRole) {
-        console.log(newName);
-        const docRef = addDoc(collection(db, "team"), { name: newName, role: newRole });
-        const newDocs = docs;
-        newDocs.push(docRef.id);
-        console.log(docs);
-        setDocsData(newDocs);
-        renderCards();
+        const newDocs = [...docs];
+        addDoc(collection(db, "team"), { name: newName, role: newRole })
+            .then((docRef) => {
+
+                newDocs.push(docRef.id);
+                console.log(newDocs.length);
+
+            });
+        setDocsData(newDocs); // ig this does nothing because it wont re-render
+
+        //renderCards();
     }
 
+    // sloppy refresh because handleAdd wont refresh the stupid table...
+    function handleRefresh() {
+        setRefresh(!refresh);
+    }
+
+
     return (
-        <CardTable>
-            {docs && docs.map((docId) => {
-                return (
-                    <TeamMemberCard docId={docId} onDelete={handleDelete} />
-                );
-            })}
-            <NewMemberCard handleAdd={handleAdd} />
-        </CardTable>
+        <div>
+            <Button onClick={handleRefresh}>Refresh Table</Button>
+            <CardTable>
+
+                {docs && docs.map((docId) => {
+                    return (
+                        <TeamMemberCard docId={docId} onDelete={handleDelete} />
+                    );
+                })}
+                <NewMemberCard handleAdd={handleAdd} />
+            </CardTable>
+        </div>
     );
 
 }
