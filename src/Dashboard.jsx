@@ -8,11 +8,14 @@ import { deleteDoc } from 'firebase/firestore';
 
 
 
-
+const StyledPaper = styled(Paper)`
+    margin: 1em;
+    padding: 1em;
+`;
 
 function Dashboard() {
     const [error, setError] = useState("");
-    const { currentUser, logout } = useAuth();
+    const { logout } = useAuth();
     const history = useHistory();
 
     async function handleLogout(event) {
@@ -34,10 +37,10 @@ function Dashboard() {
 
             <Link to="/update-profile">Update Profile</Link>
             <Button onClick={handleLogout}>Logout</Button>
-
-            <h1>Manage Team</h1>
-            <TeamTable />
-
+            <StyledPaper>
+                <h1>Manage Team</h1>
+                <TeamTable />
+            </StyledPaper>
         </div>
     );
 }

@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import NewMemberCard from './NewMemberCard';
 import TeamMemberCard from './TeamMemberCard';
-import { db, storage, updateProfilePicture } from '../API/firebase';
+import { db, storage, updateProfilePicture, } from '../API/firebase';
 import React, { useState, useEffect, useRef } from 'react';
-import { updateDoc, getDoc, getDocs, doc, deleteDoc, collection, query } from "firebase/firestore";
+import { updateDoc, getDoc, getDocs, addDoc, deleteDoc, collection, query } from "firebase/firestore";
 
 const CardTable = styled.div`
     width: 100%;
@@ -34,28 +34,32 @@ export default function TeamTable() {
     useEffect(() => {
         renderCards();
     }, []);
+
+    function handleDelete(docRef) {
+        deleteDoc(docRef);
+        const newDocs = docs.filter(doc => docRef.id !== doc);
+        setDocsData(newDocs);
+        //deleteDoc(docRef);
+    }
+
+    function handleAdd(newName, newRole) {
+        console.log(newName);
+        const docRef = addDoc(collection(db, "team"), { name: newName, role: newRole });
+        const newDocs = docs;
+        newDocs.push(docRef.id);
+        console.log(docs);
+        setDocsData(newDocs);
+        renderCards();
+    }
+
     return (
         <CardTable>
             {docs && docs.map((docId) => {
                 return (
-                    <TeamMemberCard docId={docId} />
+                    <TeamMemberCard docId={docId} onDelete={handleDelete} />
                 );
             })}
-
-            {/* {data.map((item) => {
-                return (
-                    <div className="grid-item" key={item.id}>
-                        <div className="member-content">
-                            <div className="member-image">
-                                <img src={item.image} alt="" />
-                            </div>
-                            <h6>{item.name}</h6>
-                            <p>{item.position}</p>
-                        </div>
-                    </div>
-                );
-            })} */}
-            <NewMemberCard />
+            <NewMemberCard handleAdd={handleAdd} />
         </CardTable>
     );
 
