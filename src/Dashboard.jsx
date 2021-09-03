@@ -2,7 +2,12 @@ import { Button, Paper } from '@material-ui/core';
 import React, { useState } from 'react';
 import { useAuth } from './Contexts/AuthContext';
 import { Link, useHistory } from 'react-router-dom';
-//import styled from 'styled-components';
+import styled from 'styled-components';
+import TeamTable from './DashboardComponents/TeamTable';
+import { deleteDoc } from 'firebase/firestore';
+
+
+
 
 
 function Dashboard() {
@@ -20,17 +25,24 @@ function Dashboard() {
         }
     }
 
+
     return (
         <div>
-            <Paper >
-                <h1>Dashboard</h1>
-                {error && alert(error)}
-                <h2>Profile: {currentUser.email}</h2>
-            </Paper>
+            <h1>Dashboard</h1>
+            {error && alert(error)}
+            {/* <h2>Profile: {currentUser.email}</h2> */}
+
             <Link to="/update-profile">Update Profile</Link>
             <Button onClick={handleLogout}>Logout</Button>
+
+            <h1>Manage Team</h1>
+            <TeamTable />
+
         </div>
     );
 }
+
+
+
 
 export default Dashboard;
