@@ -53,8 +53,6 @@ export default function TeamTable() {
 
             });
         setDocsData(newDocs); // ig this does nothing because it wont re-render
-
-        //renderCards();
     }
 
     // sloppy refresh because handleAdd wont refresh the stupid table...
@@ -65,7 +63,7 @@ export default function TeamTable() {
 
     return (
         <div>
-            <Button onClick={handleRefresh}>Refresh Table</Button>
+            <Button variant="outlined" onClick={handleRefresh}>Refresh Table</Button>
             <CardTable>
 
                 {docs && docs.map((docId) => {
