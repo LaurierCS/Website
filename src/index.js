@@ -19,7 +19,7 @@ ReactDOM.render(
                     <Route exact path="/" component={LandingPage} />
                     <Route path="/login" component={Login} />
                     <Route path="/forgot-password" component={ForgotPassword} />
-                    <Route path="/dashboard" component={Dashboard} />
+                    <PrivateRoute path="/dashboard" component={Dashboard} />
                     <PrivateRoute path="/update-profile" component={UpdateProfile} />
                     <Route>
                         <Redirect to="/" />

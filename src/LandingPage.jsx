@@ -328,6 +328,7 @@ export default function LandingPage() {
                 <div style={{
                     textAlign: 'center',
                 }}>
+
                     <FooterTitle >Congrats! You made it to the end!</FooterTitle>
 
                     <p style={{
@@ -336,14 +337,7 @@ export default function LandingPage() {
                         bottom: 0,
                         right: 0,
                     }}>&copy; 2021 Laurier Computing Society</p>
-                    <Link style={{
-                        position: "absolute",
-                        left: 0,
-                        bottom: 0,
-                        right: 0,
-                    }} to="/dashboard">
-                        Dashboard
-                    </Link>
+
                 </div>
 
 

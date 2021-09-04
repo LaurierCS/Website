@@ -93,7 +93,6 @@ export default function LandingPageFooter({ width, height, className, children }
 
 
             </Socials>
-
         </div>
     );
 }
