@@ -4,7 +4,7 @@ import UnknownMember from "./Assets/UnknownMember.png";
 import GeneralMember from "./GeneralMember";
 import allDocsData from "./data";
 
-//import PresPic1 from "./Assets/nausher.jpg";
+import PresPic1 from "./Assets/nausher.png";
 import PresPic2 from "./Assets/daner.jpg";
 
 
@@ -71,7 +71,7 @@ export default function TeamMember() {
   /*
   ============= NOTE ================
   Presidents are hard-coded, and not pulled from db
-  so just keep that in-mind below!
+  so just keep that in mind below!
   ===================================
   */
   return (
@@ -84,7 +84,7 @@ export default function TeamMember() {
       </Subheader>
       <PresidentContainer>
         <PresidentDiv1>
-          <PresidentImage src={UnknownMember} alt="" />
+          <PresidentImage src={PresPic1} alt="" />
           <h4
             className="text-style"
             style={{ fontSize: "2rem", marginBottom: "0", marginTop: "1.5rem" }}

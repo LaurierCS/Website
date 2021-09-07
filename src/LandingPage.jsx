@@ -339,11 +339,7 @@ export default function LandingPage() {
                     }}>&copy; 2021 Laurier Computing Society</p>
 
                 </div>
-
-
             </Footer>
-
-
         </RootDiv >
     );
 }
