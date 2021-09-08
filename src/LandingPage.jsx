@@ -8,6 +8,7 @@ import FaqSVG from './FaqBackground';
 import FaqDropdown from './FaqDropdown';
 import TeamMember from './TeamMember';
 import { Link } from "react-router-dom";
+import FaqBackgroundSVG from "./Assets/FaqBackground.svg";
 
 /*
 font-family: 'Karla', sans-serif;
@@ -49,10 +50,8 @@ const HeroImage = Styled.img`
 `;
 
 const Faq = Styled.div`
+    
     width: 100%;
-    height: calc(20em + 30vw);
-    z-index: 2;
-
     overflow: hidden;
 `;
 
@@ -223,10 +222,11 @@ const FaqBG = Styled(FaqSVG)`
     position: absolute;
     z-index: 0;
     width: 100%;
-
+    height: 50%;
     padding-bottom: 4em;
-    margin-top: -100px;
-
+    background-image: url(${FaqBackgroundSVG});
+    background-size: 100%;
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 80%, transparent 100%);
 
 `;
 
@@ -280,6 +280,9 @@ const FaqListContainer = Styled.div`
 
 `;
 
+
+
+
 export default function LandingPage() {
 
 
@@ -308,21 +311,21 @@ export default function LandingPage() {
             </HeroDiv>
 
             <Faq>
-                <FaqBG>
-                    <FaqWindow>
-                        <FAQTitle>Frequently Asked Questions</FAQTitle>
-                        <FaqListContainer>
-                            <FaqDropdown
-                                question="Who are we?"
-                                answer="Laurier Computing Society is the official student operated society of Wilfrid Laurier University’s Computer Science department. We strive to help students realise their potential in STEM by enriching their academic and professional development. Our objective is to create initiatives and events to involve students in tech to challenge and improve their skills, and foster a sense of community." />
+                <FaqBG />
+                <FaqWindow>
+                    <FAQTitle>Frequently Asked Questions</FAQTitle>
+                    <FaqListContainer>
+                        <FaqDropdown
+                            question="Who are we?"
+                            answer="Laurier Computing Society is the official student operated society of Wilfrid Laurier University’s Computer Science department. We strive to help students realise their potential in STEM by enriching their academic and professional development. Our objective is to create initiatives and events to involve students in tech to challenge and improve their skills, and foster a sense of community." />
 
-                            <FaqDropdown question="Can I get free stuff?!?!?!" answer="We do monthly money gift card giveaways on our socials, so follow us there! As well as that, all our in person events have free food and refreshments!" />
-                            <FaqDropdown question="So... what type of events do you run?" answer="We run a wide range of events. We have our signature 'Meet the Professionals' events that let students and professionals connect and get information about the industry. We also run events such as our “Learn a Tool Series”, where we showcase and preview different popular technologies used in the industry that can help students personally, in projects, or in their careers. We also run fun events, such as regular socials, gaming events, and competitions! Stay tuned on our socials to learn more!" />
-                            <FaqDropdown question="This sounds sick! How do I join?!?!?" answer="You don't have to do anything special! Just attend 2 of our events a term to be considered a part of the club! If you want to be a part of the executive team, feel free to contact any of the executive members for more information!" />
-                            <FaqDropdown question="How are you guys handling stuff with regards to COVID?" answer="All our events that are in person or hybrid follow all the guidelines put in place by the university, as well as the Students Union. These guidelines can be found here!" />
-                        </FaqListContainer>
-                    </FaqWindow>
-                </FaqBG>
+                        <FaqDropdown question="Can I get free stuff?!?!?!" answer="We do monthly money gift card giveaways on our socials, so follow us there! As well as that, all our in person events have free food and refreshments!" />
+                        <FaqDropdown question="So... what type of events do you run?" answer="We run a wide range of events. We have our signature 'Meet the Professionals' events that let students and professionals connect and get information about the industry. We also run events such as our “Learn a Tool Series”, where we showcase and preview different popular technologies used in the industry that can help students personally, in projects, or in their careers. We also run fun events, such as regular socials, gaming events, and competitions! Stay tuned on our socials to learn more!" />
+                        <FaqDropdown question="This sounds sick! How do I join?!?!?" answer="You don't have to do anything special! Just attend 2 of our events a term to be considered a part of the club! If you want to be a part of the executive team, feel free to contact any of the executive members for more information!" />
+                        <FaqDropdown question="How are you guys handling stuff with regards to COVID?" answer="All our events that are in person or hybrid follow all the guidelines put in place by the university, as well as the Students Union. These guidelines can be found here!" />
+                    </FaqListContainer>
+                </FaqWindow>
+
             </Faq>
 
             <TeamMember />

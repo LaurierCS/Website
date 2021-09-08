@@ -7,19 +7,16 @@ import allDocsData from "./data";
 import PresPic1 from "./Assets/nausher.png";
 import PresPic2 from "./Assets/daner.jpg";
 
-
-export default function TeamMember() {
-  const MemberContainer = styled.div`
+const MemberContainer = styled.div`
     display: flex;
     width: 80%;
-    
+
     margin-left: auto;
     margin-right: auto;
 
     padding-bottom: 2em;
     align-items: center;
     flex-direction: column;
-    margin-top: 0;
     .text-style {
       font-family: Rubik;
       font-style: normal;
@@ -27,33 +24,33 @@ export default function TeamMember() {
       font-weight: 100;
     }
   `;
-  const PresidentContainer = styled.div`
+const PresidentContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center
     flex-direction: row;
     flex-wrap: wrap;
   `;
-  const PresidentDiv1 = styled.div`
+const PresidentDiv1 = styled.div`
     display: flex;
     flex-direction: column;
     margin: 1em;
     align-items: center;
   `;
-  const PresidentDiv2 = styled.div`
+const PresidentDiv2 = styled.div`
     display: flex;
     flex-direction: column;
     margin: 1em;
     align-items: center;
   `;
-  const PresidentImage = styled.img`
+const PresidentImage = styled.img`
     width: 5rem;
     height: 5rem;
     border-radius: 50%;
     background-color: white;
   `;
 
-  const Title = styled.h1`
+const Title = styled.h1`
     font-family: Rubik;
     font-style: normal;
     font-weight: 100;
@@ -62,11 +59,12 @@ export default function TeamMember() {
     margin-left: 0.5em;
     margin-bottom: 0.5em;
   `;
-  const Subheader = styled.h2`
+const Subheader = styled.h2`
     text-align: center;
     padding-bottom: 1em;
   `;
 
+export default function TeamMember() {
 
   /*
   ============= NOTE ================
@@ -78,9 +76,6 @@ export default function TeamMember() {
     <MemberContainer>
       <Title className="text-style">Meet the Team</Title>
       <Subheader className="text-style">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae,
-        voluptatibus facilis. Assumenda itaque error modi vel. Aliquam alias
-        velit cupiditate suscipit.
       </Subheader>
       <PresidentContainer>
         <PresidentDiv1>
