@@ -281,12 +281,27 @@ const FaqListContainer = Styled.div`
 `;
 
 
-
+const SectionTitle = Styled.h1`
+    color: white;
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: 100;
+    font-size: clamp(2em, 5vw, 4em);
+    margin-top: 50px;
+    margin-left: 0.5em;
+    margin-bottom: 0.5em;
+  `;
 
 export default function LandingPage() {
 
 
+    // handle join buttons
     function handleClick(event) {
+        window.open("https://discord.lauriercs.ca/").focus();
+    }
+
+    // handle subscribe to newsletter
+    function handleSub(event) {
         window.open("https://g0gslyum8od.typeform.com/to/I9RXsuiT").focus();
     }
 
@@ -296,9 +311,6 @@ export default function LandingPage() {
             <HeaderDiv>
                 <Logo src={logo}></Logo>
                 <Title>LAURIER COMPUTING SOCIETY</Title>
-                <JoinButton onClick={handleClick}>
-                    Join
-                </JoinButton>
             </HeaderDiv>
 
             <HeroDiv>
@@ -306,7 +318,7 @@ export default function LandingPage() {
                 <Window>
                     <HeroTitle>Interested in joining the Club?</HeroTitle>
                     <HeroSubTitle>Join our Discord for our official announcements about the school year, as well as stay up-to-date all things LCS.</HeroSubTitle>
-                    <HeroButton onClick={handleClick}>Join</HeroButton>
+                    <HeroButton onClick={handleClick}>Join Discord</HeroButton>
                 </Window>
             </HeroDiv>
 
@@ -337,6 +349,14 @@ export default function LandingPage() {
             </Faq>
 
             <TeamMember />
+
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: "column" }}>
+                <SectionTitle>Join our newsletter</SectionTitle>
+                <HeroSubTitle style={{ marginLeft: 'auto', marginRight: 'auto', marginTop: '0.1em' }}>Subscribe to our newsletter to recieve event annoucements, and more!</HeroSubTitle>
+
+                <HeroButton onClick={handleSub} style={{ marginLeft: 'auto' }}>Subscribe</HeroButton>
+
+            </div>
 
             <Footer>
                 <div style={{
