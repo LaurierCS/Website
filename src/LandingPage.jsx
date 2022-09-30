@@ -18,7 +18,6 @@ font-family: 'Rubik', sans-serif;
 // The highest parent div
 const RootDiv = Styled.div`
     background: black;
-
 `;
 
 const HeaderDiv = Styled.div`
@@ -27,7 +26,6 @@ const HeaderDiv = Styled.div`
     width: 100%;
     justify-content: felx-start;
     align-items: center;
-
 `;
 
 const HeroDiv = Styled.div`
@@ -46,11 +44,9 @@ const HeroImage = Styled.img`
     z-index: -1;
     border-radius: 1em;
     filter: blur(4px);
-
 `;
 
 const Faq = Styled.div`
-    
     width: 100%;
     overflow: hidden;
 `;
@@ -58,14 +54,10 @@ const Faq = Styled.div`
 const Footer = Styled(LandingPageFooter)`
     position: absolute;
     min-width: 200px;
-
     bottom: 10;
     left: 0;
-    
     width: 100%;
     height: 40vh;
-    
-   
     `;
 
 const FooterTitle = Styled.h1`
@@ -73,11 +65,8 @@ const FooterTitle = Styled.h1`
     font-style: normal;
     font-weight: 400;
     font-size: clamp(2em, 3vw, 3em);
-
     margin-top: 2em;
-    
     align-self: flex-start;
-
 `;
 
 // "LAURIER COMPUTING SOCIETY"
@@ -93,7 +82,6 @@ const Logo = Styled.img`
     margin-top: 1em;
     margin-right 2em;
     margin-bottom: 1em;
-
 `;
 
 // Join our discord button
@@ -155,14 +143,10 @@ const HeroButton = Styled.button`
         margin-right: auto;
         margin-bottom: 3em;
     }
-
 `;
 
 const Window = Styled(MacWindow)`
     position: absolute;
-
-    filter: drop-shadow(1px 10px 47px rgba(0, 0, 0, 0.8));
-
     top: 10em;
     left: 10%;
 
@@ -174,6 +158,7 @@ const Window = Styled(MacWindow)`
     align-items: center;
     z-index: 2;
 
+    filter: drop-shadow(1px 10px 47px rgba(0, 0, 0, 0.8));
     @media only screen and (max-width: 700px) {
         width: 85vw;
         margin-top: 0;
@@ -182,7 +167,6 @@ const Window = Styled(MacWindow)`
         margin-left: auto;
         margin-right: auto;
     }
-
 `;
 
 const HeroTitle = Styled.h1`
@@ -273,13 +257,11 @@ const FAQTitle = Styled.h1`
     margin-bottom: 0.5em;
 `;
 
-
 const FaqListContainer = Styled.div`
     width: 100%;
     margin-left: clamp(0.5em, 5vw, 3em);
 
 `;
-
 
 const SectionTitle = Styled.h1`
     color: white;
@@ -293,8 +275,6 @@ const SectionTitle = Styled.h1`
   `;
 
 export default function LandingPage() {
-
-
     // handle join buttons
     function handleClick(event) {
         window.open("https://discord.lauriercs.ca/").focus();
@@ -306,7 +286,6 @@ export default function LandingPage() {
     }
 
     return (
-
         <RootDiv>
             <HeaderDiv>
                 <Logo src={logo}></Logo>

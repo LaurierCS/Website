@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import Styled from 'styled-components';
-import { ReactComponent as Icon } from './Assets/Icon.svg';
+import Icon from './Assets/Icon.svg';
 
 
 const StyledDiv = Styled.div`
-    font-family: "Rubik";    
-    width: 90%;  
+    font-family: "Rubik";
+    width: 90%;
     padding-bottom: 0.5em;
 `;
 
@@ -39,7 +39,7 @@ const Answer = Styled.p`
 `;
 
 const DropIcon = Styled(Icon)`
-    
+
     width: 3em;
     height: 1.5em;
     transform: rotate(0deg);

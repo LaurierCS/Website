@@ -27,7 +27,7 @@ const MemberContainer = styled.div`
 const PresidentContainer = styled.div`
     display: flex;
     align-items: center;
-    justify-content: center
+    justify-content: center;
     flex-direction: row;
     flex-wrap: wrap;
   `;

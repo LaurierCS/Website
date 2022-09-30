@@ -4,10 +4,6 @@ import { Link, useHistory } from 'react-router-dom';
 import { AuthProvider, useAuth } from './Contexts/AuthContext';
 import { updatePassword } from '@firebase/auth';
 
-
-
-
-
 export default function UpdateProfile() {
     const emailRef = useRef();
     const passwordRef = useRef();
