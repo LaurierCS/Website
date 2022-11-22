@@ -1,0 +1,20 @@
+:root {
+     --color-background: #000000;
+     --color-background-complementary: #2A2E35;
+
+     --color-primary-base: #D8EEFE;
+     --color-primary-gradient: linear-gradient(90deg, #3DA9FC 0%, #D8EEFE 100%);
+     --color-primary-blue: #3DA9FC;
+
+     --color-secondary-base: #8EAEFF;
+     --color-secondary-gradient: linear-gradient(90deg, #1F5EFF 0%, #8EAEFF 100%);
+     --color-secondary-blue: #1F5EFF;
+
+     --color-tertiary-base: #9CFFE7;
+     --color-tertiary-gradient: linear-gradient(90deg, #00D1FF 0%, #9CFFE7 100%);
+     --color-tertiary-blue: #00D1FF;
+
+     --color-quaternary-base: #FF25CF;
+     --color-quaternary-gradient: linear-gradient(90deg, #4AC9FF 0%, #FF25CF 100%);
+     --color-quaternary-blue: #4AC9FF;
+}
