@@ -1,20 +1,37 @@
 :root {
-     --color-background: #000000;
-     --color-background-complementary: #2A2E35;
+     --color-black:#000000;
+     --color-white:#FFFFFF;
+     --color_blue: #29ABF4;
+     --color-light-blue: #A1DAF5;
+     --color-pink: #FF41D5;
+     --color-blue-gradient: linear-gradient(145deg, var(--color-blue) 0%, var(--color-light-blue) 100%);
+     --color-pink-gradient: linear-gradient(145deg, var(--color-blue) 0%, var(--color-pink) 100%);
 
-     --color-primary-base: #D8EEFE;
-     --color-primary-gradient: linear-gradient(90deg, #3DA9FC 0%, #D8EEFE 100%);
-     --color-primary-blue: #3DA9FC;
+     /* 5(0) Shades of Gray, lower number the brighter */
+     --color-gray-0: #F8F8F8;
+     --color-gray-1: #E7EBF5;
+     --color-gray-2: #B2BECD;
+     --color-gray-3: #454E56;
+     --color-gray-4: #2C3844;
+     --color-gray-5: #12181B;
 
-     --color-secondary-base: #8EAEFF;
-     --color-secondary-gradient: linear-gradient(90deg, #1F5EFF 0%, #8EAEFF 100%);
-     --color-secondary-blue: #1F5EFF;
+     --color-shadow: filter: drop-shadow(0px 4px 4px rgba(18, 24, 27, 0.25));
+     --color-neon-border: border: 2px solid var(--color-blue);
+     --color-neon-effect: filter: drop-shadow(0px 0px 24px var(--color-light-blue));
 
-     --color-tertiary-base: #9CFFE7;
-     --color-tertiary-gradient: linear-gradient(90deg, #00D1FF 0%, #9CFFE7 100%);
-     --color-tertiary-blue: #00D1FF;
+     /* Default Dark Theme */
+     --color-background: var(--color-black);
+     --color-primary: var(--color-blue);
+     --color-secondary: var(--color-light-blue);
+     --color-title: var(--color-white);
+     --color-text: var(--color-gray-2);
+     --color-card: var(--color-gray-4);
+}
 
-     --color-quaternary-base: #FF25CF;
-     --color-quaternary-gradient: linear-gradient(90deg, #4AC9FF 0%, #FF25CF 100%);
-     --color-quaternary-blue: #4AC9FF;
+.light-theme {
+     --color-background: var(--color-gray-0);
+     --color-title: var(--color-gray-5);
+     --color-text: var(--color-gray-3);
+     --color-card: var(--color-gray-1);
+     --color-neon-effect: filter: drop-shadow(0px 0px 24px var(--color-blue));
 }
