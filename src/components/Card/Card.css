@@ -1,0 +1,12 @@
+.card-container {
+    background-color: var(--color-card);
+    border-radius: var(--border-radius);
+    margin: 0;
+    padding: 10px;
+    color: var(--color-text);
+}
+
+.card-header,
+h1, h2, h3, h4, h5, h6 {
+    color: var(--color-title);
+}

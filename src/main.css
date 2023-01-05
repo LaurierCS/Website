@@ -26,6 +26,9 @@
      --color-title: var(--color-white);
      --color-text: var(--color-gray-2);
      --color-card: var(--color-gray-4);
+
+     /* Default values */
+     --border-radius: 15px;
 }
 
 .light-theme {
@@ -35,3 +38,10 @@
      --color-card: var(--color-gray-1);
      --color-neon-effect: filter: drop-shadow(0px 0px 24px var(--color-blue));
 }
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+

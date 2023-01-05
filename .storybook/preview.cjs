@@ -1,3 +1,6 @@
+// expose access to css variables defined in main.css
+import '../src/main.css';
+
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
   controls: {
