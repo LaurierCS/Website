@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
-/* button styling */
+/* expanded menu styling */
 .mantine-Accordion-control {
     background-color: var(--color-gray-4);
     border-color: var(--color-gray-4);
@@ -11,7 +11,7 @@
     border-radius: 9px;
 }
 
-/* expanded menu styling */
+/* button styling */
 .mantine-Accordion-item {
     width: 65%;
     margin-left: auto;
@@ -47,13 +47,14 @@
     font-family: 'Montserrat';
 }
 
+/* determines styling when screen width and height is smaller */
 @media screen and (max-width: 415px) {
     div.faq {
         font-size: 23px;
     }
   }
 
-  @media screen and (max-width: 415px) {
+@media screen and (max-width: 415px) {
     div.mantine-Accordion-label {
         font-size: 18px;
     }
