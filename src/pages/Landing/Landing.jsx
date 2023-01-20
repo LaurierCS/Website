@@ -1,11 +1,12 @@
 import React from 'react';
 import './Landing.css';
-import { Navbar } from '../../components';
+import { Navbar, Footer } from '../../components';
 
 const Landing = () => {
      return (
           <>
                <Navbar />
+               <Footer />
           </>
      );
 };
