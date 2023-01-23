@@ -1,8 +1,10 @@
 :root {
      --color-black:#000000;
      --color-white:#FFFFFF;
-     --color_blue: #29ABF4;
+     --color-blue: #29ABF4;
      --color-light-blue: #A1DAF5;
+     --color-mint-blue: #89F7FE;
+     --color-mint-green: #ACFFBE;
      --color-pink: #FF41D5;
      --color-blue-gradient: linear-gradient(145deg, rgba(41,171,244,1) 0%, rgba(161,218,245,1) 100%); 
      --color-pink-gradient: linear-gradient(145deg, rgba(41,171,244,1) 0%, rgba(255,65,213,1) 100%);
