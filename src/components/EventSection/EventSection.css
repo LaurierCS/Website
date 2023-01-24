@@ -1,0 +1,26 @@
+.event-section-table {
+    height: 400px;
+    width: 100%;
+    background-color: var(--color-gray-2);
+    padding: 2rem;
+}
+
+.event-table {
+    height: 100%;
+    width: 100%;
+    background-color: var(--color-gray-4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.event-side-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.event-side-header {
+    font-size: 1.5rem;
+}
