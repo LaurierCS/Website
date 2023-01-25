@@ -28,7 +28,7 @@ class EventItem extends Component {
             <div className = "event_item">
                 <h1>{props.title}</h1>
                 {this.state.tags.map((tag, key) => {
-                    return <div key = {key}>{tag}</div> // creates a tag component
+                    return <div className = "item_tags" key = {key}>{tag}</div> // creates a tag component
                 })}
             </div>
         );

@@ -26,6 +26,7 @@ const OUT_TIME_FORMAT = 'h:mma';
  * Refer to the story of this component to see how everything looks and works.
  * */
 const EventTag = ({
+    key, // tag id
     variant,
     removeBg,
     online,
