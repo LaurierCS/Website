@@ -1,0 +1,31 @@
+.event-tag-container {
+    border-radius: 1rem;
+    padding: 0.1rem 1.5rem;
+    width: fit-content;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.primary {
+    color: var(--color-blue);
+}
+.primary.event-tag-bg {
+    background-color: var(--color-blue);
+    color: var(--color-white);
+}
+
+.secondary {
+    color: var(--color-mint-blue);
+}
+.secondary.event-tag-bg {
+    background-color: var(--color-mint-blue);
+    color: var(--color-black);
+}
+
+.tertiary {
+    color: var(--color-mint-green);
+}
+.tertiary.event-tag-bg {
+    background-color: var(--color-mint-green);
+    color: var(--color-black);
+}
