@@ -1,7 +1,7 @@
 import EventTag from './EventTag';
 
 export default {
-    title: 'LCS Website 2023/Components/Event Tag',
+    title: 'LCS Website 2023/Components/EventTag',
     component: EventTag,
 };
 
