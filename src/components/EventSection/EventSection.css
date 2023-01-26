@@ -1,3 +1,11 @@
+/*
+ * TODO: remove the placeholder attributes from classes:
+ * - event-section-table
+ *  - background-color
+ *  - height
+ * - event-table
+ *  - background-color
+ * */
 .event-section-table {
     height: 400px;
     width: 100%;
@@ -21,6 +29,23 @@
     align-items: center;
 }
 
+/*
+ * Leave class for backup use in case the Text component
+ * from mantine is not what we are looking for.
+ * */
 .event-side-header {
-    font-size: 1.5rem;
+    color: var(--color-white);
+    background: var(--color-blue-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.event-section-text-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
 }
