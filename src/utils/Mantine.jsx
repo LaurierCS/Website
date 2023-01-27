@@ -1,31 +1,3 @@
-import { Global } from "@mantine/core";
-
-const montserratUrl = "/fonts/Montserrat.ttf";
-const openSansUrl = "/fonts/OpenSans.ttf";
-
-const CustomFonts = () => {
-    return (
-        <Global styles={[
-            {
-                '@font-face': {
-                    fontFamily: 'Montserrat',
-                    src: `url('${montserratUrl}') format('truetype')`,
-                    fontStyle: 'normal',
-                    fontWeight: '200 700',
-                },
-            },
-            {
-                '@font-face': {
-                    fontFamily: 'Open Sans',
-                    src: `url('${openSansUrl}') format('truetype')`,
-                    fontStyle: 'normal',
-                    fontWeight: '200 700',
-                },
-            }
-        ]}/>
-    )
-}
-
 const mantineTheme = {
     colorScheme: 'dark',
     defaultRadius: 8,
@@ -57,7 +29,7 @@ const mantineTheme = {
     },
 
     // typography, sizes are in pt instead of px !
-    fontFamily: 'Montserrat, Open Sans',
+    fontFamily: 'Montserrat',
     fontSizes: {
         xs: 12,
         sm: 14,
@@ -74,6 +46,5 @@ const mantineTheme = {
 }
 
 export  {
-    CustomFonts,
     mantineTheme
 }
