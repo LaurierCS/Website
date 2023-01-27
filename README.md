@@ -1,14 +1,14 @@
 <div align='center'>
 
   ```
-▀██▀                                ██                    ▄▄█▀▀▀▄█  ▄█▀▀▀▄█  
- ██        ▄▄▄▄   ▄▄▄ ▄▄▄  ▄▄▄ ▄▄  ▄▄▄    ▄▄▄▄  ▄▄▄ ▄▄  ▄█▀     ▀   ██▄▄  ▀  
- ██       ▀▀ ▄██   ██  ██   ██▀ ▀▀  ██  ▄█▄▄▄██  ██▀ ▀▀ ██           ▀▀███▄  
- ██       ▄█▀ ██   ██  ██   ██      ██  ██       ██     ▀█▄      ▄ ▄     ▀██ 
-▄██▄▄▄▄▄█ ▀█▄▄▀█▀  ▀█▄▄▀█▄ ▄██▄    ▄██▄  ▀█▄▄▄▀ ▄██▄     ▀▀█▄▄▄▄▀  █▀▄▄▄▄█▀  
-                                                                             
+▀██▀                                ██                    ▄▄█▀▀▀▄█  ▄█▀▀▀▄█
+ ██        ▄▄▄▄   ▄▄▄ ▄▄▄  ▄▄▄ ▄▄  ▄▄▄    ▄▄▄▄  ▄▄▄ ▄▄  ▄█▀     ▀   ██▄▄  ▀
+ ██       ▀▀ ▄██   ██  ██   ██▀ ▀▀  ██  ▄█▄▄▄██  ██▀ ▀▀ ██           ▀▀███▄
+ ██       ▄█▀ ██   ██  ██   ██      ██  ██       ██     ▀█▄      ▄ ▄     ▀██
+▄██▄▄▄▄▄█ ▀█▄▄▀█▀  ▀█▄▄▀█▄ ▄██▄    ▄██▄  ▀█▄▄▄▀ ▄██▄     ▀▀█▄▄▄▄▀  █▀▄▄▄▄█▀
+
   ```
-  
+
 </div>
 
 ![GitHub](https://img.shields.io/github/license/LaurierCS/Website?style=flat-square)
@@ -30,18 +30,18 @@
 ```sh
 $ git clone https://github.com/LaurierCS/Website
 ```
-- Install dependencies 
+- Install dependencies
 ```sh
-$ yarn
+$ pnpm i
 ```
 - Launch local server
 ```sh
-$ yarn dev
+$ pnpm dev
 ```
 
 - Launch Storybook server
 ```sh
-$ yarn storybook
+$ pnpm storybook
 ```
 
 > Note: Storybook runs independently from the development server. Run both servers to observe changes on the web app and storybook.
