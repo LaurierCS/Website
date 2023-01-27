@@ -5,11 +5,13 @@ import EventTag from './EventTag/EventTag';
 import EventItem from './EventItem/EventItem';
 import EventTable from './EventTable/EventTable';
 import EventSection from './EventSection/EventSection';
+import About from './About/About';
 
 export {
     Navbar,
     Footer,
     Socials,
+    About,
     EventSection,
     EventTable,
     EventItem,
