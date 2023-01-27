@@ -5,8 +5,13 @@ import { Landing } from '../pages';
 import { CustomFonts, mantineTheme } from './Mantine';
 
 const Router = () => {
-     return (
-        <MantineProvider theme={mantineTheme} withGlobalStyles withNormalizeCSS>
+    return (
+        <MantineProvider
+            theme={mantineTheme}
+            withCSSVariables
+            withGlobalStyles
+            withNormalizeCSS
+        >
             <CustomFonts />
             <BrowserRouter>
                 <Routes>
@@ -14,7 +19,7 @@ const Router = () => {
                 </Routes>
             </BrowserRouter>
         </MantineProvider>
-     )
-}
+    );
+};
 
 export default Router;

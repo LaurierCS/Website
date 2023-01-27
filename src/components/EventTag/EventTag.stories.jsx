@@ -29,7 +29,6 @@ PlaceTag.args = {
     variant: 'tertiary',
     intent: 'place',
     place: 'BA110',
-    online: false,
     removeBg: true,
 };
 

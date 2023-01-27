@@ -15,7 +15,12 @@ export const parameters = {
 
 export const decorators = [
     (Story) => (
-        <MantineProvider theme={mantineTheme} withGlobalStyles withNormalizeCSS>
+        <MantineProvider
+            theme={mantineTheme}
+            withCSSVariables
+            withGlobalStyles
+            withNormalizeCSS
+        >
             <CustomFonts />
             <Story />
         </MantineProvider>

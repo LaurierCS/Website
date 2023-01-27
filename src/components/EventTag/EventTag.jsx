@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import './EventTag.css';
@@ -12,7 +12,6 @@ const OUT_TIME_FORMAT = 'h:mma';
  * props:
  * variant: "primary" | 'secondary' | 'tertiary' - defaults: 'primary'
  * removeBg: boolean - defaults: false
- * online: boolean - defaults: true
  * place: string - defaults: "TBA"
  * date: string of format "DD/MM/YY" - defaults: "TBA"
  * intent: "time" | "place" | "date" - defaults: 'time'
@@ -26,10 +25,8 @@ const OUT_TIME_FORMAT = 'h:mma';
  * Refer to the story of this component to see how everything looks and works.
  * */
 const EventTag = ({
-    key, // tag id
     variant,
     removeBg,
-    online,
     place,
     date,
     intent,
@@ -66,11 +63,13 @@ const EventTag = ({
                 removeBg ? '' : 'event-tag-bg'
             } ${className}`}
         >
-            {intent === 'time'
-                ? `${time.start}-${time.end}`
-                : intent === 'place'
-                ? `${online ? 'Online' : 'In Person'} | ${place}`
-                : dateString}
+            <span>
+                {intent === 'time'
+                    ? `${time.start}-${time.end}`
+                    : intent === 'place'
+                    ? place
+                    : dateString}
+            </span>
         </div>
     );
 };
@@ -79,7 +78,6 @@ EventTag.propTypes = {
     variant: PropTypes.oneOf(['primary', 'secondary', 'tertiary']),
     intent: PropTypes.oneOf(['time', 'place', 'date']),
     removeBg: PropTypes.bool,
-    online: PropTypes.bool,
     place: PropTypes.string,
     date: PropTypes.string,
     startTime: PropTypes.string,
@@ -89,7 +87,6 @@ EventTag.propTypes = {
 EventTag.defaultProps = {
     variant: 'primary',
     removeBg: false,
-    online: true,
     place: 'TBA',
     date: 'TBA',
     intent: 'time',
