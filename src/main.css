@@ -1,8 +1,10 @@
 :root {
      --color-black:#000000;
      --color-white:#FFFFFF;
-     --color_blue: #29ABF4;
+     --color-blue: #29ABF4;
      --color-light-blue: #A1DAF5;
+     --color-mint-blue: #89F7FE;
+     --color-mint-green: #ACFFBE;
      --color-pink: #FF41D5;
      --color-blue-gradient: linear-gradient(145deg, rgba(41,171,244,1) 0%, rgba(161,218,245,1) 100%); 
      --color-pink-gradient: linear-gradient(145deg, rgba(41,171,244,1) 0%, rgba(255,65,213,1) 100%);
@@ -15,9 +17,9 @@
      --color-gray-4: #2C3844;
      --color-gray-5: #12181B;
 
-     --color-shadow: filter: drop-shadow(0px 4px 4px rgba(18, 24, 27, 0.25));
-     --color-neon-border: border: 2px solid var(--color-blue);
-     --color-neon-effect: filter: drop-shadow(0px 0px 24px var(--color-light-blue));
+     --color-shadow: drop-shadow(0px 4px 4px rgba(18, 24, 27, 0.25));
+     --neon-border: 2px solid var(--color-blue);
+     --neon-box-shadow: 0px 0px 5px var(--color-blue), 0px 0px 15px var(--color-blue), 0px 0px 29px var(--color-blue);
 
      /* Default Dark Theme */
      --color-background: var(--color-black);

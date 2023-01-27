@@ -5,15 +5,20 @@ import { Landing } from '../pages';
 import { mantineTheme } from './Mantine';
 
 const Router = () => {
-     return (
-        <MantineProvider theme={{ mantineTheme }} withGlobalStyles withNormalizeCSS>
+    return (
+        <MantineProvider
+            theme={{mantineTheme}}
+            withCSSVariables
+            withGlobalStyles
+            withNormalizeCSS
+        >
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<Landing />} />
                 </Routes>
             </BrowserRouter>
         </MantineProvider>
-     )
-}
+    );
+};
 
 export default Router;
