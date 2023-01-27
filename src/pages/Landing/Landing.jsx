@@ -1,14 +1,17 @@
 import React from 'react';
 import './Landing.css';
-import { Navbar, Accord } from '../../components';
+import { Navbar, Accord, Footer, About, EventSection } from '@components';
 
 const Landing = () => {
-     return (
-          <>
-               <Navbar />
-               <Accord />
-          </>
-     );
+    return (
+        <>
+            <Navbar />
+            <About />
+            <Accord />
+            <EventSection />
+            <Footer />
+        </>
+    );
 };
 
 export default Landing;

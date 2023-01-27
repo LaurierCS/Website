@@ -39,6 +39,13 @@ $ yarn
 $ yarn dev
 ```
 
+- Launch Storybook server
+```sh
+$ yarn storybook
+```
+
+> Note: Storybook runs independently from the development server. Run both servers to observe changes on the web app and storybook.
+
 <hr>
-<img src="https://github.com/LaurierCS/Website/blob/main/public/lcs_banner.png"/>
+<img src="https://github.com/LaurierCS/Website/blob/main/src/assets/lcs_banner.png"/>
 
