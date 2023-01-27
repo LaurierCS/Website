@@ -11,9 +11,11 @@ import EventTable from './EventTable/EventTable';
 import EventSection from './EventSection/EventSection';
 import About from './About/About';
 import Spacer from './Spacer/Spacer';
+import HeroSection from './HeroSection/HeroSection';
 
 export {
     Navbar,
+    HeroSection,
     Accord,
     InfoDividerTop,
     InfoDividerBottom,
