@@ -2,12 +2,11 @@ import { MantineProvider } from '@mantine/core';
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Landing } from '../pages';
-import { CustomFonts, mantineTheme } from './Mantine';
+import { mantineTheme } from './Mantine';
 
 const Router = () => {
      return (
-        <MantineProvider theme={mantineTheme} withGlobalStyles withNormalizeCSS>
-            <CustomFonts />
+        <MantineProvider theme={{ mantineTheme }} withGlobalStyles withNormalizeCSS>
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<Landing />} />
