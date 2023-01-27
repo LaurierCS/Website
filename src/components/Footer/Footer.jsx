@@ -6,7 +6,9 @@ import { Socials } from "../../components";
 const Footer = () => {
      return (
           <footer>
+               <div className="spacer" style={{ width: "100%", height: "1.5em" }} />
                <Divider />
+               <div className="spacer" style={{ width: "100%", height: "1.5em" }} />
                <div className="footer__container">
                     <div className="footer__info">
                          <p> Copyright &#169; {new Date().getFullYear()} | Laurier Computing Society. All rights reserved.</p>
@@ -16,6 +18,7 @@ const Footer = () => {
                          <p> Made with ❤️ from the LCS Development Team</p>
                     </div>
                </div>
+               <div className="spacer" style={{ width: "100%", height: "1.5em" }} />
           </footer>
      );
 };
