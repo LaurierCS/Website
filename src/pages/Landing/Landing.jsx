@@ -1,15 +1,18 @@
 import React from 'react';
 import './Landing.css';
-import { Navbar, Accord, InfoBanner, Footer, About, EventSection } from '@components';
+import { Navbar, InfoBanner, About, EventSection, Accord, Footer, Spacer } from '@components';
 
 const Landing = () => {
     return (
         <>
             <Navbar />
+            <Spacer height="2em"/>                                  
             <InfoBanner />
+            <Spacer height="2em"/>                                  
             <About />
-            <Accord />
+            <Spacer height="2em"/>                                  
             <EventSection />
+            <Accord />
             <Footer />
         </>
     );
