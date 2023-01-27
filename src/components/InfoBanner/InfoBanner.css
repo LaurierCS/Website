@@ -9,6 +9,7 @@
     padding-left: 10%;
     padding-right: 10%;
     gap: 12em;
+    font-size: 18px;
 }
 
 .info__banner__text {
@@ -64,5 +65,13 @@
     .info__banner {
         flex-direction: column;
         gap: 4em;
+    }
+}
+
+/* media queries for font size adjustments based on screen size */
+
+@media screen and (min-width: 1300px) {
+    .info__banner {
+        font-size: 25px;
     }
 }
