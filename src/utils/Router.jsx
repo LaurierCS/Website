@@ -1,7 +1,7 @@
 import { MantineProvider } from '@mantine/core';
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Landing } from '../pages';
+import { Landing } from '@pages';
 import { mantineTheme } from './Mantine';
 
 const Router = () => {

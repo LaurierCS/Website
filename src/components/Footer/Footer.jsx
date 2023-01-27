@@ -1,7 +1,7 @@
 import React from "react";
 import "./Footer.css";
 import { Divider } from "@mantine/core";
-import { Socials } from "../../components";
+import { Socials } from "@components";
 
 const Footer = () => {
      return (
