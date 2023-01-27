@@ -7,7 +7,7 @@ import { mantineTheme } from './Mantine';
 const Router = () => {
     return (
         <MantineProvider
-            theme={{mantineTheme}}
+            theme={mantineTheme}
             withCSSVariables
             withGlobalStyles
             withNormalizeCSS
