@@ -1,0 +1,39 @@
+.info__banner {
+     padding-left: 20%;
+     padding-right: 20%;
+     padding-top: 1em;
+     padding-bottom: 1em;
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     padding-left: 10%;
+     padding-right: 10%;
+     gap: 12em;
+}
+
+.info__banner__text {
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+}
+
+.info__stats {
+     height: 70px;
+     font-weight: 700;
+     font-size: 3vw;
+     line-height: 77px;
+     color: #EBE3E6;
+     margin-top: 0;
+     margin-bottom: 0;
+}
+
+.info__header {
+     margin-bottom: 0;
+     margin-top: 0;
+     font-style: normal;
+     font-weight: 400;
+     font-size: 1.5vw;
+     line-height: 30px;
+     color: #FFFFFF;
+}
