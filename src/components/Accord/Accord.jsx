@@ -6,7 +6,7 @@ const Accord = () => {
      return (
           <section id="faq">
                <div className="Accord">
-                    <div class = "faq">&lt;Frequently Asked Questions/&gt;</div>
+                    <div className="faq">&lt;Frequently Asked Questions/&gt;</div>
                     <Accordion variant="separated" defaultValue="customization">
 
                     <Accordion.Item value="who">
