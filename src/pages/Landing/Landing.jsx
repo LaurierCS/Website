@@ -1,11 +1,12 @@
 import React from 'react';
 import './Landing.css';
-import { Navbar, Accord, Footer, About, EventSection } from '@components';
+import { Navbar, Accord, InfoBanner, Footer, About, EventSection } from '@components';
 
 const Landing = () => {
     return (
         <>
             <Navbar />
+            <InfoBanner />
             <About />
             <Accord />
             <EventSection />
