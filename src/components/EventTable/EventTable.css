@@ -11,7 +11,7 @@
 
 @media (prefers-reduced-motion: no-preference) {
     .pulse {
-        animation: pulse 1s 1 forwards;
+        animation: pulse 2.5s infinite;
     }
 }
 
@@ -21,8 +21,13 @@
             0px 0px 0px rgba(41, 202, 83, 0), 0px 0px 0px rgba(41, 202, 83, 0);
         border-color: var(--color-blue);
     }
-    100% {
+    50% {
         box-shadow: var(--neon-box-shadow);
         border-color: var(--color-light-blue);
+    }
+    100% {
+        box-shadow: 0px 0px 0px rgba(41, 202, 83, 0),
+            0px 0px 0px rgba(41, 202, 83, 0), 0px 0px 0px rgba(41, 202, 83, 0);
+        border-color: var(--color-blue);
     }
 }
