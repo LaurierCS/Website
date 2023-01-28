@@ -10,6 +10,7 @@ import EventItem from './EventItem/EventItem';
 import EventTable from './EventTable/EventTable';
 import EventSection from './EventSection/EventSection';
 import About from './About/About';
+import NavbarSocials from './NavbarSocials/NavbarSocials';
 import Spacer from './Spacer/Spacer';
 
 export {
@@ -25,5 +26,6 @@ export {
     EventTable,
     EventItem,
     EventTag,
+    NavbarSocials,
     Spacer,
 };
