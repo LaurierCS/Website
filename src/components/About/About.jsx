@@ -13,33 +13,34 @@ with hands-on experience through workshops, hackathons, networking events, and g
 sessions. Whether you're a beginner or a seasoned pro, the Laurier Computing Society has \
 something for everyone. Join us today and be a part of the future of technology!";
 
-// about component
 const About = () => {
   return (
-    <Container size="xl" my="md">
-    <Grid grow>
-        <Grid.Col md={6}>
-            <Image src={CorpImage}/>
-        </Grid.Col>
-        <Grid.Col md={6}>
-            <Center style={{ width: '100%', height: '100%' }}>
-                <Flex
-                    direction="column"
-                    justify="center"
-                    wrap="wrap"
-                    gap="md"
-                >
-                    <Title align="center" variant="gradient" order={1}>
-                        {ABOUT_US_TITLE}
-                    </Title>
-                    <Text align="center" color="white">
-                        {ABOUT_US_TEXT}
-                    </Text>
-                </Flex>
-            </Center>
-        </Grid.Col>
-    </Grid>
-</Container>
+    <section id="about">
+        <Container size="xl" my="md">
+            <Grid grow>
+                <Grid.Col md={6}>
+                    <Image src={CorpImage}/>
+                </Grid.Col>
+                <Grid.Col md={6}>
+                    <Center style={{ width: '100%', height: '100%' }}>
+                        <Flex
+                            direction="column"
+                            justify="center"
+                            wrap="wrap"
+                            gap="md"
+                        >
+                            <Title align="center" variant="gradient" order={1}>
+                                {ABOUT_US_TITLE}
+                            </Title>
+                            <Text align="center" color="white">
+                                {ABOUT_US_TEXT}
+                            </Text>
+                        </Flex>
+                    </Center>
+                </Grid.Col>
+            </Grid>
+        </Container>
+    </section>
   );
 }
 

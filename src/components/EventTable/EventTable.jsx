@@ -76,24 +76,26 @@ const EventTable = () => {
     }, []);
 
     return (
-        <Container
-            size="sm"
-            my="md"
-            px={0}
-            className={`event-table-wrapper ${eventData.length ? 'pulse' : ''}`}
-        >
-            {loading ? (
-                <Container py={6}>
-                    <Center>
-                        <Loader />
-                    </Center>
-                </Container>
-            ) : (
-                eventData.map((data, i) => {
-                    return <EventItem eventData={data} key={i} />;
-                })
-            )}
-        </Container>
+        <section id="events">
+            <Container
+                size="sm"
+                my="md"
+                px={0}
+                className={`event-table-wrapper ${eventData.length ? 'pulse' : ''}`}
+            >
+                {loading ? (
+                    <Container py={6}>
+                        <Center>
+                            <Loader />
+                        </Center>
+                    </Container>
+                ) : (
+                    eventData.map((data, i) => {
+                        return <EventItem eventData={data} key={i} />;
+                    })
+                )}
+            </Container>
+        </section>
     );
 };
 
