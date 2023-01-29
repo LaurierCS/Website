@@ -1,0 +1,64 @@
+/* expanded menu styling */
+.mantine-Accordion-control {
+    background-color: var(--color-gray-4);
+    border-color: var(--color-gray-4);
+    color: white;
+    font-family: 'Montserrat';
+    font-size: 20px;
+    height: auto;
+    border-radius: 9px;
+}
+
+/* button styling */
+.mantine-Accordion-item {
+    width: 65%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: var(--color-gray-4);
+    border: 1px solid transparent;
+    -webkit-transition: background-color 250ms ease;
+    transition: background-color 250ms ease;
+    color: white;
+    font-family: 'Montserrat';
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    font-size: 16px;
+    
+}
+
+/* border and text styling for button */
+.mantine-Accordion-item[data-active] {
+    background-color: var(--color-gray-4);
+    border-color: var(--color-gray-4);
+    font-family: 'Montserrat';
+}
+
+/* frequently asked questions text title */
+.faq {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 40px;
+    font-weight: bold;
+    background: var(--color-blue-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: 'Montserrat';
+}
+
+/* determines styling when screen width and height is smaller */
+@media screen and (max-width: 415px) {
+    div.faq {
+        font-size: 35px;
+    }
+  }
+
+@media screen and (max-width: 415px) {
+    div.mantine-Accordion-label {
+        font-size: 18px;
+    }
+    div.mantine-Accordion-item {
+        width:75%;
+    }
+  }
+
+  
