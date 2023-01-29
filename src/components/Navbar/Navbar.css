@@ -34,6 +34,10 @@
 a {
     color: inherit; 
 }
+
+a:hover {
+    color: var()
+}
    
 @media screen and (max-width:900px) {
     .navbar__links{

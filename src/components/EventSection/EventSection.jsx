@@ -4,7 +4,7 @@ import EventTable from '../EventTable/EventTable';
 // UI imports from mantine
 import { Title, Text, Container, Grid, Flex, Center } from '@mantine/core';
 
-const EVENT_SECTION_TITLE = '<Upcoming Events/>';
+const EVENT_SECTION_TITLE = '<Upcoming Events />';
 const EVENT_SECTION_PHRASE =
     "Stay ahead of the game with LCS's events and workshops!";
 

@@ -3,7 +3,7 @@ import "./About.css";
 import { Title, Text, Container, Grid, Flex, Center, Image } from '@mantine/core';
 import { CorpImage } from '@assets';
 
-const ABOUT_US_TITLE = "<About Us/>";
+const ABOUT_US_TITLE = "<About Us />";
 const ABOUT_US_TEXT = "The Laurier Computing Society is the official student-run club for \
 computer science enthusiasts at Wilfrid Laurier University. Our mission is to empower students \
 to reach their full potential in STEM by providing a wealth of resources and opportunities for \
