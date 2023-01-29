@@ -15,7 +15,7 @@ something for everyone. Join us today and be a part of the future of technology!
 
 const About = () => {
   return (
-    <section id="about">
+    <section id="About">
         <Container size="xl" my="md">
             <Grid grow>
                 <Grid.Col md={6}>
