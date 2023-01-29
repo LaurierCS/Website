@@ -1,5 +1,5 @@
 import Navbar from './Navbar/Navbar';
-import Accord from './Accord/Accord';
+import FAQ from './FAQ/FAQ';
 import InfoDividerTop from './Dividers/InfoDividerTop';
 import InfoDividerBottom from './Dividers/InfoDividerBottom';
 import InfoBanner from './InfoBanner/InfoBanner';
@@ -15,7 +15,7 @@ import Spacer from './Spacer/Spacer';
 
 export {
     Navbar,
-    Accord,
+    FAQ,
     InfoDividerTop,
     InfoDividerBottom,
     InfoBanner,
