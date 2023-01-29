@@ -1,20 +1,19 @@
 import React from 'react';
 import './Navbar.css';
-import { BsLinkedin, BsGithub } from 'react-icons/bs';
-import logo from '../../assets/logo_icon.svg';
+import { IconLogo } from '@assets';
 import { NavbarSocials } from '@components';
+import { Link } from 'react-scroll';
 
 const Navbar = () => {
     return (
         <div className="navbar">
-            <img className="navbar__logo" src={logo} alt="logo" />
+            <img className="navbar__logo" src={IconLogo} alt="logo" />
 
             <ul className="navbar__links">
-                {['FAQ', 'Events', 'About', 'The team', 'Contact'].map(
+                {['About', 'Events', 'Initiatives', 'FAQ', 'Team'].map(
                     (item) => (
                         <li key={`link-${item}`}>
-                            <div />
-                            <a href={`#${item}`}>{item}</a>
+                            <Link to={`${item}`} smooth duration={300}>{item}</Link>
                         </li>
                     )
                 )}
