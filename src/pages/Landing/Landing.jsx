@@ -1,6 +1,6 @@
 import React from 'react';
 import './Landing.css';
-import { Navbar, InfoBanner, About, EventSection, Accord, Footer, Spacer } from '@components';
+import { Navbar, InfoBanner, About, EventSection, FAQ, Footer, Spacer } from '@components';
 
 const Landing = () => {
     return (
@@ -12,7 +12,7 @@ const Landing = () => {
             <About />
             <Spacer height="2em"/>                                  
             <EventSection />
-            <Accord />
+            <FAQ />
             <Footer />
         </>
     );
