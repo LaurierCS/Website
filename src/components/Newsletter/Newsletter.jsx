@@ -1,11 +1,22 @@
 import React from "react";
 import "./Newsletter.css"
-import { Title, Text, Container, Flex, Center } from '@mantine/core';
+import { Title, Text, Container, Flex, Center, TextInput, Button, Group, Box } from '@mantine/core';
+import { useForm } from '@mantine/form';
 
 const NEWSLETTER_HEADING = "Join our Newsletter!";
 const NEWSLETTER_CAPTION = ["Subscribe to our newsletter to receive event", <br/>, "announcements and more!"]
 
-const Newsletter = () => {
+function Newsletter () {
+    const form = useForm({
+        initialValues: {
+            email: '',
+        },
+
+        validate: {
+            email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
+        },
+    });
+
     return (
         <section id="newsletter">
             <Container size="x1" my={300}>
@@ -16,12 +27,26 @@ const Newsletter = () => {
                         wrap="wrap"
                         gap="md"
                     >
-                        <Title align="center" variant="gradient" order={1} size={50}>
+                        <Title align="center" color="#A1DAF5" order={1}>
                             {NEWSLETTER_HEADING}
                         </Title>
-                        <Text align="center" color="white" size={30}>
+                        <Text align="center" color="white">
                             {NEWSLETTER_CAPTION}
                         </Text>
+
+                        <Box sx={{ width: 400 }} mx="auto" mt="sm">
+                            <form onSubmit={form.onSubmit((values) => console.log(values))}>
+                                <TextInput
+                                withAsterisk
+                                placeholder="Email"
+                                {...form.getInputProps('email')}
+                                />
+
+                                <Group position="center" mt="sm">
+                                    <Button fullWidth variant="filled" type="submit" size="lg" radius="md">SUBSCRIBE</Button>
+                                </Group>
+                            </form>
+                        </Box>
                         
                     </Flex>
                 </Center>
