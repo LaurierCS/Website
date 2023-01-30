@@ -1,18 +1,18 @@
 <div align='center'>
 
   ```
-▀██▀                                ██                    ▄▄█▀▀▀▄█  ▄█▀▀▀▄█  
- ██        ▄▄▄▄   ▄▄▄ ▄▄▄  ▄▄▄ ▄▄  ▄▄▄    ▄▄▄▄  ▄▄▄ ▄▄  ▄█▀     ▀   ██▄▄  ▀  
- ██       ▀▀ ▄██   ██  ██   ██▀ ▀▀  ██  ▄█▄▄▄██  ██▀ ▀▀ ██           ▀▀███▄  
- ██       ▄█▀ ██   ██  ██   ██      ██  ██       ██     ▀█▄      ▄ ▄     ▀██ 
-▄██▄▄▄▄▄█ ▀█▄▄▀█▀  ▀█▄▄▀█▄ ▄██▄    ▄██▄  ▀█▄▄▄▀ ▄██▄     ▀▀█▄▄▄▄▀  █▀▄▄▄▄█▀  
-                                                                             
+▀██▀                                ██                    ▄▄█▀▀▀▄█  ▄█▀▀▀▄█
+ ██        ▄▄▄▄   ▄▄▄ ▄▄▄  ▄▄▄ ▄▄  ▄▄▄    ▄▄▄▄  ▄▄▄ ▄▄  ▄█▀     ▀   ██▄▄  ▀
+ ██       ▀▀ ▄██   ██  ██   ██▀ ▀▀  ██  ▄█▄▄▄██  ██▀ ▀▀ ██           ▀▀███▄
+ ██       ▄█▀ ██   ██  ██   ██      ██  ██       ██     ▀█▄      ▄ ▄     ▀██
+▄██▄▄▄▄▄█ ▀█▄▄▀█▀  ▀█▄▄▀█▄ ▄██▄    ▄██▄  ▀█▄▄▄▀ ▄██▄     ▀▀█▄▄▄▄▀  █▀▄▄▄▄█▀
+
   ```
-  
+
 </div>
 
 ![GitHub](https://img.shields.io/github/license/LaurierCS/Website?style=flat-square)
-
+![ESLint] (https://github.com/LaurierCS/Website/actions/workflows/eslint.yml/badge.svg)
 ## Overview :sparkles:
 - The official Laurier Computing Society website, made with :heart:
 
@@ -30,7 +30,7 @@
 ```sh
 $ git clone https://github.com/LaurierCS/Website
 ```
-- Install dependencies 
+- Install dependencies
 ```sh
 $ yarn
 ```
