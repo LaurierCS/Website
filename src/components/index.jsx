@@ -12,10 +12,12 @@ import EventSection from './EventSection/EventSection';
 import About from './About/About';
 import NavbarSocials from './NavbarSocials/NavbarSocials';
 import Spacer from './Spacer/Spacer';
+import HeroSection from './HeroSection/HeroSection';
 import Newsletter from './Newsletter/Newsletter';
 
 export {
     Navbar,
+    HeroSection,
     FAQ,
     InfoDividerTop,
     InfoDividerBottom,
