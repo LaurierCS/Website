@@ -1,12 +1,12 @@
 import React from 'react';
-import './Accord.css';
+import './FAQ.css';
 import { Accordion } from '@mantine/core';
 
-const Accord = () => {
+const FAQ = () => {
      return (
-          <section id="faq">
+          <section id="FAQ">
                <div className="Accord">
-                    <div class = "faq">&lt;Frequently Asked Questions/&gt;</div>
+                    <div className="faq">&lt;Frequently Asked Questions /&gt;</div>
                     <Accordion variant="separated" defaultValue="customization">
 
                     <Accordion.Item value="who">
@@ -45,4 +45,4 @@ const Accord = () => {
      );
 };
 
-export default Accord;
+export default FAQ;

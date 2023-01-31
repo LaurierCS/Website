@@ -1,5 +1,5 @@
 import Navbar from './Navbar/Navbar';
-import Accord from './Accord/Accord';
+import FAQ from './FAQ/FAQ';
 import InfoDividerTop from './Dividers/InfoDividerTop';
 import InfoDividerBottom from './Dividers/InfoDividerBottom';
 import InfoBanner from './InfoBanner/InfoBanner';
@@ -10,13 +10,15 @@ import EventItem from './EventItem/EventItem';
 import EventTable from './EventTable/EventTable';
 import EventSection from './EventSection/EventSection';
 import About from './About/About';
+import NavbarSocials from './NavbarSocials/NavbarSocials';
 import Spacer from './Spacer/Spacer';
 import HeroSection from './HeroSection/HeroSection';
+import Newsletter from './Newsletter/Newsletter';
 
 export {
     Navbar,
     HeroSection,
-    Accord,
+    FAQ,
     InfoDividerTop,
     InfoDividerBottom,
     InfoBanner,
@@ -27,5 +29,7 @@ export {
     EventTable,
     EventItem,
     EventTag,
+    NavbarSocials,
     Spacer,
+    Newsletter,
 };
