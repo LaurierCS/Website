@@ -1,6 +1,6 @@
 // expose access to css variables defined in main.css
 import '../src/main.css';
-import { mantineTheme, CustomFonts } from '../src/utils/Mantine';
+import { mantineTheme } from '../src/utils/Mantine';
 import { MantineProvider } from '@mantine/core';
 
 export const parameters = {
@@ -21,7 +21,6 @@ export const decorators = [
             withGlobalStyles
             withNormalizeCSS
         >
-            <CustomFonts />
             <Story />
         </MantineProvider>
     ),
