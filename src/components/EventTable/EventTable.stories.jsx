@@ -8,3 +8,5 @@ export default {
 export const Default = () => {
     return <EventTable />;
 };
+
+export const NoEvents = () => <EventTable empty={true} />;
