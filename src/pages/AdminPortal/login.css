@@ -1,0 +1,10 @@
+.wrapper {
+    min-height: 100vh;
+    padding-bottom: 100px;
+}
+.center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
