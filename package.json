@@ -16,14 +16,17 @@
     "@mantine/core": "^5.8.2",
     "@mantine/form": "^5.10.2",
     "@mantine/hooks": "^5.8.2",
+    "bootstrap": "^5.2.3",
     "firebase": "^9.16.0",
     "moment": "^2.29.4",
     "react": "^18.2.0",
+    "react-bootstrap": "^2.7.0",
     "react-countup": "^6.4.1",
     "react-dom": "^18.2.0",
     "react-icons": "^4.7.1",
     "react-router-dom": "^6.4.2",
-    "react-scroll": "^1.8.8"
+    "react-scroll": "^1.8.8",
+    "react-spinners": "^0.13.8"
   },
   "devDependencies": {
     "@babel/core": "^7.20.7",
