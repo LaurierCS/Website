@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { getAuth } from 'firebase/auth';
+import { HashLoader } from 'react-spinners';
+
+const override = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translateX(-50%) translateY(-50%)',
+};
 
 export const AuthContext = React.createContext();
 
@@ -16,10 +24,12 @@ const AuthProvider = ({ children }) => {
     }, []);
     if (pending) {
         return (
-            <h1>
-                An unexpected error has occcured, you may not proceed to the
-                Admin Portal
-            </h1>
+            <HashLoader
+                cssOverride={override}
+                size={100}
+                color={'#123abc'}
+                loading={pending}
+            />
         );
     } else {
         return (

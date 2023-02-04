@@ -1,17 +1,9 @@
-import { Container, createStyles } from '@mantine/core';
+import { Container } from '@mantine/core';
 import React from 'react';
-import {
-    Navbar,
-    InfoBanner,
-    About,
-    EventSection,
-    FAQ,
-    Footer,
-} from '@components';
+import { Footer } from '@components';
 import { Form, Button } from 'react-bootstrap';
 import './login.css';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { Navigate } from 'react-router-dom';
 
 const LoginPage = () => {
     const loginUser = (e) => {
