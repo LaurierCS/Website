@@ -15,6 +15,7 @@ import moment from 'moment';
 const MembersTableRow = ({
     firstName,
     lastName,
+    middleName = '',
     picture,
     email,
     position,
@@ -27,7 +28,7 @@ const MembersTableRow = ({
                     <Group spacing="sm">
                         <Avatar size={30} src={picture} radius={30} />
                         <Text size="sm" weight={500}>
-                            {`${firstName} ${lastName}`}
+                            {[firstName, middleName, lastName].join(' ')}
                         </Text>
                     </Group>
                 </td>
@@ -63,12 +64,7 @@ const MembersTableRow = ({
 
 const MembersTable = ({ data }) => {
     const rows = data.map((item) => {
-        return (
-            <MembersTableRow
-                {...item}
-                key={`${item.firstName}-${item.lastName}`}
-            />
-        );
+        return <MembersTableRow {...item} key={item.email} />;
     });
 
     return (
@@ -95,6 +91,16 @@ const mockData = [
         lastName: 'Wu',
         position: 'Dev',
         email: 'wuch6840@mylaurier.ca',
+        picture:
+            'https://firebasestorage.googleapis.com/v0/b/lcs-frontpage.appspot.com/o/team%2Feijf7UomgQxFcqdiv7jM.jpg?alt=media&token=695f530a-7815-4918-aeae-12a8f47d6620',
+        joinDate: moment(), // placeholder timestamp
+    },
+    {
+        firstName: 'Juan',
+        middleName: 'Carlos',
+        lastName: 'Wu',
+        position: 'Dev',
+        email: 'wuch6840-2@mylaurier.ca',
         picture:
             'https://firebasestorage.googleapis.com/v0/b/lcs-frontpage.appspot.com/o/team%2Feijf7UomgQxFcqdiv7jM.jpg?alt=media&token=695f530a-7815-4918-aeae-12a8f47d6620',
         joinDate: moment(), // placeholder timestamp
