@@ -10,8 +10,16 @@ import {
     Table,
 } from '@mantine/core';
 import { IconTrash, IconPencil, IconCopy } from '@tabler/icons-react';
+import moment from 'moment';
 
-const MembersTableRow = ({ firstName, lastName, picture, email, position }) => {
+const MembersTableRow = ({
+    firstName,
+    lastName,
+    picture,
+    email,
+    position,
+    joinDate,
+}) => {
     return (
         <>
             <tr>
@@ -34,6 +42,9 @@ const MembersTableRow = ({ firstName, lastName, picture, email, position }) => {
                             <IconCopy size={16} stroke={1.5} />
                         </ActionIcon>
                     </Group>
+                </td>
+                <td>
+                    <Text>{moment(joinDate).format('DD/MM/YY')}</Text>
                 </td>
                 <td>
                     <Group spacing={0} position="right">
@@ -68,6 +79,7 @@ const MembersTable = ({ data }) => {
                         <th>Member</th>
                         <th>Position</th>
                         <th>Email</th>
+                        <th>Join Date</th>
                         <th />
                     </tr>
                 </thead>
@@ -85,6 +97,7 @@ const mockData = [
         email: 'wuch6840@mylaurier.ca',
         picture:
             'https://firebasestorage.googleapis.com/v0/b/lcs-frontpage.appspot.com/o/team%2Feijf7UomgQxFcqdiv7jM.jpg?alt=media&token=695f530a-7815-4918-aeae-12a8f47d6620',
+        joinDate: moment(), // placeholder timestamp
     },
 ];
 
