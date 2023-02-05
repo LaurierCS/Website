@@ -1,12 +1,11 @@
 import { MantineProvider } from '@mantine/core';
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Landing } from '@pages';
+import { Landing, AdminPortal, EditMembers } from '@pages';
 import { mantineTheme } from './Mantine';
 import AuthProvider from '../scripts/hooks/auth';
 import PrivateRoute from '../scripts/private-route';
 import LoginPage from '../pages/AdminPortal/login';
-import PortalLanding from '../pages/AdminPortal/portal-landing';
 
 const Router = () => {
     return (
@@ -22,9 +21,13 @@ const Router = () => {
                         <Route element={<PrivateRoute />}>
                             <Route
                                 path="/admin-portal"
-                                element={<PortalLanding />}
-                                exact
-                            />
+                                element={<AdminPortal />}
+                            >
+                                <Route
+                                    path="members"
+                                    element={<EditMembers />}
+                                />
+                            </Route>
                         </Route>
                         <Route path="/login" element={<LoginPage />} exact />
                         <Route path="/" element={<Landing />} />
