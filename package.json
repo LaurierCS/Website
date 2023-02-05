@@ -16,6 +16,7 @@
     "@mantine/core": "^5.8.2",
     "@mantine/form": "^5.10.2",
     "@mantine/hooks": "^5.8.2",
+    "@tabler/icons-react": "^2.2.0",
     "bootstrap": "^5.2.3",
     "firebase": "^9.16.0",
     "moment": "^2.29.4",
