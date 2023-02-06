@@ -1,13 +1,13 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
-import { CustomizableModal } from '@components';
+import { CustomiizableModal } from '@components';
 
 const PortalLanding = () => {
     const sampleFunc = () => {
         alert('sample function lololololoasdasdasdasdsadjaddasjda');
     };
     return (
-        <CustomizableModal
+        <CustomiizableModal
             modalOpenBtn="TEST OPEN CLICK ME BROTHER"
             heading="this is a test"
             btn1Text="close this pls"

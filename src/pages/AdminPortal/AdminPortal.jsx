@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, createStyles, Navbar, Grid } from '@mantine/core';
 import { SideNavbar } from '@components';
 import { Outlet } from 'react-router-dom';
+import { ModalsProvider } from '@mantine/modals';
 
 const useStyle = createStyles((theme) => {
     return {
@@ -19,12 +20,14 @@ const AdminPortal = () => {
     const { classes } = useStyle();
 
     return (
-        <Container fluid p={0} className={classes.container}>
-            <SideNavbar />
-            <Container className={classes.editContainer} fluid>
-                <Outlet />
+        <ModalsProvider>
+            <Container fluid p={0} className={classes.container}>
+                <SideNavbar />
+                <Container className={classes.editContainer} fluid>
+                    <Outlet />
+                </Container>
             </Container>
-        </Container>
+        </ModalsProvider>
     );
 };
 
