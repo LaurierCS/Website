@@ -6,6 +6,7 @@ const CustomizableModal = (props) => {
     const heading = props.heading;
     const btn1Text = props.btn1Text;
     const btn2Text = props.btn2Text;
+    const CustomBtn = props.customBtn;
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -13,9 +14,13 @@ const CustomizableModal = (props) => {
 
     return (
         <div>
-            <Button variant="primary" onClick={handleShow}>
-                {modalOpenBtn}
-            </Button>
+            {CustomBtn ? (
+                CustomBtn
+            ) : (
+                <Button variant="primary" onClick={handleShow}>
+                    {modalOpenBtn}
+                </Button>
+            )}
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>

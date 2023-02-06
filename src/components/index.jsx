@@ -14,8 +14,9 @@ import NavbarSocials from './NavbarSocials/NavbarSocials';
 import Spacer from './Spacer/Spacer';
 import HeroSection from './HeroSection/HeroSection';
 import Newsletter from './Newsletter/Newsletter';
-import CustomizableModal from './Modal/modal';
+import CustomizableModal from './CustomizableModal/CustomizableModal';
 import SideNavbar from './SideNavbar/SideNavbar';
+import MemberForm from './MemberForm/MemberForm';
 
 export {
     Navbar,
@@ -36,4 +37,5 @@ export {
     Newsletter,
     CustomizableModal,
     SideNavbar,
+    MemberForm,
 };
