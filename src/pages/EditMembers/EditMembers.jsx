@@ -4,7 +4,7 @@ import { MembersTable } from '@components';
 
 const EditMembers = () => {
     return (
-        <Container pt={5} fluid>
+        <Container pt={5} size="xl">
             <Title order={1}>Members</Title>
             <Container my={30} fluid>
                 <Button
