@@ -16,5 +16,7 @@ const firebaseConfig = {
     measurementId: import.meta.env.VITE_LCS_FIREBASE_MEASUREMENTID,
 };
 
+export const DB_COLLECTION = 'members';
+
 // Initialize Firebase
 export default initializeApp(firebaseConfig);

@@ -1,13 +1,15 @@
 import './EventTable.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import EventItem from '../EventItem/EventItem';
-import { createStyles, Container, Center, Loader } from '@mantine/core';
+import { Container, Center, Loader, Title } from '@mantine/core';
 
 /*
  * eventData refers to data fetched from the firebase database
  * current implementation: fetch event data in this component (makes more sense)
  * */
-const EventTable = () => {
+
+// the empty prop is just here for demo purposes until backend is up and running
+const EventTable = ({ empty = false }) => {
     const [eventData, setEventData] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -70,10 +72,17 @@ const EventTable = () => {
 
         // simulate api fetch latency
         setTimeout(() => {
-            setEventData(mockedEventData);
+            if (!empty) setEventData(mockedEventData);
             setLoading(false);
         }, 1000);
     }, []);
+
+    const events = useMemo(() => {
+        console.log('re-render');
+        return eventData.map((data, i) => (
+            <EventItem eventData={data} key={i} />
+        ));
+    }, [eventData]);
 
     return (
         <section id="events">
@@ -81,7 +90,9 @@ const EventTable = () => {
                 size="sm"
                 my="md"
                 px={0}
-                className={`event-table-wrapper ${eventData.length ? 'pulse' : ''}`}
+                className={`event-table-wrapper ${
+                    eventData.length ? 'pulse' : ''
+                }`}
             >
                 {loading ? (
                     <Container py={6}>
@@ -89,10 +100,16 @@ const EventTable = () => {
                             <Loader />
                         </Center>
                     </Container>
+                ) : eventData.length ? (
+                    events
                 ) : (
-                    eventData.map((data, i) => {
-                        return <EventItem eventData={data} key={i} />;
-                    })
+                    <Container py={6}>
+                        <Center>
+                            <Title order={3}>
+                                No events at the moment, please come back later.
+                            </Title>
+                        </Center>
+                    </Container>
                 )}
             </Container>
         </section>
