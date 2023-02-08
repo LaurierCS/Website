@@ -6,6 +6,10 @@ html {
     font-size: 18px;
 }
 
+html, #root {
+    background-color: var(--color-black);
+}
+
 :root {
      --color-black:#000000;
      --color-white:#FFFFFF;
