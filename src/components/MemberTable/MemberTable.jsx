@@ -8,8 +8,9 @@ import {
     Table,
     Pagination,
     Center,
+    Container,
 } from '@mantine/core';
-import { openModal } from '@mantine/modals';
+import { openConfirmModal, openModal } from '@mantine/modals';
 import { MemberForm } from '@components';
 import moment from 'moment';
 import { IconTrash, IconPencil, IconCopy } from '@tabler/icons-react';
@@ -17,17 +18,18 @@ import {
     getFirestore,
     query,
     collection,
-    getDocs,
     orderBy,
+    onSnapshot,
+    doc,
     Timestamp,
 } from 'firebase/firestore';
-import firebaseApp from '../../scripts/config.js';
+import firebaseApp, { DB_COLLECTION } from '../../scripts/config';
 import { useEffect, useMemo, useState } from 'react';
-import { Container } from 'react-bootstrap';
+import { deleteMember } from '../../scripts/firebaseUtils';
 
 const ROWS_PER_PAGE = 15;
 
-const MembersTableRow = ({ member, onDelete }) => {
+const MembersTableRow = ({ member }) => {
     const {
         firstName,
         lastName,
@@ -37,6 +39,27 @@ const MembersTableRow = ({ member, onDelete }) => {
         joinDate,
         middleName = '',
     } = member;
+
+    const handleDelete = () => {
+        openConfirmModal({
+            title: 'Delete Member',
+            centered: true,
+            children: (
+                <Text>
+                    Are you sure you want to delete this member? This action is
+                    destructive and data won't be restorable.
+                </Text>
+            ),
+            labels: { confirm: 'Delete Member', cancel: "No don't delete it" },
+            confirmProps: { color: 'red' },
+            onConfirm: async () => {
+                // note: firebase db
+                const db = getFirestore(firebaseApp);
+                const docRef = doc(db, DB_COLLECTION, member.docId);
+                await deleteMember(docRef);
+            },
+        });
+    };
 
     return (
         <>
@@ -70,16 +93,13 @@ const MembersTableRow = ({ member, onDelete }) => {
                             onClick={() =>
                                 openModal({
                                     title: 'Edit Member',
-                                    children: <MemberForm {...member} />,
+                                    children: <MemberForm member={member} />,
                                 })
                             }
                         >
                             <IconPencil size={16} stroke={1.5} />
                         </ActionIcon>
-                        <ActionIcon
-                            color="red"
-                            onClick={() => onDelete(member)}
-                        >
+                        <ActionIcon color="red" onClick={handleDelete}>
                             <IconTrash size={16} stroke={1.5} />
                         </ActionIcon>
                     </Group>
@@ -94,13 +114,10 @@ const MembersTable = () => {
     const [activePage, setPage] = useState(1);
 
     useEffect(() => {
-        (async () => {
-            // get data from backend
-            const db = getFirestore(firebaseApp);
-            const colRef = collection(db, 'members');
-            const q = query(colRef, orderBy('firstName'));
-            const snapshot = await getDocs(q);
-
+        const db = getFirestore(firebaseApp);
+        const colRef = collection(db, DB_COLLECTION);
+        const q = query(colRef, orderBy('firstName'));
+        const unsub = onSnapshot(q, (snapshot) => {
             // fill members
             const allMembers = [];
             snapshot.forEach((doc) => {
@@ -111,12 +128,16 @@ const MembersTable = () => {
                 );
                 data.joinDate = timestamp.toDate();
                 data.docId = doc.id; // might need the id for update/delete
-                data.email = 'test2341@mylaurier.ca'; // todo: remove this line later when all members have their email
+                if (!data.email) {
+                    data.email = 'missing@mylaurier.ca'; // todo: remove this line later when all members have their email
+                }
                 allMembers.push(data);
             });
 
             setMembers([...allMembers]);
-        })();
+        });
+
+        return unsub;
     }, []);
 
     const rows = useMemo(() => {
@@ -127,14 +148,11 @@ const MembersTable = () => {
         return members
             .slice((activePage - 1) * ROWS_PER_PAGE, ROWS_PER_PAGE * activePage)
             .map((memberData) => {
-                // at the moment we are using the name to create the key for reach row
-                // however, using the email should be better since each email is guarantee to be unique.
                 return (
                     <MembersTableRow
                         member={memberData}
-                        onDelete={(member) => {
-                            console.log(member);
-                        }}
+                        // at the moment we are using the name to create the key for reach row
+                        // however, using the email should be better since each email is guarantee to be unique.
                         key={`${memberData.firstName}-${memberData.lastName}/${memberData.position}`}
                     />
                 );
@@ -146,7 +164,7 @@ const MembersTable = () => {
     }, [members, activePage]);
 
     return (
-        <Container>
+        <Container fluid m={0} p={0}>
             <ScrollArea>
                 <Table verticalSpacing="sm">
                     <thead>

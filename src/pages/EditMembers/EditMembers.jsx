@@ -1,6 +1,6 @@
 import { Title, Container, Button } from '@mantine/core';
 import { openModal } from '@mantine/modals';
-import { MembersTable } from '@components';
+import { MembersTable, MemberForm } from '@components';
 
 const EditMembers = () => {
     return (
@@ -11,7 +11,7 @@ const EditMembers = () => {
                     onClick={() =>
                         openModal({
                             title: 'Add Member',
-                            children: <MemberForm />,
+                            children: <MemberForm member={{}} isNew={true} />,
                         })
                     }
                 >

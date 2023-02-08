@@ -1,18 +1,26 @@
 import { Avatar, Button, FileInput, Group, TextInput } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
+import { closeAllModals } from '@mantine/modals';
 import { isEmail, isNotEmpty, useForm } from '@mantine/form';
+import { doc, getFirestore, collection } from 'firebase/firestore';
 import moment from 'moment';
 import { useState } from 'react';
+import firebaseApp, { DB_COLLECTION } from '../../scripts/config';
+import { addMember, updateMember } from '../../scripts/firebaseUtils';
 
-const MemberForm = ({
-    firstName = '',
-    middleName = '',
-    lastName = '',
-    position = '',
-    email = '',
-    picture = '',
-    joinDate = moment().toDate(), // timestamp
-}) => {
+const MemberForm = ({ member, isNew = false }) => {
+    const {
+        firstName = '',
+        middleName = '',
+        lastName = '',
+        position = '',
+        email = '',
+        picture = '',
+        joinDate = moment().toDate(),
+    } = member;
+
+    const [pictureFile, setPictureFile] = useState(null);
+    const [date, setDate] = useState(joinDate);
     const form = useForm({
         initialValues: {
             firstName,
@@ -21,7 +29,6 @@ const MemberForm = ({
             position,
             email,
             joinDate,
-            pictureFile: null, // this should be a file object
         },
         validate: {
             firstName: isNotEmpty(),
@@ -32,22 +39,44 @@ const MemberForm = ({
         },
     });
 
-    const [date, setDate] = useState(joinDate);
-    const [pictureFile, setPictureFile] = useState(null);
+    const handleSubmit = async (values) => {
+        const db = getFirestore(firebaseApp);
+        if (isNew) {
+            const colRef = collection(db, DB_COLLECTION);
+            const docId = await addMember(colRef, values, pictureFile);
+            // todo: show notification
+        } else {
+            // note: firebase db
+            const docRef = doc(db, DB_COLLECTION, member.docId);
+            const data = {};
+            let isModified = false;
+            for (const field in values) {
+                if (form.isDirty(field)) {
+                    data[field] = values[field];
+                    isModified = true;
+                }
+            }
+
+            if (isModified || pictureFile) {
+                const updated = await updateMember(docRef, data, pictureFile);
+
+                if (updated) {
+                    // todo: show notification
+                }
+            }
+        }
+
+        closeAllModals();
+    };
 
     return (
-        <form
-            onSubmit={form.onSubmit((values) => {
-                console.log(values);
-                console.log(pictureFile);
-            })}
-        >
+        <form onSubmit={form.onSubmit(handleSubmit)}>
             <Group>
                 <Avatar size={60} src={picture} radius={60} />
                 <FileInput
                     label="Picture"
                     placeholder="Select Picture"
-                    accept="image/jpg"
+                    accept="image/jpeg"
                     value={pictureFile}
                     onChange={setPictureFile}
                 />
@@ -86,7 +115,7 @@ const MemberForm = ({
                 label="Join Date"
                 value={date}
                 onChange={setDate}
-                defaultValue={moment().toDate()}
+                defaultValue={joinDate}
             />
             <Button type="submit" mt="md">
                 Save
