@@ -17,7 +17,8 @@ import Newsletter from './Newsletter/Newsletter';
 import CustomizableModal from './CustomizableModal/CustomizableModal';
 import SideNavbar from './SideNavbar/SideNavbar';
 import MemberForm from './MemberForm/MemberForm';
-import MembersTable from './MemberTable/MemberTable';
+import MembersTable from './MembersTable/MembersTable';
+import MembersTableRow from './MembersTableRow/MembersTableRow';
 
 export {
     Navbar,
@@ -40,4 +41,5 @@ export {
     SideNavbar,
     MemberForm,
     MembersTable,
+    MembersTableRow,
 };
