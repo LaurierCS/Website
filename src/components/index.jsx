@@ -10,7 +10,7 @@ import EventItem from './EventItem/EventItem';
 import EventTable from './EventTable/EventTable';
 import EventSection from './EventSection/EventSection';
 import About from './About/About';
-import NavbarSocials from './NavbarSocials/NavbarSocials';
+import NavbarSocials from './Navbar/NavbarSocials/NavbarSocials';
 import Spacer from './Spacer/Spacer';
 import HeroSection from './HeroSection/HeroSection';
 import Newsletter from './Newsletter/Newsletter';
