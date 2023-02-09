@@ -58,3 +58,7 @@ html, #root {
     margin: 0;
     box-sizing: border-box;
 }
+
+section {
+    padding: 4rem 0rem;
+}
