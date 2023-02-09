@@ -34,7 +34,7 @@ const HeroSection = () => {
                             </Center>
 
                             {/*Hero Text*/}
-                            <Title pb='10rem' align="center" size={55} fw={700} variant="gradient" order={1}>
+                            <Title pb='3rem' align="center" size={55} fw={700} variant="gradient" order={1}>
                                 {HERO_SECTION_TITLE}
                             </Title>
                             <Text align="center" fz="xl" fw={500} c="white">
@@ -55,10 +55,10 @@ const HeroSection = () => {
                             </Center>
 
                             {/*Hero Image*/}
-                            <Image
+                            {/* <Image
                                 src={CorpImage}
                                 height={750}
-                            />
+                            /> */}
                         </BackgroundImage>
                     </Flex>
                 </Center>
