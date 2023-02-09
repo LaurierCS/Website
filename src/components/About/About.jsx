@@ -17,7 +17,7 @@ const About = () => {
   return (
     <section id="About">
         <Container size="xl" my="md">
-            <Grid grow>
+            <Grid grow gutter={5} gutterXl={100}>
                 <Grid.Col md={6}>
                     <Image src={CorpImage}/>
                 </Grid.Col>
