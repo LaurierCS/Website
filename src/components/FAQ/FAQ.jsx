@@ -1,12 +1,17 @@
 import React from 'react';
 import './FAQ.css';
-import { Accordion } from '@mantine/core';
+import { Accordion, MediaQuery } from '@mantine/core';
 
 const FAQ = () => {
      return (
           <section id="FAQ">
                <div className="Accord">
-                    <div className="faq">&lt;Frequently Asked Questions /&gt;</div>
+                    <MediaQuery
+                            query="(max-width: 768px)"
+                            styles={{ fontSize: '1.7rem' }}
+                    >
+                         <div className="faq">&lt;Frequently Asked Questions /&gt;</div>
+                    </MediaQuery>
                     <Accordion variant="separated" defaultValue="customization">
 
                     <Accordion.Item value="who">
