@@ -1,6 +1,6 @@
 import React from "react";
 import "./About.css";
-import { Title, Text, Container, Grid, Flex, Center, Image } from '@mantine/core';
+import { Title, Text, Container, Grid, Flex, Center, Image, MediaQuery } from '@mantine/core';
 import { CorpImage } from '@assets';
 
 const ABOUT_US_TITLE = "<About Us />";
@@ -29,12 +29,17 @@ const About = () => {
                             wrap="wrap"
                             gap="md"
                         >
+                        <MediaQuery
+                            query="(max-width: 768px)"
+                            styles={{ fontSize: '1.7rem' }}
+                        >
                             <Title align="center" variant="gradient" order={1}>
                                 {ABOUT_US_TITLE}
                             </Title>
-                            <Text align="center" color="white">
-                                {ABOUT_US_TEXT}
-                            </Text>
+                        </MediaQuery>
+                        <Text align="center" color="white">
+                            {ABOUT_US_TEXT}
+                        </Text>
                         </Flex>
                     </Center>
                 </Grid.Col>
