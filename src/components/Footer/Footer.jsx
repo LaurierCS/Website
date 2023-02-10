@@ -6,7 +6,6 @@ import { Socials } from "@components";
 const Footer = () => {
      return (
           <footer>
-               <div className="spacer" style={{ width: "100%", height: "1.5em" }} />
                <Divider />
                <div className="spacer" style={{ width: "100%", height: "1.5em" }} />
                <div className="footer__container">

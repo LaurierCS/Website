@@ -1,11 +1,14 @@
+footer {
+     background-color: var(--color-footer-background);
+     color: white;
+}
+
 .footer-container {
      display: flex;
      flex-direction: column;
      justify-content: center;
      align-items: center;
      padding: 1rem;
-     background-color: var(--color-gray-4);
-     color: #fff;
      font-size: 1.2rem;
      font-weight: 300;
      text-align: center;
