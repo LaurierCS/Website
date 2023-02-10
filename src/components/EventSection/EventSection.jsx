@@ -2,7 +2,7 @@ import './EventSection.css';
 import EventTable from '../EventTable/EventTable';
 
 // UI imports from mantine
-import { Title, Text, Container, Grid, Flex, Center } from '@mantine/core';
+import { Title, Text, Container, Grid, Flex, Center, MediaQuery } from '@mantine/core';
 
 const EVENT_SECTION_TITLE = '<Upcoming Events />';
 const EVENT_SECTION_PHRASE =
@@ -21,9 +21,14 @@ const EventSection = () => {
                                 wrap="wrap"
                                 gap="md"
                             >
-                                <Title align="center" variant="gradient" order={1}>
-                                    {EVENT_SECTION_TITLE}
-                                </Title>
+                                <MediaQuery
+                                    query="(max-width: 768px)"
+                                    styles={{ fontSize: '1.7rem' }}
+                                >
+                                    <Title align="center" variant="gradient" order={1}>
+                                        {EVENT_SECTION_TITLE}
+                                    </Title>
+                                </MediaQuery>
                                 <Text align="center" color="white">
                                     {EVENT_SECTION_PHRASE}
                                 </Text>
