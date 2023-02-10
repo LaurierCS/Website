@@ -24,27 +24,15 @@ const useStyles = createStyles((theme) => {
             zIndex: 100,
             backdropFilter: 'blur(4px)',
             backgroundColor: 'rgba(26, 27, 30, 0.40)', // mantine colour dark[7] in rgb
-            '@media only screen and (max-width: 768px)': {
-                display: 'none',
-            },
         },
         navbar__mobile: {
-            height: `${navbarHeight}px`,
-            position: 'fixed',
-            display: 'flex',
-            justifyContent: 'flex-start',
-            top: 0,
-            left: 0,
-            right: 0,
-            zIndex: 100,
-            backdropFilter: 'blur(4px)',
-            backgroundColor: 'rgba(26, 27, 30, 0.40)', // mantine colour dark[7] in rgb
             display: 'inline-block',
             '@media only screen and (min-width: 768px)': {
                 display: 'none',
             },
         },
         burger__button: {
+            position: 'fixed',
             float: 'right',
             padding: '1.2em 1.5em',
         },
@@ -95,7 +83,6 @@ const Navbar = () => {
     const { classes } = useStyles();
 
     return (
-        <>
         <div className={classes.navbar}>
             <img className={classes.logo} src={IconLogo} alt="logo" />
 
@@ -119,17 +106,16 @@ const Navbar = () => {
             <div className={classes.socials}>
                 <NavbarSocials />
             </div>
-        </div>
 
-        <div className={classes.navbar__mobile}>
-            <img className={classes.logo} src={IconLogo} alt="logo" />
-            <div className={classes.burger__button}>
-                <Burger 
-                    opened={opened}
-                    onClick={() => setOpened((open) => !open)}
-                    size="sm"
-                    color="gray"
-                />
+            <div className={classes.navbar__mobile}>
+                <div className={classes.burger__button}>
+                    <Burger 
+                        opened={opened}
+                        onClick={() => setOpened((open) => !open)}
+                        size="sm"
+                        color="gray"
+                    />
+                </div>
 
                 <Drawer 
                     transition="rotate-left"
@@ -137,11 +123,11 @@ const Navbar = () => {
                     transitionTimingFunction="ease"
                     opened={opened}
                     onClose={() => setOpened(false)}
-                    position="top"
+                    position="right"
                     overlayOpacity={0.55}
                     overlayColor="var(--color-background)"
                     overlayBlur={3}
-                    padding="xl"
+                    padding="10%"
                 >
                     <div className="drawer__content">
                         <div className="drawer__items">
@@ -167,7 +153,6 @@ const Navbar = () => {
                 </Drawer>
             </div>
         </div>
-        </>
     );
 };
 
