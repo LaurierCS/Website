@@ -11,11 +11,10 @@ const InfoBanner = () => {
             <Center style={{ backgroundColor: '#12181B' }}>
                 <div className="info__banner">
                     <div className="info__banner__text">
-                        <p className="info__header"> Community of </p>
                         <p className="info__stats">
                             {<CountUp end={3000} duration={1.0} />}+
                         </p>
-                        <p className="info__header"> CS Students </p>
+                        <p className="info__header"> Students </p>
                     </div>
                     <div className="info__banner__text">
                         <p className="info__stats">
