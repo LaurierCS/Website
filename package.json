@@ -18,6 +18,7 @@
     "@mantine/form": "^5.10.2",
     "@mantine/hooks": "^5.8.2",
     "@mantine/modals": "^5.10.3",
+    "@notionhq/client": "^2.2.3",
     "@tabler/icons-react": "^2.2.0",
     "bootstrap": "^5.2.3",
     "dayjs": "1.x",
