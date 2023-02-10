@@ -61,9 +61,7 @@ const MembersTable = () => {
                 return (
                     <MembersTableRow
                         member={memberData}
-                        // at the moment we are using the name to create the key for reach row
-                        // however, using the email should be better since each email is guarantee to be unique.
-                        key={`${memberData.firstName}-${memberData.lastName}/${memberData.position}`}
+                        key={memberData.docId}
                     />
                 );
             });

@@ -17,9 +17,6 @@ const EditMembers = () => {
                 >
                     Add Member
                 </Button>
-                <Button variant="outline" style={{ marginLeft: 10 }}>
-                    Sync With Notion
-                </Button>
             </Container>
             <Container fluid>
                 <MembersTable />
