@@ -35,7 +35,7 @@ const HeroSection = () => {
                                         width={120}
                                         height={90}
                                         align="center"
-                                        pb="4rem"
+                                        pb="2rem"
                                 />
                                 </Center>
                             </MediaQuery>
