@@ -141,6 +141,7 @@ const Navbar = () => {
                                                 smooth
                                                 duration={300}
                                                 className={classes.link}
+                                                onClick={() => setOpened(false)}
                                             >
                                                 {item}
                                             </Link>
