@@ -1,11 +1,11 @@
 import { Group, Avatar, Text, Badge, ActionIcon } from '@mantine/core';
-import { deleteMember } from '../../scripts/firebaseUtils';
+import { deleteMember } from '@utils/firebaseUtils';
 import { openConfirmModal, openModal } from '@mantine/modals';
 import { MemberForm } from '@components';
 import moment from 'moment';
 import { IconTrash, IconPencil, IconCopy } from '@tabler/icons-react';
 import { getFirestore, doc } from 'firebase/firestore';
-import firebaseApp, { DB_COLLECTION } from '../../scripts/config';
+import firebaseApp, { DB_COLLECTION } from '@scripts/config';
 
 const MembersTableRow = ({ member }) => {
     const {

@@ -6,13 +6,13 @@ import {
     uploadBytes,
 } from 'firebase/storage';
 import { addDoc, deleteDoc, updateDoc, Timestamp } from 'firebase/firestore';
-import firebaseApp, { DB_COLLECTION } from '../scripts/config';
+import firebaseApp from '@scripts/config';
 
 // general todos:
 // 1. handle more picture formats
 // 2. add error handlers with descriptive error feedback
 
-async function uploadPicture(docId, file, bucket = DB_COLLECTION) {
+async function uploadPicture(docId, file, bucket = 'members') {
     const storage = getStorage(firebaseApp);
     const storageRef = getStorageRef(storage, `${bucket}/${docId}.jpg`);
 
@@ -26,7 +26,7 @@ async function uploadPicture(docId, file, bucket = DB_COLLECTION) {
     return downloadUrl;
 }
 
-async function deletePicture(docId, bucket = DB_COLLECTION) {
+async function deletePicture(docId, bucket = 'members') {
     const storage = getStorage(firebaseApp);
     const storageRef = getStorageRef(storage, `${bucket}/${docId}.jpg`);
 
@@ -40,7 +40,7 @@ async function deletePicture(docId, bucket = DB_COLLECTION) {
 }
 
 async function addMember(colRef, values, picture) {
-    values.joinDate = Timestamp.fromDate(values.joinDate);
+    values.date_joined = values.date_joined.toISOString();
 
     const docRef = await addDoc(colRef, values);
 
@@ -78,4 +78,4 @@ async function deleteMember(docRef) {
     await deletePicture(docRef.id);
 }
 
-export { uploadPicture, deletePicture, addMember, deleteMember, updateMember };
+export { updateMember, uploadPicture, deletePicture, addMember, deleteMember };

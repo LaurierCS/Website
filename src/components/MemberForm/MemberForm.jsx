@@ -5,8 +5,8 @@ import { isEmail, isNotEmpty, useForm } from '@mantine/form';
 import { doc, getFirestore, collection } from 'firebase/firestore';
 import moment from 'moment';
 import { useState } from 'react';
-import firebaseApp, { DB_COLLECTION } from '../../scripts/config';
-import { addMember, updateMember } from '../../scripts/firebaseUtils';
+import firebaseApp, { DB_COLLECTION } from '@scripts/config';
+import { addMember, updateMember } from '@utils/firebaseUtils';
 
 const MemberForm = ({ member, isNew = false }) => {
     const {
