@@ -1,5 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { getAuth } from 'firebase/auth';
+import {
+    getAuth,
+    signOut as baseSignOut,
+    signInWithEmailAndPassword,
+} from 'firebase/auth';
 import { HashLoader } from 'react-spinners';
 
 const override = {
@@ -26,6 +30,31 @@ export const useFirebaseAuth = () => {
 const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState();
     const [pending, setPending] = useState(true);
+    const signIn = async (email, password) => {
+        try {
+            const user = await signInWithEmailAndPassword(
+                getAuth(),
+                email,
+                password
+            );
+            return user;
+        } catch (error) {
+            console.error(error);
+            // TODO: show error notification
+            throw error;
+        }
+    };
+
+    const signOut = async () => {
+        try {
+            await baseSignOut(getAuth());
+        } catch (error) {
+            console.error(error);
+            // TODO: show error notification
+            throw error;
+        }
+    };
+
     useEffect(() => {
         const unsub = getAuth().onAuthStateChanged((user) => {
             if (user) {
@@ -46,7 +75,7 @@ const AuthProvider = ({ children }) => {
         );
     } else {
         return (
-            <AuthContext.Provider value={{ currentUser }}>
+            <AuthContext.Provider value={{ currentUser, signIn, signOut }}>
                 {children}
             </AuthContext.Provider>
         );
