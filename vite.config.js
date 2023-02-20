@@ -14,6 +14,7 @@ export default defineConfig({
             '@stories': path.resolve(__dirname, 'src/stories/'),
             '@utils': path.resolve(__dirname, 'src/utils/'),
             '@scripts': path.resolve(__dirname, 'src/scripts/'),
+            '@hooks': path.resolve(__dirname, 'src/hooks/'),
         },
     },
 });
