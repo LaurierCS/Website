@@ -3,16 +3,16 @@ import React from 'react';
 import { Footer } from '@components';
 import { Form, Button } from 'react-bootstrap';
 import './login.css';
-import { useFirebaseAuth } from '@hooks';
+import { useAuth } from '@hooks';
 
 const LoginPage = () => {
-    const { signIn } = useFirebaseAuth();
+    const { signIn } = useAuth();
     const loginUser = (e) => {
         e.preventDefault();
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
         signIn(email, password)
-            .then((user) => {
+            .then((_user) => {
                 alert('Welcome LCS Admin');
                 window.location.replace(
                     document.URL.substring(0, document.URL.length - 5) +
