@@ -5,7 +5,7 @@ import {
     signInWithEmailAndPassword,
 } from 'firebase/auth';
 import { HashLoader } from 'react-spinners';
-import { useFirebaseApp } from '@hooks';
+import { app } from '@scripts/firebase';
 
 const override = {
     position: 'absolute',
@@ -29,8 +29,6 @@ export const useSession = () => {
 };
 
 export const useAuth = () => {
-    const app = useFirebaseApp();
-
     const signIn = useCallback(async (email, password) => {
         try {
             const user = await signInWithEmailAndPassword(
