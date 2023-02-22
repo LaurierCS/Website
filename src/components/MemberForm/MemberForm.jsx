@@ -5,7 +5,7 @@ import { isEmail, isNotEmpty, useForm } from '@mantine/form';
 import { doc, getFirestore, collection } from 'firebase/firestore';
 import moment from 'moment';
 import { useState } from 'react';
-import firebaseApp, { DB_COLLECTION } from '@scripts/config';
+import { app } from '@scripts/firebase';
 import { addMember, updateMember } from '@utils/firebaseUtils';
 
 const MemberForm = ({ member, isNew = false }) => {
@@ -40,14 +40,14 @@ const MemberForm = ({ member, isNew = false }) => {
     });
 
     const handleSubmit = async (values) => {
-        const db = getFirestore(firebaseApp);
+        const db = getFirestore(app);
         if (isNew) {
-            const colRef = collection(db, DB_COLLECTION);
+            const colRef = collection(db, 'members');
             const docId = await addMember(colRef, values, pictureFile);
             // todo: show notification
         } else {
             // note: firebase db
-            const docRef = doc(db, DB_COLLECTION, member.docId);
+            const docRef = doc(db, 'members', member.docId);
             const data = {};
             let isModified = false;
             for (const field in values) {

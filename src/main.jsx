@@ -1,6 +1,6 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './scripts/config';
+import '@scripts/firebase';
 import ReactDOM from 'react-dom/client';
 import './main.css';
 import Router from '@utils/Router';

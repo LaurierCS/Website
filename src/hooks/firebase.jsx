@@ -1,16 +1,16 @@
-import firebaseApp from '@scripts/config';
+import { app } from '@scripts/firebase';
 import { getFirestore } from 'firebase/firestore';
 
 export const useFirebaseApp = () => {
-    return firebaseApp;
+    return app;
 };
 
-const firestore = getFirestore(firebaseApp);
+const firestore = getFirestore(app);
 
 export const useFirestore = () => {
     if (firestore) {
         return firestore;
     }
 
-    return getFirestore(firebaseApp);
+    return getFirestore(app);
 };
