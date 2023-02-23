@@ -1,4 +1,3 @@
-import AuthProvider, { useSession, useAuth } from './auth';
-import { useFirebaseApp, useFirestore } from './firebase';
+import { useSession, useAuth } from './auth';
 
-export { AuthProvider, useFirebaseApp, useSession, useAuth, useFirestore };
+export { useSession, useAuth };

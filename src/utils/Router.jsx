@@ -3,9 +3,9 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Landing, AdminPortal, EditMembers } from '@pages';
 import { mantineTheme } from './Mantine';
-import { AuthProvider } from '@hooks';
-import PrivateRoute from '../scripts/private-route';
-import LoginPage from '../pages/AdminPortal/login';
+import { AuthProvider } from '@contexts/AuthContext';
+import PrivateRoute from '@scripts/private-route';
+import LoginPage from '@pages/AdminPortal/login';
 
 const Router = () => {
     return (
