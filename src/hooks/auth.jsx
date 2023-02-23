@@ -21,28 +21,16 @@ export const useSession = () => {
 
 export const useAuth = () => {
     const signIn = useCallback(async (email, password) => {
-        try {
-            const user = await signInWithEmailAndPassword(
-                getAuth(app),
-                email,
-                password
-            );
-            return user;
-        } catch (error) {
-            console.error(error);
-            // TODO: show error notification
-            throw error;
-        }
+        const user = await signInWithEmailAndPassword(
+            getAuth(app),
+            email,
+            password
+        );
+        return user;
     });
 
     const signOut = useCallback(async () => {
-        try {
-            await firebaseSignOut(getAuth(app));
-        } catch (error) {
-            console.error(error);
-            // TODO: show error notification
-            throw error;
-        }
+        await firebaseSignOut(getAuth(app));
     });
 
     return { signIn, signOut };
