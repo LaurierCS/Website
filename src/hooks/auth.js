@@ -7,19 +7,9 @@ import {
 import { app } from '@scripts/firebase';
 import { AuthContext } from '@contexts/AuthContext';
 
-export const useSession = () => {
+export const useAuth = () => {
     const { currentUser } = useContext(AuthContext);
 
-    if (!currentUser) {
-        console.warn(
-            '`useSession` being used before successful authentication.'
-        );
-    }
-
-    return currentUser;
-};
-
-export const useAuth = () => {
     const signIn = useCallback(async (email, password) => {
         const user = await signInWithEmailAndPassword(
             getAuth(app),
@@ -33,5 +23,5 @@ export const useAuth = () => {
         await firebaseSignOut(getAuth(app));
     });
 
-    return { signIn, signOut };
+    return { signIn, signOut, currentUser };
 };

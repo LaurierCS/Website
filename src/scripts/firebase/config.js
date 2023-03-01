@@ -1,5 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
+import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -16,7 +17,14 @@ const firebaseConfig = {
     measurementId: import.meta.env.VITE_LCS_FIREBASE_MEASUREMENTID,
 };
 
-export const DB_COLLECTION = 'members';
-
 // Initialize Firebase
-export default initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+
+// there gotta be a better way...
+const firestore = getFirestore(app);
+
+if (import.meta.env.DEV) {
+    connectFirestoreEmulator(firestore, 'localhost', 8080);
+}
+
+export { app, firestore };

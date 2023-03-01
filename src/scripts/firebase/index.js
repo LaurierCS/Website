@@ -1,3 +1,3 @@
-import app from './config';
+import { app, firestore } from './config';
 
-export { app };
+export { app, firestore };
