@@ -13,5 +13,10 @@ service cloud.firestore {
         allow write, update, create if
             request.auth.token.team || request.auth.token.admin;
     }
+
+    match /events/{eventId} {
+        allow write, update, create if
+            request.auth.token.event || request.auth.token.admin;
+    }
   }
 }
