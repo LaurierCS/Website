@@ -43,6 +43,8 @@ module.exports = {
                     '@pages': path.resolve(__dirname, '../src/pages/'),
                     '@stories': path.resolve(__dirname, '../src/stories/'),
                     '@utils': path.resolve(__dirname, '../src/utils/'),
+                    '@hooks': path.resolve(__dirname, '../src/hooks/'),
+                    '@contexts': path.resolve(__dirname, '../src/contexts/'),
                 },
             },
         };
