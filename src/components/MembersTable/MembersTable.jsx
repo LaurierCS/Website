@@ -13,7 +13,7 @@ import {
     onSnapshot,
     Timestamp,
 } from 'firebase/firestore';
-import firebaseApp, { DB_COLLECTION } from '../../scripts/config';
+import { app } from '@scripts/firebase';
 import { useEffect, useMemo, useState } from 'react';
 import { MembersTableRow } from '@components';
 
@@ -24,8 +24,8 @@ const MembersTable = () => {
     const [activePage, setPage] = useState(1);
 
     useEffect(() => {
-        const db = getFirestore(firebaseApp);
-        const colRef = collection(db, DB_COLLECTION);
+        const db = getFirestore(app);
+        const colRef = collection(db, 'members');
         const q = query(colRef, orderBy('firstName'));
         const unsub = onSnapshot(q, (snapshot) => {
             // fill members

@@ -5,7 +5,7 @@ import { MemberForm } from '@components';
 import moment from 'moment';
 import { IconTrash, IconPencil, IconCopy } from '@tabler/icons-react';
 import { getFirestore, doc } from 'firebase/firestore';
-import firebaseApp, { DB_COLLECTION } from '@scripts/config';
+import { app } from '@scripts/firebase';
 
 const MembersTableRow = ({ member }) => {
     const {
@@ -32,8 +32,8 @@ const MembersTableRow = ({ member }) => {
             confirmProps: { color: 'red' },
             onConfirm: async () => {
                 // note: firebase db
-                const db = getFirestore(firebaseApp);
-                const docRef = doc(db, DB_COLLECTION, member.docId);
+                const db = getFirestore(app);
+                const docRef = doc(db, 'members', member.docId);
                 await deleteMember(docRef);
             },
         });

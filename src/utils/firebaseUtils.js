@@ -6,14 +6,14 @@ import {
     uploadBytes,
 } from 'firebase/storage';
 import { addDoc, deleteDoc, updateDoc, Timestamp } from 'firebase/firestore';
-import firebaseApp from '@scripts/config';
+import { app } from '@scripts/firebase';
 
 // general todos:
 // 1. handle more picture formats
 // 2. add error handlers with descriptive error feedback
 
 async function uploadPicture(docId, file, bucket = 'members') {
-    const storage = getStorage(firebaseApp);
+    const storage = getStorage(app);
     const storageRef = getStorageRef(storage, `${bucket}/${docId}.jpg`);
 
     // todo: add error handling
@@ -27,7 +27,7 @@ async function uploadPicture(docId, file, bucket = 'members') {
 }
 
 async function deletePicture(docId, bucket = 'members') {
-    const storage = getStorage(firebaseApp);
+    const storage = getStorage(app);
     const storageRef = getStorageRef(storage, `${bucket}/${docId}.jpg`);
 
     try {
