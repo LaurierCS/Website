@@ -1,9 +1,10 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Global rules
     match /{document=**} {
       allow read: if
-          true;
+        request.resource.is_public || request.auth != null; 
       allow write: if
           request.auth != null;
     }
