@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from 'react';
-import { getAuth } from 'firebase/auth';
+import { getAuth, connectAuthEmulator } from 'firebase/auth';
 import { HashLoader } from 'react-spinners';
+import { app } from '@scripts/firebase';
 
 const override = {
     position: 'absolute',
@@ -16,7 +17,11 @@ export const AuthProvider = ({ children }) => {
     const [pending, setPending] = useState(true);
 
     useEffect(() => {
-        const unsub = getAuth().onAuthStateChanged((user) => {
+        const auth = getAuth(app);
+        if (import.meta.env.DEV) {
+            connectAuthEmulator(auth, 'http://localhost:9099');
+        }
+        const unsub = auth.onAuthStateChanged((user) => {
             if (user) {
                 setCurrentUser(user);
             }
