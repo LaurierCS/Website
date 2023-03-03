@@ -1,22 +1,45 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    // Generic functions
+    function isPublic() {
+      return request.resource.is_public == true;
+    }
+
+    function isAuthenticated() {
+      return request.auth != null;
+    } 
+
+    // Permission functions
+    function hasAdminPerms() {
+      return request.auth.token.admin == true;
+    }
+
+    function hasEventPerms() {
+      return request.auth.token.event == true;
+    }
+
+    function hasTeamPerms() {
+      return request.auth.token.team == true;
+    }
+
     // Global rules
     match /{document=**} {
       allow read: if
-        request.resource.is_public || request.auth != null; 
+        isPublic() || isAuthenticated();
       allow write: if
-          request.auth != null;
+          isAuthenticated();
     }
 
     match /team/{teamId} {
         allow write, update, create: if
-            request.auth.token.team || request.auth.token.admin;
+            hasAdminPerms() || hasTeamPerms();
     }
 
     match /events/{eventId} {
         allow write, update, create: if
-            request.auth.token.event || request.auth.token.admin;
+            hasAdminPerms() || hasEventPerms();
     }
   }
 }
