@@ -12,7 +12,7 @@
     },
     "functions": [
         {
-            "source": "functions",
+            "source": "./firebase/functions",
             "codebase": "default",
             "ignore": [
                 "node_modules",
