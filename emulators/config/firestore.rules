@@ -4,7 +4,7 @@ service cloud.firestore {
 
     // Generic functions
     function isPublic() {
-      return request.resource.is_public == true;
+      return resource.data.is_public != null && resource.data.is_public == true;
     }
 
     function isAuthenticated() {
@@ -29,17 +29,17 @@ service cloud.firestore {
       allow read: if
         isPublic() || isAuthenticated();
       allow write: if
-          isAuthenticated();
+          false;
     }
 
     match /team/{teamId} {
-        allow write, update, create: if
-            hasAdminPerms() || hasTeamPerms();
+        allow write: if
+           isAuthenticated() && (hasAdminPerms() || hasTeamPerms());
     }
 
     match /events/{eventId} {
-        allow write, update, create: if
-            hasAdminPerms() || hasEventPerms();
+        allow write: if
+           isAuthenticated() && (hasAdminPerms() || hasEventPerms());
     }
   }
 }
