@@ -1,4 +1,30 @@
-import { assertFails, assertSucceeds } from '@firebase/rules-unit-testing';
+import {
+    assertFails,
+    assertSucceeds,
+    initializeTestEnvironment,
+} from '@firebase/rules-unit-testing';
+import path from 'path';
+import fs from 'fs';
+
+export async function setup(options = {}) {
+    if (!options.projectId) options.projectId = 'demo-firestore-rules';
+
+    if (!options.firestore) {
+        const rulesPath = path.resolve(
+            __dirname,
+            '../../emulators/config/firestore.rules'
+        );
+        options.firestore = {
+            rules: fs.readFileSync(rulesPath, 'utf8'),
+            host: '127.0.0.1',
+            port: 8080,
+        };
+    }
+
+    const testEnv = await initializeTestEnvironment(options);
+
+    return testEnv;
+}
 
 expect.extend({
     async toAllow(x) {
