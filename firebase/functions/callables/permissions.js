@@ -1,21 +1,37 @@
 import admin from 'firebase-admin';
-import { getReturnObject } from '../helpers.js';
+import { getReturnObject, isAuthenticated } from '../helpers.js';
 
-export async function handleGrantAdminPerms(data, context) {
-    if (!context.auth) {
+function validatePrivateRequest(data, context) {
+    if (!isAuthenticated(context)) {
         // unauthorized call, reject
-        return getReturnObject(false, 'Must be authenticated.');
+        return {
+            pass: false,
+            returnObj: getReturnObject(false, 'Must be authenticated.'),
+        };
     }
 
     if (!data.uid || !data.uid instanceof String) {
-        return getReturnObject(
-            false,
-            'Must provide grantee uid and it must be of type String'
-        );
+        return {
+            pass: false,
+            returnObj: getReturnObject(
+                false,
+                'Must provide uid and uid must be type of String.'
+            ),
+        };
+    }
+
+    return { pass: true, returnObj: null };
+}
+
+export async function handleAdminPerms(data, context, permissionChange) {
+    let { pass, returnObj } = validatePrivateRequest(data, context);
+
+    if (!pass) {
+        return returnObj;
     }
 
     let user;
-    let grantee;
+    let otherUser;
 
     try {
         user = await admin.auth().getUser(context.auth.uid);
@@ -27,7 +43,7 @@ export async function handleGrantAdminPerms(data, context) {
     }
 
     try {
-        grantee = await admin.auth().getUser(data.uid);
+        otherUser = await admin.auth().getUser(data.uid);
     } catch (_e) {
         return getReturnObject(
             false,
@@ -37,15 +53,18 @@ export async function handleGrantAdminPerms(data, context) {
 
     try {
         if (user.customClaims && user.customClaims.admin) {
-            if (grantee.customClaims && grantee.customClaims.admin) {
+            if (
+                otherUser.customClaims &&
+                otherUser.customClaims.admin === permissionChange
+            ) {
                 return getReturnObject(
                     true,
-                    `User with uid: ${grantee.uid} already has admin permission.`
+                    `User with uid: ${otherUser.uid} already has admin permission set to ${permissionChange}.`
                 );
             }
             // proceed
             const claims = admin.auth().setCustomUserClaims(data.uid, {
-                ...grantee.customClaims,
+                ...otherUser.customClaims,
                 admin: true,
             });
             return getReturnObject(
