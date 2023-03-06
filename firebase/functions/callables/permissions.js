@@ -23,7 +23,7 @@ function validatePrivateRequest(data, context) {
     return { pass: true, returnObj: null };
 }
 
-export async function handleAdminPerms(data, context, permissionChange) {
+export async function handleAdminPerms(data, context, permChange) {
     let { pass, returnObj } = validatePrivateRequest(data, context);
 
     if (!pass) {
@@ -55,22 +55,22 @@ export async function handleAdminPerms(data, context, permissionChange) {
         if (user.customClaims && user.customClaims.admin) {
             if (
                 otherUser.customClaims &&
-                otherUser.customClaims.admin === permissionChange
+                otherUser.customClaims.admin === permChange
             ) {
                 return getReturnObject(
                     true,
-                    `User with uid: ${otherUser.uid} already has admin permission set to ${permissionChange}.`
+                    `User with uid: ${otherUser.uid} already has admin permission set to ${permChange}.`
                 );
             }
             // proceed
             const claims = admin.auth().setCustomUserClaims(data.uid, {
                 ...otherUser.customClaims,
-                admin: permissionChange,
+                admin: permChange,
             });
             return getReturnObject(
                 true,
                 `Admin permission ${
-                    permissionChange ? 'granted to' : 'revoked from'
+                    permChange ? 'granted to' : 'revoked from'
                 } uid: ${data.uid}`,
                 claims
             );
@@ -78,7 +78,7 @@ export async function handleAdminPerms(data, context, permissionChange) {
             return getReturnObject(
                 false,
                 `Current authenticated user does not have permission to ${
-                    permissionChange ? 'grant' : 'revoke'
+                    permChange ? 'grant' : 'revoke'
                 } admin role to others.`
             );
         }
