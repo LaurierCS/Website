@@ -65,7 +65,7 @@ export async function handleAdminPerms(data, context, permissionChange) {
             // proceed
             const claims = admin.auth().setCustomUserClaims(data.uid, {
                 ...otherUser.customClaims,
-                admin: true,
+                admin: permissionChange,
             });
             return getReturnObject(
                 true,
