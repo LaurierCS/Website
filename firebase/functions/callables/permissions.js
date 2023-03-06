@@ -75,7 +75,9 @@ export async function handleAdminPerms(data, context, permissionChange) {
         } else {
             return getReturnObject(
                 false,
-                'Current authenticated user does not have permission to grant admin role to others.'
+                `Current authenticated user does not have permission to ${
+                    permissionChange ? 'grant' : 'revoke'
+                } admin role to others.`
             );
         }
     } catch (error) {}
