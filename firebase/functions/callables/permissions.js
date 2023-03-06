@@ -69,7 +69,9 @@ export async function handleAdminPerms(data, context, permissionChange) {
             });
             return getReturnObject(
                 true,
-                `Admin permission granted to uid: ${data.uid}`,
+                `Admin permission ${
+                    permissionChange ? 'granted to' : 'revoked from'
+                } uid: ${data.uid}`,
                 claims
             );
         } else {
