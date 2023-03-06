@@ -8,3 +8,7 @@ admin.initializeApp();
 export const grantAdminPermission = functions.https.onCall(
     async (data, context) => await handleAdminPerms(data, context, true)
 );
+
+export const revokeAdminPermission = functions.https.onCall(
+    async (data, context) => await handleAdminPerms(data, context, false)
+);
