@@ -23,6 +23,35 @@ function validatePrivateRequest(data, context) {
     return { pass: true, returnObj: null };
 }
 
+async function getUsers(data, context) {
+    let requester = null;
+    let target = null;
+    let errUsers = [];
+
+    try {
+        requester = await admin.auth().getUser(context.auth.uid);
+    } catch (_e) {
+        errUsers.push(context.auth.uid);
+    }
+
+    try {
+        target = await admin.auth().getUser(data.uid);
+    } catch (_e) {
+        errUsers.push(data.uid);
+    }
+
+    return {
+        requester,
+        target,
+        error: errUsers.length
+            ? getReturnObject(
+                  false,
+                  `Could not identify user(s) with uid: ${errUsers.join(', ')}`
+              )
+            : null,
+    };
+}
+
 export async function handleAdminPerms(data, context, permChange) {
     let { pass, returnObj } = validatePrivateRequest(data, context);
 
