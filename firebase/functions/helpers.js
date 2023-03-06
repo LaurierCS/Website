@@ -8,3 +8,8 @@ export function getReturnObject(is_ok, message, data) {
     }
     return obj;
 }
+
+// for code clarity
+export function isAuthenticated(context) {
+    return !!context.auth;
+}
