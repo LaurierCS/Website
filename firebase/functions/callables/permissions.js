@@ -5,22 +5,20 @@ function validatePrivateRequest(data, context) {
     if (!isAuthenticated(context)) {
         // unauthorized call, reject
         return {
-            pass: false,
-            returnObj: getReturnObject(false, 'Must be authenticated.'),
+            error: getReturnObject(false, 'Must be authenticated.'),
         };
     }
 
     if (!data.uid || !data.uid instanceof String) {
         return {
-            pass: false,
-            returnObj: getReturnObject(
+            error: getReturnObject(
                 false,
                 'Must provide uid and uid must be type of String.'
             ),
         };
     }
 
-    return { pass: true, returnObj: null };
+    return { error: null };
 }
 
 async function getUsers(data, context) {
@@ -52,129 +50,11 @@ async function getUsers(data, context) {
     };
 }
 
-export async function handleAdminPerms(data, context, permChange) {
-    let { pass, returnObj } = validatePrivateRequest(data, context);
-
-    if (!pass) {
-        return returnObj;
-    }
-
-    let user;
-    let otherUser;
-
-    try {
-        user = await admin.auth().getUser(context.auth.uid);
-    } catch (_e) {
-        return getReturnObject(
-            false,
-            'Could not identify user with uid ' + context.auth.uid
-        );
-    }
-
-    try {
-        otherUser = await admin.auth().getUser(data.uid);
-    } catch (_e) {
-        return getReturnObject(
-            false,
-            'Could not identify user with uid ' + data.uid
-        );
-    }
-
-    try {
-        if (user.customClaims && user.customClaims.admin) {
-            if (
-                otherUser.customClaims &&
-                otherUser.customClaims.admin === permChange
-            ) {
-                return getReturnObject(
-                    true,
-                    `User with uid: ${otherUser.uid} already has admin permission set to ${permChange}.`
-                );
-            }
-            // proceed
-            const claims = admin.auth().setCustomUserClaims(data.uid, {
-                ...otherUser.customClaims,
-                admin: permChange,
-            });
-            return getReturnObject(
-                true,
-                `Admin permission ${
-                    permChange ? 'granted to' : 'revoked from'
-                } uid: ${data.uid}`,
-                claims
-            );
-        } else {
-            return getReturnObject(
-                false,
-                `Current authenticated user does not have permission to ${
-                    permChange ? 'grant' : 'revoke'
-                } admin role to others.`
-            );
-        }
-    } catch (error) {}
-
-    return getReturnObject(false, 'Something went wrong internally...');
-}
-
-export async function handleEventPerms(data, context, permsChange) {
+export async function handlePerms(data, context) {
     const validationResult = validatePrivateRequest(data, context);
 
-    if (!validationResult.pass) {
-        return validationResult.returnObj;
-    }
-
-    const users = await getUsers(data, context);
-
-    if (users.error != null) {
-        return users.error;
-    }
-
-    try {
-        if (
-            (users.requester.customClaims &&
-                users.requester.customClaims.event) ||
-            users.requester.customClaims.admin
-        ) {
-            if (
-                users.target.customClaims &&
-                users.target.customClaims.event === permsChange
-            ) {
-                return getReturnObject(
-                    true,
-                    `User with uid: ${users.target.uid} already has event permission set to ${permsChange}.`
-                );
-            }
-
-            // proceed
-            const claims = admin.auth().setCustomUserClaims(data.uid, {
-                ...users.target.customClaims,
-                event: permsChange,
-            });
-            return getReturnObject(
-                true,
-                `Event permission ${
-                    permsChange ? 'granted to' : 'revoked from'
-                } uid: ${data.uid}`,
-                claims
-            );
-        } else {
-            return getReturnObject(
-                false,
-                `Current authenticated user does not have permission to ${
-                    permsChange ? 'grant' : 'revoke'
-                } event role to others.`
-            );
-        }
-    } catch (error) {}
-
-    return getReturnObject(false, 'Something went wrong internally...');
-}
-
-export async function handleTeamPerms(data, context, permsChange) {
-    const validationResult = validatePrivateRequest(data, context);
-
-    if (!validationResult.pass) {
-        return validationResult.returnObj;
+    if (validationResult.error) {
+        return validationResult.error;
     }
 
     const users = await getUsers(data, context);
@@ -184,39 +64,38 @@ export async function handleTeamPerms(data, context, permsChange) {
     }
 
     try {
-        if (
-            (users.requester.customClaims &&
-                users.requester.customClaims.team) ||
-            users.requester.customClaims.admin
-        ) {
-            if (
-                users.target.customClaims &&
-                users.target.customClaims.team === permsChange
-            ) {
-                return getReturnObject(
-                    true,
-                    `User with uid: ${users.target.uid} already has team permission set to ${permsChange}.`
-                );
-            }
+        const permType = data.permType;
+        const permSet = data.permSet;
+        const requesterClaims = users.requester.customClaims || {};
+        const targetClaims = users.target.customClaims || {};
 
+        if (
+            (requesterClaims.admin || requesterClaims[permType]) &&
+            targetClaims[permType] !== permSet
+        ) {
             // proceed
             const claims = admin.auth().setCustomUserClaims(data.uid, {
-                ...users.target.customClaims,
-                team: permsChange,
+                ...targetClaims,
+                [permType]: permSet,
             });
             return getReturnObject(
                 true,
-                `Team permission ${
-                    permsChange ? 'granted to' : 'revoked from'
+                `${permType} permission ${
+                    permSet ? 'granted to' : 'revoked from'
                 } uid: ${data.uid}`,
                 claims
+            );
+        } else if (targetClaims[permType] === permSet) {
+            return getReturnObject(
+                true,
+                `User with uid: ${users.target.uid} already has ${permType} permission set to ${permSet}.`
             );
         } else {
             return getReturnObject(
                 false,
                 `Current authenticated user does not have permission to ${
-                    permsChange ? 'grant' : 'revoke'
-                } team role to others.`
+                    permSet ? 'grant' : 'revoke'
+                } ${permType} role to others.`
             );
         }
     } catch (error) {}
