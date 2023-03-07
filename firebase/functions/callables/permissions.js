@@ -169,3 +169,57 @@ export async function handleEventPerms(data, context, permsChange) {
 
     return getReturnObject(false, 'Something went wrong internally...');
 }
+
+export async function handleTeamPerms(data, context, permsChange) {
+    const validationResult = validatePrivateRequest(data, context);
+
+    if (!validationResult.pass) {
+        return validationResult.returnObj;
+    }
+
+    const users = await getUsers(data, context);
+
+    if (users.error) {
+        return users.error;
+    }
+
+    try {
+        if (
+            (users.requester.customClaims &&
+                users.requester.customClaims.team) ||
+            users.requester.customClaims.admin
+        ) {
+            if (
+                users.target.customClaims &&
+                users.target.customClaims.team === permsChange
+            ) {
+                return getReturnObject(
+                    true,
+                    `User with uid: ${users.target.uid} already has team permission set to ${permsChange}.`
+                );
+            }
+
+            // proceed
+            const claims = admin.auth().setCustomUserClaims(data.uid, {
+                ...users.target.customClaims,
+                team: permsChange,
+            });
+            return getReturnObject(
+                true,
+                `Team permission ${
+                    permsChange ? 'granted to' : 'revoked from'
+                } uid: ${data.uid}`,
+                claims
+            );
+        } else {
+            return getReturnObject(
+                false,
+                `Current authenticated user does not have permission to ${
+                    permsChange ? 'grant' : 'revoke'
+                } team role to others.`
+            );
+        }
+    } catch (error) {}
+
+    return getReturnObject(false, 'Something went wrong internally...');
+}
