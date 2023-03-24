@@ -59,7 +59,7 @@
     div.faq {
         font-size: 35px;
     }
-  }
+}
 
 @media screen and (max-width: 415px) {
     div.mantine-Accordion-label {
@@ -68,4 +68,4 @@
     div.mantine-Accordion-item {
         width:75%;
     }
-  }
+}
