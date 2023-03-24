@@ -1,7 +1,16 @@
 /* expanded menu styling */
 .mantine-Accordion-control {
-    background-color: var(--color-gray-4);
-    border-color: var(--color-gray-4);
+    background-color: var(--color-faq-background-inactive);
+    border-color: var(--color-faq-border);
+    color: white;
+    font-family: 'Montserrat';
+    font-size: 20px;
+    height: auto;
+    border-radius: 9px;
+}
+
+.mantine-Accordion-control[data-active] {
+    background-color: rgba(37, 38, 43, 0.75);
     color: white;
     font-family: 'Montserrat';
     font-size: 20px;
@@ -14,13 +23,13 @@
     width: 65%;
     margin-left: auto;
     margin-right: auto;
-    background-color: var(--color-gray-4);
     border: 1px solid transparent;
     -webkit-transition: background-color 250ms ease;
     transition: background-color 250ms ease;
+    border-color: var(--color-faq-border);
     color: white;
     font-family: 'Montserrat';
-    border-radius: 12px;
+    border-radius: 10px;
     margin-bottom: 2rem;
     font-size: 16px;
     
@@ -28,8 +37,8 @@
 
 /* border and text styling for button */
 .mantine-Accordion-item[data-active] {
-    background-color: var(--color-gray-4);
-    border-color: var(--color-gray-4);
+    background-color: var(--color-faq-background-active);
+    border-color: var(--color-faq-border);
     font-family: 'Montserrat';
 }
 
@@ -60,5 +69,3 @@
         width:75%;
     }
   }
-
-  
