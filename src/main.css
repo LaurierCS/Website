@@ -31,6 +31,9 @@ html, #root {
     --color-gray-5: #12181B;
 
     --color-footer-background: #202124;
+    --color-faq-background-inactive: #2C2E33;
+    --color-faq-background-active: #141517;
+    --color-faq-border: #C1C2C5;
 
     --color-shadow: drop-shadow(0px 4px 4px rgba(18, 24, 27, 0.25));
     --neon-border: 2px solid var(--color-blue);
