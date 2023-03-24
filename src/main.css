@@ -7,11 +7,11 @@ html {
 }
 
 html, #root {
-    background-color: var(--color-background-default);
+    background: var(--color-background-default);
 }
 
 :root {
-    --color-background-default: #1a1b1e;
+    --color-background-default: linear-gradient(180deg, #1A1B1E 0%, #1E2123 23.96%, #1B1F21 44.27%, #1D2A31 62.5%, #1D3847 81.25%, #235571 100%);
     --color-black:#000000;
     --color-white:#FFFFFF;
     --color-blue: #29ABF4;
@@ -30,7 +30,7 @@ html, #root {
     --color-gray-4: #2C3844;
     --color-gray-5: #12181B;
 
-    --color-footer-background: #202124;
+    --color-footer-background: rgba(231, 235, 245, 0.03);
     --color-faq-background-inactive: #2C2E33;
     --color-faq-background-active: #141517;
     --color-faq-border: #C1C2C5;
