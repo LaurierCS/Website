@@ -1,12 +1,10 @@
 import React from "react";
 import "./Footer.css";
-import { Divider } from "@mantine/core";
 import { Socials } from "@components";
 
 const Footer = () => {
      return (
           <footer>
-               <Divider />
                <div className="spacer" style={{ width: "100%", height: "1.5em" }} />
                <div className="footer__container">
                     <div className="footer__info">
