@@ -1,7 +1,7 @@
 import React from "react";
 import "./About.css";
 import { Title, Text, Container, Grid, Flex, Center, Image, MediaQuery } from '@mantine/core';
-import { CorpImage } from '@assets';
+import { PCDesign } from '@assets';
 
 const ABOUT_US_TITLE = "<About Us />";
 const ABOUT_US_TEXT = "The Laurier Computing Society is the official student-run club for \
@@ -19,7 +19,7 @@ const About = () => {
         <Container size="xl" my="md">
             <Grid grow gutter={5} gutterXl={100}>
                 <Grid.Col md={6}>
-                    <Image src={CorpImage}/>
+                    <Image src={PCDesign}/>
                 </Grid.Col>
                 <Grid.Col md={6}>
                     <Center style={{ width: '100%', height: '100%' }}>
