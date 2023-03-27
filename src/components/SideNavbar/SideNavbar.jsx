@@ -1,5 +1,4 @@
-import { IconHome, IconUser } from '@tabler/icons-react';
-import { createStyles, Tooltip, NavLink } from '@mantine/core';
+import { createStyles, NavLink } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 
 const useStyle = createStyles((theme) => {
@@ -14,11 +13,7 @@ const useStyle = createStyles((theme) => {
     };
 });
 
-const availableRoutes = [
-    { label: 'Members', href: '/admin-portal/members', icon: IconUser },
-];
-
-const SideNavbar = () => {
+const SideNavbar = ({ availableRoutes }) => {
     const { classes } = useStyle();
     const nav = useNavigate();
 
