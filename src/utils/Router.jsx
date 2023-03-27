@@ -1,7 +1,7 @@
 import { MantineProvider } from '@mantine/core';
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Landing, AdminPortal, EditMembers } from '@pages';
+import { Landing, AdminPortal, EditMembers, AdminSettings } from '@pages';
 import { mantineTheme } from './Mantine';
 import { AuthProvider } from '@contexts/AuthContext';
 import PrivateRoute from '@scripts/private-route';
@@ -26,6 +26,10 @@ const Router = () => {
                                 <Route
                                     path="members"
                                     element={<EditMembers />}
+                                />
+                                <Route
+                                    path="settings"
+                                    element={<AdminSettings />}
                                 />
                             </Route>
                         </Route>
