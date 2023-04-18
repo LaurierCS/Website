@@ -1,25 +1,5 @@
 import admin from 'firebase-admin';
-import { getReturnObject, isAuthenticated } from '../helpers.js';
-
-function validatePrivateRequest(data, context) {
-    if (!isAuthenticated(context)) {
-        // unauthorized call, reject
-        return {
-            error: getReturnObject(false, 'Must be authenticated.'),
-        };
-    }
-
-    if (!data.uid || !data.uid instanceof String) {
-        return {
-            error: getReturnObject(
-                false,
-                'Must provide uid and uid must be type of String.'
-            ),
-        };
-    }
-
-    return { error: null };
-}
+import { getReturnObject } from '../helpers.js';
 
 async function getUsers(data, context) {
     let requester = null;
@@ -50,6 +30,26 @@ async function getUsers(data, context) {
     };
 }
 
+function validatePrivateRequest(data, context) {
+    if (!isAuthenticated(context)) {
+        // unauthorized call, reject
+        return {
+            error: getReturnObject(false, 'Must be authenticated.'),
+        };
+    }
+
+    if (!data.uid || !data.uid instanceof String) {
+        return {
+            error: getReturnObject(
+                false,
+                'Must provide uid and uid must be type of String.'
+            ),
+        };
+    }
+
+    return { error: null };
+}
+
 export async function handlePerms(data, context) {
     const validationResult = validatePrivateRequest(data, context);
 
@@ -73,11 +73,10 @@ export async function handlePerms(data, context) {
             (requesterClaims.admin || requesterClaims[permType]) &&
             targetClaims[permType] !== permSet
         ) {
-            // proceed
-            const claims = admin.auth().setCustomUserClaims(data.uid, {
-                ...targetClaims,
-                [permType]: permSet,
-            });
+            targetClaims[permType] = permSet;
+            const claims = admin
+                .auth()
+                .setCustomUserClaims(data.uid, targetClaims);
             return getReturnObject(
                 true,
                 `${permType} permission ${
