@@ -32,9 +32,8 @@ const useStyles = createStyles((theme) => {
             },
         },
         burger__button: {
-            position: 'fixed',
             float: 'right',
-            padding: '1.2em 1.5em',
+            padding: '1.2em 13em',
         },
         link: {
             display: 'inline-block',
