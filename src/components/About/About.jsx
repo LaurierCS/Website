@@ -33,7 +33,7 @@ const About = () => {
                             query="(max-width: 768px)"
                             styles={{ fontSize: '1.7rem' }}
                         >
-                            <Title align="center" variant="gradient" order={1}>
+                            <Title align="center" order={1}>
                                 {ABOUT_US_TITLE}
                             </Title>
                         </MediaQuery>

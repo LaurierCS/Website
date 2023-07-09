@@ -7,8 +7,7 @@ import CountUp from 'react-countup';
 const InfoBanner = () => {
     return (
         <section id="info-banner">
-            <InfoDividerTop />
-            <Center style={{ backgroundColor: '#12181B' }}>
+            <Center mx={100}>
                 <div className="info__banner">
                     <div className="info__banner__text">
                         <p className="info__stats">
@@ -30,7 +29,6 @@ const InfoBanner = () => {
                     </div>
                 </div>
             </Center>
-            <InfoDividerBottom />
         </section>
     );
 };

@@ -10,8 +10,10 @@
     padding-right: 10%;
     gap: 12em;
     font-size: 18px;
+    background-image: url("../../assets/pretty_infobanner.svg");
+    background-size:cover;
+        
 }
-
 .info__banner__text {
     display: flex;
     flex-direction: column;
@@ -75,3 +77,4 @@
         font-size: 25px;
     }
 }
+

@@ -19,7 +19,7 @@ html, #root {
     --color-mint-blue: #89F7FE;
     --color-mint-green: #ACFFBE;
     --color-pink: #FF41D5;
-    --color-blue-gradient: linear-gradient(145deg, rgba(41,171,244,1) 0%, rgba(161,218,245,1) 100%); 
+    --color-blue-gradient: linear-gradient(180deg, #6CB3FF 0%, #89F7FE 100%); 
     --color-pink-gradient: linear-gradient(145deg, rgba(41,171,244,1) 0%, rgba(255,65,213,1) 100%);
 
     /* 6(0) Shades of Gray, lower number the brighter */
@@ -68,3 +68,16 @@ html, #root {
 section {
     padding: 4rem 0rem;
 }
+
+h1, h2, h3, h4, h5, h6, .faq {
+
+    background: -webkit-linear-gradient(45deg,#419DFF, #89F7FE); 
+    background-clip: text;
+    -moz-background-clip: text;
+    -webkit-background-clip: text;
+    -moz-text-fill-color: transparent;
+    -webkit-text-fill-color: transparent;
+
+}
+
+/*text color: E7EBF5 */

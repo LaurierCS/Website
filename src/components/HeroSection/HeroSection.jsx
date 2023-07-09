@@ -1,4 +1,5 @@
 import './HeroSection.css';
+import './../../../src/main.css'
 import { Title, Text, BackgroundImage, Container, Flex, Image, Center, MediaQuery, Button } from "@mantine/core";
 import { CorpImage, IconLogo } from '@assets';
 import {FaDiscord} from "react-icons/fa";
@@ -45,7 +46,7 @@ const HeroSection = () => {
                                 query="(min-width: 768px)"
                                 styles={{ fontSize: '3rem' }}
                             >
-                                <Title pb='3rem' align="center" fw={700} variant="gradient" order={1}>
+                                <Title pb='3rem' align="center" fw={700} c="gradient" order={1}>
                                     {HERO_SECTION_TITLE}
                                 </Title>
                             </MediaQuery>

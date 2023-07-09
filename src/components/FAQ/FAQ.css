@@ -48,9 +48,6 @@
     margin-bottom: 40px;
     font-size: 40px;
     font-weight: bold;
-    background: var(--color-blue-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     font-family: 'Montserrat';
 }
 
