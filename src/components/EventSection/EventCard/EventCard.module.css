@@ -1,0 +1,27 @@
+.icon {
+    font-size: 92px;
+}
+
+.title {
+    font-size: 40px;
+    color: white;
+}
+
+.date {
+    font-size: 25px;
+    font-weight: bold;
+    color: #6CB3FF;
+}
+
+.description {
+    font-size: 25px;
+    color: #E7EBF5;
+    margin: 40px 0px;
+}
+
+.link > a {
+    font-size: 25px;
+    font-weight: bold;
+    color: #89F7FE;
+    text-decoration: none;
+}

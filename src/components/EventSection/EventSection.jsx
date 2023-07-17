@@ -1,12 +1,15 @@
-import './EventSection.css';
-import EventTable from '../EventTable/EventTable';
+import {
+    Container,
+    Grid,
+    Center,
+    Flex,
+    MediaQuery,
+    Title,
+    Text,
+} from '@mantine/core';
 
-// UI imports from mantine
-import { Title, Text, Container, Grid, Flex, Center, MediaQuery } from '@mantine/core';
-
-const EVENT_SECTION_TITLE = '<Upcoming Events />';
-const EVENT_SECTION_PHRASE =
-    "Stay ahead of the game with LCS's events and workshops!";
+const EVENT_SECTION_TITLE = '<Our Upcoming Events />';
+const EVENT_SECTION_PHRASE = '*Updates every month*';
 
 const EventSection = () => {
     return (
@@ -21,11 +24,12 @@ const EventSection = () => {
                                 wrap="wrap"
                                 gap="md"
                             >
-                                <MediaQuery
-                                    query="(max-width: 768px)"
-                                    styles={{ fontSize: '1.7rem' }}
-                                >
-                                    <Title align="center" variant="gradient" order={1}>
+                                <MediaQuery query="(max-width: 768px)">
+                                    <Title
+                                        align="center"
+                                        variant="gradient"
+                                        order={1}
+                                    >
                                         {EVENT_SECTION_TITLE}
                                     </Title>
                                 </MediaQuery>
@@ -35,9 +39,7 @@ const EventSection = () => {
                             </Flex>
                         </Center>
                     </Grid.Col>
-                    <Grid.Col md={6}>
-                        <EventTable />
-                    </Grid.Col>
+                    <Grid.Col md={6}></Grid.Col>
                 </Grid>
             </Container>
         </section>
