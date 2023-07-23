@@ -5,6 +5,11 @@
 .title {
     font-size: 40px;
     color: white;
+    max-width: 100%;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .date {
@@ -13,10 +18,16 @@
     color: #6CB3FF;
 }
 
+.descriptionContainer {
+    margin: 40px 0px;
+}
+
 .description {
+    width: 100%;
+    max-width: 100%;
     font-size: 25px;
     color: #E7EBF5;
-    margin: 40px 0px;
+    text-overflow: ellipsis;
 }
 
 .link > a {

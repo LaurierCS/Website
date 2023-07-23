@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
-import momentPropTypes from 'react-moment-proptypes';
-import { Box } from '@mantine/core';
+import { Box, Tooltip } from '@mantine/core';
 import { Link } from 'react-router-dom';
 
 import classes from './EventCard.module.css';
-import { background } from '@storybook/theming';
 
 const EventCard = ({ icon, title, date, place, description, url, isNext }) => {
+    const descriptionMaxLength = 112;
+
+    // I hate how the classes are here, makes me want to quit mantine 100000%
     return (
         <Box
             sx={(theme) => ({
@@ -16,7 +17,7 @@ const EventCard = ({ icon, title, date, place, description, url, isNext }) => {
                 paddingBottom: '20px',
                 width: '567px',
                 height: '535px',
-                boxShadow: theme.shadows.md,
+                boxShadow: theme.shadows.lg,
                 position: 'relative',
                 transition: 'all ease 150ms',
                 borderStyle: 'solid',
@@ -31,7 +32,6 @@ const EventCard = ({ icon, title, date, place, description, url, isNext }) => {
                 zIndex: 2,
                 '::before': {
                     content: '""',
-                    background: 'red',
                     position: 'absolute',
                     background: theme.fn.gradient(),
                     top: '0',
@@ -52,7 +52,9 @@ const EventCard = ({ icon, title, date, place, description, url, isNext }) => {
             >
                 <Box>
                     <span className={classes.icon}>{icon}</span>
-                    <h1 className={classes.title}>{title}</h1>
+                    <Tooltip label={title}>
+                        <h1 className={classes.title}>{title}</h1>
+                    </Tooltip>
                     <Box
                         sx={() => ({
                             display: 'flex',
@@ -84,7 +86,14 @@ const EventCard = ({ icon, title, date, place, description, url, isNext }) => {
                         </Box>
                     </Box>
                 </Box>
-                <p className={classes.description}>{description}</p>
+
+                <div className={classes.descriptionContainer}>
+                    <p className={classes.description}>
+                        {description.length > descriptionMaxLength
+                            ? description.slice(0, -3) + '...'
+                            : description}
+                    </p>
+                </div>
 
                 <span className={classes.link}>
                     <Link to={url}>{'Learn More >>'}</Link>
@@ -121,7 +130,7 @@ EventCard.defaultProps = {
 EventCard.propTypes = {
     icon: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    date: momentPropTypes.momentObj,
+    date: PropTypes.object.isRequired,
     place: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired,
