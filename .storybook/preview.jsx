@@ -1,27 +1,42 @@
-// expose access to css variables defined in main.css
-import '../src/main.css';
-import { mantineTheme } from '../src/utils/Mantine';
+import { themes } from '@storybook/theming';
 import { MantineProvider } from '@mantine/core';
+import { mantineTheme } from '../src/utils/Mantine';
+import { withRouter } from 'storybook-addon-react-router-v6';
 
-export const parameters = {
-    actions: { argTypesRegex: '^on[A-Z].*' },
-    controls: {
-        matchers: {
-            color: /(background|color)$/i,
-            date: /Date$/,
+import '../src/main.css';
+
+/** @type { import('@storybook/react').Preview } */
+const preview = {
+    parameters: {
+        actions: { argTypesRegex: '^on[A-Z].*' },
+        controls: {
+            matchers: {
+                color: /(background|color)$/i,
+                date: /Date$/,
+            },
+        },
+        docs: {
+            theme: themes.dark,
+        },
+        darkMode: {
+            dark: { ...themes.dark, appBg: 'black' },
+            light: { ...themes.normal, appBg: 'white' },
+            current: 'dark',
         },
     },
 };
 
-export const decorators = [
-    (Story) => (
-        <MantineProvider
-            theme={mantineTheme}
-            withCSSVariables
-            withGlobalStyles
-            withNormalizeCSS
-        >
-            <Story />
+export default preview;
+
+function ThemeWrapper(props) {
+    return (
+        <MantineProvider theme={mantineTheme} withGlobalStyles>
+            {props.children}
         </MantineProvider>
-    ),
+    );
+}
+
+export const decorators = [
+    withRouter,
+    (renderStory) => <ThemeWrapper>{renderStory()}</ThemeWrapper>,
 ];

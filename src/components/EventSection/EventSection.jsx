@@ -1,44 +1,36 @@
-import './EventSection.css';
-import EventTable from '../EventTable/EventTable';
+import { Container, Flex, Title, Text } from '@mantine/core';
+import EventCarousel from './EventCarousel/EventCarousel';
 
-// UI imports from mantine
-import { Title, Text, Container, Grid, Flex, Center, MediaQuery } from '@mantine/core';
+import classes from './EventSection.module.css';
 
-const EVENT_SECTION_TITLE = '<Upcoming Events />';
-const EVENT_SECTION_PHRASE =
-    "Stay ahead of the game with LCS's events and workshops!";
+const EVENT_SECTION_TITLE = '<Our Upcoming Events />';
+const EVENT_SECTION_PHRASE = '*Updates every month*';
 
 const EventSection = () => {
     return (
         <section id="Events">
-            <Container size="xl" my="md">
-                <Grid grow>
-                    <Grid.Col md={6}>
-                        <Center style={{ width: '100%', height: '100%' }}>
-                            <Flex
-                                direction="column"
-                                justify="center"
-                                wrap="wrap"
-                                gap="md"
-                            >
-                                <MediaQuery
-                                    query="(max-width: 768px)"
-                                    styles={{ fontSize: '1.7rem' }}
-                                >
-                                    <Title align="center" variant="gradient" order={1}>
-                                        {EVENT_SECTION_TITLE}
-                                    </Title>
-                                </MediaQuery>
-                                <Text align="center" color="white">
-                                    {EVENT_SECTION_PHRASE}
-                                </Text>
-                            </Flex>
-                        </Center>
-                    </Grid.Col>
-                    <Grid.Col md={6}>
-                        <EventTable />
-                    </Grid.Col>
-                </Grid>
+            <Container fluid>
+                <Flex direction="column" justify="center" wrap="wrap" gap="md">
+                    <Title
+                        align="center"
+                        variant="gradient"
+                        order={1}
+                        className={classes.sectionTitle}
+                    >
+                        {EVENT_SECTION_TITLE}
+                    </Title>
+                    <Text
+                        span
+                        align="center"
+                        color="white"
+                        sx={{ fontSize: '32px' }}
+                    >
+                        {EVENT_SECTION_PHRASE}
+                    </Text>
+                </Flex>
+                <Container fluid>
+                    <EventCarousel />
+                </Container>
             </Container>
         </section>
     );

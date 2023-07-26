@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from '../../utils/day';
 import './EventTag.css';
 
 const IN_DATE_FORMAT = 'DD/MM/YY';
@@ -36,8 +36,8 @@ const EventTag = ({
 }) => {
     const time = useMemo(() => {
         // safety check
-        const start = moment(startTime, IN_TIME_FORMAT);
-        const end = moment(endTime, IN_TIME_FORMAT);
+        const start = dayjs(startTime, IN_TIME_FORMAT);
+        const end = dayjs(endTime, IN_TIME_FORMAT);
 
         if (start > end) {
             console.warn(
@@ -54,7 +54,7 @@ const EventTag = ({
     const dateString = useMemo(() => {
         if (date === 'TBA') return date;
 
-        return moment(date, IN_DATE_FORMAT).format(OUT_DATE_FORMAT);
+        return dayjs(date, IN_DATE_FORMAT).format(OUT_DATE_FORMAT);
     }, [date]);
 
     return (
