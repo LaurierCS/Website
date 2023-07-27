@@ -33,7 +33,10 @@ const EventCard = ({ icon, title, date, place, description, url, isNext }) => {
                 '::before': {
                     content: '""',
                     position: 'absolute',
-                    background: theme.fn.gradient(),
+                    background: theme.fn.gradient({
+                        from: 'blue.4',
+                        to: 'accents.1',
+                    }),
                     top: '0',
                     left: '0',
                     width: '100%',
@@ -103,7 +106,10 @@ const EventCard = ({ icon, title, date, place, description, url, isNext }) => {
                 <Box
                     component="span"
                     sx={(theme) => ({
-                        background: theme.fn.gradient(),
+                        background: theme.fn.gradient({
+                            from: 'blue.4',
+                            to: 'accents.1',
+                        }),
                         color: '#1A1B1E',
                         fontSize: '32px',
                         fontWeight: 'bold',
