@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
-import { ActionIcon, Box } from '@mantine/core';
+import { ActionIcon, Box, Text, Center } from '@mantine/core';
 import {
     collection,
     query,
@@ -84,7 +84,7 @@ const EventCarousel = () => {
                 className={classes.eventsContainer}
                 sx={{
                     justifyContent:
-                        visibleEvents.length === 3
+                        visibleEvents.length === 3 || visibleEvents.length <= 1
                             ? 'center'
                             : activeIndex === 0
                             ? 'end'
@@ -101,6 +101,18 @@ const EventCarousel = () => {
                         <EventCard {...event} />
                     </div>
                 ))}
+                {!visibleEvents.length && (
+                    <div className={classes.midEvent}>
+                        <EventCard
+                            title="No Events"
+                            description="There are no events scheduled for now."
+                            date={dayjs()}
+                            icon="😭"
+                            place="Unknown"
+                            url="/"
+                        />
+                    </div>
+                )}
             </Box>
             <div className={classes.controllerContainer}>
                 <ActionIcon

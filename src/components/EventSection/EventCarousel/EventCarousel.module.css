@@ -15,7 +15,7 @@
     flex-shrink: 0;
 }
 
-.midEvent {
+.midEvent:not(:only-child) {
     position: absolute;
     z-index: 3;
     top: 4rem;
