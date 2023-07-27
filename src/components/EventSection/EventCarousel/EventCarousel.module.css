@@ -1,0 +1,67 @@
+.carouselRoot {
+    padding-left: 15%;
+    padding-right: 15%;
+}
+
+.eventsContainer {
+    display: flex;
+    align-items: center;
+    padding-top: 8rem;
+    position: relative;
+    gap: 15%;
+}
+
+.eventsContainer > div {
+    flex-shrink: 0;
+}
+
+.midEvent:not(:only-child) {
+    position: absolute;
+    z-index: 3;
+    top: 4rem;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.sideEvent {
+    opacity: 0.5;
+}
+
+.controllerContainer {
+    margin-top: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.control {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 9999px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+}
+
+.dot, .activeDot {
+    width: 16px;
+    height: 16px;
+    border-radius: 9999px;
+    background-color: #717277;
+    flex-shrink: 0;
+}
+
+.activeDot {
+    background-color: #D9D9D9;
+}
+
+.dotsContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
