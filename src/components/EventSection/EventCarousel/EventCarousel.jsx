@@ -55,6 +55,8 @@ const EventCarousel = () => {
     }, []);
 
     const slideEvents = (direction) => {
+        if (!eventsRef.current.length) return;
+
         const isInbound =
             direction === 'left'
                 ? activeIndex + 1 < eventsRef.current.length
@@ -87,8 +89,8 @@ const EventCarousel = () => {
                         visibleEvents.length === 3 || visibleEvents.length <= 1
                             ? 'center'
                             : activeIndex === 0
-                            ? 'end'
-                            : 'start',
+                                ? 'end'
+                                : 'start',
                 }}
             >
                 {visibleEvents.map(({ key, ...event }) => (
@@ -116,7 +118,7 @@ const EventCarousel = () => {
             </Box>
             <div className={classes.controllerContainer}>
                 <ActionIcon
-                    disabled={activeIndex === 0}
+                    disabled={activeIndex === 0 || !eventsRef.current.length}
                     onClick={() => slideEvents('right')}
                     variant="filled"
                     className={classes.control}
@@ -134,7 +136,7 @@ const EventCarousel = () => {
                     ))}
                 </div>
                 <ActionIcon
-                    disabled={activeIndex === eventsRef.current.length - 1}
+                    disabled={activeIndex === eventsRef.current.length - 1 || !eventsRef.current.length}
                     onClick={() => slideEvents('left')}
                     variant="filled"
                     className={classes.control}
