@@ -75,25 +75,23 @@ const mantineTheme = {
         to: 'lightBlue.2',
     },
 
+    // typography, sizes are in pt instead of px !
     fontFamily: 'Montserrat',
     fontSizes: {
-        xs: '12px',
-        sm: '14px',
-        md: '18px',
-        lg: '20px',
-        xl: '24px',
+        xs: 12,
+        sm: 14,
+        md: 18,
+        lg: 20,
+        xl: 24,
     },
     headings: {
         fontFamily: 'Montserrat', // force to use Montserrat for headings
-        sizes: {
-            h1: {
-                fontSize: '48px',
-            },
-        },
     },
 
     // for users who have reduced motion for animations set in their OS
     respectReducedMotion: true,
-};
+}
 
-export { mantineTheme };
+export {
+    mantineTheme
+}
