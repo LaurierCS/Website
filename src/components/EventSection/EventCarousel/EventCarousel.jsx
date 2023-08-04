@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
-import { ActionIcon, Box, Text, Center } from '@mantine/core';
+import { ActionIcon, Box } from '@mantine/core';
 import {
     collection,
     query,
@@ -17,9 +17,15 @@ import classes from './EventCarousel.module.css';
 
 // TODO: add animation
 
+// this is used to fill out an empty space when the carousel reaches the end.
+const CardPlaceholder = () => (
+    <Box sx={{ width: '567px', height: '535px', opacity: 0 }}></Box>
+);
+
 const EventCarousel = () => {
     const [visibleEvents, setVisibleEvents] = useState([]);
     const [activeIndex, setActiveIndex] = useState(0);
+    const [slideDirection, setSlideDirection] = useState('');
     const eventsRef = useRef([]);
 
     useEffect(() => {
@@ -39,6 +45,8 @@ const EventCarousel = () => {
                 data.active = false;
                 _events.push(data);
             });
+
+            if (!_events.length) return;
 
             // move the up comming event to the middle
             const upnext = _events[0];
@@ -78,21 +86,22 @@ const EventCarousel = () => {
 
         setActiveIndex(newIndex);
         setVisibleEvents(visible);
+        setSlideDirection(
+            newIndex === 0 || newIndex === eventsRef.current.length - 1
+                ? direction
+                : ''
+        );
     };
 
     return (
         <div className={classes.carouselRoot}>
             <Box
                 className={classes.eventsContainer}
-                sx={{
-                    justifyContent:
-                        visibleEvents.length === 3 || visibleEvents.length <= 1
-                            ? 'center'
-                            : activeIndex === 0
-                                ? 'end'
-                                : 'start',
-                }}
+                sx={{ justifyContent: 'center' }}
             >
+                {slideDirection === 'right' && activeIndex === 0 && (
+                    <CardPlaceholder />
+                )}
                 {visibleEvents.map(({ key, ...event }) => (
                     <div
                         key={key}
@@ -103,6 +112,10 @@ const EventCarousel = () => {
                         <EventCard {...event} />
                     </div>
                 ))}
+                {slideDirection === 'left' &&
+                    activeIndex === eventsRef.current.length - 1 && (
+                        <CardPlaceholder />
+                    )}
                 {!visibleEvents.length && (
                     <div className={classes.midEvent}>
                         <EventCard
@@ -126,17 +139,30 @@ const EventCarousel = () => {
                     <IconChevronLeft />
                 </ActionIcon>
                 <div className={classes.dotsContainer}>
-                    {visibleEvents.map((event) => (
+                    {[0, 1, 2].map((dot) => (
                         <div
-                            key={`dot-${event.key}`}
+                            key={`dot-${dot}`}
                             className={
-                                event.active ? classes.activeDot : classes.dot
+                                eventsRef.current.length &&
+                                ((dot === 0 && activeIndex === 0) ||
+                                    (dot === 2 &&
+                                        activeIndex ===
+                                            eventsRef.current.length - 1) ||
+                                    (dot === 1 &&
+                                        activeIndex > 0 &&
+                                        activeIndex <
+                                            eventsRef.current.length - 1))
+                                    ? classes.activeDot
+                                    : classes.dot
                             }
                         ></div>
                     ))}
                 </div>
                 <ActionIcon
-                    disabled={activeIndex === eventsRef.current.length - 1 || !eventsRef.current.length}
+                    disabled={
+                        activeIndex === eventsRef.current.length - 1 ||
+                        !eventsRef.current.length
+                    }
                     onClick={() => slideEvents('left')}
                     variant="filled"
                     className={classes.control}
