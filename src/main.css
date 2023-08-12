@@ -70,3 +70,15 @@ section {
     margin-bottom: 4rem;
 }
 
+/* Global Utility Classes */
+.space-y-2 > * + * {
+  margin-top: 2rem;
+}
+
+.space-x-2 > * + * {
+  margin-right: 2rem;
+}
+
+.bold {
+  font-weight: bold;
+}
