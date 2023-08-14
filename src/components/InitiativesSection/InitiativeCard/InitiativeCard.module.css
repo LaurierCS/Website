@@ -1,0 +1,48 @@
+.wrapper {
+  position: relative;
+}
+
+.title {
+  font-size: 48px;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.primaryContainer {
+  display: flex;
+  gap: 32px;
+}
+
+.description {
+  font-size: 25px;
+  color: #E7EBF5;
+  text-align: right;
+}
+
+.logo {
+  max-width: 382px;
+  margin: auto;
+  display: block;
+}
+
+.expandButton {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.expandButton > svg {
+  height: 32px;
+  width: 32px;
+}
+
+.hidden {
+  visibility: hidden;
+}
