@@ -86,7 +86,7 @@ const Navbar = () => {
             <img className={classes.logo} src={IconLogo} alt="logo" />
 
             <ul className={classes.linkList}>
-                {['About', 'Events', 'Initiatives', 'FAQ', 'Team'].map(
+                {['About', 'Initiatives', 'Events', 'FAQ', 'Team'].map(
                     (item) => (
                         <li key={`link-${item}`}>
                             <Link
@@ -108,7 +108,7 @@ const Navbar = () => {
 
             <div className={classes.navbar__mobile}>
                 <div className={classes.burger__button}>
-                    <Burger 
+                    <Burger
                         opened={opened}
                         onClick={() => setOpened((open) => !open)}
                         size="sm"
@@ -116,7 +116,7 @@ const Navbar = () => {
                     />
                 </div>
 
-                <Drawer 
+                <Drawer
                     transition="rotate-left"
                     transitionDuration={300}
                     transitionTimingFunction="ease"
@@ -131,22 +131,26 @@ const Navbar = () => {
                     <div className="drawer__content">
                         <div className="drawer__items">
                             <ul className={classes.linkList__mobile}>
-                                {['About', 'Events', 'Initiatives', 'FAQ', 'Team'].map(
-                                    (item) => (
-                                        <li key={`link-${item}`}>
-                                            <Link
-                                                to={`${item}`}
-                                                offset={-navbarHeight}
-                                                smooth
-                                                duration={300}
-                                                className={classes.link}
-                                                onClick={() => setOpened(false)}
-                                            >
-                                                {item}
-                                            </Link>
-                                        </li>
-                                    )
-                                )}
+                                {[
+                                    'About',
+                                    'Initiatives',
+                                    'Events',
+                                    'FAQ',
+                                    'Team',
+                                ].map((item) => (
+                                    <li key={`link-${item}`}>
+                                        <Link
+                                            to={`${item}`}
+                                            offset={-navbarHeight}
+                                            smooth
+                                            duration={300}
+                                            className={classes.link}
+                                            onClick={() => setOpened(false)}
+                                        >
+                                            {item}
+                                        </Link>
+                                    </li>
+                                ))}
                             </ul>
                         </div>
                     </div>

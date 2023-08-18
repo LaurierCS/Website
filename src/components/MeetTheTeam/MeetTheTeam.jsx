@@ -170,7 +170,7 @@ const MeetTheTeam = () => {
     }, []);
 
     return (
-        <section id="meetTheTeam">
+        <section id="Team">
             <Container fluid px="6%">
                 <Flex align="center" justify="center" gap={120}>
                     <Box>
