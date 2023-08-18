@@ -15,7 +15,7 @@ import Spacer from './Spacer/Spacer';
 import HeroSection from './HeroSection/HeroSection';
 import Newsletter from './Newsletter/Newsletter';
 import InitiativesSection from './InitiativesSection/InitiativesSection';
-import MeetTheTeam from './MeetTheTeam/MeatTheTeam';
+import MeetTheTeam from './MeetTheTeam/MeetTheTeam';
 
 export {
     Navbar,
