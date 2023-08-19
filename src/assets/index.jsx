@@ -10,6 +10,7 @@ import UWCSCPartnerLogo from './uwcsc_partner_logo.png';
 import UWDSCPartnerLogo from './uwdsc_partner_logo.png';
 import Plant from './plant.png';
 import PPLogo from './pp.png';
+import FratBoiDug from './frat_boi_dug.svg';
 
 export {
     Logo,
@@ -24,4 +25,5 @@ export {
     PPLogo,
     UWCSCPartnerLogo,
     UWDSCPartnerLogo,
+    FratBoiDug,
 };
