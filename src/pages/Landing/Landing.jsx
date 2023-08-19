@@ -11,6 +11,7 @@ import {
     Newsletter,
     HeroSection,
     InitiativesSection,
+    MeetTheTeam,
 } from '@components';
 
 const Landing = () => {
@@ -26,8 +27,9 @@ const Landing = () => {
             <InitiativesSection />
             <Spacer height="2em" />
             <EventSection />
-            <FAQ />
             <Newsletter />
+            <FAQ />
+            <MeetTheTeam />
             <Footer />
         </>
     );

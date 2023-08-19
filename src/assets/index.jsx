@@ -12,6 +12,7 @@ import Plant from './plant.png';
 import PPLogo from './pp.png';
 import Dug from './dug.svg';
 import Heart from './heart.svg';
+import FratBoiDug from './frat_boi_dug.svg';
 
 export {
     Logo,
@@ -28,4 +29,5 @@ export {
     UWDSCPartnerLogo,
     Dug,
     Heart,
+    FratBoiDug,
 };
