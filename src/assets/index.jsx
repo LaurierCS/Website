@@ -10,6 +10,8 @@ import UWCSCPartnerLogo from './uwcsc_partner_logo.png';
 import UWDSCPartnerLogo from './uwdsc_partner_logo.png';
 import Plant from './plant.png';
 import PPLogo from './pp.png';
+import Dug from './dug.svg';
+import Heart from './heart.svg';
 
 export {
     Logo,
@@ -24,4 +26,6 @@ export {
     PPLogo,
     UWCSCPartnerLogo,
     UWDSCPartnerLogo,
+    Dug,
+    Heart,
 };
