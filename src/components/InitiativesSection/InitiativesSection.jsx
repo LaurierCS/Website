@@ -1,14 +1,11 @@
 import { Container, Title, Text, Flex, Box } from '@mantine/core';
 import InitiativeCard from './InitiativeCard/InitiativeCard';
 import {
-    PPLogo,
     Plant,
     PodsLogo,
     IconLogo,
     C3PartnerLogo,
     HHPartnerLogo,
-    UWCSCPartnerLogo,
-    UWDSCPartnerLogo,
 } from '@assets';
 
 const SECTION_TITLE = '<Our Initiatives />';
