@@ -115,52 +115,6 @@ const InitiativesSection = () => {
                             <img src={Plant} alt="Plant" />
                         </Box>
                     </InitiativeCard>
-                    <InitiativeCard
-                        title="Project Program"
-                        description="A collaboration with Wilfrid Laurier University's LCS and University of Waterloo's CSC and DSC, where students participate in a month-long hackathon!"
-                        logo={PPLogo}
-                        logoLabel="Project Program Logo"
-                        right
-                        partnerLogos={[
-                            {
-                                label: 'LCS Logo',
-                                url: IconLogo,
-                                style: { width: '62px' },
-                            },
-                            {
-                                label: 'DSC Logo',
-                                url: UWDSCPartnerLogo,
-                                style: { width: '38px', marginRight: '14px' },
-                            },
-                            {
-                                label: 'CSC Logo',
-                                url: UWCSCPartnerLogo,
-                                style: { width: '38px' },
-                            },
-                        ]}
-                    >
-                        <Box
-                            sx={{
-                                display: 'grid',
-                                gridTemplateColumns: 'auto 1fr',
-                                padding: '2rem',
-                            }}
-                        >
-                            <img src={Plant} alt="Plant" />
-                            <Box
-                                sx={{
-                                    padding: '2rem',
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    gap: '2rem',
-                                    textAlign: 'left',
-                                    color: 'white',
-                                }}
-                            >
-                                <p>NEEDS TO FILL IN CONTENT FOR THIS</p>
-                            </Box>
-                        </Box>
-                    </InitiativeCard>
                 </Container>
             </Container>
         </section>
