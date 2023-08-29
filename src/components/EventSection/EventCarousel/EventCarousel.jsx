@@ -8,6 +8,7 @@ import {
     orderBy,
     getDocs,
     Timestamp,
+    limit,
 } from 'firebase/firestore';
 import EventCard from '../EventCard/EventCard';
 import dayjs from '../../../utils/day';
@@ -33,7 +34,8 @@ const EventCarousel = () => {
             const q = query(
                 collection(store, 'events'),
                 where('date', '>=', Timestamp.now()),
-                orderBy('date', 'asc')
+                orderBy('date', 'asc'),
+                limit(3)
             );
 
             const docs = await getDocs(q);
