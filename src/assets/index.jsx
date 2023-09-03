@@ -6,10 +6,7 @@ import PCDesign from './pc_design.svg';
 import PodsLogo from './pods_logo.png';
 import C3PartnerLogo from './c3_partner_logo.png';
 import HHPartnerLogo from './hh_partner_logo.png';
-import UWCSCPartnerLogo from './uwcsc_partner_logo.png';
-import UWDSCPartnerLogo from './uwdsc_partner_logo.png';
 import Plant from './plant.png';
-import PPLogo from './pp.png';
 import Dug from './dug.svg';
 import Heart from './heart.svg';
 import FratBoiDug from './frat_boi_dug.svg';
@@ -24,9 +21,6 @@ export {
     C3PartnerLogo,
     HHPartnerLogo,
     Plant,
-    PPLogo,
-    UWCSCPartnerLogo,
-    UWDSCPartnerLogo,
     Dug,
     Heart,
     FratBoiDug,
