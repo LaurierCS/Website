@@ -1,73 +1,14 @@
 import { useEffect, useState } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import { useDisclosure } from '@mantine/hooks';
-import {
-    Title,
-    Text,
-    Box,
-    Flex,
-    Button,
-    Modal,
-    createStyles,
-} from '@mantine/core';
+import { Title, Text, Box, Flex, Button, Modal } from '@mantine/core';
 import { PodsLogo, IconLogo, C3PartnerLogo, HHPartnerLogo } from '@assets';
 import { useCommonStyles } from './styles';
 import dayjs from '@utils/day';
-import { store } from '../../../services/firebase';
-
-const useStyles = createStyles((theme) => ({
-    lcsLogo: {
-        width: '3rem',
-    },
-    hhLogo: {
-        width: '2rem',
-        marginLeft: '-0.7rem',
-    },
-    c3Logo: {
-        width: '2rem',
-    },
-    bodyPODSLogo: {
-        maxWidth: '23rem',
-        margin: 'auto',
-        display: 'block',
-
-        [theme.fn.smallerThan('md')]: {
-            display: 'none',
-        },
-    },
-    headerPODSLogoBox: {
-        height: '100%',
-        position: 'absolute',
-        right: 0,
-        top: 0,
-
-        [theme.fn.smallerThan('sm')]: {
-            position: 'initial',
-            marginTop: '1rem',
-        },
-    },
-    hedearPODSLogo: {
-        maxHeight: '2rem',
-    },
-    actionBox: {
-        position: 'absolute',
-        right: 0,
-
-        [theme.fn.smallerThan('sm')]: {
-            position: 'initial',
-        },
-    },
-    smallText: {
-        fontSize: '1rem',
-        textAlign: 'center',
-        color: 'white',
-        marginTop: '1rem',
-    },
-}));
+import { store } from '@services/firebase';
 
 const PODS = () => {
-    const { classes } = useStyles();
-    const { classes: commonClasses } = useCommonStyles();
+    const { classes } = useCommonStyles();
     const [opened, { open, close }] = useDisclosure(false);
     const [data, setData] = useState({
         applicable: false,
@@ -98,14 +39,13 @@ const PODS = () => {
 
     return (
         <Box sx={(theme) => ({ boxShadow: theme.shadows.lg })}>
-            <Box className={commonClasses.outerBox}>
-                <Box className={commonClasses.innerBox}>
-                    <Title className={commonClasses.title}>LCS PODS</Title>
+            <Box className={classes.outerBox}>
+                <Box className={classes.innerBox}>
                     <Flex
                         justify="center"
                         align="center"
                         gap={12}
-                        className={commonClasses.partnerLogoContainer}
+                        className={classes.partnerLogoContainer}
                     >
                         <img
                             alt="LCS Logo"
@@ -123,10 +63,11 @@ const PODS = () => {
                             className={classes.c3Logo}
                         />
                     </Flex>
+                    <Title className={classes.title}>LCS PODS</Title>
                     <Flex
                         justify="center"
                         align="center"
-                        className={classes.headerPODSLogoBox}
+                        className={classes.headerLogoBox}
                     >
                         <Box
                             sx={(theme) => ({
@@ -140,14 +81,14 @@ const PODS = () => {
                             <img
                                 src={PodsLogo}
                                 alt="PODS Logo"
-                                className={classes.hedearPODSLogo}
+                                className={classes.headerLogo}
                             />
                         </Box>
                     </Flex>
                 </Box>
                 <Flex gap={32} direction="row-reverse">
                     <Flex align="center">
-                        <Text className={commonClasses.description}>
+                        <Text className={classes.description}>
                             {data.description}
                         </Text>
                     </Flex>
@@ -155,13 +96,15 @@ const PODS = () => {
                         <img
                             src={PodsLogo}
                             alt="PODS Logo"
-                            className={classes.bodyPODSLogo}
+                            className={classes.bodyLogo}
                         />
                     </Flex>
                 </Flex>
-                <Text className={classes.smallText}>
-                    {`Applications open on ${data.openDate}`}
-                </Text>
+                {!data.applicable && (
+                    <Text className={classes.smallText}>
+                        {`Applications open on ${data.openDate}`}
+                    </Text>
+                )}
                 <Flex
                     sx={{ position: 'relative' }}
                     mt="2rem"
@@ -191,7 +134,7 @@ const PODS = () => {
                                     from: 'blue.4',
                                     to: 'accents.1',
                                 }}
-                                className={commonClasses.actionBtn}
+                                className={classes.actionBtn}
                                 size="lg"
                                 onClick={() => console.log('here')}
                                 disabled={!data.applicable}
@@ -218,6 +161,7 @@ const PODS = () => {
                         color: 'white',
                     }}
                 >
+                    {/* the content for this section could be stored in firebase as well like the description */}
                     <p>
                         PODS has 5 major development phases -{' '}
                         <span className="bold">

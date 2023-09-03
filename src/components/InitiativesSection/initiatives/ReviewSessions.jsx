@@ -1,43 +1,13 @@
 import { useDisclosure } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
-import {
-    Title,
-    Text,
-    Box,
-    Flex,
-    Button,
-    Modal,
-    createStyles,
-} from '@mantine/core';
-import { PodsLogo, IconLogo, C3PartnerLogo, HHPartnerLogo } from '@assets';
+import { Title, Text, Box, Flex, Button, Modal } from '@mantine/core';
+import { PodsLogo, IconLogo } from '@assets';
 import { useCommonStyles } from './styles';
 import { store } from '../../../services/firebase';
 
-const useStyles = createStyles((theme) => ({
-    lcsLogo: {
-        width: '3rem',
-    },
-    hhLogo: {
-        width: '2rem',
-        marginLeft: '-0.7rem',
-    },
-    c3Logo: {
-        width: '2rem',
-    },
-    bodyLogo: {
-        maxWidth: '23rem',
-        margin: 'auto',
-        display: 'block',
-
-        [theme.fn.smallerThan('md')]: {
-            display: 'none',
-        },
-    },
-}));
-
-const CodeNChill = () => {
-    const { classes } = useStyles();
+const ReviewSessions = () => {
+    const { classes } = useCommonStyles();
     const { classes: commonClasses } = useCommonStyles();
     const [opened, { open, close }] = useDisclosure(false);
     const [description, setDescription] = useState('');
@@ -45,7 +15,7 @@ const CodeNChill = () => {
     const getData = async () => {
         try {
             const docSnap = await getDoc(
-                doc(store, 'initiatives', 'codenchill')
+                doc(store, 'initiatives', 'review-sessions')
             );
             if (docSnap.exists()) {
                 const docData = docSnap.data();
@@ -64,7 +34,6 @@ const CodeNChill = () => {
         <Box sx={(theme) => ({ boxShadow: theme.shadows.lg })}>
             <Box className={commonClasses.outerBox}>
                 <Box className={commonClasses.innerBox}>
-                    <Title className={commonClasses.title}>Code n' Chill</Title>
                     <Flex
                         justify="center"
                         align="center"
@@ -76,19 +45,33 @@ const CodeNChill = () => {
                             src={IconLogo}
                             className={classes.lcsLogo}
                         />
-                        <img
-                            alt="HawkHacks Logo"
-                            src={HHPartnerLogo}
-                            className={classes.hhLogo}
-                        />
-                        <img
-                            alt="C Cubed Logo"
-                            src={C3PartnerLogo}
-                            className={classes.c3Logo}
-                        />
+                    </Flex>
+                    <Title className={commonClasses.title}>
+                        Review Sessions
+                    </Title>
+                    <Flex
+                        justify="center"
+                        align="center"
+                        className={classes.headerLogoBox}
+                    >
+                        <Box
+                            sx={(theme) => ({
+                                display: 'none',
+
+                                [theme.fn.smallerThan('md')]: {
+                                    display: 'block',
+                                },
+                            })}
+                        >
+                            <img
+                                src={PodsLogo}
+                                alt="PODS Logo"
+                                className={classes.headerLogo}
+                            />
+                        </Box>
                     </Flex>
                 </Box>
-                <Flex gap={32} direction="row-reverse">
+                <Flex gap={32} direction="row-reverse" justify="space-between">
                     <Flex align="center">
                         <Text className={commonClasses.description}>
                             {description}
@@ -119,7 +102,7 @@ const CodeNChill = () => {
             <Modal
                 opened={opened}
                 onClose={close}
-                title="LCS CodeNChill Details"
+                title="LCS ReviewSessions Details"
                 centered
             >
                 <Box
@@ -132,15 +115,15 @@ const CodeNChill = () => {
                     }}
                 >
                     <p>
-                        CodeNChill has 5 major development phases -{' '}
+                        ReviewSessions has 5 major development phases -{' '}
                         <span className="bold">
                             Brainstorming, Design, Prototyping, MVP
                         </span>{' '}
                         and <span className="bold">Launch</span>.
                     </p>
                     <p>
-                        CodeNChill teams are curated based on skill level, based
-                        on your application's test. Our goal is for{' '}
+                        ReviewSessions teams are curated based on skill level,
+                        based on your application's test. Our goal is for{' '}
                         <span className="bold">everyone to learn</span> - nto
                         just one hardcarry.
                     </p>
@@ -158,4 +141,4 @@ const CodeNChill = () => {
     );
 };
 
-export default CodeNChill;
+export default ReviewSessions;

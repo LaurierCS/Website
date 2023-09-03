@@ -1,6 +1,6 @@
 import { Container, Title, Text, Flex, Box } from '@mantine/core';
 import PODS from './initiatives/PODS';
-import CodeNChill from './initiatives/CodeNChill';
+import ReviewSessions from './initiatives/ReviewSessions';
 
 const SECTION_TITLE = '<Our Initiatives />';
 const SECTION_PHRASE =
@@ -37,7 +37,7 @@ const InitiativesSection = () => {
                 </Flex>
                 <Container fluid className="space-y-2">
                     <PODS />
-                    <CodeNChill />
+                    <ReviewSessions />
                 </Container>
             </Container>
         </section>
