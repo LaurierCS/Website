@@ -1,12 +1,6 @@
 import { Container, Title, Text, Flex, Box } from '@mantine/core';
-import InitiativeCard from './InitiativeCard/InitiativeCard';
-import {
-    Plant,
-    PodsLogo,
-    IconLogo,
-    C3PartnerLogo,
-    HHPartnerLogo,
-} from '@assets';
+import PODS from './initiatives/PODS';
+import CodeNChill from './initiatives/CodeNChill';
 
 const SECTION_TITLE = '<Our Initiatives />';
 const SECTION_PHRASE =
@@ -42,76 +36,8 @@ const InitiativesSection = () => {
                     </Text>
                 </Flex>
                 <Container fluid className="space-y-2">
-                    <InitiativeCard
-                        title="LCS PODS"
-                        description="A 3-month long program that groups students into teams to work on a software development project. The goal is to teach students the crucial skills that they’d need to start their careers, as well as create a community of passionate developers."
-                        logo={PodsLogo}
-                        logoLabel="PODS Logo"
-                        partnerLogos={[
-                            {
-                                label: 'LCS Logo',
-                                url: IconLogo,
-                                style: { width: '62px' },
-                            },
-                            {
-                                label: 'HH Logo',
-                                url: HHPartnerLogo,
-                                style: { width: '38px', marginRight: '16px' },
-                            },
-                            {
-                                label: 'C3 Logo',
-                                url: C3PartnerLogo,
-                                style: { width: '38px' },
-                            },
-                        ]}
-                    >
-                        <Box
-                            sx={{
-                                display: 'grid',
-                                gridTemplateColumns: '1fr auto',
-                                padding: '2rem',
-                            }}
-                        >
-                            <Box
-                                sx={{
-                                    padding: '2rem',
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    gap: '2rem',
-                                    textAlign: 'right',
-                                    color: 'white',
-                                }}
-                            >
-                                <p>
-                                    PODS has 5 major development phases -{' '}
-                                    <span className="bold">
-                                        Brainstorming, Design, Prototyping, MVP
-                                    </span>{' '}
-                                    and <span className="bold">Launch</span>.
-                                </p>
-                                <p>
-                                    PODS teams are curated based on skill level,
-                                    based on your application's test. Our goal
-                                    is for{' '}
-                                    <span className="bold">
-                                        everyone to learn
-                                    </span>{' '}
-                                    - nto just one hardcarry.
-                                </p>
-                                <p>
-                                    Each POD will work on one project over the
-                                    course of the next three months. These
-                                    projects can be{' '}
-                                    <span className="bold">
-                                        websites, video games, machine learning
-                                        models,
-                                    </span>
-                                    or whatever else the team is interested in!
-                                </p>
-                            </Box>
-                            <img src={Plant} alt="Plant" />
-                        </Box>
-                    </InitiativeCard>
+                    <PODS />
+                    <CodeNChill />
                 </Container>
             </Container>
         </section>

@@ -3,6 +3,8 @@ import { Box, Title, Text, Flex } from '@mantine/core';
 import { IconChevronUp, IconChevronDown } from '@tabler/icons-react';
 import classes from './InitiativeCard.module.css';
 
+// NOTE: not using this at the moment.
+
 const InitiativeCard = ({
     title = '',
     description = '',
