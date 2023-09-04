@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
-import { ActionIcon, Box } from '@mantine/core';
+import { ActionIcon, Box, createStyles } from '@mantine/core';
 import {
     collection,
     query,
@@ -13,8 +13,8 @@ import {
 import EventCard from '../EventCard/EventCard';
 import dayjs from '../../../utils/day';
 import { store } from '../../../services/firebase';
-
-import classes from './EventCarousel.module.css';
+import { useMediaQuery } from '@mantine/hooks';
+import { flushSync } from 'react-dom';
 
 // TODO: add animation
 
@@ -23,11 +23,96 @@ const CardPlaceholder = () => (
     <Box sx={{ width: '567px', height: '535px', opacity: 0 }}></Box>
 );
 
+const useStyles = createStyles((theme) => ({
+    carouselRoot: {
+        paddingLeft: '15%',
+        paddingRight: '15%',
+
+        [theme.fn.smallerThan('md')]: {
+            paddingLeft: '0',
+            paddingRight: '0',
+        },
+    },
+    eventsContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingTop: '8rem',
+        position: 'relative',
+        gap: '8%',
+
+        [theme.fn.smallerThan('lg')]: {
+            gap: '2%',
+            width: '100%',
+        },
+
+        [theme.fn.smallerThan('sm')]: {
+            paddingTop: '2rem',
+        },
+    },
+    midEvent: {
+        ['&:not(:only-child)']: {
+            position: 'absolute',
+            zIndex: 3,
+            top: '4rem',
+            left: '50%',
+            transform: 'translateX(-50%)',
+        },
+
+        [theme.fn.smallerThan('md')]: {
+            width: '100%',
+        },
+    },
+    sideEvent: {
+        opacity: 0.5,
+    },
+    controllerContainer: {
+        marginTop: '2rem',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    control: {
+        width: '2rem',
+        height: '2rem',
+        borderRadius: 9999,
+        backgroundColor: 'white',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: 'black',
+    },
+    dot: {
+        width: '1rem',
+        height: '1rem',
+        borderRadius: 9999,
+        backgroundColor: '#717277',
+        flexShrink: 0,
+    },
+    activeDot: {
+        width: '1rem',
+        height: '1rem',
+        borderRadius: 9999,
+        backgroundColor: '#D9D9D9',
+        flexShrink: 0,
+    },
+    dotsContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 12,
+        marginLeft: '2rem',
+        marginRight: '2rem',
+    },
+}));
+
 const EventCarousel = () => {
     const [visibleEvents, setVisibleEvents] = useState([]);
     const [activeIndex, setActiveIndex] = useState(0);
     const [slideDirection, setSlideDirection] = useState('');
+    const { classes } = useStyles();
     const eventsRef = useRef([]);
+    const mdBreakpoint = useMediaQuery('(max-width: 64em)');
 
     useEffect(() => {
         (async () => {
@@ -59,62 +144,97 @@ const EventCarousel = () => {
             const secondHalf = _events.slice(mid + 1);
             eventsRef.current = [...firstHalf, upnext, ...secondHalf];
             const startIndex = mid - 1 >= 0 ? mid - 1 : 0;
-            setActiveIndex(mid);
-            setVisibleEvents(eventsRef.current.slice(startIndex, mid + 2));
+            flushSync(() => {
+                setActiveIndex(mid);
+                setVisibleEvents(eventsRef.current.slice(startIndex, mid + 2));
+            });
         })();
     }, []);
 
-    const slideEvents = (direction) => {
-        if (!eventsRef.current.length) return;
-
+    const getNextIndex = (direction) => {
         const isInbound =
             direction === 'left'
                 ? activeIndex + 1 < eventsRef.current.length
                 : activeIndex - 1 >= 0;
-        let newIndex = -1;
+        let nextIndex = -1;
         if (direction === 'left') {
-            newIndex = isInbound
+            nextIndex = isInbound
                 ? activeIndex + 1
                 : eventsRef.current.length - 1;
         } else {
-            newIndex = isInbound ? activeIndex - 1 : 0;
+            nextIndex = isInbound ? activeIndex - 1 : 0;
         }
         eventsRef.current[activeIndex].active = false;
-        eventsRef.current[newIndex].active = true;
-        const visible = eventsRef.current.slice(
-            newIndex - 1 >= 0 ? newIndex - 1 : 0,
-            newIndex + 2
-        );
+        eventsRef.current[nextIndex].active = true;
+        return nextIndex;
+    };
 
-        setActiveIndex(newIndex);
-        setVisibleEvents(visible);
+    const setCarouselState = (nextIndex, events, direction) => {
+        setActiveIndex(nextIndex);
+        setVisibleEvents(events);
         setSlideDirection(
-            newIndex === 0 || newIndex === eventsRef.current.length - 1
+            nextIndex === 0 || nextIndex === eventsRef.current.length - 1
                 ? direction
                 : ''
         );
     };
 
+    const bigSlide = (direction) => {
+        const nextIndex = getNextIndex(direction);
+        const visible = eventsRef.current.slice(
+            nextIndex - 1 >= 0 ? nextIndex - 1 : 0,
+            nextIndex + 2
+        );
+        setCarouselState(nextIndex, visible, direction);
+    };
+
+    const simpleSlide = (direction) => {
+        const nextIndex = getNextIndex(direction);
+
+        const visible = [eventsRef.current[nextIndex]];
+        setCarouselState(nextIndex, visible, direction);
+    };
+
+    const slideEvents = (direction) => {
+        if (!eventsRef.current.length) return;
+        if (mdBreakpoint) simpleSlide(direction);
+        else bigSlide(direction);
+    };
+
     return (
         <div className={classes.carouselRoot}>
-            <Box
-                className={classes.eventsContainer}
-                sx={{ justifyContent: 'center' }}
-            >
-                {slideDirection === 'right' && activeIndex === 0 && (
-                    <CardPlaceholder />
-                )}
-                {visibleEvents.map(({ key, ...event }) => (
-                    <div
-                        key={key}
-                        className={
-                            event.active ? classes.midEvent : classes.sideEvent
-                        }
-                    >
-                        <EventCard {...event} />
-                    </div>
-                ))}
-                {slideDirection === 'left' &&
+            <Box className={classes.eventsContainer}>
+                {!mdBreakpoint &&
+                    slideDirection === 'right' &&
+                    activeIndex === 0 && <CardPlaceholder />}
+                {visibleEvents.map(({ key, ...event }) => {
+                    if (mdBreakpoint && event.active) {
+                        return (
+                            <div key={key} className={classes.midEvent}>
+                                <EventCard {...event} />
+                            </div>
+                        );
+                    }
+
+                    if (!mdBreakpoint) {
+                        return (
+                            <div
+                                key={key}
+                                className={
+                                    event.active
+                                        ? classes.midEvent
+                                        : classes.sideEvent
+                                }
+                            >
+                                <EventCard {...event} />
+                            </div>
+                        );
+                    }
+
+                    return null;
+                })}
+                {!mdBreakpoint &&
+                    slideDirection === 'left' &&
                     activeIndex === eventsRef.current.length - 1 && (
                         <CardPlaceholder />
                     )}
