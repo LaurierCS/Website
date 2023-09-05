@@ -6,7 +6,7 @@ import { Dug, Heart } from '@assets';
 
 import './Footer.css';
 
-const useStyles = createStyles(() => ({
+const useStyles = createStyles((theme) => ({
     title: {
         fontSize: 48,
         color: 'white',
@@ -19,12 +19,25 @@ const useStyles = createStyles(() => ({
     },
     dugBox: {
         position: 'relative',
+
+        [theme.fn.smallerThan('sm')]: {
+            width: '100%',
+            paddingTop: '5rem',
+            overflow: 'hidden',
+        },
+    },
+    dug: {
+        [theme.fn.smallerThan('sm')]: {},
     },
     heart: {
         position: 'absolute',
         left: 100,
-        top: -80,
+        top: '-5rem',
         animation: 'bounce 2s infinite',
+
+        [theme.fn.smallerThan('sm')]: {
+            top: '1rem',
+        },
     },
     footerBar: {
         background: 'rgba(26, 27, 30, 0.9)',
