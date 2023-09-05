@@ -50,10 +50,6 @@ const useStyles = createStyles((theme) => ({
         [theme.fn.smallerThan('lg')]: {
             fontSize: '1.2rem',
         },
-
-        [theme.fn.smallerThan('sm')]: {
-            fontSize: '1rem',
-        },
     },
     link: {
         fontSize: '1.56rem',
@@ -103,6 +99,7 @@ const useStyles = createStyles((theme) => ({
 
         [theme.fn.smallerThan('md')]: {
             width: '100%',
+            height: 'auto',
         },
     },
     placeRoot: {

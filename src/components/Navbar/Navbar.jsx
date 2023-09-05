@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import './Navbar.css';
 import { IconLogo } from '@assets';
 import { NavbarSocials } from '@components';
@@ -16,8 +16,6 @@ const useStyles = createStyles((theme) => {
             height: `${navbarHeight}px`,
             position: 'fixed',
             display: 'flex',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
             top: 0,
             left: 0,
             right: 0,
@@ -26,14 +24,15 @@ const useStyles = createStyles((theme) => {
             backgroundColor: 'rgba(26, 27, 30, 0.40)', // mantine colour dark[7] in rgb
         },
         navbar__mobile: {
-            display: 'inline-block',
-            '@media only screen and (min-width: 768px)': {
-                display: 'none',
+            display: 'none',
+
+            '@media screen and (max-width: 830px)': {
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+                width: 'calc(100% - 90px)',
+                paddingRight: '1.5rem',
             },
-        },
-        burger__button: {
-            float: 'right',
-            padding: '1.2em 13em',
         },
         link: {
             display: 'inline-block',
@@ -53,9 +52,6 @@ const useStyles = createStyles((theme) => {
             display: 'flex',
             alignItems: 'center',
             listStyle: 'none',
-            '@media screen and (max-width: 900px)': {
-                display: 'none',
-            },
         },
         linkList__mobile: {
             display: 'flex',
@@ -67,59 +63,68 @@ const useStyles = createStyles((theme) => {
         socials: {
             marginLeft: 'auto',
             marginRight: '1rem',
-            '@media screen and (max-width: 900px)': {
+        },
+        logo: {
+            height: '90px',
+        },
+        desktopNav: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            width: 'calc(100% - 90px)',
+
+            '@media screen and (max-width: 830px)': {
                 display: 'none',
             },
         },
-        logo: {
-            height: '100%',
+        mobileSocials: {
+            marginTop: '2rem',
         },
     };
 });
 
 const Navbar = () => {
-    const [opened, setOpened] = React.useState(false);
+    const [opened, setOpened] = useState(false);
     const { classes } = useStyles();
 
     return (
         <div className={classes.navbar}>
             <img className={classes.logo} src={IconLogo} alt="logo" />
 
-            <ul className={classes.linkList}>
-                {['About', 'Initiatives', 'Events', 'FAQ', 'Team'].map(
-                    (item) => (
-                        <li key={`link-${item}`}>
-                            <Link
-                                to={`${item}`}
-                                offset={-navbarHeight}
-                                smooth
-                                duration={300}
-                                className={classes.link}
-                            >
-                                {item}
-                            </Link>
-                        </li>
-                    )
-                )}
-            </ul>
-            <div className={classes.socials}>
-                <NavbarSocials />
+            <div className={classes.desktopNav}>
+                <nav>
+                    <ul className={classes.linkList}>
+                        {['About', 'Initiatives', 'Events', 'FAQ', 'Team'].map(
+                            (item) => (
+                                <li key={`link-${item}`}>
+                                    <Link
+                                        to={`${item}`}
+                                        offset={-navbarHeight}
+                                        smooth
+                                        duration={300}
+                                        className={classes.link}
+                                    >
+                                        {item}
+                                    </Link>
+                                </li>
+                            )
+                        )}
+                    </ul>
+                </nav>
+                <div className={classes.socials}>
+                    <NavbarSocials />
+                </div>
             </div>
 
             <div className={classes.navbar__mobile}>
-                <div className={classes.burger__button}>
-                    <Burger
-                        opened={opened}
-                        onClick={() => setOpened((open) => !open)}
-                        size="sm"
-                        color="gray"
-                    />
-                </div>
+                <Burger
+                    opened={opened}
+                    onClick={() => setOpened((open) => !open)}
+                    size="sm"
+                    color="gray"
+                />
 
                 <Drawer
-                    transition="rotate-left"
-                    transitionDuration={300}
-                    transitionTimingFunction="ease"
                     opened={opened}
                     onClose={() => setOpened(false)}
                     position="right"
@@ -127,32 +132,34 @@ const Navbar = () => {
                     overlayColor="var(--color-background)"
                     overlayBlur={3}
                     padding="10%"
+                    className={classes.drawer}
                 >
-                    <div className="drawer__content">
-                        <div className="drawer__items">
-                            <ul className={classes.linkList__mobile}>
-                                {[
-                                    'About',
-                                    'Initiatives',
-                                    'Events',
-                                    'FAQ',
-                                    'Team',
-                                ].map((item) => (
-                                    <li key={`link-${item}`}>
-                                        <Link
-                                            to={`${item}`}
-                                            offset={-navbarHeight}
-                                            smooth
-                                            duration={300}
-                                            className={classes.link}
-                                            onClick={() => setOpened(false)}
-                                        >
-                                            {item}
-                                        </Link>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
+                    <nav>
+                        <ul className={classes.linkList__mobile}>
+                            {[
+                                'About',
+                                'Initiatives',
+                                'Events',
+                                'FAQ',
+                                'Team',
+                            ].map((item) => (
+                                <li key={`link-${item}`}>
+                                    <Link
+                                        to={`${item}`}
+                                        offset={-navbarHeight}
+                                        smooth
+                                        duration={300}
+                                        className={classes.link}
+                                        onClick={() => setOpened(false)}
+                                    >
+                                        {item}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </nav>
+                    <div className={classes.mobileSocials}>
+                        <NavbarSocials />
                     </div>
                 </Drawer>
             </div>
