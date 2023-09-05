@@ -9,7 +9,12 @@ const EventSection = () => {
         <section id="Events">
             <Container fluid>
                 <Flex direction="column" justify="center" wrap="wrap" gap="md">
-                    <Title align="center" variant="gradient" order={1}>
+                    <Title
+                        align="center"
+                        variant="gradient"
+                        order={1}
+                        sx={{ fontSize: '3rem' }}
+                    >
                         {EVENT_SECTION_TITLE}
                     </Title>
                     <Text
@@ -17,7 +22,7 @@ const EventSection = () => {
                         align="center"
                         color="white"
                         sx={(theme) => ({
-                            fontSize: '2rem',
+                            fontSize: '1.5rem',
                             [theme.fn.smallerThan('sm')]: {
                                 fontSize: '1.2rem',
                             },

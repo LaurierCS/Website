@@ -1,13 +1,9 @@
 import { useState } from 'react';
-import './Navbar.css';
 import { IconLogo } from '@assets';
 import { NavbarSocials } from '@components';
 import { Link } from 'react-scroll';
 import { createStyles, Burger, Drawer } from '@mantine/core';
 
-// 5rem original height that was defined on the css file
-// 18 is the root font size
-// 5 times the root font size, not ideal, this is a magic number, root font size may change in the future, who knows
 const navbarHeight = 5 * 18;
 
 const useStyles = createStyles((theme) => {
@@ -39,7 +35,7 @@ const useStyles = createStyles((theme) => {
             color: theme.colors.gray[5],
             textDecoration: 'none',
             fontWeight: 500,
-            fontSize: '0.9em',
+            fontSize: '1rem',
             padding: '1.2em 1.5em',
             cursor: 'pointer',
             transition: 'color 150ms ease',
