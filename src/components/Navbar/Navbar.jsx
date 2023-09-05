@@ -26,7 +26,7 @@ const useStyles = createStyles((theme) => {
         navbar__mobile: {
             display: 'none',
 
-            '@media screen and (max-width: 830px)': {
+            '@media screen and (max-width: 900px)': {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'flex-end',
@@ -73,7 +73,7 @@ const useStyles = createStyles((theme) => {
             justifyContent: 'space-between',
             width: 'calc(100% - 90px)',
 
-            '@media screen and (max-width: 830px)': {
+            '@media screen and (max-width: 900px)': {
                 display: 'none',
             },
         },
