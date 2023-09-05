@@ -11,14 +11,19 @@ const InitiativesSection = () => {
         <section id="Initiatives">
             <Container size="xl">
                 <Flex direction="column" justify="center" wrap="wrap" gap="md">
-                    <Title align="center" variant="gradient" order={1}>
+                    <Title
+                        align="center"
+                        variant="gradient"
+                        order={1}
+                        sx={{ fontSize: '3rem' }}
+                    >
                         {SECTION_TITLE}
                     </Title>
                     <Text
                         span
                         align="center"
                         color="white"
-                        sx={{ fontSize: '32px' }}
+                        sx={{ fontSize: '1.5rem' }}
                     >
                         {SECTION_PHRASE}
                     </Text>
@@ -27,9 +32,9 @@ const InitiativesSection = () => {
                         align="center"
                         color="white"
                         sx={{
-                            fontSize: '32px',
-                            marginTop: '32px',
-                            marginBottom: '32px',
+                            fontSize: '1.5rem',
+                            marginTop: '1.5rem',
+                            marginBottom: '1.5rem',
                         }}
                     >
                         Check out our current projects:
