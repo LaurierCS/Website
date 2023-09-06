@@ -99,10 +99,9 @@ const HeroSection = () => {
                             {/*Discord Button*/}
                             <Center py="5rem">
                                 <Button
-                                    variant="gradient"
-                                    gradient={{ from: 'indigo', to: 'cyan' }}
                                     size="lg"
                                     leftIcon={<FaDiscord />}
+                                    style={{backgroundColor: '#6998DF'}}
                                 >
                                     Join our Discord!
                                 </Button>

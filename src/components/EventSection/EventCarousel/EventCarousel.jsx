@@ -93,7 +93,7 @@ const useStyles = createStyles((theme) => ({
         width: '1rem',
         height: '1rem',
         borderRadius: 9999,
-        backgroundColor: '#D9D9D9',
+        backgroundColor: '#E7EBF5',
         flexShrink: 0,
     },
     dotsContainer: {
