@@ -253,47 +253,51 @@ const EventCarousel = () => {
                     </div>
                 )}
             </Box>
-            <div className={classes.controllerContainer}>
-                <ActionIcon
-                    disabled={activeIndex === 0 || !eventsRef.current.length}
-                    onClick={() => slideEvents('right')}
-                    variant="filled"
-                    className={classes.control}
-                >
-                    <IconChevronLeft />
-                </ActionIcon>
-                <div className={classes.dotsContainer}>
-                    {[0, 1, 2].map((dot) => (
-                        <div
-                            key={`dot-${dot}`}
-                            className={
-                                eventsRef.current.length &&
-                                ((dot === 0 && activeIndex === 0) ||
-                                    (dot === 2 &&
-                                        activeIndex ===
-                                            eventsRef.current.length - 1) ||
-                                    (dot === 1 &&
-                                        activeIndex > 0 &&
-                                        activeIndex <
-                                            eventsRef.current.length - 1))
-                                    ? classes.activeDot
-                                    : classes.dot
-                            }
-                        ></div>
-                    ))}
+            {!!eventsRef.current.length && (
+                <div className={classes.controllerContainer}>
+                    <ActionIcon
+                        disabled={
+                            activeIndex === 0 || !eventsRef.current.length
+                        }
+                        onClick={() => slideEvents('right')}
+                        variant="filled"
+                        className={classes.control}
+                    >
+                        <IconChevronLeft />
+                    </ActionIcon>
+                    <div className={classes.dotsContainer}>
+                        {[0, 1, 2].map((dot) => (
+                            <div
+                                key={`dot-${dot}`}
+                                className={
+                                    eventsRef.current.length &&
+                                    ((dot === 0 && activeIndex === 0) ||
+                                        (dot === 2 &&
+                                            activeIndex ===
+                                                eventsRef.current.length - 1) ||
+                                        (dot === 1 &&
+                                            activeIndex > 0 &&
+                                            activeIndex <
+                                                eventsRef.current.length - 1))
+                                        ? classes.activeDot
+                                        : classes.dot
+                                }
+                            ></div>
+                        ))}
+                    </div>
+                    <ActionIcon
+                        disabled={
+                            activeIndex === eventsRef.current.length - 1 ||
+                            !eventsRef.current.length
+                        }
+                        onClick={() => slideEvents('left')}
+                        variant="filled"
+                        className={classes.control}
+                    >
+                        <IconChevronRight />
+                    </ActionIcon>
                 </div>
-                <ActionIcon
-                    disabled={
-                        activeIndex === eventsRef.current.length - 1 ||
-                        !eventsRef.current.length
-                    }
-                    onClick={() => slideEvents('left')}
-                    variant="filled"
-                    className={classes.control}
-                >
-                    <IconChevronRight />
-                </ActionIcon>
-            </div>
+            )}
         </div>
     );
 };
