@@ -67,7 +67,8 @@ const useStyles = createStyles((theme) => ({
         background: 'rgba(26, 27, 30, 0.9)',
     },
     arrowUp: {
-        color: 'white',
+        color: '#6998DF',
+        opacity: '0.8',
     },
 }));
 
@@ -75,11 +76,11 @@ const Footer = () => {
     const { classes } = useStyles();
     return (
         <footer>
-            <Title align="center" order={1} className={classes.title}>
+            <Title  align="center"  order={1} className={classes.title}>
                 {'<Congrats! You made it to the end! />'}
             </Title>
             <Text align="center" className={classes.text}>
-                {"Here's a token of appreciation from Dug"}
+                {"Here's a token of appreciation from Dug:"}
             </Text>
             <Flex pt="6rem" pb="4rem" justify="center">
                 <Box className={classes.dugBox}>
