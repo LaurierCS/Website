@@ -62,7 +62,7 @@ const useStyles = createStyles((theme) => ({
         borderRadius: '10px',
         paddingTop: '20px',
         paddingBottom: '20px',
-        width: '30rem',
+        width: '33rem',
         height: '535px',
         boxShadow: theme.shadows.lg,
         position: 'relative',
@@ -73,7 +73,7 @@ const useStyles = createStyles((theme) => ({
         ':hover': {
             borderColor: '#6CB3FF',
             '::before': {
-                opacity: 0.6,
+                opacity: 0.5,
             },
         },
         zIndex: 2,
@@ -90,11 +90,22 @@ const useStyles = createStyles((theme) => ({
             height: '100%',
             zIndex: -1,
             opacity: 0,
-            transition: 'opacity ease 150ms',
+            transition: 'all ease 150ms',
+        },
+        '::after': {
+            content: '""',
+            position: 'absolute',
+            top: -5,
+            right: -5,
+            bottom: -5,
+            left: -5,
+            zIndex: -1,
+            borderRadius: 10,
+            border: '2px solid #6cb3ff',
         },
 
         [theme.fn.smallerThan('lg')]: {
-            width: '25rem',
+            width: '30rem',
         },
 
         [theme.fn.smallerThan('md')]: {
