@@ -55,8 +55,8 @@ const useStyles = createStyles((theme) => ({
         borderRadius: 9999,
         border: 'none',
         cursor: 'pointer',
-        position: 'absolute',
-        top: 0,
+        position: 'fixed',
+        top: '95%',
         transform: 'translateY(-110%)',
         right: '5%',
         width: '3rem',
@@ -100,12 +100,12 @@ const Footer = () => {
                     Copyright &#169; {new Date().getFullYear()} | Laurier
                     Computing Society. All rights reserved.
                 </Text>
-                <Link to="top" smooth duration={300}>
+            </Box>
+            <Link to="top" smooth duration={300}>
                     <div className={classes.backToTopBtn}>
                         <IconArrowUp className={classes.arrowUp} />
                     </div>
-                </Link>
-            </Box>
+            </Link>
         </footer>
     );
 };
