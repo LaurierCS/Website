@@ -193,7 +193,7 @@ const MeetTheTeam = () => {
                     </Box>
                 </Flex>
             </Container>
-            <Container fluid px="6%">
+            <Container fluid px="10%">
                 <Department name="Presidents" members={presidents} />
                 <Department name="Admin" members={admin} />
                 <Department name="Development" members={development} />
