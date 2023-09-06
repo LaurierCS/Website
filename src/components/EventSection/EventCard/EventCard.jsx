@@ -39,7 +39,20 @@ const useStyles = createStyles((theme) => ({
         },
 
         [theme.fn.smallerThan('sm')]: {
-            fontSize: '0.8rem',
+            fontSize: '0.9rem',
+        },
+    },
+    time: {
+        fontSize: '1.56rem',
+        fontWeight: 'bold',
+        color: '#6CB3FF',
+        display: 'block',
+        [theme.fn.smallerThan('lg')]: {
+            fontSize: '1.2rem',
+        },
+
+        [theme.fn.smallerThan('sm')]: {
+            fontSize: '0.9rem',
         },
     },
     description: {
@@ -49,6 +62,10 @@ const useStyles = createStyles((theme) => ({
 
         [theme.fn.smallerThan('lg')]: {
             fontSize: '1.2rem',
+        },
+
+        [theme.fn.smallerThan('sm')]: {
+            fontSize: '1rem',
         },
     },
     link: {
@@ -188,6 +205,7 @@ const EventCard = ({
     igPost,
     isPublicDate,
     isPublicPlace,
+    isPublicTime,
     isNext,
     disableIg,
     hideDate,
@@ -211,10 +229,17 @@ const EventCard = ({
                     </Tooltip>
                     <Flex align="center" justify="space-between">
                         {!hideDate && (
-                            <span className={classes.date}>
-                                {isPublicDate && date.format('MMMM Do, YYYY')}
-                                {!isPublicDate && 'Date: TBD'}
-                            </span>
+                            <Box>
+                                <span className={classes.date}>
+                                    {isPublicDate &&
+                                        date.format('MMMM Do, YYYY')}
+                                    {!isPublicDate && 'Date: TBD'}
+                                </span>
+                                <span className={classes.time}>
+                                    {isPublicTime && date.format('hh:mm A')}
+                                    {!isPublicTime && 'Time: TBD'}
+                                </span>
+                            </Box>
                         )}
                         {!hidePlace && (
                             <Box className={classes.placeRoot}>
