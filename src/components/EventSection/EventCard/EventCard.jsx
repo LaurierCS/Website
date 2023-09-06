@@ -54,15 +54,23 @@ const useStyles = createStyles((theme) => ({
     link: {
         fontSize: '1.56rem',
         fontWeight: 'bold',
-        color: '#89F7FE',
-        textDecoration: 'none',
+        color: theme.colors.accents[1],
+        borderRadius: '8px',
+
+        [theme.fn.smallerThan('lg')]: {
+            fontSize: '1.2rem',
+        },
+    },
+    highlight: {
+        color: theme.colors.accents[1],
+        fontWeight: 'bold',
     },
     cardRoot: {
         backgroundColor: theme.colors.card[0],
         borderRadius: '10px',
         paddingTop: '20px',
         paddingBottom: '20px',
-        width: '30rem',
+        width: '33rem',
         height: '535px',
         boxShadow: theme.shadows.lg,
         position: 'relative',
@@ -73,7 +81,7 @@ const useStyles = createStyles((theme) => ({
         ':hover': {
             borderColor: '#6CB3FF',
             '::before': {
-                opacity: 0.6,
+                opacity: 0.4,
             },
         },
         zIndex: 2,
@@ -90,11 +98,22 @@ const useStyles = createStyles((theme) => ({
             height: '100%',
             zIndex: -1,
             opacity: 0,
-            transition: 'opacity ease 150ms',
+            transition: 'all ease 150ms',
+        },
+        '::after': {
+            content: '""',
+            position: 'absolute',
+            top: -5,
+            right: -5,
+            bottom: -5,
+            left: -5,
+            zIndex: -1,
+            borderRadius: 10,
+            border: '2px solid #6cb3ff',
         },
 
         [theme.fn.smallerThan('lg')]: {
-            width: '25rem',
+            width: '30rem',
         },
 
         [theme.fn.smallerThan('md')]: {
@@ -160,7 +179,20 @@ const useStyles = createStyles((theme) => ({
 
 const descriptionMaxLength = 112;
 
-const EventCard = ({ icon, title, date, place, description, url, isNext }) => {
+const EventCard = ({
+    icon,
+    title,
+    date,
+    place,
+    description,
+    igPost,
+    isPublicDate,
+    isPublicPlace,
+    isNext,
+    disableIg,
+    hideDate,
+    hidePlace,
+}) => {
     const { classes } = useStyles();
 
     // I hate how the classes are here, makes me want to quit mantine 100000%
@@ -178,12 +210,19 @@ const EventCard = ({ icon, title, date, place, description, url, isNext }) => {
                         <h1 className={classes.title}>{title}</h1>
                     </Tooltip>
                     <Flex align="center" justify="space-between">
-                        <span className={classes.date}>
-                            {date.format('MMMM Do, YYYY')}
-                        </span>
-                        <Box className={classes.placeRoot}>
-                            <Box className={classes.placeContent}>{place}</Box>
-                        </Box>
+                        {!hideDate && (
+                            <span className={classes.date}>
+                                {isPublicDate && date.format('MMMM Do, YYYY')}
+                                {!isPublicDate && 'Date: TBD'}
+                            </span>
+                        )}
+                        {!hidePlace && (
+                            <Box className={classes.placeRoot}>
+                                <Box className={classes.placeContent}>
+                                    {isPublicPlace ? place : 'Place: TBD'}
+                                </Box>
+                            </Box>
+                        )}
                     </Flex>
                 </Box>
                 <p className={classes.description}>
@@ -191,6 +230,26 @@ const EventCard = ({ icon, title, date, place, description, url, isNext }) => {
                         ? description.slice(0, -3) + '...'
                         : description}
                 </p>
+                {!disableIg && igPost && (
+                    <a
+                        href={igPost}
+                        target="_blank"
+                        rel="next noreferrer"
+                        className={classes.link}
+                    >
+                        Learn more about the event!
+                    </a>
+                )}
+                {!disableIg && !igPost && (
+                    <span
+                        className={[
+                            classes.description,
+                            classes.highlight,
+                        ].join(' ')}
+                    >
+                        Find out more closer to the date!
+                    </span>
+                )}
             </Box>
             {isNext && (
                 <Box component="span" className={classes.upNext}>

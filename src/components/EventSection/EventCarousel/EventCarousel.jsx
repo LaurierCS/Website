@@ -246,7 +246,9 @@ const EventCarousel = () => {
                             date={dayjs()}
                             icon="😭"
                             place="Unknown"
-                            url="/"
+                            disableIg
+                            hidePlace
+                            hideDate
                         />
                     </div>
                 )}
