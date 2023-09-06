@@ -6,7 +6,7 @@ import { FaYoutube, FaDiscord, FaTwitch, FaTwitter } from 'react-icons/fa';
 const NavbarSocials = () => {
     return (
         <Center>
-            <SimpleGrid cols={6} spacing="xl">
+            <SimpleGrid cols={5} spacing="xl">
                 <a
                     href="https://discord.gg/lauriercs"
                     target="_blank"
@@ -32,15 +32,6 @@ const NavbarSocials = () => {
                 >
                     <ActionIcon size="md" variant="transparent">
                         <AiFillLinkedin size={100} />
-                    </ActionIcon>
-                </a>
-                <a
-                    href="https://twitter.com/lauriercs"
-                    target="_blank"
-                    rel="next noreferrer"
-                >
-                    <ActionIcon size="md" variant="transparent">
-                        <FaTwitter size={20} />
                     </ActionIcon>
                 </a>
                 <a
