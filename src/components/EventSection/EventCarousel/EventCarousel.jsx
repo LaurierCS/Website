@@ -103,6 +103,7 @@ const useStyles = createStyles((theme) => ({
         gap: 12,
         marginLeft: '2rem',
         marginRight: '2rem',
+        
     },
 }));
 
