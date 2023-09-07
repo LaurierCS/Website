@@ -155,6 +155,25 @@ const MeetTheTeam = () => {
             const outreachMembers = team.filter((member) =>
                 member.departments.includes('outreach')
             );
+
+            // put VPs first in the list
+            const prefix = 'VP of';
+            const sort = (a, b) => {
+                if (a.role.startsWith(prefix) && !b.role.startsWith(prefix)) {
+                    return -1;
+                }
+                if (!a.role.startsWith(prefix) && b.role.startsWith(prefix)) {
+                    return 1;
+                }
+                return 0;
+            };
+            adminMembers.sort(sort);
+            developmentMembers.sort(sort);
+            eventsMembers.sort(sort);
+            commMembers.sort(sort);
+            communityMembers.sort(sort);
+            outreachMembers.sort(sort);
+
             // put in flush sync to update the states in one batch
             // because this current function is async and it can cause multiple renders
             flushSync(() => {
