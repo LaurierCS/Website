@@ -28,7 +28,7 @@
     font-weight: 700;
     font-size: 2.2em;
     line-height: 77px;
-    color: #ebe3e6;
+    color: white;
     margin-top: 0;
     margin-bottom: 0;
 }
@@ -40,7 +40,7 @@
     font-weight: 400;
     font-size: 1em;
     line-height: 30px;
-    color: #ffffff;
+    color: white;
 }
 
 @media screen and (max-width: 980px) {

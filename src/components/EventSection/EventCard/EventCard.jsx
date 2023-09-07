@@ -270,8 +270,10 @@ EventCard.propTypes = {
     date: PropTypes.object.isRequired,
     place: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
-    url: PropTypes.string.isRequired,
     isNext: PropTypes.bool,
+    disableIg: PropTypes.bool,
+    hideDate: PropTypes.bool,
+    hidePlace: PropTypes.bool,
 };
 
 export default EventCard;
