@@ -41,6 +41,7 @@ const useStyles = createStyles((theme) => {
             transition: 'color 150ms ease',
             '&:hover': {
                 color: theme.colors.gray[0],
+                transform: 'scale(1.1)',
                 transition: 'color 100ms ease',
             },
         },
