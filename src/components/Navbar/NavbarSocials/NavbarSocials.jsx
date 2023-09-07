@@ -1,9 +1,21 @@
 import React from 'react';
-import { Center, SimpleGrid, ActionIcon } from '@mantine/core';
+import { Center, SimpleGrid, ActionIcon, createStyles } from '@mantine/core';
 import { AiFillInstagram, AiFillLinkedin } from 'react-icons/ai';
 import { FaYoutube, FaDiscord, FaTwitch } from 'react-icons/fa';
 
+
+const useStyles = createStyles(() => {
+    return {
+        socials: {
+            '&:hover': {
+                transform: 'scale(1.1)'
+            }
+        },
+    };
+});
+
 const NavbarSocials = () => {
+    const { classes } = useStyles();
     return (
         <Center>
             <SimpleGrid cols={5} spacing="xl">
@@ -12,7 +24,7 @@ const NavbarSocials = () => {
                     target="_blank"
                     rel="external noreferrer"
                 >
-                    <ActionIcon size="md" variant="transparent">
+                    <ActionIcon size="md" variant="transparent" className={classes.socials}>
                         <FaDiscord size={100} />
                     </ActionIcon>
                 </a>
@@ -21,7 +33,7 @@ const NavbarSocials = () => {
                     target="_blank"
                     rel="external noreferrer"
                 >
-                    <ActionIcon size="md" variant="transparent">
+                    <ActionIcon size="md" variant="transparent" className={classes.socials}>
                         <AiFillInstagram size={100} />
                     </ActionIcon>
                 </a>
@@ -30,7 +42,7 @@ const NavbarSocials = () => {
                     target="_blank"
                     rel="external noreferrer"
                 >
-                    <ActionIcon size="md" variant="transparent">
+                    <ActionIcon size="md" variant="transparent" className={classes.socials}>
                         <AiFillLinkedin size={100} />
                     </ActionIcon>
                 </a>
@@ -39,7 +51,7 @@ const NavbarSocials = () => {
                     target="_blank"
                     rel="external noreferrer"
                 >
-                    <ActionIcon size="md" variant="transparent">
+                    <ActionIcon size="md" variant="transparent" className={classes.socials}>
                         <FaYoutube size={100} />
                     </ActionIcon>
                 </a>
@@ -48,7 +60,7 @@ const NavbarSocials = () => {
                     target="_blank"
                     rel="next noreferrer"
                 >
-                    <ActionIcon size="md" variant="transparent">
+                    <ActionIcon size="md" variant="transparent" className={classes.socials}>
                         <FaTwitch size={20} />
                     </ActionIcon>
                 </a>
