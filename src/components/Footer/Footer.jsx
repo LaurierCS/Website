@@ -76,10 +76,10 @@ const Footer = () => {
     const { classes } = useStyles();
     return (
         <footer>
-            <Title  align="center"  order={1} className={classes.title}>
+            <Title style={{marginLeft:'20px', marginRight:'20px'}} align="center" order={1} className={classes.title}>
                 {'<Congrats! You made it to the end! />'}
             </Title>
-            <Text align="center" className={classes.text}>
+            <Text style={{marginLeft:'10px', marginRight:'10px'}} align="center" className={classes.text}>
                 {"Here's a token of appreciation from Dug:"}
             </Text>
             <Flex pt="6rem" pb="4rem" justify="center">
