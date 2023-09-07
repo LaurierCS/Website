@@ -79,7 +79,7 @@ const useStyles = createStyles((theme) => ({
         paddingTop: '20px',
         paddingBottom: '20px',
         width: '33rem',
-        height: '640px',
+        height: '35rem',
         boxShadow: theme.shadows.lg,
         position: 'relative',
         transition: 'all ease 150ms',

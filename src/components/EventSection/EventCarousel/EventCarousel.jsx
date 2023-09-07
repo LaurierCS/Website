@@ -103,7 +103,6 @@ const useStyles = createStyles((theme) => ({
         gap: 12,
         marginLeft: '2rem',
         marginRight: '2rem',
-        
     },
 }));
 
@@ -244,7 +243,7 @@ const EventCarousel = () => {
                     <div className={classes.midEvent}>
                         <EventCard
                             title="No Events"
-                            description="There are no events scheduled for now."
+                            description="There are no events scheduled for now. Please come back later!"
                             date={dayjs()}
                             icon="😭"
                             place="Unknown"
