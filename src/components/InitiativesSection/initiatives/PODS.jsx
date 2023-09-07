@@ -178,10 +178,10 @@ const PODS = () => {
                     <p>
                         Each POD will work on one project over the course of the
                         next three months. These projects can be{' '}
-                        <span className="bold">
-                            websites, video games, machine learning models,
-                        </span>
-                        or whatever else the team is interested in!
+                        <span className="bold">websites</span>
+                        ,&nbsp;<span className="bold">video games</span>,&nbsp;
+                        <span className="bold">machine learning models</span>
+                        ,&nbsp;or whatever else the team is interested in!
                     </p>
                 </Box>
             </Modal>
