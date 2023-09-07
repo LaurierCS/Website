@@ -83,14 +83,7 @@ function Newsletter() {
                             styles={{ width: 300 }}
                         >
                             <Box sx={{ width: 400 }} mx="auto" mt="sm">
-                                <form onSubmit={form.onSubmit(subscribe)}>
-                                    <input
-                                        className={classes.emailInput}
-                                        placeholder="Email"
-                                        type="email"
-                                        required
-                                        {...form.getInputProps('email')}
-                                    />
+                                <form action="https://eepurl.com/hI3myD" target="_blank">
                                     <Button
                                         fullWidth
                                         variant="filled"
