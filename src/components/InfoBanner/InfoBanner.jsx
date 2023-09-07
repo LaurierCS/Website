@@ -6,9 +6,15 @@ import CountUp from 'react-countup';
 
 const InfoBanner = () => {
     return (
-        <section id="info-banner">
+        <section id="info-banner" style={{ lineHeight: 0 }}>
             <InfoDividerTop />
-            <Center style={{ backgroundColor: '#12181B' }}>
+            <Center
+                sx={{
+                    background:
+                        'linear-gradient(90deg, rgb(108, 179, 255) 0%, rgb(137, 247, 254) 240%)',
+                    backgroundColor: '#6CB3FF',
+                }}
+            >
                 <div className="info__banner">
                     <div className="info__banner__text">
                         <p className="info__stats">

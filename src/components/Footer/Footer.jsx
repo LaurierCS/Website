@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { Text, Title, Box, Flex, createStyles } from '@mantine/core';
 import { IconArrowUp } from '@tabler/icons-react';
 import { Link } from 'react-scroll';
@@ -55,16 +55,17 @@ const useStyles = createStyles((theme) => ({
         borderRadius: 9999,
         border: 'none',
         cursor: 'pointer',
-        position: 'absolute',
-        top: 0,
+        position: 'fixed',
+        top: '97%',
         transform: 'translateY(-110%)',
-        right: '5%',
+        right: '2%',
         width: '3rem',
         height: '3rem',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         background: 'rgba(26, 27, 30, 0.9)',
+        transition: 'opacity 0.3s ease-in-out'
     },
     arrowUp: {
         color: '#6998DF',
@@ -74,6 +75,30 @@ const useStyles = createStyles((theme) => ({
 
 const Footer = () => {
     const { classes } = useStyles();
+    const [showBackToTop, setShowBackToTop] = useState(false);
+
+    useEffect(() => {
+        // Function to handle scroll event
+        const handleScroll = () => {
+            // Adjust this value to determine when the button appears
+            const scrollThreshold = 350;
+            const shouldShow = window.scrollY > scrollThreshold;
+            setShowBackToTop(shouldShow);
+        };
+
+        // Add scroll event listener when the component mounts
+        window.addEventListener('scroll', handleScroll);
+
+        // Remove the scroll event listener when the component unmounts
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
+    const backToTopButtonStyle = {
+        opacity: showBackToTop ? 1 : 0,
+    };
+
     return (
         <footer>
             <Title style={{marginLeft:'20px', marginRight:'20px'}} align="center" order={1} className={classes.title}>
@@ -100,12 +125,12 @@ const Footer = () => {
                     Copyright &#169; {new Date().getFullYear()} | Laurier
                     Computing Society. All rights reserved.
                 </Text>
-                <Link to="top" smooth duration={300}>
-                    <div className={classes.backToTopBtn}>
-                        <IconArrowUp className={classes.arrowUp} />
-                    </div>
-                </Link>
             </Box>
+            <Link to="top" smooth duration={300}>
+                <div className={classes.backToTopBtn} style={backToTopButtonStyle}>
+                    <IconArrowUp className={classes.arrowUp} />
+                </div>
+            </Link>
         </footer>
     );
 };

@@ -14,42 +14,50 @@ const useStyles = createStyles((theme) => ({
         },
     },
     title: {
-        fontSize: '2.5rem',
+        fontSize: '1.8rem',
         color: 'white',
         maxWidth: '100%',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
 
-        [theme.fn.smallerThan('lg')]: {
-            fontSize: '2rem',
-        },
-
         [theme.fn.smallerThan('sm')]: {
-            fontSize: '1.5rem',
+            fontSize: '1.2rem',
+            overflow: 'initial',
+            whiteSpace: 'normal',
         },
     },
     date: {
-        fontSize: '1.56rem',
+        fontSize: '1.2rem',
         fontWeight: 'bold',
         color: '#6CB3FF',
 
-        [theme.fn.smallerThan('lg')]: {
-            fontSize: '1.2rem',
+        [theme.fn.smallerThan('sm')]: {
+            fontSize: '0.9rem',
         },
+    },
+    time: {
+        fontSize: '1.2rem',
+        fontWeight: 'bold',
+        color: '#6CB3FF',
+        display: 'block',
 
         [theme.fn.smallerThan('sm')]: {
-            fontSize: '0.8rem',
+            fontSize: '0.9rem',
         },
     },
     description: {
         margin: '40px 0px',
-        fontSize: '1.56rem',
+        fontSize: '1rem',
         color: '#E7EBF5',
 
-        [theme.fn.smallerThan('lg')]: {
-            fontSize: '1.2rem',
-        },
+        // [theme.fn.smallerThan('lg')]: {
+        //     fontSize: '1.2rem',
+        // },
+        //
+        // [theme.fn.smallerThan('sm')]: {
+        //     fontSize: '1rem',
+        // },
     },
     link: {
         fontSize: '1.56rem',
@@ -71,7 +79,7 @@ const useStyles = createStyles((theme) => ({
         paddingTop: '20px',
         paddingBottom: '20px',
         width: '33rem',
-        height: '535px',
+        height: '640px',
         boxShadow: theme.shadows.lg,
         position: 'relative',
         transition: 'all ease 150ms',
@@ -127,11 +135,7 @@ const useStyles = createStyles((theme) => ({
         backgroundColor: '#89F7FE',
         color: '#2C3844',
         fontWeight: 'bold',
-        fontSize: '1.56rem',
-
-        [theme.fn.smallerThan('lg')]: {
-            fontSize: '1.2rem',
-        },
+        fontSize: '1.2rem',
 
         [theme.fn.smallerThan('sm')]: {
             fontSize: '0.8rem',
@@ -177,7 +181,7 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-const descriptionMaxLength = 112;
+const descriptionMaxLength = 200;
 
 const EventCard = ({
     icon,
@@ -188,6 +192,7 @@ const EventCard = ({
     igPost,
     isPublicDate,
     isPublicPlace,
+    isPublicTime,
     isNext,
     disableIg,
     hideDate,
@@ -211,10 +216,17 @@ const EventCard = ({
                     </Tooltip>
                     <Flex align="center" justify="space-between">
                         {!hideDate && (
-                            <span className={classes.date}>
-                                {isPublicDate && date.format('MMMM Do, YYYY')}
-                                {!isPublicDate && 'Date: TBD'}
-                            </span>
+                            <Box>
+                                <span className={classes.date}>
+                                    {isPublicDate &&
+                                        date.format('MMMM Do, YYYY')}
+                                    {!isPublicDate && 'Date: TBD'}
+                                </span>
+                                <span className={classes.time}>
+                                    {isPublicTime && date.format('hh:mm A')}
+                                    {!isPublicTime && 'Time: TBD'}
+                                </span>
+                            </Box>
                         )}
                         {!hidePlace && (
                             <Box className={classes.placeRoot}>
@@ -226,9 +238,10 @@ const EventCard = ({
                     </Flex>
                 </Box>
                 <p className={classes.description}>
-                    {description.length > descriptionMaxLength
-                        ? description.slice(0, -3) + '...'
-                        : description}
+                    {/* {description.length > descriptionMaxLength */}
+                    {/*     ? description.slice(0, -3) + '...' */}
+                    {/*     : description} */}
+                    {description}
                 </p>
                 {!disableIg && igPost && (
                     <a
@@ -270,8 +283,10 @@ EventCard.propTypes = {
     date: PropTypes.object.isRequired,
     place: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
-    url: PropTypes.string.isRequired,
     isNext: PropTypes.bool,
+    disableIg: PropTypes.bool,
+    hideDate: PropTypes.bool,
+    hidePlace: PropTypes.bool,
 };
 
 export default EventCard;
