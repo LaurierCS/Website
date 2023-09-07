@@ -41,6 +41,7 @@ export const useCommonStyles = createStyles((theme) => ({
         borderRadius: '19px',
         backgroundColor: '#2C3844',
         width: '100%',
+        border: '2px solid #6cb3ff',
 
         [theme.fn.smallerThan('sm')]: {
             padding: '1rem',
@@ -103,5 +104,20 @@ export const useCommonStyles = createStyles((theme) => ({
         textAlign: 'center',
         color: 'white',
         marginTop: '1rem',
+    },
+    emojiLogo: {
+        fontSize: '300px',
+        [theme.fn.smallerThan('md')]: {
+            display: 'none',
+        },
+    },
+    emojiHeaderLogo: {
+        fontSize: '2rem',
+    },
+    link: {
+        textTransform: 'capitalize',
+        cursor: 'pointer',
+        textDecoration: 'underline',
+        color: theme.colors.blue[2],
     },
 }));

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Center, SimpleGrid, ActionIcon } from '@mantine/core';
 import { AiFillInstagram, AiFillLinkedin } from 'react-icons/ai';
-import { FaYoutube, FaDiscord, FaTwitch, FaTwitter } from 'react-icons/fa';
+import { FaYoutube, FaDiscord, FaTwitch } from 'react-icons/fa';
 
 const NavbarSocials = () => {
     return (

@@ -1,34 +1,13 @@
-import { useDisclosure } from '@mantine/hooks';
-import { useEffect, useState } from 'react';
-import { doc, getDoc } from 'firebase/firestore';
-import { Title, Text, Box, Flex, Button, Modal } from '@mantine/core';
-import { PodsLogo, IconLogo } from '@assets';
+import { Title, Text, Box, Flex, Button } from '@mantine/core';
+import { FaYoutube, FaTwitch } from 'react-icons/fa';
+import { IconLogo } from '@assets';
+import { Link } from 'react-scroll';
 import { useCommonStyles } from './styles';
-import { store } from '../../../services/firebase';
+import { navbarHeight } from '../../Navbar/Navbar';
 
 const ReviewSessions = () => {
     const { classes } = useCommonStyles();
     const { classes: commonClasses } = useCommonStyles();
-    const [opened, { open, close }] = useDisclosure(false);
-    const [description, setDescription] = useState('');
-
-    const getData = async () => {
-        try {
-            const docSnap = await getDoc(
-                doc(store, 'initiatives', 'review-sessions')
-            );
-            if (docSnap.exists()) {
-                const docData = docSnap.data();
-                setDescription(docData.description);
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    useEffect(() => {
-        getData();
-    }, []);
 
     return (
         <Box sx={(theme) => ({ boxShadow: theme.shadows.lg })}>
@@ -39,6 +18,11 @@ const ReviewSessions = () => {
                         align="center"
                         gap={12}
                         className={commonClasses.partnerLogoContainer}
+                        sx={(theme) => ({
+                            [theme.fn.smallerThan('xs')]: {
+                                gridColumn: 'span 1',
+                            },
+                        })}
                     >
                         <img
                             alt="LCS Logo"
@@ -52,7 +36,12 @@ const ReviewSessions = () => {
                     <Flex
                         justify="center"
                         align="center"
-                        className={classes.headerLogoBox}
+                        sx={(theme) => ({
+                            height: '100%',
+                            [theme.fn.smallerThan('xs')]: {
+                                gridColumn: 'span 1',
+                            },
+                        })}
                     >
                         <Box
                             sx={(theme) => ({
@@ -63,80 +52,64 @@ const ReviewSessions = () => {
                                 },
                             })}
                         >
-                            <img
-                                src={PodsLogo}
-                                alt="PODS Logo"
-                                className={classes.headerLogo}
-                            />
+                            <span className={classes.emojiHeaderLogo}>📝</span>
                         </Box>
                     </Flex>
                 </Box>
-                <Flex gap={32} direction="row-reverse" justify="space-between">
-                    <Flex align="center">
+                <Flex justify="center" gap={32}>
+                    <span className={classes.emojiLogo}>📝</span>
+                    <Box>
                         <Text className={commonClasses.description}>
-                            {description}
+                            Review Sessions are events hosted in-person and/or
+                            online by LCS which offer fun and interactive way to
+                            review course content through games of Kahoot and
+                            slide shows. Keep an eye on our{' '}
+                            <Link
+                                to="Events"
+                                offset={-navbarHeight}
+                                smooth
+                                duration={300}
+                                className={classes.link}
+                            >
+                                upcoming events
+                            </Link>{' '}
+                            to not miss out on any Review Session!
                         </Text>
-                    </Flex>
-                    <Flex align="center">
-                        <img
-                            src={PodsLogo}
-                            alt="Code n Chill Logo"
-                            className={classes.bodyLogo}
-                        />
-                    </Flex>
-                </Flex>
-                <Flex mt="2rem" gap="md" justify="center">
-                    <span className="sr-only" id="pods-details">
-                        opens a modal with more description about code and chill
-                    </span>
-                    <Button
-                        aria-describedby="pods-details"
-                        size="lg"
-                        variant="subtle"
-                        onClick={open}
-                    >
-                        Show More
-                    </Button>
+
+                        <Box mt={32}>
+                            <Text className={classes.description}>
+                                Feel free to take a look at previous Review
+                                Sessions and follow us on Twitch for live
+                                streams!
+                            </Text>
+                            <Button
+                                component="a"
+                                variant="subtle"
+                                color="red.5"
+                                href="https://www.youtube.com/@LaurierComputingSociety/playlists"
+                                size="lg"
+                                leftIcon={<FaYoutube />}
+                                target="_blank"
+                                rel="external noreferrer"
+                            >
+                                Youtube
+                            </Button>
+                            <Button
+                                component="a"
+                                variant="subtle"
+                                color="violet.5"
+                                href="https://www.twitch.tv/lauriercs"
+                                size="lg"
+                                leftIcon={<FaTwitch />}
+                                target="_blank"
+                                rel="external noreferrer"
+                            >
+                                Twitch
+                            </Button>
+                        </Box>
+                    </Box>
                 </Flex>
             </Box>
-            <Modal
-                opened={opened}
-                onClose={close}
-                title="LCS ReviewSessions Details"
-                centered
-            >
-                <Box
-                    sx={{
-                        padding: '2rem',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '1rem',
-                        color: 'white',
-                    }}
-                >
-                    <p>
-                        ReviewSessions has 5 major development phases -{' '}
-                        <span className="bold">
-                            Brainstorming, Design, Prototyping, MVP
-                        </span>{' '}
-                        and <span className="bold">Launch</span>.
-                    </p>
-                    <p>
-                        ReviewSessions teams are curated based on skill level,
-                        based on your application's test. Our goal is for{' '}
-                        <span className="bold">everyone to learn</span> - nto
-                        just one hardcarry.
-                    </p>
-                    <p>
-                        Each POD will work on one project over the course of the
-                        next three months. These projects can be{' '}
-                        <span className="bold">
-                            websites, video games, machine learning models,
-                        </span>
-                        or whatever else the team is interested in!
-                    </p>
-                </Box>
-            </Modal>
         </Box>
     );
 };
