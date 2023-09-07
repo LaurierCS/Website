@@ -99,9 +99,13 @@ const HeroSection = () => {
                             {/*Discord Button*/}
                             <Center py="5rem">
                                 <Button
+                                    component="a"
+                                    href="https://discord.gg/lauriercs"
                                     size="lg"
                                     leftIcon={<FaDiscord />}
-                                    style={{backgroundColor: '#6998DF'}}
+                                    style={{ backgroundColor: '#6998DF' }}
+                                    target="_blank"
+                                    rel="external noreferrer"
                                 >
                                     Join our Discord!
                                 </Button>
