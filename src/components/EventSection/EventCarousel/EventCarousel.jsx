@@ -119,6 +119,7 @@ const EventCarousel = () => {
             const q = query(
                 collection(store, 'events'),
                 where('date', '>=', Timestamp.now()),
+                where('visible', '==', true),
                 orderBy('date', 'asc'),
                 limit(3)
             );
