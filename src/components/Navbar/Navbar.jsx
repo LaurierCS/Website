@@ -4,7 +4,7 @@ import { NavbarSocials } from '@components';
 import { Link } from 'react-scroll';
 import { createStyles, Burger, Drawer } from '@mantine/core';
 
-const navbarHeight = 5 * 18;
+export const navbarHeight = 5 * 18;
 
 const useStyles = createStyles((theme) => {
     return {

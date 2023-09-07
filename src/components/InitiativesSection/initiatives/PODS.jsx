@@ -38,7 +38,11 @@ const PODS = () => {
     }, []);
 
     return (
-        <Box sx={(theme) => ({ boxShadow: theme.shadows.lg })}>
+        <Box
+            sx={(theme) => ({
+                boxShadow: theme.shadows.lg,
+            })}
+        >
             <Box className={classes.outerBox}>
                 <Box className={classes.innerBox}>
                     <Flex
@@ -86,7 +90,15 @@ const PODS = () => {
                         </Box>
                     </Flex>
                 </Box>
-                <Flex gap={32} direction="row-reverse">
+                <Flex
+                    sx={(theme) => ({
+                        gap: 32,
+                        [theme.fn.smallerThan('sm')]: {
+                            gap: 0,
+                        },
+                    })}
+                    direction="row-reverse"
+                >
                     <Flex align="center">
                         <Text className={classes.description}>
                             {data.description}
