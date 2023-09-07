@@ -158,9 +158,9 @@ const FAQ = () => {
                                 livestreams and post the edited version onto our
                                 YouTube page for viewing. <br />
                                 <br />
-                                This content includes review sessions,
-                                workshops, meet the professionals, information
-                                on the coop process, and more! <br />
+                                This content includes Review Sessions,
+                                Workshops, Meet The Professionals, information
+                                on the Co-op process, and more! <br />
                                 <br />
                                 We also give updates on events to upcoming
                                 events on our Instagram, Discord and other
@@ -200,12 +200,6 @@ const FAQ = () => {
                                 We also host LCS PODS which aims to help student
                                 start off their career with a solid project in
                                 their portfolio. <br />
-                                <br />
-                                In addition, we run Project Program, in
-                                collaboration with the University Of Waterloo's
-                                Computer Science and Data Science Clubs, to help
-                                students pair up with mentors and create a
-                                project to compete with others for prizes!
                             </Accordion.Panel>
                         </Accordion.Item>
                     </Accordion>
