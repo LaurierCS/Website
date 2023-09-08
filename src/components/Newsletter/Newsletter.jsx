@@ -89,7 +89,7 @@ function Newsletter() {
                             color="white"
                             className={classes.description}
                         >
-                            Wanna stay in the know of our next events?"
+                            Wanna stay in the know of our next events?
                         </Text>
                         <Title
                             align="center"
