@@ -35,7 +35,6 @@ const EventTag = ({
     className,
 }) => {
     const time = useMemo(() => {
-        // safety check
         const start = dayjs(startTime, IN_TIME_FORMAT);
         const end = dayjs(endTime, IN_TIME_FORMAT);
 
