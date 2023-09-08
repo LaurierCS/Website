@@ -15,8 +15,12 @@ const useStyles = createStyles((theme) => ({
         fontSize: '3rem',
         color: 'white',
 
-        [theme.fn.smallerThan('780')]: {
+        [theme.fn.smallerThan('600')]: {
             fontSize: '2rem',
+        },
+
+        [theme.fn.smallerThan('400')]: {
+            fontSize: '1.5rem',
         },
     },
 
@@ -26,7 +30,7 @@ const useStyles = createStyles((theme) => ({
         marginTop: '2rem',
         marginBottom: '2rem',
 
-        [theme.fn.smallerThan('780')]: {
+        [theme.fn.smallerThan('600')]: {
             fontSize: '1rem',
         },
     },
@@ -154,7 +158,9 @@ const Footer = () => {
     return (
         <footer className={classes.footer}>
             <Title align="center" order={1} className={classes.title}>
-                {'Congrats! You made it to the end!'}
+                <span>Congrats!</span>
+                <br />
+                <span>You made it to the end!</span>
             </Title>
             <Text
                 style={{ marginLeft: '10px', marginRight: '10px' }}
