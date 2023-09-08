@@ -5,40 +5,65 @@ import { Link } from 'react-scroll';
 import { Dug, Heart } from '@assets';
 
 import './Footer.css';
+import { navbarHeight } from '../Navbar/Navbar';
 
 const useStyles = createStyles((theme) => ({
     title: {
         fontSize: 48,
         color: 'white',
+
+        [theme.fn.smallerThan('780')]: {
+            fontSize: '2rem',
+        },
     },
+
     text: {
         fontSize: 32,
         color: '#E7EBF5',
         marginTop: '2rem',
         marginBottom: '2rem',
+
+        [theme.fn.smallerThan('780')]: {
+            fontSize: '1rem',
+        },
     },
+
     dugBox: {
         position: 'relative',
 
-        [theme.fn.smallerThan('sm')]: {
+        [theme.fn.smallerThan('780')]: {
             width: '100%',
-            paddingTop: '5rem',
+            paddingTop: '6rem',
             overflow: 'hidden',
+            transform: 'translateY(-8rem)',
         },
     },
+
     dug: {
-        [theme.fn.smallerThan('sm')]: {},
+        [theme.fn.smallerThan('780')]: {
+            width: '100%',
+        },
     },
+
     heart: {
         position: 'absolute',
         left: 100,
         top: '-5rem',
         animation: 'bounce 2s infinite',
 
-        [theme.fn.smallerThan('sm')]: {
-            top: '1rem',
+        [theme.fn.smallerThan('780')]: {
+            top: '3rem',
+            left: '4rem',
+            width: '8rem',
+
+            [theme.fn.smallerThan('400')]: {
+                top: '3rem',
+                left: '2wrem',
+                width: '6rem',
+            }
         },
     },
+
     footerBar: {
         background: 'rgba(26, 27, 30, 0.9)',
         padding: '2rem',
@@ -48,9 +73,11 @@ const useStyles = createStyles((theme) => ({
         left: 0,
         right: 0,
     },
+
     lcsDevTeam: {
         fontWeight: 'bold',
     },
+
     backToTopBtn: {
         borderRadius: 9999,
         border: 'none',
@@ -67,6 +94,7 @@ const useStyles = createStyles((theme) => ({
         background: 'rgba(26, 27, 30, 0.9)',
         transition: 'opacity 0.3s ease-in-out'
     },
+
     arrowUp: {
         color: '#6998DF',
         opacity: '0.8',
@@ -78,18 +106,14 @@ const Footer = () => {
     const [showBackToTop, setShowBackToTop] = useState(false);
 
     useEffect(() => {
-        // Function to handle scroll event
         const handleScroll = () => {
-            // Adjust this value to determine when the button appears
             const scrollThreshold = 350;
             const shouldShow = window.scrollY > scrollThreshold;
             setShowBackToTop(shouldShow);
         };
 
-        // Add scroll event listener when the component mounts
         window.addEventListener('scroll', handleScroll);
 
-        // Remove the scroll event listener when the component unmounts
         return () => {
             window.removeEventListener('scroll', handleScroll);
         };
@@ -101,10 +125,19 @@ const Footer = () => {
 
     return (
         <footer>
-            <Title style={{marginLeft:'20px', marginRight:'20px'}} align="center" order={1} className={classes.title}>
-                {'<Congrats! You made it to the end! />'}
+            <Title 
+                style={{marginLeft:'20px', marginRight:'20px'}} 
+                align="center" 
+                order={1} 
+                className={classes.title}
+            >
+                {'Congrats! You made it to the end!'}
             </Title>
-            <Text style={{marginLeft:'10px', marginRight:'10px'}} align="center" className={classes.text}>
+            <Text 
+                style={{marginLeft:'10px', marginRight:'10px'}} 
+                align="center" 
+                className={classes.text}
+            >
                 {"Here's a token of appreciation from Dug:"}
             </Text>
             <Flex pt="6rem" pb="4rem" justify="center">
@@ -126,7 +159,7 @@ const Footer = () => {
                     Computing Society. All rights reserved.
                 </Text>
             </Box>
-            <Link to="top" smooth duration={300}>
+            <Link to="top" smooth duration={300} offset={-navbarHeight}>
                 <div className={classes.backToTopBtn} style={backToTopButtonStyle}>
                     <IconArrowUp className={classes.arrowUp} />
                 </div>
