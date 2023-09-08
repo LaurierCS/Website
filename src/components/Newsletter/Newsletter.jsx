@@ -50,11 +50,20 @@ const useStyles = createStyles((theme) => ({
     button: {
         fontSize: '1.5rem',
         marginTop: '10px',
-        
+
         [theme.fn.smallerThan('780')]: {
             fontSize: '1rem',
         },
-    }
+    },
+
+    newsletterBtn: {
+        width: 400,
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        [theme.fn.smallerThan(450)]: {
+            padding: '0 4rem',
+        },
+    },
 }));
 
 function Newsletter() {
@@ -75,8 +84,8 @@ function Newsletter() {
                         wrap="wrap"
                         gap="md"
                     >
-                        <Text 
-                            align="center" 
+                        <Text
+                            align="center"
                             color="white"
                             className={classes.description}
                         >
@@ -91,9 +100,9 @@ function Newsletter() {
                             {NEWSLETTER_HEADING}
                         </Title>
 
-                        <Text 
-                            align="center" 
-                            color="white" 
+                        <Text
+                            align="center"
+                            color="white"
                             weight="bold"
                             className={classes.description}
                         >
@@ -101,20 +110,23 @@ function Newsletter() {
                             <br />
                             announcements, updates, and more!
                         </Text>
-                            <Box sx={{ width: 400 }} mx="auto" mt="sm">
-                                <form action="https://eepurl.com/hI3myD" target="_blank">
-                                    <Button
-                                        fullWidth
-                                        variant="filled"
-                                        type="submit"
-                                        radius="6px"
-                                        size="lg"
-                                        className={classes.button}
-                                    >
-                                        SUBSCRIBE
-                                    </Button>
-                                </form>
-                            </Box>
+                        <Box className={classes.newsletterBtn} mt="sm">
+                            <form
+                                action="https://eepurl.com/hI3myD"
+                                target="_blank"
+                            >
+                                <Button
+                                    fullWidth
+                                    variant="filled"
+                                    type="submit"
+                                    radius="6px"
+                                    size="lg"
+                                    className={classes.button}
+                                >
+                                    SUBSCRIBE
+                                </Button>
+                            </form>
+                        </Box>
                     </Flex>
                 </Center>
             </Container>

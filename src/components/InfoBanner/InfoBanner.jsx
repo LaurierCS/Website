@@ -30,7 +30,7 @@ const InfoBanner = () => {
                     </div>
                     <div className="info__banner__text">
                         <p className="info__stats">
-                            {<CountUp end={52} duration={1.0} />}
+                            {<CountUp end={54} duration={1.0} />}
                         </p>
                         <p className="info__header"> Executive Members </p>
                     </div>
