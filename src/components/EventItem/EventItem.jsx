@@ -1,4 +1,3 @@
-import './EventItem.css';
 import EventTag from '../EventTag/EventTag';
 import { createStyles, Flex, Title } from '@mantine/core';
 
@@ -9,6 +8,7 @@ const useStyles = createStyles((theme) => {
             lineHeight: 1.2,
             color: theme.white,
         },
+
         eventItemWrapper: {
             padding: '1.5em',
             transition: 'background-color 250ms ease',
@@ -18,9 +18,11 @@ const useStyles = createStyles((theme) => {
                 cursor: 'pointer',
             },
         },
+
         eventItemTagWrapper: {
             marginTop: '0.5em',
         },
+
         eventItemTag: {
             flexShrink: 0,
         },
