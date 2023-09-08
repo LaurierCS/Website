@@ -18,14 +18,23 @@ const MEET_THE_TEAM_TITLE = '<Meet The Team />';
 const MEET_THE_THEAM_PHRASE = 'Meet the masterminds behind the club!';
 
 const memberStyles = createStyles((theme) => ({
-    text: {
+    textName: {
         color: 'white',
         fontWeight: 'bold',
         fontSize: 24,
-        [theme.fn.smallerThan('sm')]: {
-            fontSize: 16,
+        [theme.fn.smallerThan('780')]: {
+            fontSize: '1rem',
         },
     },
+
+    textRole: {
+        color: 'white',
+        fontSize: 24,
+        [theme.fn.smallerThan('780')]: {
+            fontSize: '1rem',
+        },
+    },
+
     avatar: {
         width: 120,
         height: 120,
@@ -39,6 +48,21 @@ const memberStyles = createStyles((theme) => ({
 }));
 
 const sectionStyles = createStyles((theme) => ({
+    title: {
+        [theme.fn.smallerThan('780')]: {
+            fontSize: '2rem',
+        },  
+    },
+
+    description: {
+        [theme.fn.smallerThan('780')]: {
+            paddingTop: '1rem',
+            fontSize: '1rem',
+            marginBottom: '-6rem',
+            marginTop: '1rem',
+        },
+    },
+
     dugContainer: {
         position: 'relative',
         maxWidth: 640,
@@ -47,13 +71,23 @@ const sectionStyles = createStyles((theme) => ({
             display: 'none',
         },
     },
+
     dug: {
         width: '100%',
     },
+
     dugName: {
         position: 'absolute',
         right: 0,
         bottom: '5%',
+    },
+}));
+
+const deptStyles = createStyles((theme) => ({
+    deptTitle: {
+        [theme.fn.smallerThan('780')]: {
+            fontSize: '1.5rem',
+        },
     },
 }));
 
@@ -69,10 +103,10 @@ const Member = ({ name, role, picture }) => {
                 />
             </Box>
             <Box>
-                <Text as="p" className={classes.text}>
+                <Text as="p" className={classes.textName}>
                     {name}
                 </Text>
-                <Text as="p" className={classes.text}>
+                <Text as="p" className={classes.textRole}>
                     {role}
                 </Text>
             </Box>
@@ -81,11 +115,13 @@ const Member = ({ name, role, picture }) => {
 };
 
 const Department = ({ name, members }) => {
+    const { classes } = deptStyles();
     return (
         <Box my={64}>
             <Title
                 order={2}
                 sx={{ fontSize: 40, color: 'white', marginBottom: 32 }}
+                className = {classes.deptTitle}
             >
                 {name}
             </Title>
@@ -133,7 +169,6 @@ const MeetTheTeam = () => {
             const team = [];
             snapshot.forEach((doc) => team.push(doc.data()));
 
-            // orgnaize team by department
             const presidentMembers = team.filter((member) =>
                 member.departments.includes('president')
             );
@@ -156,7 +191,6 @@ const MeetTheTeam = () => {
                 member.departments.includes('outreach')
             );
 
-            // put VPs first in the list
             const prefix = 'VP of';
             const sort = (a, b) => {
                 if (a.role.startsWith(prefix) && !b.role.startsWith(prefix)) {
@@ -174,8 +208,6 @@ const MeetTheTeam = () => {
             communityMembers.sort(sort);
             outreachMembers.sort(sort);
 
-            // put in flush sync to update the states in one batch
-            // because this current function is async and it can cause multiple renders
             flushSync(() => {
                 setPresidents(presidentMembers);
                 setAdmin(adminMembers);
@@ -190,17 +222,21 @@ const MeetTheTeam = () => {
 
     return (
         <section id="Team">
-            <Container fluid px="6%">
+            <Container fluid px="6%" my={150}>
                 <Flex align="center" justify="center" gap={120}>
                     <Box>
                         <Title
                             variant="gradient"
                             order={1}
                             sx={{ fontSize: 48 }}
+                            className={classes.title}
                         >
                             {MEET_THE_TEAM_TITLE}
                         </Title>
-                        <Text sx={{ fontSize: 32 }}>
+                        <Text 
+                            sx={{ fontSize: 32 }}
+                            className={classes.description}
+                        >
                             {MEET_THE_THEAM_PHRASE}
                         </Text>
                     </Box>
