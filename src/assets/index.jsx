@@ -1,26 +1,18 @@
-import Logo from './lcs_logo.png';
 import IconLogo from './logo_icon.svg';
-import Banner from './lcs_banner.png';
-import CorpImage from './corporate_artstyle.png';
 import PCDesign from './pc_design.svg';
 import PodsLogo from './pods_logo.png';
 import C3PartnerLogo from './c3_partner_logo.png';
 import HHPartnerLogo from './hh_partner_logo.png';
-import Plant from './plant.png';
 import Dug from './dug.svg';
 import Heart from './heart.svg';
 import FratBoiDug from './frat_boi_dug.svg';
 
 export {
-    Logo,
     IconLogo,
-    Banner,
-    CorpImage,
     PCDesign,
     PodsLogo,
     C3PartnerLogo,
     HHPartnerLogo,
-    Plant,
     Dug,
     Heart,
     FratBoiDug,
