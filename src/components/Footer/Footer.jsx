@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, Title, Box, Flex, createStyles } from '@mantine/core';
 import { IconArrowUp } from '@tabler/icons-react';
 import { Link } from 'react-scroll';
@@ -8,8 +8,11 @@ import './Footer.css';
 import { navbarHeight } from '../Navbar/Navbar';
 
 const useStyles = createStyles((theme) => ({
+    footer: {
+        marginTop: '8rem',
+    },
     title: {
-        fontSize: 48,
+        fontSize: '3rem',
         color: 'white',
 
         [theme.fn.smallerThan('780')]: {
@@ -56,17 +59,42 @@ const useStyles = createStyles((theme) => ({
             left: '4rem',
             width: '8rem',
 
+            [theme.fn.largerThan('480')]: {
+                left: '8rem',
+                width: '10rem',
+            },
+
+            [theme.fn.smallerThan('660')]: {
+                left: '7rem',
+                width: '9rem',
+            },
+
+            [theme.fn.smallerThan('560')]: {
+                left: '6rem',
+                width: '8rem',
+            },
+
+            [theme.fn.smallerThan('560')]: {
+                left: '6rem',
+                width: '8rem',
+            },
+
+            [theme.fn.smallerThan('480')]: {
+                left: '4rem',
+                width: '7rem',
+            },
+
             [theme.fn.smallerThan('400')]: {
                 top: '3rem',
                 left: '2wrem',
                 width: '6rem',
-            }
+            },
         },
     },
 
     footerBar: {
         background: 'rgba(26, 27, 30, 0.9)',
-        padding: '2rem',
+        padding: '3rem 2rem',
         fontSize: 18,
         position: 'absolute',
         bottom: 0,
@@ -92,7 +120,7 @@ const useStyles = createStyles((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
         background: 'rgba(26, 27, 30, 0.9)',
-        transition: 'opacity 0.3s ease-in-out'
+        transition: 'opacity 0.3s ease-in-out',
     },
 
     arrowUp: {
@@ -124,18 +152,13 @@ const Footer = () => {
     };
 
     return (
-        <footer>
-            <Title 
-                style={{marginLeft:'20px', marginRight:'20px'}} 
-                align="center" 
-                order={1} 
-                className={classes.title}
-            >
+        <footer className={classes.footer}>
+            <Title align="center" order={1} className={classes.title}>
                 {'Congrats! You made it to the end!'}
             </Title>
-            <Text 
-                style={{marginLeft:'10px', marginRight:'10px'}} 
-                align="center" 
+            <Text
+                style={{ marginLeft: '10px', marginRight: '10px' }}
+                align="center"
                 className={classes.text}
             >
                 {"Here's a token of appreciation from Dug:"}
@@ -153,14 +176,17 @@ const Footer = () => {
                 <Text as="p" align="center" className={classes.lcsDevTeam}>
                     LCS Development Team
                 </Text>
-                <Text as="p" align="center" my="3rem">
+                <Text as="p" align="center" mt="3rem">
                     {' '}
                     Copyright &#169; {new Date().getFullYear()} | Laurier
                     Computing Society. All rights reserved.
                 </Text>
             </Box>
             <Link to="top" smooth duration={300} offset={-navbarHeight}>
-                <div className={classes.backToTopBtn} style={backToTopButtonStyle}>
+                <div
+                    className={classes.backToTopBtn}
+                    style={backToTopButtonStyle}
+                >
                     <IconArrowUp className={classes.arrowUp} />
                 </div>
             </Link>
