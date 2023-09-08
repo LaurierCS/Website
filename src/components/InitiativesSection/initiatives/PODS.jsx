@@ -173,7 +173,6 @@ const PODS = () => {
                         color: 'white',
                     }}
                 >
-                    {/* the content for this section could be stored in firebase as well like the description */}
                     <p>
                         PODS has 5 major development phases -{' '}
                         <span className="bold">
@@ -184,7 +183,7 @@ const PODS = () => {
                     <p>
                         PODS teams are curated based on skill level, based on
                         your application's test. Our goal is for{' '}
-                        <span className="bold">everyone to learn</span> - nto
+                        <span className="bold">everyone to learn</span> - not
                         just one hardcarry.
                     </p>
                     <p>

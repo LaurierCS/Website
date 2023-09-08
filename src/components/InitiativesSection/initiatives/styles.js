@@ -4,13 +4,16 @@ export const useCommonStyles = createStyles((theme) => ({
     lcsLogo: {
         width: '3rem',
     },
+
     hhLogo: {
         width: '2rem',
         marginLeft: '-0.7rem',
     },
+
     c3Logo: {
         width: '2rem',
     },
+
     partnerLogoContainer: {
         position: 'absolute',
         left: 0,
@@ -24,6 +27,7 @@ export const useCommonStyles = createStyles((theme) => ({
             gridColumn: 'span 2',
         },
     },
+
     title: {
         fontSize: '3rem',
         color: '#E7EBF5',
@@ -34,8 +38,10 @@ export const useCommonStyles = createStyles((theme) => ({
         [theme.fn.smallerThan('sm')]: {
             gridColumn: 'span 2',
             gridRow: 1,
+            fontSize: '2rem',
         },
     },
+
     outerBox: {
         padding: '2rem',
         borderRadius: '19px',
@@ -47,6 +53,7 @@ export const useCommonStyles = createStyles((theme) => ({
             padding: '1rem',
         },
     },
+
     innerBox: {
         marginBottom: '1rem',
         position: 'relative',
@@ -61,9 +68,11 @@ export const useCommonStyles = createStyles((theme) => ({
             gap: '0.5rem',
         },
     },
+
     actionBtn: {
         color: '#1A1B1E',
     },
+
     description: {
         fontSize: '1.5rem',
         color: '#E7EBF5',
@@ -73,6 +82,7 @@ export const useCommonStyles = createStyles((theme) => ({
             fontSize: '1rem',
         },
     },
+
     bodyLogo: {
         maxWidth: '23rem',
         margin: 'auto',
@@ -82,15 +92,18 @@ export const useCommonStyles = createStyles((theme) => ({
             display: 'none',
         },
     },
+
     headerLogoBox: {
         height: '100%',
         [theme.fn.smallerThan('xs')]: {
             gridColumn: 'span 2',
         },
     },
+
     headerLogo: {
         maxHeight: '2rem',
     },
+
     actionBox: {
         position: 'absolute',
         right: 0,
@@ -99,21 +112,25 @@ export const useCommonStyles = createStyles((theme) => ({
             position: 'initial',
         },
     },
+
     smallText: {
         fontSize: '1rem',
         textAlign: 'center',
         color: 'white',
         marginTop: '1rem',
     },
+
     emojiLogo: {
         fontSize: '300px',
         [theme.fn.smallerThan('md')]: {
             display: 'none',
         },
     },
+
     emojiHeaderLogo: {
         fontSize: '2rem',
     },
+    
     link: {
         textTransform: 'capitalize',
         cursor: 'pointer',
