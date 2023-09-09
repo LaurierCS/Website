@@ -6,7 +6,7 @@ import CountUp from 'react-countup';
 
 const STUDENT_COUNT = 3500;
 const EVENT_COUNT = 20;
-const EXECUTIVE_COUNT = 54;
+const EXECUTIVE_COUNT = 53;
 
 const InfoBanner = () => {
     return (
