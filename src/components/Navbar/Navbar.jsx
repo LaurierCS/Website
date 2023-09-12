@@ -40,10 +40,11 @@ const useStyles = createStyles((theme) => {
             fontSize: '1rem',
             padding: '1.2em 1.5em',
             cursor: 'pointer',
-            transition: 'color 150ms ease',
+            transition: 'all 150ms ease-in, all 200ms ease-out',
             '&:hover': {
                 color: theme.colors.gray[0],
-                transition: 'color 100ms ease',
+                transform: 'scale(1.2)',
+                margin: '0.2em 0'
             },
         },
 
