@@ -1,0 +1,38 @@
+.event-tag-container {
+    border-radius: 1rem;
+    padding: 0 0.5em;
+    width: fit-content;
+    font-size: 0.8em;
+    font-weight: 600;
+    text-align: center;
+}
+
+.primary {
+    color: var(--color-blue);
+}
+.primary.event-tag-bg {
+    background-color: var(--color-blue);
+    color: var(--color-white);
+}
+
+.secondary {
+    color: var(--color-mint-blue);
+}
+.secondary.event-tag-bg {
+    background-color: var(--color-mint-blue);
+    color: var(--color-black);
+}
+
+.tertiary {
+    color: var(--color-mint-green);
+}
+.tertiary.event-tag-bg {
+    background-color: var(--color-mint-green);
+    color: var(--color-black);
+}
+
+@media screen and (max-width: 500px) {
+    .event-tag-container {
+        font-size: 0.6em;
+    }
+}

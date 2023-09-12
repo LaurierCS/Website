@@ -1,34 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Oswald&family=Philosopher&family=Playfair+Display&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+
+html, #root {
+    background: var(--color-background-default);
+}
+
 :root {
-     --color-black:#000000;
-     --color-white:#FFFFFF;
-     --color_blue: #29ABF4;
-     --color-light-blue: #A1DAF5;
-     --color-pink: #FF41D5;
-     --color-blue-gradient: linear-gradient(145deg, rgba(41,171,244,1) 0%, rgba(161,218,245,1) 100%); 
-     --color-pink-gradient: linear-gradient(145deg, rgba(41,171,244,1) 0%, rgba(255,65,213,1) 100%);
+    --color-background-default: linear-gradient(180deg, #1A1B1E 0%, #1E2123 23.96%, #1B1F21 44.27%, #1D2A31 62.5%, #1D3847 81.25%, #235571 100%);
+    --color-black:#000000;
+    --color-white:#FFFFFF;
+    --color-blue: #29ABF4;
+    --color-light-blue: #A1DAF5;
+    --color-mint-blue: #89F7FE;
+    --color-mint-green: #ACFFBE;
+    --color-pink: #FF41D5;
+    --color-blue-gradient: linear-gradient(145deg, rgba(41,171,244,1) 0%, rgba(161,218,245,1) 100%); 
+    --color-pink-gradient: linear-gradient(145deg, rgba(41,171,244,1) 0%, rgba(255,65,213,1) 100%);
 
-     /* 5(0) Shades of Gray, lower number the brighter */
-     --color-gray-0: #F8F8F8;
-     --color-gray-1: #E7EBF5;
-     --color-gray-2: #B2BECD;
-     --color-gray-3: #454E56;
-     --color-gray-4: #2C3844;
-     --color-gray-5: #12181B;
+    /* 6(0) Shades of Gray, lower number the brighter */
+    --color-gray-0: #F8F8F8;
+    --color-gray-1: #E7EBF5;
+    --color-gray-2: #B2BECD;
+    --color-gray-3: #454E56;
+    --color-gray-4: #2C3844;
+    --color-gray-5: #12181B;
 
-     --color-shadow: filter: drop-shadow(0px 4px 4px rgba(18, 24, 27, 0.25));
-     --color-neon-border: border: 2px solid var(--color-blue);
-     --color-neon-effect: filter: drop-shadow(0px 0px 24px var(--color-light-blue));
+    --color-footer-background: rgba(231, 235, 245, 0.03);
+    --color-faq-background-inactive: #2C2E33;
+    --color-faq-background-active: #141517;
+    --color-faq-border: #C1C2C5;
 
-     /* Default Dark Theme */
-     --color-background: var(--color-black);
-     --color-primary: var(--color-blue);
-     --color-secondary: var(--color-light-blue);
-     --color-title: var(--color-white);
-     --color-text: var(--color-gray-2);
-     --color-card: var(--color-gray-4);
+    --color-shadow: drop-shadow(0px 4px 4px rgba(18, 24, 27, 0.25));
+    --neon-border: 2px solid var(--color-blue);
+    --neon-box-shadow: 0px 0px 5px var(--color-blue), 0px 0px 15px var(--color-blue), 0px 0px 29px var(--color-blue);
 
-     /* Default values */
-     --border-radius: 15px;
+    /* Default Dark Theme */
+    --color-background: var(--color-black);
+    --color-primary: var(--color-blue);
+    --color-secondary: var(--color-light-blue);
+    --color-title: var(--color-white);
+    --color-text: var(--color-gray-2);
+    --color-card: var(--color-gray-4);
+
+    /* Default values */
+    --border-radius: 15px;
 }
 
 .light-theme {
@@ -45,3 +60,32 @@
     box-sizing: border-box;
 }
 
+section {
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+}
+
+/* Global Utility Classes */
+.space-y-2 > * + * {
+  margin-top: 2rem;
+}
+
+.space-x-2 > * + * {
+  margin-right: 2rem;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border-width: 0;
+}
