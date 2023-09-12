@@ -13,7 +13,7 @@ const useStyles = createStyles((theme) => ({
             backgroundColor: '#2C3844',
         },
     },
-    
+
     control: {
         color: 'white',
         fontWeight: 'bold',
@@ -39,7 +39,7 @@ const useStyles = createStyles((theme) => ({
         color: '#E7EBF5',
 
         padding: '1rem',
-  
+
         position: 'relative',
         zIndex: 2,
         borderBottomRightRadius: 8,
@@ -63,14 +63,14 @@ const useStyles = createStyles((theme) => ({
 
         [theme.fn.smallerThan('780')]: {
             fontSize: '1rem',
-        }
+        },
     },
 
     title: {
         [theme.fn.smallerThan('780')]: {
             fontSize: '2rem',
         },
-    }
+    },
 }));
 
 const FAQ_TITLE = '<Frequently Asked Questions />';
@@ -194,12 +194,9 @@ const FAQ = () => {
                                 <span className={classes.emojiContainer}>
                                     💰
                                 </span>
-                                Are there any giveways currently?
+                                {'Can we get free stuff?!'}
                             </Accordion.Control>
                             <Accordion.Panel className={classes.panel}>
-                                We do monthly money gift card giveaways on our
-                                socials, so follow us there! <br />
-                                <br />
                                 Make sure to attend our virtual and in-person
                                 events to get a chance to enter giveways or
                                 competitions to earn rewards!
