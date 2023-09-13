@@ -73,6 +73,15 @@ export const useCommonStyles = createStyles((theme) => ({
         color: '#1A1B1E',
     },
 
+    actionBox: {
+        justifyContent: 'center',
+
+        [theme.fn.smallerThan('400')]: {
+            flexDirection: 'column',
+            alignItems: 'center',
+        },
+    },
+
     description: {
         fontSize: '1.5rem',
         color: '#E7EBF5',
@@ -104,15 +113,6 @@ export const useCommonStyles = createStyles((theme) => ({
         maxHeight: '2rem',
     },
 
-    actionBox: {
-        position: 'absolute',
-        right: 0,
-
-        [theme.fn.smallerThan('sm')]: {
-            position: 'initial',
-        },
-    },
-
     smallText: {
         fontSize: '1rem',
         textAlign: 'center',
@@ -130,7 +130,7 @@ export const useCommonStyles = createStyles((theme) => ({
     emojiHeaderLogo: {
         fontSize: '2rem',
     },
-    
+
     link: {
         textTransform: 'capitalize',
         cursor: 'pointer',
