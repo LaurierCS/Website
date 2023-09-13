@@ -14,6 +14,7 @@ const PODS = () => {
         applicable: false,
         openDate: 'TBD',
         description: '',
+        typeform: '',
     });
 
     const getData = async () => {
@@ -26,6 +27,7 @@ const PODS = () => {
                     applicable: docData.applicable,
                     openDate: dayjs(date).format('MMMM Do, YYYY'),
                     description: docData.description,
+                    typeform: docData.typeform,
                 });
             }
         } catch (error) {
@@ -117,12 +119,7 @@ const PODS = () => {
                         {`Applications open on ${data.openDate}`}
                     </Text>
                 )}
-                <Flex
-                    sx={{ position: 'relative' }}
-                    mt="2rem"
-                    gap="md"
-                    justify="center"
-                >
+                <Flex mt="2rem" gap="md" className={classes.actionBox}>
                     <span className="sr-only" id="pods-details">
                         opens a modal with more description about PODS
                     </span>
@@ -135,20 +132,21 @@ const PODS = () => {
                         Show More
                     </Button>
                     {data.applicable && (
-                        <Box className={classes.actionBox}>
+                        <Box>
                             <span className="sr-only" id="apply-pods">
                                 opens form to apply to PODS
                             </span>
                             <Button
+                                component="a"
+                                href={data.typeform}
                                 aria-describedby="apply-pods"
-                                variant=""
+                                variant="gradient"
                                 gradient={{
                                     from: 'blue.4',
                                     to: 'accents.1',
                                 }}
                                 className={classes.actionBtn}
                                 size="lg"
-                                onClick={() => console.log('here')}
                                 disabled={!data.applicable}
                             >
                                 Apply
