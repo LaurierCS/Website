@@ -16,6 +16,16 @@ const useStyles = createStyles((theme) => ({
 
     control: {
         color: 'white',
+        transition: 'background-color 250ms ease',
+            '&:hover': {
+                background: theme.fn.gradient({
+                    from: 'blue.4',
+                    to: 'accents.1',
+                }),
+                transition: 'background-color 150ms ease',
+                cursor: 'pointer',
+            },
+            
         fontWeight: 'bold',
 
         [theme.fn.smallerThan('780')]: {
