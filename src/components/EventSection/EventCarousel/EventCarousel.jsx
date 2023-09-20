@@ -67,7 +67,6 @@ const useStyles = createStyles((theme) => ({
         opacity: 0.5,
     },
     controllerContainer: {
-        marginTop: '2rem',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -103,14 +102,16 @@ const useStyles = createStyles((theme) => ({
         gap: 12,
         marginLeft: '2rem',
         marginRight: '2rem',
-        
+    },
+    spacer: {
+        height: '2rem',
     },
 }));
 
 const EventCarousel = () => {
     const [visibleEvents, setVisibleEvents] = useState([]);
     const [activeIndex, setActiveIndex] = useState(0);
-    const [slideDirection, setSlideDirection] = useState('');
+    const [slideDirection, setSlideDirection] = useState('left');
     const { classes } = useStyles();
     const eventsRef = useRef([]);
     const mdBreakpoint = useMediaQuery('(max-width: 64em)');
@@ -255,7 +256,8 @@ const EventCarousel = () => {
                     </div>
                 )}
             </Box>
-            {!!eventsRef.current.length && (
+            <Box className={classes.spacer}></Box>
+            {eventsRef.current.length > 1 && (
                 <div className={classes.controllerContainer}>
                     <ActionIcon
                         disabled={
@@ -268,19 +270,12 @@ const EventCarousel = () => {
                         <IconChevronLeft />
                     </ActionIcon>
                     <div className={classes.dotsContainer}>
-                        {[0, 1, 2].map((dot) => (
+                        {eventsRef.current.map((_, dot) => (
                             <div
                                 key={`dot-${dot}`}
                                 className={
                                     eventsRef.current.length &&
-                                    ((dot === 0 && activeIndex === 0) ||
-                                        (dot === 2 &&
-                                            activeIndex ===
-                                                eventsRef.current.length - 1) ||
-                                        (dot === 1 &&
-                                            activeIndex > 0 &&
-                                            activeIndex <
-                                                eventsRef.current.length - 1))
+                                    dot === activeIndex
                                         ? classes.activeDot
                                         : classes.dot
                                 }
