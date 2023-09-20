@@ -13,10 +13,16 @@ const useStyles = createStyles((theme) => ({
             backgroundColor: '#2C3844',
         },
     },
+
     control: {
         color: 'white',
         fontWeight: 'bold',
+
+        [theme.fn.smallerThan('780')]: {
+            fontSize: '1rem',
+        },
     },
+
     accordion: {
         width: '65%',
 
@@ -24,12 +30,16 @@ const useStyles = createStyles((theme) => ({
             width: '85%',
         },
     },
+
     emojiContainer: {
         marginRight: '1rem',
     },
+
     panel: {
         color: '#E7EBF5',
-        fontWeight: 'bold',
+
+        padding: '1rem',
+
         position: 'relative',
         zIndex: 2,
         borderBottomRightRadius: 8,
@@ -50,10 +60,20 @@ const useStyles = createStyles((theme) => ({
             }),
             zIndex: -1,
         },
+
+        [theme.fn.smallerThan('780')]: {
+            fontSize: '1rem',
+        },
+    },
+
+    title: {
+        [theme.fn.smallerThan('780')]: {
+            fontSize: '2rem',
+        },
     },
 }));
 
-const FAQ_TITLE = '<Frequently Asked Questiens />';
+const FAQ_TITLE = '<Frequently Asked Questions />';
 
 const FAQ = () => {
     const { classes } = useStyles();
@@ -66,6 +86,7 @@ const FAQ = () => {
                     align="center"
                     variant="gradient"
                     mb="2rem"
+                    className={classes.title}
                 >
                     {FAQ_TITLE}
                 </Title>
@@ -85,7 +106,7 @@ const FAQ = () => {
                             <Accordion.Panel className={classes.panel}>
                                 Laurier Computing Society is the official
                                 student operated society of Wilfrid Laurier
-                                University’s Computer Science department. <br />
+                                University's Computer Science department. <br />
                                 <br />
                                 We strive to help students realise their
                                 potential in STEM by enriching their academic
@@ -158,9 +179,9 @@ const FAQ = () => {
                                 livestreams and post the edited version onto our
                                 YouTube page for viewing. <br />
                                 <br />
-                                This content includes review sessions,
-                                workshops, meet the professionals, information
-                                on the coop process, and more! <br />
+                                This content includes Review Sessions,
+                                Workshops, Meet The Professionals, information
+                                on the Co-op process, and more! <br />
                                 <br />
                                 We also give updates on events to upcoming
                                 events on our Instagram, Discord and other
@@ -173,12 +194,9 @@ const FAQ = () => {
                                 <span className={classes.emojiContainer}>
                                     💰
                                 </span>
-                                Are there any giveways currently?
+                                {'Can we get free stuff?!'}
                             </Accordion.Control>
                             <Accordion.Panel className={classes.panel}>
-                                We do monthly money gift card giveaways on our
-                                socials, so follow us there! <br />
-                                <br />
                                 Make sure to attend our virtual and in-person
                                 events to get a chance to enter giveways or
                                 competitions to earn rewards!
@@ -200,12 +218,6 @@ const FAQ = () => {
                                 We also host LCS PODS which aims to help student
                                 start off their career with a solid project in
                                 their portfolio. <br />
-                                <br />
-                                In addition, we run Project Program, in
-                                collaboration with the University Of Waterloo's
-                                Computer Science and Data Science Clubs, to help
-                                students pair up with mentors and create a
-                                project to compete with others for prizes!
                             </Accordion.Panel>
                         </Accordion.Item>
                     </Accordion>

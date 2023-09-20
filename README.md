@@ -1,14 +1,14 @@
 <div align='center'>
 
   ```
-▀██▀                                ██                    ▄▄█▀▀▀▄█  ▄█▀▀▀▄█  
- ██        ▄▄▄▄   ▄▄▄ ▄▄▄  ▄▄▄ ▄▄  ▄▄▄    ▄▄▄▄  ▄▄▄ ▄▄  ▄█▀     ▀   ██▄▄  ▀  
- ██       ▀▀ ▄██   ██  ██   ██▀ ▀▀  ██  ▄█▄▄▄██  ██▀ ▀▀ ██           ▀▀███▄  
- ██       ▄█▀ ██   ██  ██   ██      ██  ██       ██     ▀█▄      ▄ ▄     ▀██ 
-▄██▄▄▄▄▄█ ▀█▄▄▀█▀  ▀█▄▄▀█▄ ▄██▄    ▄██▄  ▀█▄▄▄▀ ▄██▄     ▀▀█▄▄▄▄▀  █▀▄▄▄▄█▀  
-                                                                             
+▀██▀                                ██                    ▄▄█▀▀▀▄█  ▄█▀▀▀▄█
+ ██        ▄▄▄▄   ▄▄▄ ▄▄▄  ▄▄▄ ▄▄  ▄▄▄    ▄▄▄▄  ▄▄▄ ▄▄  ▄█▀     ▀   ██▄▄  ▀
+ ██       ▀▀ ▄██   ██  ██   ██▀ ▀▀  ██  ▄█▄▄▄██  ██▀ ▀▀ ██           ▀▀███▄
+ ██       ▄█▀ ██   ██  ██   ██      ██  ██       ██     ▀█▄      ▄ ▄     ▀██
+▄██▄▄▄▄▄█ ▀█▄▄▀█▀  ▀█▄▄▀█▄ ▄██▄    ▄██▄  ▀█▄▄▄▀ ▄██▄     ▀▀█▄▄▄▄▀  █▀▄▄▄▄█▀
+
   ```
-  
+
 </div>
 
 ![GitHub](https://img.shields.io/github/license/LaurierCS/Website?style=flat-square)
@@ -23,25 +23,25 @@
 ![](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 
 ### Requirements
-- Node.js, NPM, Yarn
+- Node.js, PNPM
 
 ### Setup
 - Clone repo
 ```sh
 $ git clone https://github.com/LaurierCS/Website
 ```
-- Install dependencies 
+- Install dependencies
 ```sh
-$ yarn
+$ pnpm i
 ```
 - Launch local server
 ```sh
-$ yarn dev
+$ pnpm dev
 ```
 
 - Launch Storybook server
 ```sh
-$ yarn storybook
+$ pnpm storybook
 ```
 
 > Note: Storybook runs independently from the development server. Run both servers to observe changes on the web app and storybook.

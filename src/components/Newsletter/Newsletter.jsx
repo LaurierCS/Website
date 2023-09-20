@@ -5,7 +5,6 @@ import {
     Container,
     Flex,
     Center,
-    TextInput,
     Button,
     Group,
     Box,
@@ -14,7 +13,7 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 
-const NEWSLETTER_HEADING = '<Join our Newsletter! />';
+const NEWSLETTER_HEADING = '<Sign up for our Newsletter! />';
 const NEWSLETTER_CAPTION = [
     'Subscribe to our newsletter to receive event',
     <br />,
@@ -31,15 +30,44 @@ const useStyles = createStyles((theme) => ({
         padding: '6px 16px',
         width: '100%',
     },
+
+    title: {
+        fontWeight: 'bold',
+        fontSize: 48,
+        [theme.fn.smallerThan('780')]: {
+            fontSize: '2rem',
+        },
+    },
+
+    description: {
+        fontSize: 24,
+        fontWeight: '600',
+        [theme.fn.smallerThan('780')]: {
+            fontSize: '1rem',
+        },
+    },
+
+    button: {
+        fontSize: '1.5rem',
+        marginTop: '10px',
+
+        [theme.fn.smallerThan('780')]: {
+            fontSize: '1rem',
+        },
+    },
+
+    newsletterBtn: {
+        width: 400,
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        [theme.fn.smallerThan(450)]: {
+            padding: '0 4rem',
+        },
+    },
 }));
 
 function Newsletter() {
     const { classes } = useStyles();
-    const form = useForm({
-        initialValues: {
-            email: '',
-        },
-    });
 
     const subscribe = async ({ email }) => {
         if (!email) return;
@@ -56,56 +84,49 @@ function Newsletter() {
                         wrap="wrap"
                         gap="md"
                     >
-                        <Text align="center" color="white">
-                            Wanna stay in the know of our next events?"
+                        <Text
+                            align="center"
+                            color="white"
+                            className={classes.description}
+                        >
+                            Wanna stay in the know of our next events?
                         </Text>
                         <Title
                             align="center"
                             variant="gradient"
                             order={1}
-                            sx={{ fontSize: '3rem' }}
+                            className={classes.title}
                         >
                             {NEWSLETTER_HEADING}
                         </Title>
-                        <MediaQuery
-                            query="(max-width: 768px)"
-                            styles={{ fontSize: '1.2rem' }}
-                        >
-                            <Text align="center" color="white" weight="bold">
-                                Subscribe to our newsletter to receive event
-                                <br />
-                                announcements, updates, and more!
-                            </Text>
-                        </MediaQuery>
 
-                        <MediaQuery
-                            query="(max-width: 768px)"
-                            styles={{ width: 300 }}
+                        <Text
+                            align="center"
+                            color="white"
+                            weight="bold"
+                            className={classes.description}
                         >
-                            <Box sx={{ width: 400 }} mx="auto" mt="sm">
-                                <form onSubmit={form.onSubmit(subscribe)}>
-                                    <input
-                                        className={classes.emailInput}
-                                        placeholder="Email"
-                                        type="email"
-                                        required
-                                        {...form.getInputProps('email')}
-                                    />
-                                    <Button
-                                        fullWidth
-                                        variant="filled"
-                                        type="submit"
-                                        radius="6px"
-                                        sx={{
-                                            fontSize: '1rem',
-                                            marginTop: '10px',
-                                        }}
-                                    >
-                                        SUBSCRIBE
-                                    </Button>
-                                </form>
-                            </Box>
-                        </MediaQuery>
+                            Subscribe to our newsletter to receive event
+                            <br />
+                            announcements, updates, and more!
+                        </Text>
+                        <Box className={classes.newsletterBtn} mt="sm">
+                            <form
+                                action="https://eepurl.com/hI3myD"
+                                target="_blank"
+                            >
+                                <Button
+                                    fullWidth
+                                    variant="filled"
+                                    type="submit"
+                                    radius="6px"
+                                    size="lg"
+                                    className={classes.button}
+                                >
+                                    SUBSCRIBE
+                                </Button>
+                            </form>
+                        </Box>
                     </Flex>
                 </Center>
             </Container>

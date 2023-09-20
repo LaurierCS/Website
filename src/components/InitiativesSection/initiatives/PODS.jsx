@@ -14,6 +14,7 @@ const PODS = () => {
         applicable: false,
         openDate: 'TBD',
         description: '',
+        typeform: '',
     });
 
     const getData = async () => {
@@ -26,6 +27,7 @@ const PODS = () => {
                     applicable: docData.applicable,
                     openDate: dayjs(date).format('MMMM Do, YYYY'),
                     description: docData.description,
+                    typeform: docData.typeform,
                 });
             }
         } catch (error) {
@@ -38,7 +40,11 @@ const PODS = () => {
     }, []);
 
     return (
-        <Box sx={(theme) => ({ boxShadow: theme.shadows.lg })}>
+        <Box
+            sx={(theme) => ({
+                boxShadow: theme.shadows.lg,
+            })}
+        >
             <Box className={classes.outerBox}>
                 <Box className={classes.innerBox}>
                     <Flex
@@ -86,7 +92,15 @@ const PODS = () => {
                         </Box>
                     </Flex>
                 </Box>
-                <Flex gap={32} direction="row-reverse">
+                <Flex
+                    sx={(theme) => ({
+                        gap: 32,
+                        [theme.fn.smallerThan('sm')]: {
+                            gap: 0,
+                        },
+                    })}
+                    direction="row-reverse"
+                >
                     <Flex align="center">
                         <Text className={classes.description}>
                             {data.description}
@@ -105,12 +119,7 @@ const PODS = () => {
                         {`Applications open on ${data.openDate}`}
                     </Text>
                 )}
-                <Flex
-                    sx={{ position: 'relative' }}
-                    mt="2rem"
-                    gap="md"
-                    justify="center"
-                >
+                <Flex mt="2rem" gap="md" className={classes.actionBox}>
                     <span className="sr-only" id="pods-details">
                         opens a modal with more description about PODS
                     </span>
@@ -123,20 +132,21 @@ const PODS = () => {
                         Show More
                     </Button>
                     {data.applicable && (
-                        <Box className={classes.actionBox}>
+                        <Box>
                             <span className="sr-only" id="apply-pods">
                                 opens form to apply to PODS
                             </span>
                             <Button
+                                component="a"
+                                href={data.typeform}
                                 aria-describedby="apply-pods"
-                                variant=""
+                                variant="gradient"
                                 gradient={{
                                     from: 'blue.4',
                                     to: 'accents.1',
                                 }}
                                 className={classes.actionBtn}
                                 size="lg"
-                                onClick={() => console.log('here')}
                                 disabled={!data.applicable}
                             >
                                 Apply
@@ -161,7 +171,6 @@ const PODS = () => {
                         color: 'white',
                     }}
                 >
-                    {/* the content for this section could be stored in firebase as well like the description */}
                     <p>
                         PODS has 5 major development phases -{' '}
                         <span className="bold">
@@ -172,16 +181,16 @@ const PODS = () => {
                     <p>
                         PODS teams are curated based on skill level, based on
                         your application's test. Our goal is for{' '}
-                        <span className="bold">everyone to learn</span> - nto
+                        <span className="bold">everyone to learn</span> - not
                         just one hardcarry.
                     </p>
                     <p>
                         Each POD will work on one project over the course of the
                         next three months. These projects can be{' '}
-                        <span className="bold">
-                            websites, video games, machine learning models,
-                        </span>
-                        or whatever else the team is interested in!
+                        <span className="bold">websites</span>
+                        ,&nbsp;<span className="bold">video games</span>,&nbsp;
+                        <span className="bold">machine learning models</span>
+                        ,&nbsp;or whatever else the team is interested in!
                     </p>
                 </Box>
             </Modal>

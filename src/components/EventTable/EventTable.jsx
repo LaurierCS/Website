@@ -3,19 +3,11 @@ import { useEffect, useMemo, useState } from 'react';
 import EventItem from '../EventItem/EventItem';
 import { Container, Center, Loader, Title } from '@mantine/core';
 
-/*
- * eventData refers to data fetched from the firebase database
- * current implementation: fetch event data in this component (makes more sense)
- * */
-
-// the empty prop is just here for demo purposes until backend is up and running
 const EventTable = ({ empty = false }) => {
     const [eventData, setEventData] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // fetch event data
     useEffect(() => {
-        // mocked event data
         const mockedEventData = [
             {
                 eventTitle:
@@ -70,7 +62,6 @@ const EventTable = ({ empty = false }) => {
             },
         ];
 
-        // simulate api fetch latency
         setTimeout(() => {
             if (!empty) setEventData(mockedEventData);
             setLoading(false);

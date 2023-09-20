@@ -16,7 +16,6 @@
 }
 
 .secondary {
-    /*    color: var(--mantine-color-violet-4); */
     color: var(--color-mint-blue);
 }
 .secondary.event-tag-bg {

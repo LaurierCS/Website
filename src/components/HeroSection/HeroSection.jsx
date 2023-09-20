@@ -1,4 +1,3 @@
-import './HeroSection.css';
 import {
     Title,
     Text,
@@ -9,6 +8,7 @@ import {
     Center,
     MediaQuery,
     Button,
+    createStyles,
 } from '@mantine/core';
 import { IconLogo } from '@assets';
 import { FaDiscord } from 'react-icons/fa';
@@ -20,10 +20,61 @@ const HERO_SECTION_TEXT_1 = 'Student Lead';
 const HERO_SECTION_TEXT_2 = 'Established 2012';
 const HERO_SECTION_TEXT_3 = 'Career Driven';
 
+
+const useStyles = createStyles((theme) => ({
+    container: {
+        [theme.fn.smallerThan('340')]: {
+            padding: '0',
+        },  
+
+        [theme.fn.largerThan('2000')]: {
+            paddingTop: '20rem',
+        }
+    },
+
+    title: {
+        fontSize: 50,
+        [theme.fn.smallerThan('780')]: {
+            fontSize: '2rem',
+        },
+    },
+
+    logo: {
+        '&:hover': {
+            WebkitAnimation: 'spin 4s linear infinite',
+            MozAnimation: 'spin 4s linear infinite',
+            animation: 'spin 4s linear infinite',
+        },
+
+        '@-moz-keyframes spin': {
+            '100%': {
+                '-moz-transform': 'rotate(360deg)',
+            },
+        },
+
+        '@-webkit-keyframes spin': {
+            '100%': {
+                '-webkit-transform': 'rotate(360deg)',
+            },
+        },
+
+        '@keyframes spin': {
+            '100%': {
+                '-webkit-transform': 'rotate(360deg)',
+                transform: 'rotate(360deg)',
+            },
+        },
+        [theme.fn.smallerThan('340')]: {
+            display: 'none',
+        },
+    },
+}));
+
 const HeroSection = () => {
+    const { classes } = useStyles();
     return (
         <section id="top">
-            <Container py="8rem" size="xl" my="md">
+            <Container py="8rem" size="xl" my="md" className={classes.container}>
                 <Center style={{ width: '100%', height: '100%' }}>
                     <Flex
                         direction="column"
@@ -31,9 +82,7 @@ const HeroSection = () => {
                         wrap="wrap"
                         gap="md"
                     >
-                        {/*Leaving as a possible placeholder for bg img*/}
                         <BackgroundImage src="">
-                            {/*Icon Logo*/}
                             <MediaQuery
                                 query="(max-width: 768px)"
                                 styles={{
@@ -48,26 +97,22 @@ const HeroSection = () => {
                                         height={90}
                                         align="center"
                                         pb="2rem"
+                                        className={classes.logo}
                                     />
                                 </Center>
                             </MediaQuery>
 
-                            {/*Hero Text*/}
-                            <MediaQuery
-                                query="(min-width: 768px)"
-                                styles={{ fontSize: '3rem' }}
+                            <Title
+                                pb="3rem"
+                                align="center"
+                                fw={700}
+                                variant="gradient"
+                                order={1}
+                                className={classes.title}
                             >
-                                <Title
-                                    pb="3rem"
-                                    align="center"
-                                    fw={700}
-                                    variant="gradient"
-                                    order={1}
-                                >
-                                    {HERO_SECTION_TITLE}
-                                </Title>
-                            </MediaQuery>
-
+                                {HERO_SECTION_TITLE}
+                            </Title>
+           
                             <MediaQuery
                                 query="(max-width: 768px)"
                                 styles={{ fontSize: '1.2rem' }}
@@ -110,12 +155,6 @@ const HeroSection = () => {
                                     Join our Discord!
                                 </Button>
                             </Center>
-
-                            {/*Hero Image*/}
-                            {/* <Image
-                                src={CorpImage}
-                                height={750}
-                            /> */}
                         </BackgroundImage>
                     </Flex>
                 </Center>

@@ -4,7 +4,7 @@ import { NavbarSocials } from '@components';
 import { Link } from 'react-scroll';
 import { createStyles, Burger, Drawer } from '@mantine/core';
 
-const navbarHeight = 5 * 18;
+export const navbarHeight = 5 * 18;
 
 const useStyles = createStyles((theme) => {
     return {
@@ -17,9 +17,10 @@ const useStyles = createStyles((theme) => {
             right: 0,
             zIndex: 100,
             backdropFilter: 'blur(4px)',
-            backgroundColor: 'rgba(26, 27, 30, 0.40)', // mantine colour dark[7] in rgb
+            backgroundColor: 'rgba(26, 27, 30, 0.40)',
         },
-        navbar__mobile: {
+
+        navbarMobile: {
             display: 'none',
 
             '@media screen and (max-width: 900px)': {
@@ -30,6 +31,7 @@ const useStyles = createStyles((theme) => {
                 paddingRight: '1.5rem',
             },
         },
+
         link: {
             display: 'inline-block',
             color: theme.colors.gray[5],
@@ -38,31 +40,62 @@ const useStyles = createStyles((theme) => {
             fontSize: '1rem',
             padding: '1.2em 1.5em',
             cursor: 'pointer',
-            transition: 'color 150ms ease',
+            transition: 'all 150ms ease-in, all 200ms ease-out',
             '&:hover': {
                 color: theme.colors.gray[0],
-                transition: 'color 100ms ease',
+                transform: 'scale(1.2)',
+                margin: '0.2em 0'
             },
         },
+
         linkList: {
             display: 'flex',
             alignItems: 'center',
             listStyle: 'none',
         },
-        linkList__mobile: {
+
+        linkListMobile: {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             listStyle: 'none',
             marginTop: '-1.5rem',
         },
+
         socials: {
             marginLeft: 'auto',
             marginRight: '1rem',
         },
+
         logo: {
             height: '90px',
+
+            '&:hover': {
+                WebkitAnimation: 'spin 4s linear infinite',
+                MozAnimation: 'spin 4s linear infinite',
+                animation: 'spin 4s linear infinite',
+            },
+
+            '@-moz-keyframes spin': {
+                '100%': {
+                    '-moz-transform': 'rotate(360deg)',
+                },
+            },
+
+            '@-webkit-keyframes spin': {
+                '100%': {
+                    '-webkit-transform': 'rotate(360deg)',
+                },
+            },
+
+            '@keyframes spin': {
+                '100%': {
+                    '-webkit-transform': 'rotate(360deg)',
+                    transform: 'rotate(360deg)',
+                },
+            },
         },
+
         desktopNav: {
             display: 'flex',
             alignItems: 'center',
@@ -73,6 +106,7 @@ const useStyles = createStyles((theme) => {
                 display: 'none',
             },
         },
+        
         mobileSocials: {
             marginTop: '2rem',
         },
@@ -84,82 +118,84 @@ const Navbar = () => {
     const { classes } = useStyles();
 
     return (
-        <div className={classes.navbar}>
-            <img className={classes.logo} src={IconLogo} alt="logo" />
+        <section id="navbar">
+            <div className={classes.navbar}>
+                <img className={classes.logo} src={IconLogo} alt="logo" />
 
-            <div className={classes.desktopNav}>
-                <nav>
-                    <ul className={classes.linkList}>
-                        {['About', 'Initiatives', 'Events', 'FAQ', 'Team'].map(
-                            (item) => (
-                                <li key={`link-${item}`}>
-                                    <Link
-                                        to={`${item}`}
-                                        offset={-navbarHeight}
-                                        smooth
-                                        duration={300}
-                                        className={classes.link}
-                                    >
-                                        {item}
-                                    </Link>
-                                </li>
-                            )
-                        )}
-                    </ul>
-                </nav>
-                <div className={classes.socials}>
-                    <NavbarSocials />
-                </div>
-            </div>
-
-            <div className={classes.navbar__mobile}>
-                <Burger
-                    opened={opened}
-                    onClick={() => setOpened((open) => !open)}
-                    size="sm"
-                    color="gray"
-                />
-
-                <Drawer
-                    opened={opened}
-                    onClose={() => setOpened(false)}
-                    position="right"
-                    overlayOpacity={0.55}
-                    overlayColor="var(--color-background)"
-                    overlayBlur={3}
-                    padding="10%"
-                    className={classes.drawer}
-                >
+                <div className={classes.desktopNav}>
                     <nav>
-                        <ul className={classes.linkList__mobile}>
-                            {[
-                                'About',
-                                'Initiatives',
-                                'Events',
-                                'FAQ',
-                                'Team',
-                            ].map((item) => (
-                                <li key={`link-${item}`}>
-                                    <Link
-                                        to={`${item}`}
-                                        offset={-navbarHeight}
-                                        smooth
-                                        duration={300}
-                                        className={classes.link}
-                                        onClick={() => setOpened(false)}
-                                    >
-                                        {item}
-                                    </Link>
-                                </li>
-                            ))}
+                        <ul className={classes.linkList}>
+                            {['About', 'Initiatives', 'Events', 'FAQ', 'Team'].map(
+                                (item) => (
+                                    <li key={`link-${item}`}>
+                                        <Link
+                                            to={`${item}`}
+                                            offset={-navbarHeight}
+                                            smooth
+                                            duration={300}
+                                            className={classes.link}
+                                        >
+                                            {item}
+                                        </Link>
+                                    </li>
+                                )
+                            )}
                         </ul>
                     </nav>
-                    <div className={classes.mobileSocials}>
+                    <div className={classes.socials}>
                         <NavbarSocials />
                     </div>
-                </Drawer>
+                </div>
+
+                <div className={classes.navbarMobile}>
+                    <Burger
+                        opened={opened}
+                        onClick={() => setOpened((open) => !open)}
+                        size="sm"
+                        color="gray"
+                    />
+
+                    <Drawer
+                        opened={opened}
+                        onClose={() => setOpened(false)}
+                        position="right"
+                        overlayOpacity={0.55}
+                        overlayColor="var(--color-background)"
+                        overlayBlur={3}
+                        padding="10%"
+                        className={classes.drawer}
+                    >
+                        <nav>
+                            <ul className={classes.linkListMobile}>
+                                {[
+                                    'About',
+                                    'Initiatives',
+                                    'Events',
+                                    'FAQ',
+                                    'Team',
+                                ].map((item) => (
+                                    <li key={`link-${item}`}>
+                                        <Link
+                                            to={`${item}`}
+                                            offset={-navbarHeight}
+                                            smooth
+                                            duration={300}
+                                            className={classes.link}
+                                            onClick={() => setOpened(false)}
+                                        >
+                                            {item}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </nav>
+                        <div className={classes.mobileSocials}>
+                            <NavbarSocials />
+                        </div>
+                    </Drawer>
+                </div>
             </div>
-        </div>
+        </section>
     );
 };
 

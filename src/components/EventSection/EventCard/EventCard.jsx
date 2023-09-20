@@ -13,6 +13,7 @@ const useStyles = createStyles((theme) => ({
             fontSize: '3rem',
         },
     },
+
     title: {
         fontSize: '1.8rem',
         color: 'white',
@@ -27,6 +28,7 @@ const useStyles = createStyles((theme) => ({
             whiteSpace: 'normal',
         },
     },
+
     date: {
         fontSize: '1.2rem',
         fontWeight: 'bold',
@@ -36,6 +38,7 @@ const useStyles = createStyles((theme) => ({
             fontSize: '0.9rem',
         },
     },
+
     time: {
         fontSize: '1.2rem',
         fontWeight: 'bold',
@@ -46,19 +49,13 @@ const useStyles = createStyles((theme) => ({
             fontSize: '0.9rem',
         },
     },
+
     description: {
         margin: '40px 0px',
         fontSize: '1rem',
         color: '#E7EBF5',
-
-        // [theme.fn.smallerThan('lg')]: {
-        //     fontSize: '1.2rem',
-        // },
-        //
-        // [theme.fn.smallerThan('sm')]: {
-        //     fontSize: '1rem',
-        // },
     },
+
     link: {
         fontSize: '1.56rem',
         fontWeight: 'bold',
@@ -69,17 +66,19 @@ const useStyles = createStyles((theme) => ({
             fontSize: '1.2rem',
         },
     },
+
     highlight: {
         color: theme.colors.accents[1],
         fontWeight: 'bold',
     },
+
     cardRoot: {
         backgroundColor: theme.colors.card[0],
         borderRadius: '10px',
         paddingTop: '20px',
         paddingBottom: '20px',
         width: '33rem',
-        height: '640px',
+        height: '35rem',
         boxShadow: theme.shadows.lg,
         position: 'relative',
         transition: 'all ease 150ms',
@@ -129,6 +128,7 @@ const useStyles = createStyles((theme) => ({
             height: 'auto',
         },
     },
+
     placeRoot: {
         borderRadius: '10px',
         overflow: 'hidden',
@@ -141,6 +141,7 @@ const useStyles = createStyles((theme) => ({
             fontSize: '0.8rem',
         },
     },
+
     placeContent: {
         paddingLeft: '1.25rem',
         paddingRight: '1.25rem',
@@ -155,6 +156,7 @@ const useStyles = createStyles((theme) => ({
             paddingRight: '0.5rem',
         },
     },
+
     upNext: {
         background: theme.fn.gradient({
             from: 'blue.4',
@@ -181,8 +183,6 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-const descriptionMaxLength = 200;
-
 const EventCard = ({
     icon,
     title,
@@ -200,7 +200,6 @@ const EventCard = ({
 }) => {
     const { classes } = useStyles();
 
-    // I hate how the classes are here, makes me want to quit mantine 100000%
     return (
         <Box className={classes.cardRoot}>
             <Box
@@ -237,12 +236,11 @@ const EventCard = ({
                         )}
                     </Flex>
                 </Box>
+
                 <p className={classes.description}>
-                    {/* {description.length > descriptionMaxLength */}
-                    {/*     ? description.slice(0, -3) + '...' */}
-                    {/*     : description} */}
                     {description}
                 </p>
+
                 {!disableIg && igPost && (
                     <a
                         href={igPost}
@@ -253,6 +251,7 @@ const EventCard = ({
                         Learn more about the event!
                     </a>
                 )}
+
                 {!disableIg && !igPost && (
                     <span
                         className={[
@@ -264,6 +263,7 @@ const EventCard = ({
                     </span>
                 )}
             </Box>
+
             {isNext && (
                 <Box component="span" className={classes.upNext}>
                     UP NEXT

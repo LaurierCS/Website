@@ -16,9 +16,6 @@ import { store } from '../../../services/firebase';
 import { useMediaQuery } from '@mantine/hooks';
 import { flushSync } from 'react-dom';
 
-// TODO: add animation
-
-// this is used to fill out an empty space when the carousel reaches the end.
 const CardPlaceholder = () => (
     <Box sx={{ width: '567px', height: '535px', opacity: 0 }}></Box>
 );
@@ -33,6 +30,7 @@ const useStyles = createStyles((theme) => ({
             paddingRight: '0',
         },
     },
+
     eventsContainer: {
         display: 'flex',
         alignItems: 'center',
@@ -50,6 +48,7 @@ const useStyles = createStyles((theme) => ({
             paddingTop: '2rem',
         },
     },
+
     midEvent: {
         ['&:not(:only-child)']: {
             position: 'absolute',
@@ -63,14 +62,17 @@ const useStyles = createStyles((theme) => ({
             width: '100%',
         },
     },
+
     sideEvent: {
         opacity: 0.5,
     },
+
     controllerContainer: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
     },
+
     control: {
         width: '2rem',
         height: '2rem',
@@ -81,6 +83,7 @@ const useStyles = createStyles((theme) => ({
         justifyContent: 'center',
         color: 'black',
     },
+
     dot: {
         width: '1rem',
         height: '1rem',
@@ -88,6 +91,7 @@ const useStyles = createStyles((theme) => ({
         backgroundColor: '#717277',
         flexShrink: 0,
     },
+
     activeDot: {
         width: '1rem',
         height: '1rem',
@@ -95,6 +99,7 @@ const useStyles = createStyles((theme) => ({
         backgroundColor: '#E7EBF5',
         flexShrink: 0,
     },
+
     dotsContainer: {
         display: 'flex',
         alignItems: 'center',
@@ -138,7 +143,6 @@ const EventCarousel = () => {
 
             if (!_events.length) return;
 
-            // move the up comming event to the middle
             const upnext = _events[0];
             upnext.isNext = true;
             upnext.active = true;
@@ -245,7 +249,7 @@ const EventCarousel = () => {
                     <div className={classes.midEvent}>
                         <EventCard
                             title="No Events"
-                            description="There are no events scheduled for now."
+                            description="There are no events scheduled for now. Please come back later!"
                             date={dayjs()}
                             icon="😭"
                             place="Unknown"
@@ -282,6 +286,7 @@ const EventCarousel = () => {
                             ></div>
                         ))}
                     </div>
+                    
                     <ActionIcon
                         disabled={
                             activeIndex === eventsRef.current.length - 1 ||
