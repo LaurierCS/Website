@@ -60,7 +60,7 @@ const useStyles = createStyles((theme) => ({
     },
 
     panel: {
-        color: 'white',
+        color: '#E7EBF5',
         padding: '1rem',
         position: 'relative',
         zIndex: 2,
@@ -81,7 +81,6 @@ const useStyles = createStyles((theme) => ({
             }),
             zIndex: -1,
         },
-        borderColor: 'transparent',
 
         [theme.fn.smallerThan('780')]: {
             fontSize: '1rem',
