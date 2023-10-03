@@ -3,12 +3,14 @@ import { Title, Accordion, createStyles, Flex } from '@mantine/core';
 
 const useStyles = createStyles((theme) => ({
     item: {
+        backgroundColor: '#2C3844',
         borderStyle: 'solid',
         borderWidth: 2,
         borderColor: theme.colors.blue[4],
 
         '&[data-active]': {
             border: 'none',
+            backgroundColor: '#2C3844',
         },
 
         position: 'relative',
