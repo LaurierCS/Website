@@ -12,6 +12,30 @@ const useStyles = createStyles((theme) => ({
             border: 'none',
             backgroundColor: '#2C3844',
         },
+
+        position: 'relative',
+        zIndex: 2,
+        ['&::before']: {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+            opacity: 0,
+            background: theme.fn.gradient({
+                from: 'blue.4',
+                to: 'accents.1',
+            }),
+            zIndex: -1,
+            transition: 'all ease 150ms',
+        },
+        ['&:not([data-active]):hover']: {
+            ['&::before']: {
+                opacity: 0.45,
+            },
+        },
+        overflow: 'hidden',
     },
 
     control: {
@@ -37,15 +61,12 @@ const useStyles = createStyles((theme) => ({
 
     panel: {
         color: '#E7EBF5',
-
         padding: '1rem',
-
         position: 'relative',
         zIndex: 2,
+        overflow: 'hidden',
         borderBottomRightRadius: 8,
         borderBottomLeftRadius: 8,
-        overflow: 'hidden',
-
         ['&::before']: {
             content: '""',
             position: 'absolute',
