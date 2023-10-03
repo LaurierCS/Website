@@ -3,31 +3,37 @@ import { Title, Accordion, createStyles, Flex } from '@mantine/core';
 
 const useStyles = createStyles((theme) => ({
     item: {
-        backgroundColor: '#2C3844',
         borderStyle: 'solid',
         borderWidth: 2,
         borderColor: theme.colors.blue[4],
 
         '&[data-active]': {
             border: 'none',
-            backgroundColor: '#2C3844',
         },
     },
 
     control: {
+        
         color: 'white',
         transition: 'background 250ms ease',
-            '&:hover': {
-                background: theme.fn.gradient({
-                    from: 'blue.4',
-                    to: 'accents.1',
-                   
-                }),
-                transition: 'background-color 150ms ease',
-                cursor: 'pointer',
-                opacity: 0.4,
-            },
+   
+        '&:hover': {
+            background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), ' + theme.fn.gradient({
+                from: 'blue.4',
+                to: 'accents.1',
+                
+            }),
+            transition: 'background-color 150ms ease',
+            cursor: 'pointer',
+
+            borderTopLeftRadius:6,
+            borderTopRightRadius:6,
+
             
+            
+
+        },
+
         fontWeight: 'bold',
 
         [theme.fn.smallerThan('780')]: {
@@ -47,31 +53,43 @@ const useStyles = createStyles((theme) => ({
         marginRight: '1rem',
     },
 
+    
+
     panel: {
-        color: '#E7EBF5',
+
+        ['&::before']: {
+            content: '""',
+            position: 'absolute',
+            
+            top: '0',
+            left: '0',
+            width: '100%',
+            height: '100%',
+            zIndex: -1,
+            opacity: 0,
+            transition: 'all ease 150ms',
+            
+            
+        },
+        
+        color: 'white',
+        background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), ' + theme.fn.gradient({
+            from: 'blue.4',
+            to: 'accents.1',
+        }),
+
+        borderBottomLeftRadius: 8,
+        borderBottomRightRadius: 8,
+
 
         padding: '1rem',
 
         position: 'relative',
         zIndex: 2,
-        borderBottomRightRadius: 8,
-        borderBottomLeftRadius: 8,
         overflow: 'hidden',
+        borderColor: 'transparent',
 
-        ['&::before']: {
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0,
-            opacity: 0.45,
-            background: theme.fn.gradient({
-                from: 'blue.4',
-                to: 'accents.1',
-            }),
-            zIndex: -1,
-        },
+        
 
         [theme.fn.smallerThan('780')]: {
             fontSize: '1rem',
