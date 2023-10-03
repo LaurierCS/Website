@@ -10,30 +10,34 @@ const useStyles = createStyles((theme) => ({
         '&[data-active]': {
             border: 'none',
         },
+
+        position: 'relative',
+        zIndex: 2,
+        ['&::before']: {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+            opacity: 0,
+            background: theme.fn.gradient({
+                from: 'blue.4',
+                to: 'accents.1',
+            }),
+            zIndex: -1,
+            transition: 'all ease 150ms',
+        },
+        ['&:not([data-active]):hover']: {
+            ['&::before']: {
+                opacity: 0.45,
+            },
+        },
+        overflow: 'hidden',
     },
 
     control: {
-        
         color: 'white',
-        transition: 'background 250ms ease',
-   
-        '&:hover': {
-            background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), ' + theme.fn.gradient({
-                from: 'blue.4',
-                to: 'accents.1',
-                
-            }),
-            transition: 'background-color 150ms ease',
-            cursor: 'pointer',
-
-            borderTopLeftRadius:6,
-            borderTopRightRadius:6,
-
-            
-            
-
-        },
-
         fontWeight: 'bold',
 
         [theme.fn.smallerThan('780')]: {
@@ -53,43 +57,29 @@ const useStyles = createStyles((theme) => ({
         marginRight: '1rem',
     },
 
-    
-
     panel: {
-
-        ['&::before']: {
-            content: '""',
-            position: 'absolute',
-            
-            top: '0',
-            left: '0',
-            width: '100%',
-            height: '100%',
-            zIndex: -1,
-            opacity: 0,
-            transition: 'all ease 150ms',
-            
-            
-        },
-        
         color: 'white',
-        background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), ' + theme.fn.gradient({
-            from: 'blue.4',
-            to: 'accents.1',
-        }),
-
-        borderBottomLeftRadius: 8,
-        borderBottomRightRadius: 8,
-
-
         padding: '1rem',
-
         position: 'relative',
         zIndex: 2,
         overflow: 'hidden',
+        borderBottomRightRadius: 8,
+        borderBottomLeftRadius: 8,
+        ['&::before']: {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+            opacity: 0.45,
+            background: theme.fn.gradient({
+                from: 'blue.4',
+                to: 'accents.1',
+            }),
+            zIndex: -1,
+        },
         borderColor: 'transparent',
-
-        
 
         [theme.fn.smallerThan('780')]: {
             fontSize: '1rem',
