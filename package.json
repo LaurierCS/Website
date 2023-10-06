@@ -8,7 +8,9 @@
         "build": "vite build",
         "preview": "vite preview",
         "storybook": "storybook dev -p 6006",
-        "build-storybook": "storybook build"
+        "build-storybook": "storybook build",
+        "deploy": "firebase deploy",
+        "predeploy": "pnpm run build"
     },
     "dependencies": {
         "@emotion/css": "^11.11.2",
@@ -44,6 +46,7 @@
         "@types/react-dom": "^18.2.7",
         "@vitejs/plugin-react": "^2.2.0",
         "babel-loader": "^8.3.0",
+        "firebase-tools": "^12.6.2",
         "prop-types": "^15.8.1",
         "storybook": "^7.4.1",
         "storybook-addon-react-router-v6": "^1.0.2",
