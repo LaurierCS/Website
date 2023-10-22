@@ -15,6 +15,8 @@ Here is the list of tools you need to install before starting out:
 
 ## Getting Started
 
+> At the moment, please don't worry about Storybook and Unit Tests
+
 Let's start by explaining the folder structure for this project:
 
 ```
