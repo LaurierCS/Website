@@ -44,13 +44,14 @@
         "@storybook/theming": "^7.4.1",
         "@types/react": "^18.2.21",
         "@types/react-dom": "^18.2.7",
-        "@vitejs/plugin-react": "^2.2.0",
+        "@vitejs/plugin-react": "^4.1.0",
         "babel-loader": "^8.3.0",
         "firebase-tools": "^12.6.2",
         "prop-types": "^15.8.1",
         "storybook": "^7.4.1",
         "storybook-addon-react-router-v6": "^1.0.2",
         "storybook-dark-mode": "^3.0.1",
+        "typescript": "^5.2.2",
         "vite": "^3.2.7"
     }
 }
