@@ -21,12 +21,12 @@
         "noFallthroughCasesInSwitch": true,
         "paths": {
             "@/*": ["./src/*"],
-            "@assets": ["./src/assets/*"],
-            "@components": ["./src/components/*"],
-            "@pages": ["./src/pages/*"],
-            "@stories": ["./src/stories/*"],
-            "@utils": ["./src/utils/*"],
-            "@services": ["./src/services/*"]
+            "@assets*": ["./src/assets*"],
+            "@components*": ["./src/components*"],
+            "@pages*": ["./src/pages*"],
+            "@stories*": ["./src/stories*"],
+            "@utils*": ["./src/utils*"],
+            "@services*": ["./src/services*"]
         }
     },
     "include": ["src"],
