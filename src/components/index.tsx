@@ -5,9 +5,6 @@ import InfoDividerBottom from './Dividers/InfoDividerBottom';
 import InfoBanner from './InfoBanner/InfoBanner';
 import Footer from './Footer/Footer';
 import Socials from './Socials/Socials';
-import EventTag from './EventTag/EventTag';
-import EventItem from './EventItem/EventItem';
-import EventTable from './EventTable/EventTable';
 import EventSection from './EventSection/EventSection';
 import About from './About/About';
 import NavbarSocials from './Navbar/NavbarSocials/NavbarSocials';
@@ -28,9 +25,6 @@ export {
     Socials,
     About,
     EventSection,
-    EventTable,
-    EventItem,
-    EventTag,
     NavbarSocials,
     Spacer,
     Newsletter,
