@@ -6,12 +6,10 @@ import {
     Flex,
     Center,
     Button,
-    Group,
     Box,
-    MediaQuery,
     createStyles,
+    MantineTheme,
 } from '@mantine/core';
-import { useForm } from '@mantine/form';
 
 const NEWSLETTER_HEADING = '<Sign up for our Newsletter! />';
 const NEWSLETTER_CAPTION = [
@@ -20,7 +18,7 @@ const NEWSLETTER_CAPTION = [
     'announcements and more!',
 ];
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles((theme: MantineTheme) => ({
     emailInput: {
         backgroundColor: '#E7EBF5',
         border: 'none',
@@ -34,15 +32,15 @@ const useStyles = createStyles((theme) => ({
     title: {
         fontWeight: 'bold',
         fontSize: 48,
-        [theme.fn.smallerThan('780')]: {
+        [theme.fn.smallerThan(780)]: {
             fontSize: '2rem',
         },
     },
 
     description: {
         fontSize: 24,
-        fontWeight: '600',
-        [theme.fn.smallerThan('780')]: {
+        fontWeight: 600,
+        [theme.fn.smallerThan(780)]: {
             fontSize: '1rem',
         },
     },
@@ -51,7 +49,7 @@ const useStyles = createStyles((theme) => ({
         fontSize: '1.5rem',
         marginTop: '10px',
 
-        [theme.fn.smallerThan('780')]: {
+        [theme.fn.smallerThan(780)]: {
             fontSize: '1rem',
         },
     },
@@ -69,14 +67,14 @@ const useStyles = createStyles((theme) => ({
 function Newsletter() {
     const { classes } = useStyles();
 
-    const subscribe = async ({ email }) => {
-        if (!email) return;
-        console.log(email);
-    };
+    // const subscribe = async ({ email }) => {
+    //     if (!email) return;
+    //     console.log(email);
+    // };
 
     return (
         <section id="newsletter">
-            <Container size="x1" my={150}>
+            <Container size="xl" my={150}>
                 <Center style={{ width: '100%', height: '100%' }}>
                     <Flex
                         direction="column"
@@ -119,7 +117,7 @@ function Newsletter() {
                                     fullWidth
                                     variant="filled"
                                     type="submit"
-                                    radius="6px"
+                                    radius="sm"
                                     size="lg"
                                     className={classes.button}
                                 >
