@@ -7,18 +7,19 @@ import {
     Flex,
     Center,
     createStyles,
+    MantineTheme,
 } from '@mantine/core';
-import { PCDesign } from '@assets';
+import { PCDesign } from '@/assets';
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles((theme: MantineTheme) => ({
     title: {
-        [theme.fn.smallerThan('780')]: {
+        [theme.fn.smallerThan(780)]: {
             fontSize: '2rem',
         },  
     },
     
     image: {
-        [theme.fn.smallerThan('1000')]: {
+        [theme.fn.smallerThan(1000)]: {
             paddingBottom: '3rem',
         },
     },
@@ -26,13 +27,13 @@ const useStyles = createStyles((theme) => ({
     description: {
         fontSize: '1.5rem',
 
-        [theme.fn.smallerThan('780')]: {
+        [theme.fn.smallerThan(780)]: {
             fontSize: '1rem',
         },
     },
     
     grid: {
-        [theme.fn.largerThan('2000')]: {
+        [theme.fn.largerThan(2000)]: {
 
         },
     },
@@ -49,7 +50,7 @@ with hands-on experience through workshops, hackathons, networking events, and g
 sessions. Whether you're a beginner or a seasoned pro, the Laurier Computing Society has \
 something for everyone. Join us today and be a part of the future of technology!";
 
-const About = () => {
+const About: React.FC = () => {
     const { classes } = useStyles();
     return (
         <section id="About">
