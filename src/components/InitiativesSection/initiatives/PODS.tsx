@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import { useDisclosure } from '@mantine/hooks';
 import { Title, Text, Box, Flex, Button, Modal } from '@mantine/core';
-import { PodsLogo, IconLogo, C3PartnerLogo, HHPartnerLogo } from '@assets';
+import { PodsLogo, IconLogo, C3PartnerLogo, HHPartnerLogo } from '@/assets';
 import { useCommonStyles } from './styles';
 import dayjs from '@utils/day';
 import { store } from '@services/firebase';

@@ -1,6 +1,6 @@
-import { createStyles } from '@mantine/core';
+import { createStyles, MantineTheme } from '@mantine/core';
 
-export const useCommonStyles = createStyles((theme) => ({
+export const useCommonStyles = createStyles((theme: MantineTheme) => ({
     lcsLogo: {
         width: '3rem',
     },
@@ -76,7 +76,7 @@ export const useCommonStyles = createStyles((theme) => ({
     actionBox: {
         justifyContent: 'center',
 
-        [theme.fn.smallerThan('400')]: {
+        [theme.fn.smallerThan(400)]: {
             flexDirection: 'column',
             alignItems: 'center',
         },

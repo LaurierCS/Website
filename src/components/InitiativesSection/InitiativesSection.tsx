@@ -1,23 +1,23 @@
-import { Container, Title, Text, Flex, Box, createStyles } from '@mantine/core';
+import { Container, Title, Text, Flex, Box, createStyles, MantineTheme } from '@mantine/core';
 import PODS from './initiatives/PODS';
 import ReviewSessions from './initiatives/ReviewSessions';
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles((theme: MantineTheme) => ({
     title: {
-        [theme.fn.smallerThan('780')] : {
+        [theme.fn.smallerThan(780)] : {
             fontSize: '2rem',
         },
     },
 
     description: {
-        [theme.fn.smallerThan('780')] : {
+        [theme.fn.smallerThan(780)] : {
             fontSize: '1rem',
         },
     },
 
     header: {
-        fontWeight: '600',
-        [theme.fn.smallerThan('780')] : {
+        fontWeight: 600,
+        [theme.fn.smallerThan(780)] : {
             fontSize: '1.2rem',
         },
     }
@@ -27,7 +27,7 @@ const SECTION_TITLE = '<Our Initiatives />';
 const SECTION_PHRASE =
     'At LCS, we understand how important building a good portfolio is. That’s why we give students the opportunities to do so!';
 
-const InitiativesSection = () => {
+const InitiativesSection: React.FC = () => {
     const { classes } = useStyles();
     return (
         <section id="Initiatives">
