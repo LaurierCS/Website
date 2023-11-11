@@ -1,6 +1,10 @@
 import React from 'react';
 
-const Spacer = ({ height }) => (
+interface SpacerProps {
+     height: string | number;
+ }
+
+const Spacer: React.FC<SpacerProps> = ({ height }) => (
      <div style={{ height: height, width: "100%" }} />
 );
 
