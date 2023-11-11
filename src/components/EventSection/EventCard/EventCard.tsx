@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import { Box, Flex, Tooltip, createStyles } from '@mantine/core';
+import { Box, Flex, Tooltip, createStyles, MantineTheme } from '@mantine/core';
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles((theme: MantineTheme) => ({
     icon: {
         fontSize: '5.75rem',
 
@@ -183,20 +183,37 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-const EventCard = ({
+interface EventCardProps {
+    icon: React.ReactNode;
+    title: string;
+    date: any; 
+    place: string;
+    description: string;
+    igPost?: string;
+    isPublicDate?: boolean;
+    isPublicPlace?: boolean;
+    isPublicTime?: boolean;
+    isNext?: boolean;
+    disableIg?: boolean;
+    hideDate?: boolean;
+    hidePlace?: boolean;
+
+}
+
+const EventCard: React.FC<EventCardProps> = ({
     icon,
     title,
     date,
     place,
     description,
     igPost,
-    isPublicDate,
-    isPublicPlace,
-    isPublicTime,
-    isNext,
-    disableIg,
-    hideDate,
-    hidePlace,
+    isPublicDate = false,
+    isPublicPlace = false,
+    isPublicTime = false,
+    isNext = false,
+    disableIg = false,
+    hideDate = false,
+    hidePlace = false,
 }) => {
     const { classes } = useStyles();
 
