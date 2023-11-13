@@ -1,7 +1,7 @@
 import React from 'react';
-import { Title, Accordion, createStyles, Flex } from '@mantine/core';
+import { Title, Accordion, createStyles, Flex, MantineTheme } from '@mantine/core';
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles((theme: MantineTheme) => ({
     item: {
         backgroundColor: '#2C3844',
         borderStyle: 'solid',
@@ -42,7 +42,7 @@ const useStyles = createStyles((theme) => ({
         color: 'white',
         fontWeight: 'bold',
 
-        [theme.fn.smallerThan('780')]: {
+        [theme.fn.smallerThan(780)]: {
             fontSize: '1rem',
         },
     },
@@ -82,13 +82,13 @@ const useStyles = createStyles((theme) => ({
             zIndex: -1,
         },
 
-        [theme.fn.smallerThan('780')]: {
+        [theme.fn.smallerThan(780)]: {
             fontSize: '1rem',
         },
     },
 
     title: {
-        [theme.fn.smallerThan('780')]: {
+        [theme.fn.smallerThan(780)]: {
             fontSize: '2rem',
         },
     },
@@ -96,7 +96,7 @@ const useStyles = createStyles((theme) => ({
 
 const FAQ_TITLE = '<Frequently Asked Questions />';
 
-const FAQ = () => {
+const FAQ: React.FC = () => {
     const { classes } = useStyles();
     return (
         <section id="FAQ">

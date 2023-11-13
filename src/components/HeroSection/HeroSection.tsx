@@ -9,8 +9,9 @@ import {
     MediaQuery,
     Button,
     createStyles,
+    MantineTheme,
 } from '@mantine/core';
-import { IconLogo } from '@assets';
+import { IconLogo } from '@/assets';
 import { FaDiscord } from 'react-icons/fa';
 
 const HERO_SECTION_TITLE = '<Laurier Computing Society />';
@@ -21,20 +22,20 @@ const HERO_SECTION_TEXT_2 = 'Established 2012';
 const HERO_SECTION_TEXT_3 = 'Career Driven';
 
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles((theme: MantineTheme) => ({
     container: {
-        [theme.fn.smallerThan('340')]: {
+        [theme.fn.smallerThan(340)]: {
             padding: '0',
         },  
 
-        [theme.fn.largerThan('2000')]: {
+        [theme.fn.largerThan(2000)]: {
             paddingTop: '20rem',
         }
     },
 
     title: {
         fontSize: 50,
-        [theme.fn.smallerThan('780')]: {
+        [theme.fn.smallerThan(780)]: {
             fontSize: '2rem',
         },
     },
@@ -64,13 +65,13 @@ const useStyles = createStyles((theme) => ({
                 transform: 'rotate(360deg)',
             },
         },
-        [theme.fn.smallerThan('340')]: {
+        [theme.fn.smallerThan(340)]: {
             display: 'none',
         },
     },
 }));
 
-const HeroSection = () => {
+const HeroSection: React.FC = () => {
     const { classes } = useStyles();
     return (
         <section id="top">
@@ -95,7 +96,6 @@ const HeroSection = () => {
                                         src={IconLogo}
                                         width={120}
                                         height={90}
-                                        align="center"
                                         pb="2rem"
                                         className={classes.logo}
                                     />

@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
-import { ActionIcon, Box, createStyles } from '@mantine/core';
+import { ActionIcon, Box, createStyles, MantineTheme } from '@mantine/core';
 import {
     collection,
     query,
@@ -20,7 +20,7 @@ const CardPlaceholder = () => (
     <Box sx={{ width: '567px', height: '535px', opacity: 0 }}></Box>
 );
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles((theme: MantineTheme) => ({
     carouselRoot: {
         paddingLeft: '15%',
         paddingRight: '15%',
@@ -113,12 +113,30 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-const EventCarousel = () => {
-    const [visibleEvents, setVisibleEvents] = useState([]);
-    const [activeIndex, setActiveIndex] = useState(0);
+interface EventData {
+    date: dayjs.Dayjs; 
+    key: string;
+    active: boolean;
+    isNext?: boolean;
+    icon: React.ReactNode;
+    title: string;
+    place: string;
+    description: string;
+    igPost?: string;
+    isPublicDate?: boolean;
+    isPublicPlace?: boolean;
+    isPublicTime?: boolean;
+    disableIg?: boolean;
+    hideDate?: boolean;
+    hidePlace?: boolean;
+}
+
+const EventCarousel: React.FC = () => {
+    const [visibleEvents, setVisibleEvents] = useState<EventData[]>([]);
+    const [activeIndex, setActiveIndex] = useState<number>(0);
     const [slideDirection, setSlideDirection] = useState('left');
     const { classes } = useStyles();
-    const eventsRef = useRef([]);
+    const eventsRef = useRef<EventData[]>([]);
     const mdBreakpoint = useMediaQuery('(max-width: 64em)');
 
     useEffect(() => {
@@ -132,7 +150,7 @@ const EventCarousel = () => {
             );
 
             const docs = await getDocs(q);
-            let _events = [];
+            let _events: EventData[] = [];
             docs.forEach((doc) => {
                 const data = doc.data();
                 data.date = dayjs.unix(data.date.seconds);
@@ -158,7 +176,7 @@ const EventCarousel = () => {
         })();
     }, []);
 
-    const getNextIndex = (direction) => {
+    const getNextIndex = (direction: string) => {
         const isInbound =
             direction === 'left'
                 ? activeIndex + 1 < eventsRef.current.length
@@ -176,7 +194,7 @@ const EventCarousel = () => {
         return nextIndex;
     };
 
-    const setCarouselState = (nextIndex, events, direction) => {
+    const setCarouselState = (nextIndex: number, events:EventData[] , direction: string) => {
         setActiveIndex(nextIndex);
         setVisibleEvents(events);
         setSlideDirection(
@@ -186,7 +204,7 @@ const EventCarousel = () => {
         );
     };
 
-    const bigSlide = (direction) => {
+    const bigSlide = (direction: string) => {
         const nextIndex = getNextIndex(direction);
         const visible = eventsRef.current.slice(
             nextIndex - 1 >= 0 ? nextIndex - 1 : 0,
@@ -195,14 +213,14 @@ const EventCarousel = () => {
         setCarouselState(nextIndex, visible, direction);
     };
 
-    const simpleSlide = (direction) => {
+    const simpleSlide = (direction: string) => {
         const nextIndex = getNextIndex(direction);
 
         const visible = [eventsRef.current[nextIndex]];
         setCarouselState(nextIndex, visible, direction);
     };
 
-    const slideEvents = (direction) => {
+    const slideEvents = (direction: string) => {
         if (!eventsRef.current.length) return;
         if (mdBreakpoint) simpleSlide(direction);
         else bigSlide(direction);

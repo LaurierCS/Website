@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Text, Title, Box, Flex, createStyles } from '@mantine/core';
+import { Text, Title, Box, Flex, createStyles, MantineTheme } from '@mantine/core';
 import { IconArrowUp } from '@tabler/icons-react';
 import { Link } from 'react-scroll';
-import { Dug, Heart } from '@assets';
+import { Dug, Heart } from '@/assets';
 
 import './Footer.css';
 import { navbarHeight } from '../Navbar/Navbar';
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles((theme: MantineTheme) => ({
     footer: {
         marginTop: '8rem',
     },
@@ -15,11 +15,11 @@ const useStyles = createStyles((theme) => ({
         fontSize: '3rem',
         color: 'white',
 
-        [theme.fn.smallerThan('600')]: {
+        [theme.fn.smallerThan(600)]: {
             fontSize: '2rem',
         },
 
-        [theme.fn.smallerThan('400')]: {
+        [theme.fn.smallerThan(400)]: {
             fontSize: '1.5rem',
         },
     },
@@ -30,7 +30,7 @@ const useStyles = createStyles((theme) => ({
         marginTop: '2rem',
         marginBottom: '2rem',
 
-        [theme.fn.smallerThan('600')]: {
+        [theme.fn.smallerThan(600)]: {
             fontSize: '1rem',
         },
     },
@@ -38,7 +38,7 @@ const useStyles = createStyles((theme) => ({
     dugBox: {
         position: 'relative',
 
-        [theme.fn.smallerThan('780')]: {
+        [theme.fn.smallerThan(780)]: {
             width: '100%',
             paddingTop: '6rem',
             overflow: 'hidden',
@@ -47,7 +47,7 @@ const useStyles = createStyles((theme) => ({
     },
 
     dug: {
-        [theme.fn.smallerThan('780')]: {
+        [theme.fn.smallerThan(780)]: {
             width: '100%',
         },
     },
@@ -58,37 +58,37 @@ const useStyles = createStyles((theme) => ({
         top: '-5rem',
         animation: 'bounce 2s infinite',
 
-        [theme.fn.smallerThan('780')]: {
+        [theme.fn.smallerThan(780)]: {
             top: '3rem',
             left: '4rem',
             width: '8rem',
 
-            [theme.fn.largerThan('480')]: {
+            [theme.fn.largerThan(480)]: {
                 left: '8rem',
                 width: '10rem',
             },
 
-            [theme.fn.smallerThan('660')]: {
+            [theme.fn.smallerThan(660)]: {
                 left: '7rem',
                 width: '9rem',
             },
 
-            [theme.fn.smallerThan('560')]: {
+            [theme.fn.smallerThan(560)]: {
                 left: '6rem',
                 width: '8rem',
             },
 
-            [theme.fn.smallerThan('560')]: {
+            [theme.fn.smallerThan(560)]: {
                 left: '6rem',
                 width: '8rem',
             },
 
-            [theme.fn.smallerThan('480')]: {
+            [theme.fn.smallerThan(480)]: {
                 left: '4rem',
                 width: '7rem',
             },
 
-            [theme.fn.smallerThan('400')]: {
+            [theme.fn.smallerThan(400)]: {
                 top: '3rem',
                 left: '2wrem',
                 width: '6rem',
@@ -133,9 +133,9 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-const Footer = () => {
+const Footer: React.FC = () => {
     const { classes } = useStyles();
-    const [showBackToTop, setShowBackToTop] = useState(false);
+    const [showBackToTop, setShowBackToTop] = useState<boolean>(false);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -176,17 +176,16 @@ const Footer = () => {
                 </Box>
             </Flex>
             <Box className={classes.footerBar}>
-                <Text as="p" align="center">
+                <p style={{ textAlign: 'center' }}>
                     Made with ❤️
-                </Text>
-                <Text as="p" align="center" className={classes.lcsDevTeam}>
+                </p>
+                <p style={{ textAlign: 'center' }} className={classes.lcsDevTeam}>
                     LCS Development Team
-                </Text>
-                <Text as="p" align="center" mt="3rem">
-                    {' '}
+                </p>
+                <p style={{ textAlign: 'center', marginTop: '3rem' }}>
                     Copyright &#169; {new Date().getFullYear()} | Laurier
                     Computing Society. All rights reserved.
-                </Text>
+                </p>
             </Box>
             <Link to="top" smooth duration={300} offset={-navbarHeight}>
                 <div

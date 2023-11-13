@@ -1,6 +1,6 @@
 import React from 'react';
 import './InfoBanner.css';
-import { InfoDividerTop, InfoDividerBottom } from '@components';
+import { InfoDividerTop, InfoDividerBottom } from '@/components';
 import { Center } from '@mantine/core';
 import CountUp from 'react-countup';
 

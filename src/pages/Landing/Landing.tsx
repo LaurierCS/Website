@@ -12,7 +12,7 @@ import {
     HeroSection,
     InitiativesSection,
     MeetTheTeam,
-} from '@components';
+} from '@/components';
 
 const Landing = () => {
     return (

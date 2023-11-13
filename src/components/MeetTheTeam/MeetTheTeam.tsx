@@ -10,6 +10,7 @@ import {
     Avatar,
     SimpleGrid,
     createStyles,
+    MantineTheme, 
 } from '@mantine/core';
 import { FratBoiDug } from '../../assets';
 import { store } from '../../services/firebase';
@@ -17,12 +18,12 @@ import { store } from '../../services/firebase';
 const MEET_THE_TEAM_TITLE = '<Meet The Team />';
 const MEET_THE_THEAM_PHRASE = 'Meet the masterminds behind the club!';
 
-const memberStyles = createStyles((theme) => ({
+const memberStyles = createStyles((theme: MantineTheme) => ({
     textName: {
         color: 'white',
         fontWeight: 'bold',
         fontSize: 24,
-        [theme.fn.smallerThan('780')]: {
+        [theme.fn.smallerThan(780)]: {
             fontSize: '1rem',
         },
     },
@@ -30,7 +31,7 @@ const memberStyles = createStyles((theme) => ({
     textRole: {
         color: 'white',
         fontSize: 24,
-        [theme.fn.smallerThan('780')]: {
+        [theme.fn.smallerThan(780)]: {
             fontSize: '1rem',
         },
     },
@@ -47,15 +48,15 @@ const memberStyles = createStyles((theme) => ({
     },
 }));
 
-const sectionStyles = createStyles((theme) => ({
+const sectionStyles = createStyles((theme: MantineTheme) => ({
     title: {
-        [theme.fn.smallerThan('780')]: {
+        [theme.fn.smallerThan(780)]: {
             fontSize: '2rem',
         },  
     },
 
     description: {
-        [theme.fn.smallerThan('780')]: {
+        [theme.fn.smallerThan(780)]: {
             paddingTop: '1rem',
             fontSize: '1rem',
             marginBottom: '-6rem',
@@ -85,13 +86,19 @@ const sectionStyles = createStyles((theme) => ({
 
 const deptStyles = createStyles((theme) => ({
     deptTitle: {
-        [theme.fn.smallerThan('780')]: {
+        [theme.fn.smallerThan(780)]: {
             fontSize: '1.5rem',
         },
     },
 }));
 
-const Member = ({ name, role, picture }) => {
+interface MemberProps {
+    name: string;
+    role: string;
+    picture: string;
+}
+
+const Member: React.FC<MemberProps> = ({ name, role, picture }) => {
     const { classes } = memberStyles();
     return (
         <Flex align="center" gap={18}>
@@ -103,18 +110,23 @@ const Member = ({ name, role, picture }) => {
                 />
             </Box>
             <Box>
-                <Text as="p" className={classes.textName}>
+                <p className={classes.textName}>
                     {name}
-                </Text>
-                <Text as="p" className={classes.textRole}>
+                </p>
+                <p className={classes.textRole}>
                     {role}
-                </Text>
+                </p>
             </Box>
         </Flex>
     );
 };
 
-const Department = ({ name, members }) => {
+interface DepartmentProps {
+    name: string;
+    members: MemberProps[];
+}
+
+const Department: React.FC<DepartmentProps> = ({ name, members }) => {
     const { classes } = deptStyles();
     return (
         <Box my={64}>
@@ -150,14 +162,22 @@ const Department = ({ name, members }) => {
     );
 };
 
-const MeetTheTeam = () => {
-    const [presidents, setPresidents] = useState([]);
-    const [admin, setAdmin] = useState([]);
-    const [development, setDevelopment] = useState([]);
-    const [events, setEvents] = useState([]);
-    const [communication, setCommunication] = useState([]);
-    const [communityMod, setCommunityMod] = useState([]);
-    const [outreach, setOutreach] = useState([]);
+interface TeamMember {
+    name: string;
+    role: string;
+    picture: string;
+    departments: string[];
+}
+
+
+const MeetTheTeam: React.FC = () => {
+    const [presidents, setPresidents] = useState<TeamMember[]>([]);
+    const [admin, setAdmin] = useState<TeamMember[]>([]);
+    const [development, setDevelopment] = useState<TeamMember[]>([]);
+    const [events, setEvents] = useState<TeamMember[]>([]);
+    const [communication, setCommunication] = useState<TeamMember[]>([]);
+    const [communityMod, setCommunityMod] = useState<TeamMember[]>([]);
+    const [outreach, setOutreach] = useState<TeamMember[]>([]);
 
     const { classes } = sectionStyles();
 
@@ -166,8 +186,10 @@ const MeetTheTeam = () => {
             const q = query(collection(store, 'team'));
             const snapshot = await getDocs(q);
 
-            const team = [];
-            snapshot.forEach((doc) => team.push(doc.data()));
+            const team: TeamMember[] = [];
+            snapshot.forEach((doc) => {
+                team.push(doc.data() as TeamMember);
+            });
 
             const presidentMembers = team.filter((member) =>
                 member.departments.includes('president')
@@ -192,7 +214,7 @@ const MeetTheTeam = () => {
             );
 
             const prefix = 'VP of';
-            const sort = (a, b) => {
+            const sort = (a: TeamMember, b: TeamMember) => {
                 if (a.role.startsWith(prefix) && !b.role.startsWith(prefix)) {
                     return -1;
                 }

@@ -1,6 +1,6 @@
 import { Title, Text, Box, Flex, Button } from '@mantine/core';
 import { FaYoutube, FaTwitch } from 'react-icons/fa';
-import { IconLogo } from '@assets';
+import { IconLogo } from '@/assets';
 import { Link } from 'react-scroll';
 import { useCommonStyles } from './styles';
 import { navbarHeight } from '../../Navbar/Navbar';

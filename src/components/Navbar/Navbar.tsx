@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { IconLogo } from '@assets';
-import { NavbarSocials } from '@components';
+import { IconLogo } from '@/assets';
+import { NavbarSocials } from '@/components';
 import { Link } from 'react-scroll';
-import { createStyles, Burger, Drawer } from '@mantine/core';
+import { createStyles, Burger, Drawer, MantineTheme } from '@mantine/core';
 
 export const navbarHeight = 5 * 18;
 
-const useStyles = createStyles((theme) => {
+const useStyles = createStyles((theme: MantineTheme) => {
     return {
         navbar: {
             height: `${navbarHeight}px`,
@@ -113,7 +113,7 @@ const useStyles = createStyles((theme) => {
     };
 });
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
     const [opened, setOpened] = useState(false);
     const { classes } = useStyles();
 
@@ -162,8 +162,7 @@ const Navbar = () => {
                         overlayOpacity={0.55}
                         overlayColor="var(--color-background)"
                         overlayBlur={3}
-                        padding="10%"
-                        className={classes.drawer}
+                        style={{ padding: '10%' }}
                     >
                         <nav>
                             <ul className={classes.linkListMobile}>
