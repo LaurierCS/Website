@@ -13,7 +13,7 @@
     --clip-top: calc(var(--stack-height) * var(--index));
     --clip-bottom: calc(var(--stack-height) * var(--inverse-index));
     clip-path: inset(var(--clip-top) 0 var(--clip-bottom) 0);
-    animation: cubic-bezier(.46,.29,0,1.24) 1 backwards calc(var(--index) * 120ms), glitch 2s ease infinite 2s alternate-reverse;
+    animation: cubic-bezier(.46,.29,0,1.24) 1 backwards calc(var(--index) * 120ms), glitch 2s ease infinite 2s alternate-reverse, glitch 2s ease 750ms;
     background: linear-gradient(to right, #29abf4, #A1DAF5);
     -webkit-background-clip: text;
     color: transparent;
