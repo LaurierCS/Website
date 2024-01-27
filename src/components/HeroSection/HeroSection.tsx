@@ -13,6 +13,7 @@ import {
 } from '@mantine/core';
 import { IconLogo } from '@/assets';
 import { FaDiscord } from 'react-icons/fa';
+import './HeroSection.css';
 
 const HERO_SECTION_TITLE = '<Laurier Computing Society />';
 const HERO_SECTION_HOOK =
@@ -70,7 +71,6 @@ const useStyles = createStyles((theme: MantineTheme) => ({
         },
     },
 }));
-
 const HeroSection: React.FC = () => {
     const { classes } = useStyles();
     return (
@@ -102,16 +102,15 @@ const HeroSection: React.FC = () => {
                                 </Center>
                             </MediaQuery>
 
-                            <Title
-                                pb="3rem"
-                                align="center"
-                                fw={700}
-                                variant="gradient"
-                                order={1}
-                                className={classes.title}
-                            >
-                                {HERO_SECTION_TITLE}
-                            </Title>
+
+                            <div className="glitch-container">
+                                <div className="stack" style={{ '--stacks': 3 } as React.CSSProperties}>
+                                    <span style={{ '--index': 0 } as React.CSSProperties}>{HERO_SECTION_TITLE}</span>
+                                    <span style={{ '--index': 1 } as React.CSSProperties}>{HERO_SECTION_TITLE}</span>
+                                    <span style={{ '--index': 2 } as React.CSSProperties}>{HERO_SECTION_TITLE}</span>
+                                </div>
+                            </div>
+
            
                             <MediaQuery
                                 query="(max-width: 768px)"
