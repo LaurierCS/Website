@@ -61,7 +61,6 @@ const useStyles = createStyles((theme: MantineTheme) => ({
 
     panel: {
         color: '#E7EBF5',
-        padding: '1rem',
         position: 'relative',
         zIndex: 2,
         overflow: 'hidden',
@@ -125,6 +124,7 @@ const FAQ: React.FC = () => {
                                 Who are we?
                             </Accordion.Control>
                             <Accordion.Panel className={classes.panel}>
+                                <div style={{ padding: '1rem' }}>
                                 Laurier Computing Society is the official
                                 student operated society of Wilfrid Laurier
                                 University's Computer Science department. <br />
@@ -137,6 +137,7 @@ const FAQ: React.FC = () => {
                                 events to involve students in tech to challenge
                                 and improve their skills, and foster a sense of
                                 community.
+                                </div>
                             </Accordion.Panel>
                         </Accordion.Item>
                         <Accordion.Item
@@ -150,6 +151,7 @@ const FAQ: React.FC = () => {
                                 What type of events do you run?
                             </Accordion.Control>
                             <Accordion.Panel className={classes.panel}>
+                                <div style={{ padding: '1rem' }}>
                                 We run a wide range of events. We have our
                                 signature 'Meet the Professionals' events that
                                 let students and professionals connect and get
@@ -164,6 +166,7 @@ const FAQ: React.FC = () => {
                                 We also run fun events, such as regular socials,
                                 gaming events, and competitions! Stay tuned on
                                 our socials to learn more!
+                                </div>
                             </Accordion.Panel>
                         </Accordion.Item>
 
@@ -171,10 +174,11 @@ const FAQ: React.FC = () => {
                             <Accordion.Control className={classes.control}>
                                 <span className={classes.emojiContainer}>
                                     🤓
-                                </span>{' '}
+                                </span>
                                 How do I become an official member?
                             </Accordion.Control>
                             <Accordion.Panel className={classes.panel}>
+                                <div style={{ padding: '1rem' }}>
                                 You don't have to do anything special! Just
                                 attend 2 of our events a term to be considered a
                                 part of the club! <br />
@@ -182,6 +186,7 @@ const FAQ: React.FC = () => {
                                 If you want to be a part of the executive team,
                                 feel free to contact any of the executive
                                 members for more information!
+                                </div>
                             </Accordion.Panel>
                         </Accordion.Item>
 
@@ -196,6 +201,7 @@ const FAQ: React.FC = () => {
                                 Where do you upload content online?
                             </Accordion.Control>
                             <Accordion.Panel className={classes.panel}>
+                                <div style={{ padding: '1rem' }}>
                                 We post our content typically on Twitch as
                                 livestreams and post the edited version onto our
                                 YouTube page for viewing. <br />
@@ -207,6 +213,7 @@ const FAQ: React.FC = () => {
                                 We also give updates on events to upcoming
                                 events on our Instagram, Discord and other
                                 socials.
+                                </div>
                             </Accordion.Panel>
                         </Accordion.Item>
 
@@ -218,9 +225,11 @@ const FAQ: React.FC = () => {
                                 {'Can we get free stuff?!'}
                             </Accordion.Control>
                             <Accordion.Panel className={classes.panel}>
+                                <div style={{ padding: '1rem' }}>
                                 Make sure to attend our virtual and in-person
                                 events to get a chance to enter giveways or
                                 competitions to earn rewards!
+                                </div>
                             </Accordion.Panel>
                         </Accordion.Item>
 
@@ -228,10 +237,11 @@ const FAQ: React.FC = () => {
                             <Accordion.Control className={classes.control}>
                                 <span className={classes.emojiContainer}>
                                     🗿
-                                </span>{' '}
+                                </span>
                                 What else does LCS do?
                             </Accordion.Control>
                             <Accordion.Panel className={classes.panel}>
+                                <div style={{ padding: '1rem' }}>
                                 We host a yearly hackathon called HawkHacks that
                                 includes $20k+ in prizes for the winners and has
                                 contestants from all over the world. <br />
@@ -239,6 +249,7 @@ const FAQ: React.FC = () => {
                                 We also host LCS PODS which aims to help student
                                 start off their career with a solid project in
                                 their portfolio. <br />
+                                </div>
                             </Accordion.Panel>
                         </Accordion.Item>
                     </Accordion>
