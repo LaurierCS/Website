@@ -18,46 +18,6 @@ const notionClient = new NotionClient({
   auth: notionSecret,
 });
 
-export const setEventIDs = functions.https.onRequest(async (request, response) => {
-  try {
-    const entries = await notionClient.databases.query({
-      database_id: databaseId,
-    });
-
-    const updates = [];
-    for (const page of entries.results) {
-      if ('properties' in page) { 
-        const property = page.properties['Event Identifier']; 
-        if (property.type === "rich_text") { 
-          if (!property.rich_text || property.rich_text.length === 0) {
-
-            const newEventIdentifier = uuidv4();
-            updates.push(notionClient.pages.update({
-              page_id: page.id,
-              properties: {
-                'Event Identifier': {
-                  rich_text: [{
-                    type: 'text',
-                    text: { content: newEventIdentifier },
-                  }],
-                },
-              },
-            }));
-          }
-        }
-      }
-    }
-
-    await Promise.all(updates);
-
-    response.json({ message: 'Database updated successfully', updatedCount: updates.length });
-  } catch (error) {
-    console.error("Error updating Notion calendar:", error);
-    response.status(500).send("Internal Server Error");
-  }
-});
-
-
 
 export const syncNotionEventsToFirestore = functions.https.onRequest(async (_, response) => {
     try {
@@ -109,7 +69,9 @@ export const syncNotionEventsToFirestore = functions.https.onRequest(async (_, r
     			visible: page.properties["Visible"]?.multi_select.map((select: any) => select.name).join(", ") ?? true,
 			};
 
-		    await db.collection("events").doc(eventIdentifier).set(docData, { merge: true });
+		    const docId = page.id.replace(/-/g, "");
+
+		    await db.collection("events").doc(docId).set(docData, { merge: true });
 		});
 
         response.send("Notion events synced successfully with Firestore.");
