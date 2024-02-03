@@ -1,7 +1,6 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import { Client as NotionClient } from "@notionhq/client";
-import { v4 as uuidv4 } from 'uuid';
 
 admin.initializeApp();
 const db = admin.firestore();
@@ -19,7 +18,8 @@ const notionClient = new NotionClient({
 });
 
 
-export const syncNotionEventsToFirestore = functions.https.onRequest(async (_, response) => {
+//export const syncNotionEventsToFirestore = functions.https.onRequest(async (_, response) => {
+export const scheduledSyncNotionEventsToFirestore = functions.pubsub.schedule('0 * * * *').onRun(async (context) => {
     try {
         if (!databaseId) {
             throw new Error("Environment variable NOTION_DATABASE_ID is not set.");
@@ -54,7 +54,6 @@ export const syncNotionEventsToFirestore = functions.https.onRequest(async (_, r
 			}
 
 		    const title = page.properties["Name"]?.title[0]?.plain_text ?? "Untitled Event";
-		    const eventIdentifier = page.properties["Event Identifier"]?.rich_text[0]?.plain_text ?? ""
 
 			const docData = {
 			    title,
@@ -73,10 +72,10 @@ export const syncNotionEventsToFirestore = functions.https.onRequest(async (_, r
 
 		    await db.collection("events").doc(docId).set(docData, { merge: true });
 		});
-
-        response.send("Notion events synced successfully with Firestore.");
+		console.log("Notion events synced successfully with Firestore.");
+        //response.send("Notion events synced successfully with Firestore.");
     } catch (error) {
         console.error("Error syncing Notion events to Firestore:", error);
-        response.status(500).send("Internal Server Error");
+        //response.status(500).send("Internal Server Error");
     }
 });
