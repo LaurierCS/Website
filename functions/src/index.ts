@@ -68,7 +68,8 @@ export const scheduledSyncNotionEventsToFirestore = functions.pubsub.schedule('0
 				visible: page.properties["Visible"]?.multi_select.map((select: any) => select.name).join(", ") ?? true,
 			};
 
-			const docId = page.id.replace(/-/g, "");
+			const sanitizedTitle = title.replace(/\W+/g, "").toLowerCase(); // Remove non-alphanumeric characters and convert to lower case
+			const docId = `${sanitizedTitle}_${page.id.replace(/-/g, "").substring(0, 4)}`;
 
 			await db.collection("events").doc(docId).set(docData, { merge: true });
 		});
