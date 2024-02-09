@@ -39,6 +39,15 @@ export const scheduledSyncNotionEventsToFirestore = functions.pubsub.schedule('0
 				return;
 			}
 
+			const isInPersonOrOnline = page.properties["In Person/Online"]?.select?.name ?? null;
+			const hasConfirmedRoom = page.properties["Confirmed Room"]?.multi_select.length > 0;
+			//const hasTypeformSignIn = page.properties["Typeform Sign In"]?.url ?? null;
+			//const hasTypeformFeedback = page.properties["Typeform Feedback"]?.url ?? null;
+
+			if (!isInPersonOrOnline || !hasConfirmedRoom) {
+				return;
+			}
+
 			let description = "";
 
 			for (const block of blockResponse.results) {
@@ -69,7 +78,7 @@ export const scheduledSyncNotionEventsToFirestore = functions.pubsub.schedule('0
 			};
 
 			const sanitizedTitle = title.replace(/\W+/g, "").toLowerCase(); // Remove non-alphanumeric characters and convert to lower case
-			const docId = `${sanitizedTitle}_${page.id.replace(/-/g, "").substring(0, 4)}`;
+			const docId = `${sanitizedTitle}_${page.id.replace(/-/g, "").substring(0, 6)}`;
 
 			await db.collection("events").doc(docId).set(docData, { merge: true });
 		});
