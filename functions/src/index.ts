@@ -63,6 +63,10 @@ export const scheduledSyncNotionEventsToFirestore = functions.pubsub.schedule('0
 			}
 
 			const title = page.properties["Name"]?.title[0]?.plain_text ?? "Untitled Event";
+			
+			if (!title) {
+			    return;
+			}
 
 			const docData = {
 				title,
