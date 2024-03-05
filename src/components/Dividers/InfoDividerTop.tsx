@@ -1,14 +1,14 @@
-import React from 'react';
+import React from "react";
 
 const InfoDividerTop = () => {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
             style={{
-                WebkitTransition: '0.3s',
-                transition: '0.3s',
+                WebkitTransition: "0.3s",
+                transition: "0.3s",
                 lineHeight: 0,
-                marginBottom: '-1px',
+                marginBottom: "-1px",
             }}
             version="1.1"
             viewBox="0 0 1440 280"

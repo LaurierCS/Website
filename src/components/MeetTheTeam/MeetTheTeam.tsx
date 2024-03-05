@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { collection, query, getDocs } from 'firebase/firestore';
-import { flushSync } from 'react-dom';
+import { useEffect, useState } from "react";
+import { collection, query, getDocs } from "firebase/firestore";
+import { flushSync } from "react-dom";
 import {
     Flex,
     Box,
@@ -11,28 +11,28 @@ import {
     SimpleGrid,
     createStyles,
     MantineTheme, 
-} from '@mantine/core';
-import { FratBoiDug } from '../../assets';
-import { store } from '../../services/firebase';
+} from "@mantine/core";
+import { FratBoiDug } from "../../assets";
+import { store } from "../../services/firebase";
 
-const MEET_THE_TEAM_TITLE = '<Meet The Team />';
-const MEET_THE_THEAM_PHRASE = 'Meet the masterminds behind the club!';
+const MEET_THE_TEAM_TITLE = "<Meet The Team />";
+const MEET_THE_THEAM_PHRASE = "Meet the masterminds behind the club!";
 
 const memberStyles = createStyles((theme: MantineTheme) => ({
     textName: {
-        color: 'white',
-        fontWeight: 'bold',
+        color: "white",
+        fontWeight: "bold",
         fontSize: 24,
         [theme.fn.smallerThan(780)]: {
-            fontSize: '1rem',
+            fontSize: "1rem",
         },
     },
 
     textRole: {
-        color: 'white',
+        color: "white",
         fontSize: 24,
         [theme.fn.smallerThan(780)]: {
-            fontSize: '1rem',
+            fontSize: "1rem",
         },
     },
 
@@ -41,7 +41,7 @@ const memberStyles = createStyles((theme: MantineTheme) => ({
         height: 120,
         borderRadius: 9999,
 
-        [theme.fn.smallerThan('sm')]: {
+        [theme.fn.smallerThan("sm")]: {
             width: 80,
             height: 80,
         },
@@ -51,43 +51,43 @@ const memberStyles = createStyles((theme: MantineTheme) => ({
 const sectionStyles = createStyles((theme: MantineTheme) => ({
     title: {
         [theme.fn.smallerThan(780)]: {
-            fontSize: '2rem',
+            fontSize: "2rem",
         },  
     },
 
     description: {
         [theme.fn.smallerThan(780)]: {
-            paddingTop: '1rem',
-            fontSize: '1rem',
-            marginBottom: '-6rem',
-            marginTop: '1rem',
+            paddingTop: "1rem",
+            fontSize: "1rem",
+            marginBottom: "-6rem",
+            marginTop: "1rem",
         },
     },
 
     dugContainer: {
-        position: 'relative',
+        position: "relative",
         maxWidth: 640,
 
-        [theme.fn.smallerThan('sm')]: {
-            display: 'none',
+        [theme.fn.smallerThan("sm")]: {
+            display: "none",
         },
     },
 
     dug: {
-        width: '100%',
+        width: "100%",
     },
 
     dugName: {
-        position: 'absolute',
+        position: "absolute",
         right: 0,
-        bottom: '5%',
+        bottom: "5%",
     },
 }));
 
 const deptStyles = createStyles((theme) => ({
     deptTitle: {
         [theme.fn.smallerThan(780)]: {
-            fontSize: '1.5rem',
+            fontSize: "1.5rem",
         },
     },
 }));
@@ -132,7 +132,7 @@ const Department: React.FC<DepartmentProps> = ({ name, members }) => {
         <Box my={64}>
             <Title
                 order={2}
-                sx={{ fontSize: 40, color: 'white', marginBottom: 32 }}
+                sx={{ fontSize: 40, color: "white", marginBottom: 32 }}
                 className = {classes.deptTitle}
             >
                 {name}
@@ -141,12 +141,12 @@ const Department: React.FC<DepartmentProps> = ({ name, members }) => {
                 verticalSpacing="xl"
                 breakpoints={[
                     {
-                        minWidth: 'lg',
+                        minWidth: "lg",
                         cols: 3,
                         spacing: 120,
                     },
-                    { minWidth: 'md', cols: 2, spacing: 80 },
-                    { minWidth: 'sm', cols: 1 },
+                    { minWidth: "md", cols: 2, spacing: 80 },
+                    { minWidth: "sm", cols: 1 },
                 ]}
             >
                 {members.map((member, i) => (
@@ -183,7 +183,7 @@ const MeetTheTeam: React.FC = () => {
 
     useEffect(() => {
         (async () => {
-            const q = query(collection(store, 'team'));
+            const q = query(collection(store, "team"));
             const snapshot = await getDocs(q);
 
             const team: TeamMember[] = [];
@@ -192,28 +192,28 @@ const MeetTheTeam: React.FC = () => {
             });
 
             const presidentMembers = team.filter((member) =>
-                member.departments.includes('president')
+                member.departments.includes("president")
             );
             const adminMembers = team.filter((member) =>
-                member.departments.includes('admin')
+                member.departments.includes("admin")
             );
             const developmentMembers = team.filter((member) =>
-                member.departments.includes('development')
+                member.departments.includes("development")
             );
             const eventsMembers = team.filter((member) =>
-                member.departments.includes('events')
+                member.departments.includes("events")
             );
             const commMembers = team.filter((member) =>
-                member.departments.includes('comms')
+                member.departments.includes("comms")
             );
             const communityMembers = team.filter((member) =>
-                member.departments.includes('community')
+                member.departments.includes("community")
             );
             const outreachMembers = team.filter((member) =>
-                member.departments.includes('outreach')
+                member.departments.includes("outreach")
             );
 
-            const prefix = 'VP of';
+            const prefix = "VP of";
             const sort = (a: TeamMember, b: TeamMember) => {
                 if (a.role.startsWith(prefix) && !b.role.startsWith(prefix)) {
                     return -1;

@@ -1,6 +1,6 @@
-import './InfoBanner.css';
-import { Center } from '@mantine/core';
-import CountUp from 'react-countup';
+import "./InfoBanner.css";
+import { Center } from "@mantine/core";
+import CountUp from "react-countup";
 
 const STUDENT_COUNT = 3500;
 const EVENT_COUNT = 20;

@@ -1,44 +1,44 @@
-import React from 'react';
-import { Center, SimpleGrid, ActionIcon, createStyles } from '@mantine/core';
-import { AiFillInstagram, AiFillLinkedin } from 'react-icons/ai';
-import { FaYoutube, FaDiscord, FaTwitch } from 'react-icons/fa';
+import React from "react";
+import { Center, SimpleGrid, ActionIcon, createStyles } from "@mantine/core";
+import { AiFillInstagram, AiFillLinkedin } from "react-icons/ai";
+import { FaYoutube, FaDiscord, FaTwitch } from "react-icons/fa";
 
 
 const useStyles = createStyles(() => {
     return {
         discord: {
-            transition: 'all 200ms ease-in-out',
-            '&:hover': {
-                transform: 'scale(1.2)',
-                color: '#7289da'
+            transition: "all 200ms ease-in-out",
+            "&:hover": {
+                transform: "scale(1.2)",
+                color: "#7289da"
             }
         },
         instagram: {
-            transition: 'all 200ms ease-in-out',
-            '&:hover': {
-                transform: 'scale(1.2)',
-                color: '#d62976'
+            transition: "all 200ms ease-in-out",
+            "&:hover": {
+                transform: "scale(1.2)",
+                color: "#d62976"
             }
         },
         linkedin: {
-            transition: 'all 200ms ease-in-out',
-            '&:hover': {
-                transform: 'scale(1.2)',
-                color: '#0a66c2'
+            transition: "all 200ms ease-in-out",
+            "&:hover": {
+                transform: "scale(1.2)",
+                color: "#0a66c2"
             }
         },
         youtube: {
-            transition: 'all 200ms ease-in-out',
-            '&:hover': {
-                transform: 'scale(1.2)',
-                color: '#c4302b'
+            transition: "all 200ms ease-in-out",
+            "&:hover": {
+                transform: "scale(1.2)",
+                color: "#c4302b"
             }
         },
         twitch: {
-            transition: 'all 200ms ease-in-out',
-            '&:hover': {
-                transform: 'scale(1.2)',
-                color: '#6441a5'
+            transition: "all 200ms ease-in-out",
+            "&:hover": {
+                transform: "scale(1.2)",
+                color: "#6441a5"
             }
         }
     };
