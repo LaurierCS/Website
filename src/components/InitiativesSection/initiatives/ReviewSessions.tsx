@@ -1,9 +1,9 @@
-import { Title, Text, Box, Flex, Button } from '@mantine/core';
-import { FaYoutube, FaTwitch } from 'react-icons/fa';
-import { IconLogo } from '@/assets';
-import { Link } from 'react-scroll';
-import { useCommonStyles } from './styles';
-import { navbarHeight } from '../../Navbar/Navbar';
+import { Title, Text, Box, Flex, Button } from "@mantine/core";
+import { FaYoutube, FaTwitch } from "react-icons/fa";
+import { IconLogo } from "@/assets";
+import { Link } from "react-scroll";
+import { useCommonStyles } from "./styles";
+import { navbarHeight } from "../../Navbar/Navbar";
 
 const ReviewSessions = () => {
     const { classes } = useCommonStyles();
@@ -19,8 +19,8 @@ const ReviewSessions = () => {
                         gap={12}
                         className={commonClasses.partnerLogoContainer}
                         sx={(theme) => ({
-                            [theme.fn.smallerThan('xs')]: {
-                                gridColumn: 'span 1',
+                            [theme.fn.smallerThan("xs")]: {
+                                gridColumn: "span 1",
                             },
                         })}
                     >
@@ -37,18 +37,18 @@ const ReviewSessions = () => {
                         justify="center"
                         align="center"
                         sx={(theme) => ({
-                            height: '100%',
-                            [theme.fn.smallerThan('xs')]: {
-                                gridColumn: 'span 1',
+                            height: "100%",
+                            [theme.fn.smallerThan("xs")]: {
+                                gridColumn: "span 1",
                             },
                         })}
                     >
                         <Box
                             sx={(theme) => ({
-                                display: 'none',
+                                display: "none",
 
-                                [theme.fn.smallerThan('md')]: {
-                                    display: 'block',
+                                [theme.fn.smallerThan("md")]: {
+                                    display: "block",
                                 },
                             })}
                         >
@@ -63,7 +63,7 @@ const ReviewSessions = () => {
                             Review Sessions are events hosted in-person and/or
                             online by LCS which offer fun and interactive way to
                             review course content through games of Kahoot and
-                            slide shows. Keep an eye on our{' '}
+                            slide shows. Keep an eye on our{" "}
                             <Link
                                 to="Events"
                                 offset={-navbarHeight}
@@ -72,7 +72,7 @@ const ReviewSessions = () => {
                                 className={classes.link}
                             >
                                 upcoming events
-                            </Link>{' '}
+                            </Link>{" "}
                             to not miss out on any Review Session!
                         </Text>
 

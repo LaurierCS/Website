@@ -1,5 +1,5 @@
-import React from 'react';
-import './Landing.css';
+import React from "react";
+import "./Landing.css";
 import {
     Navbar,
     InfoBanner,
@@ -12,7 +12,7 @@ import {
     HeroSection,
     InitiativesSection,
     MeetTheTeam,
-} from '@/components';
+} from "@/components";
 
 const Landing = () => {
     return (
