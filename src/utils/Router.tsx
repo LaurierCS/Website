@@ -1,4 +1,5 @@
 import { MantineProvider } from "@mantine/core";
+import { NotificationsProvider } from "@mantine/notifications";
 import {
     BrowserRouter,
     Navigate,
@@ -28,17 +29,19 @@ const Router = () => {
             withGlobalStyles
             withNormalizeCSS
         >
-            <AuthProvider>
-                <BrowserRouter>
-                    <Routes>
-                        <Route path="/" element={<Landing />} />
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/admin" element={<AdminOnly />}>
-                            <Route path="" element={<AdminPage />} />
-                        </Route>
-                    </Routes>
-                </BrowserRouter>
-            </AuthProvider>
+            <NotificationsProvider>
+                <AuthProvider>
+                    <BrowserRouter>
+                        <Routes>
+                            <Route path="/" element={<Landing />} />
+                            <Route path="/login" element={<Login />} />
+                            <Route path="/admin" element={<AdminOnly />}>
+                                <Route path="" element={<AdminPage />} />
+                            </Route>
+                        </Routes>
+                    </BrowserRouter>
+                </AuthProvider>
+            </NotificationsProvider>
         </MantineProvider>
     );
 };
