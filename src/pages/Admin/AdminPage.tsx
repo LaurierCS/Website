@@ -9,6 +9,7 @@ import {
     TextInput,
     MultiSelect,
     Button,
+    Checkbox,
 } from "@mantine/core";
 import {
     type DocumentData,
@@ -21,9 +22,11 @@ import {
 } from "firebase/firestore";
 import { type FormEventHandler, useEffect, useState } from "react";
 import type { TeamMember } from "@/components/MeetTheTeam/MeetTheTeam";
+import { randomId } from "@mantine/hooks";
 import { showNotification, updateNotification } from "@mantine/notifications";
 
 interface TeamMemberWithDocRef extends TeamMember {
+    isPublic: boolean;
     docRef: DocumentReference<DocumentData, DocumentData>;
 }
 
@@ -40,13 +43,8 @@ const departments = [
 const AdminPage: React.FC = () => {
     const [team, setTeam] = useState<TeamMemberWithDocRef[]>([]);
     const [openModal, setOpenModal] = useState(false);
-    const [editName, setEditName] = useState("");
-    const [editRole, setEditRole] = useState("");
-    const [editDepartments, setEditDepartments] = useState<string[]>([]);
-    const [activeDoc, setActiveDoc] = useState<DocumentReference<
-        DocumentData,
-        DocumentData
-    > | null>(null);
+    const [activeMember, setActiveMember] =
+        useState<TeamMemberWithDocRef | null>(null);
     const [isSaving, setIsSaving] = useState(false);
 
     useEffect(() => {
@@ -61,11 +59,14 @@ const AdminPage: React.FC = () => {
             snapshot.forEach((doc) => {
                 const data = doc.data();
 
+                console.log(doc.id, doc.ref.id);
+
                 t.push({
                     name: data.name,
                     role: data.role,
                     departments: data.departments,
                     picture: data.picture,
+                    isPublic: data.is_public,
                     docRef: doc.ref,
                 });
             });
@@ -75,28 +76,21 @@ const AdminPage: React.FC = () => {
     }, []);
 
     const editMember = (member: TeamMemberWithDocRef) => {
-        setEditName(member.name);
-        setEditRole(member.role);
-        setEditDepartments(member.departments);
-        setActiveDoc(member.docRef);
+        setActiveMember(member);
         setOpenModal(true);
     };
 
     const closeModal = () => {
         setOpenModal(false);
-        setEditName("");
-        setEditRole("");
-        setEditDepartments([]);
-        setActiveDoc(null);
+        setActiveMember(null);
     };
 
     const handleSave: FormEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
-        // TODO: add some notifications to let user know
-        if (!editName || !editRole || !editDepartments.length || !activeDoc)
-            return;
 
-        const notificationId = "savingNotification" + editName;
+        if (!activeMember) return;
+
+        const notificationId = randomId();
         try {
             setIsSaving(true);
             showNotification({
@@ -107,21 +101,23 @@ const AdminPage: React.FC = () => {
                 message: "Saving changes in firestore...",
                 loading: true,
             });
-            await updateDoc(activeDoc, {
-                name: editName,
-                role: editRole,
-                departments: editDepartments,
+            await updateDoc(activeMember.docRef, {
+                name: activeMember.name,
+                role: activeMember.role,
+                is_public: activeMember.isPublic,
+                departments: activeMember.departments,
             });
             // update the table with the new changes
             setTeam((old) =>
                 old.map((item) => {
-                    if (item.docRef.id === activeDoc.id) {
+                    if (item.docRef.id === activeMember.docRef.id) {
                         return {
-                            name: editName,
-                            role: editRole,
-                            departments: editDepartments,
-                            picture: item.picture,
+                            name: activeMember.name,
+                            role: activeMember.role,
+                            departments: activeMember.departments,
                             docRef: item.docRef,
+                            isPublic: item.isPublic,
+                            picture: item.picture,
                         };
                     }
 
@@ -147,6 +143,18 @@ const AdminPage: React.FC = () => {
                 message: "Changes successfully saved in firestore!",
                 loading: false,
             });
+        }
+    };
+
+    const handleInputChange = (
+        field: keyof TeamMemberWithDocRef,
+        value: any
+    ) => {
+        if (activeMember) {
+            const member = { ...activeMember };
+            // typescript being annoying here...
+            member[field] = value as never;
+            setActiveMember(member);
         }
     };
 
@@ -180,27 +188,44 @@ const AdminPage: React.FC = () => {
                 <form onSubmit={handleSave}>
                     <TextInput
                         label="Name"
-                        value={editName}
-                        onChange={(e) => setEditName(e.target.value)}
+                        value={activeMember ? activeMember.name : ""}
+                        onChange={(e) =>
+                            handleInputChange("name", e.target.value)
+                        }
                         disabled={isSaving}
                         required
                     />
                     <Space h="lg" />
                     <TextInput
                         label="Role"
-                        value={editRole}
-                        onChange={(e) => setEditRole(e.target.value)}
+                        value={activeMember ? activeMember.role : ""}
+                        onChange={(e) =>
+                            handleInputChange("role", e.target.value)
+                        }
                         disabled={isSaving}
                         required
                     />
                     <Space h="lg" />
                     <MultiSelect
                         label="Departments"
-                        value={editDepartments}
-                        onChange={setEditDepartments}
+                        value={activeMember ? activeMember.departments : []}
+                        onChange={(data) =>
+                            handleInputChange("departments", data)
+                        }
                         data={departments}
                         disabled={isSaving}
                         required
+                    />
+                    <Space h="lg" />
+                    <Checkbox
+                        label="Is ready to show in the landing page?"
+                        onChange={(e) =>
+                            handleInputChange(
+                                "isPublic",
+                                e.currentTarget.checked
+                            )
+                        }
+                        checked={activeMember ? activeMember.isPublic : false}
                     />
                     <Space h="lg" />
                     <Button type="submit" disabled={isSaving}>
