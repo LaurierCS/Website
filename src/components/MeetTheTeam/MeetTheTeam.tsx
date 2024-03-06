@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { collection, query, getDocs } from "firebase/firestore";
+import { collection, query, getDocs, where } from "firebase/firestore";
 import { flushSync } from "react-dom";
 import {
     Flex,
@@ -178,7 +178,10 @@ const MeetTheTeam: React.FC = () => {
 
     useEffect(() => {
         (async () => {
-            const q = query(collection(store, "team"));
+            const q = query(
+                collection(store, "team"),
+                where("is_public", "==", true)
+            );
             const snapshot = await getDocs(q);
 
             const team: TeamMember[] = [];
