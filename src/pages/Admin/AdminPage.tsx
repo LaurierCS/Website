@@ -10,6 +10,7 @@ import {
     MultiSelect,
     Button,
     Checkbox,
+    Badge,
 } from "@mantine/core";
 import {
     type DocumentData,
@@ -166,11 +167,16 @@ const AdminPage: React.FC = () => {
             <td>{member.name}</td>
             <td>{member.role}</td>
             <td>{member.departments.join(", ")}</td>
+            <td>
+                <Badge color={member.isPublic ? "green" : "red"}>
+                    {member.isPublic ? "YES" : "NO"}
+                </Badge>
+            </td>
         </tr>
     ));
 
     return (
-        <Container>
+        <Container size="lg">
             <Title>Admin Page</Title>
             <Space h="lg" />
             <Table highlightOnHover withColumnBorders horizontalSpacing="xl">
@@ -180,6 +186,7 @@ const AdminPage: React.FC = () => {
                         <th>Name</th>
                         <th>Role</th>
                         <th>Departments</th>
+                        <th>Visible in prod</th>
                     </tr>
                 </thead>
                 <tbody>{rows}</tbody>
