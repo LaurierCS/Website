@@ -12,6 +12,7 @@ import {
     Checkbox,
     Badge,
     FileInput,
+    Flex,
 } from "@mantine/core";
 import { randomId } from "@mantine/hooks";
 import { showNotification, updateNotification } from "@mantine/notifications";
@@ -23,6 +24,7 @@ import {
     orderBy,
     query,
     updateDoc,
+    addDoc,
 } from "firebase/firestore";
 import {
     deleteObject,
@@ -35,7 +37,8 @@ import type { TeamMember } from "@/components/MeetTheTeam/MeetTheTeam";
 
 interface TeamMemberWithDocRef extends TeamMember {
     isPublic: boolean;
-    docRef: DocumentReference<DocumentData, DocumentData>;
+    docRef?: DocumentReference<DocumentData, DocumentData>;
+    isNewMember: boolean;
 }
 
 const departments = [
@@ -75,6 +78,7 @@ const AdminPage: React.FC = () => {
                     picture: data.picture,
                     isPublic: data.is_public,
                     docRef: doc.ref,
+                    isNewMember: false,
                 });
             });
             setTeam(t);
@@ -91,6 +95,18 @@ const AdminPage: React.FC = () => {
         setOpenModal(false);
         setActiveMember(null);
         setNewPic(null);
+    };
+
+    const addMember = () => {
+        setActiveMember({
+            name: "",
+            role: "",
+            picture: "",
+            departments: [],
+            isPublic: false,
+            isNewMember: true,
+        });
+        setOpenModal(true);
     };
 
     const handleSave: FormEventHandler<HTMLFormElement> = async (e) => {
@@ -110,22 +126,33 @@ const AdminPage: React.FC = () => {
                 loading: true,
             });
 
+            if (!activeMember.docRef) {
+                // create a new doc
+                const docRef = await addDoc(collection(store, "team"), {
+                    is_public: false,
+                });
+                activeMember.docRef = docRef;
+            }
+
             if (newPic !== null) {
-                const oldPicRef = ref(storage, activeMember.picture);
-                // delete old picture
-                try {
-                    await deleteObject(oldPicRef);
-                } catch (err) {
-                    console.error(err);
-                    showNotification({
-                        autoClose: false,
-                        color: "red",
-                        title: "Error",
-                        message:
-                            "Not able to delete old picture from storage. Please provide the dev team with the following reference for manual clean up. Ref: " +
-                            oldPicRef.toString(),
-                    });
+                if (!activeMember.isNewMember) {
+                    const oldPicRef = ref(storage, activeMember.picture);
+                    // delete old picture
+                    try {
+                        await deleteObject(oldPicRef);
+                    } catch (err) {
+                        console.error(err);
+                        showNotification({
+                            autoClose: false,
+                            color: "red",
+                            title: "Error",
+                            message:
+                                "Not able to delete old picture from storage. Please provide the dev team with the following reference for manual clean up. Ref: " +
+                                oldPicRef.toString(),
+                        });
+                    }
                 }
+
                 // upload new picture
                 const storageRef = ref(
                     storage,
@@ -142,23 +169,34 @@ const AdminPage: React.FC = () => {
                 departments: activeMember.departments,
                 picture: activeMember.picture,
             });
-            // update the table with the new changes
-            setTeam((old) =>
-                old.map((item) => {
-                    if (item.docRef.id === activeMember.docRef.id) {
-                        return {
-                            name: activeMember.name,
-                            role: activeMember.role,
-                            departments: activeMember.departments,
-                            isPublic: activeMember.isPublic,
-                            picture: activeMember.picture,
-                            docRef: item.docRef,
-                        };
-                    }
 
-                    return item;
-                })
-            );
+            if (activeMember.isNewMember) {
+                setTeam((old) => [...old, activeMember]);
+            } else {
+                // update the table with the new changes
+                setTeam((old) =>
+                    old.map((item) => {
+                        if (
+                            item.docRef &&
+                            activeMember.docRef &&
+                            item.docRef.id === activeMember.docRef.id
+                        ) {
+                            return {
+                                name: activeMember.name,
+                                role: activeMember.role,
+                                departments: activeMember.departments,
+                                isPublic: activeMember.isPublic,
+                                picture: activeMember.picture,
+                                isNewMember: item.isNewMember,
+                                docRef: item.docRef,
+                            };
+                        }
+
+                        return item;
+                    })
+                );
+            }
+
             closeModal();
             updateNotification({
                 id: notificationId,
@@ -213,6 +251,9 @@ const AdminPage: React.FC = () => {
     return (
         <Container size="lg">
             <Title>Admin Page</Title>
+            <Flex justify="flex-start" align="center" py="lg">
+                <Button onClick={addMember}>Add Member</Button>
+            </Flex>
             <Space h="lg" />
             <Table highlightOnHover withColumnBorders horizontalSpacing="xl">
                 <thead>
