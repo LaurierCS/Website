@@ -1,8 +1,18 @@
 import { MantineProvider } from "@mantine/core";
-import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Landing } from "@pages";
+import { BrowserRouter, Navigate, Outlet, Route, Routes } from "react-router-dom";
+import { Landing, Login } from "@/pages";
 import { mantineTheme } from "./Mantine";
+import AuthProvider, { useAuth } from "@/pages/Admin/AuthProvider";
+
+const AdminOnly: React.FC<{ children?: React.ReactNode }> = () => {
+    const { user } = useAuth();
+
+    if (!user) {
+        return <Navigate to="/" />;
+    }
+
+    return <Outlet />;
+};
 
 const Router = () => {
     return (
@@ -12,11 +22,17 @@ const Router = () => {
             withGlobalStyles
             withNormalizeCSS
         >
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" element={<Landing />} />
-                </Routes>
-            </BrowserRouter>
+            <AuthProvider>
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/" element={<Landing />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/admin" element={<AdminOnly />}>
+                            <Route path="" element={<div>admin</div>} />
+                        </Route>
+                    </Routes>
+                </BrowserRouter>
+            </AuthProvider>
         </MantineProvider>
     );
 };
