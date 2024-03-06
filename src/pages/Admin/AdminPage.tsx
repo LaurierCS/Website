@@ -1,5 +1,5 @@
 import { store } from "@/services/firebase";
-import { Avatar, Table } from "@mantine/core";
+import { Container, Avatar, Table } from "@mantine/core";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import type { TeamMember } from "@/components/MeetTheTeam/MeetTheTeam";
@@ -34,17 +34,19 @@ const AdminPage: React.FC = () => {
     ));
 
     return (
-        <Table>
-            <thead>
-                <tr>
-                    <th>Picture</th>
-                    <th>Name</th>
-                    <th>Role</th>
-                    <th>Departments</th>
-                </tr>
-            </thead>
-            <tbody>{rows}</tbody>
-        </Table>
+        <Container>
+            <Table highlightOnHover withColumnBorders horizontalSpacing="xl">
+                <thead>
+                    <tr>
+                        <th>Picture</th>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th>Departments</th>
+                    </tr>
+                </thead>
+                <tbody>{rows}</tbody>
+            </Table>
+        </Container>
     );
 };
 
