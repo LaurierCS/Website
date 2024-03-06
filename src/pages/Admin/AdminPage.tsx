@@ -1,4 +1,4 @@
-import { store } from "@/services/firebase";
+import { type FormEventHandler, useEffect, useState } from "react";
 import {
     Container,
     Avatar,
@@ -11,7 +11,10 @@ import {
     Button,
     Checkbox,
     Badge,
+    FileInput,
 } from "@mantine/core";
+import { randomId } from "@mantine/hooks";
+import { showNotification, updateNotification } from "@mantine/notifications";
 import {
     type DocumentData,
     DocumentReference,
@@ -21,10 +24,14 @@ import {
     query,
     updateDoc,
 } from "firebase/firestore";
-import { type FormEventHandler, useEffect, useState } from "react";
+import {
+    deleteObject,
+    getDownloadURL,
+    ref,
+    uploadBytes,
+} from "firebase/storage";
+import { storage, store } from "@/services/firebase";
 import type { TeamMember } from "@/components/MeetTheTeam/MeetTheTeam";
-import { randomId } from "@mantine/hooks";
-import { showNotification, updateNotification } from "@mantine/notifications";
 
 interface TeamMemberWithDocRef extends TeamMember {
     isPublic: boolean;
@@ -47,6 +54,7 @@ const AdminPage: React.FC = () => {
     const [activeMember, setActiveMember] =
         useState<TeamMemberWithDocRef | null>(null);
     const [isSaving, setIsSaving] = useState(false);
+    const [newPic, setNewPic] = useState<File | null>(null);
 
     useEffect(() => {
         const getData = async () => {
@@ -59,8 +67,6 @@ const AdminPage: React.FC = () => {
             const t: TeamMemberWithDocRef[] = [];
             snapshot.forEach((doc) => {
                 const data = doc.data();
-
-                console.log(doc.id, doc.ref.id);
 
                 t.push({
                     name: data.name,
@@ -84,6 +90,7 @@ const AdminPage: React.FC = () => {
     const closeModal = () => {
         setOpenModal(false);
         setActiveMember(null);
+        setNewPic(null);
     };
 
     const handleSave: FormEventHandler<HTMLFormElement> = async (e) => {
@@ -102,11 +109,38 @@ const AdminPage: React.FC = () => {
                 message: "Saving changes in firestore...",
                 loading: true,
             });
+
+            if (newPic !== null) {
+                const oldPicRef = ref(storage, activeMember.picture);
+                // delete old picture
+                try {
+                    await deleteObject(oldPicRef);
+                } catch (err) {
+                    console.error(err);
+                    showNotification({
+                        autoClose: false,
+                        color: "red",
+                        title: "Error",
+                        message:
+                            "Not able to delete old picture from storage. Please provide the dev team with the following reference for manual clean up. Ref: " +
+                            oldPicRef.toString(),
+                    });
+                }
+                // upload new picture
+                const storageRef = ref(
+                    storage,
+                    "team/" + activeMember.name + activeMember.docRef.id
+                );
+                const snap = await uploadBytes(storageRef, newPic);
+                activeMember.picture = await getDownloadURL(snap.ref);
+            }
+
             await updateDoc(activeMember.docRef, {
                 name: activeMember.name,
                 role: activeMember.role,
                 is_public: activeMember.isPublic,
                 departments: activeMember.departments,
+                picture: activeMember.picture,
             });
             // update the table with the new changes
             setTeam((old) =>
@@ -116,15 +150,23 @@ const AdminPage: React.FC = () => {
                             name: activeMember.name,
                             role: activeMember.role,
                             departments: activeMember.departments,
+                            isPublic: activeMember.isPublic,
+                            picture: activeMember.picture,
                             docRef: item.docRef,
-                            isPublic: item.isPublic,
-                            picture: item.picture,
                         };
                     }
 
                     return item;
                 })
             );
+            closeModal();
+            updateNotification({
+                id: notificationId,
+                color: "green",
+                title: "Saved!",
+                message: "Changes successfully saved in firestore!",
+                loading: false,
+            });
         } catch (err) {
             console.error(err);
             updateNotification({
@@ -137,13 +179,6 @@ const AdminPage: React.FC = () => {
             });
         } finally {
             setIsSaving(false);
-            updateNotification({
-                id: notificationId,
-                color: "green",
-                title: "Saved!",
-                message: "Changes successfully saved in firestore!",
-                loading: false,
-            });
         }
     };
 
@@ -233,6 +268,13 @@ const AdminPage: React.FC = () => {
                             )
                         }
                         checked={activeMember ? activeMember.isPublic : false}
+                    />
+                    <Space h="lg" />
+                    <FileInput
+                        value={newPic}
+                        onChange={setNewPic}
+                        accept="image/*"
+                        label="Picture"
                     />
                     <Space h="lg" />
                     <Button type="submit" disabled={isSaving}>
