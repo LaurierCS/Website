@@ -1,4 +1,10 @@
-import { User, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import {
+    User,
+    browserSessionPersistence,
+    setPersistence,
+    signInWithEmailAndPassword,
+    signOut,
+} from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "@/services/firebase";
 
@@ -11,11 +17,14 @@ interface AuthContextValue {
     logout: LogoutFn;
 }
 
-
 const AuthContext = createContext<AuthContextValue>({
     user: null,
-    login: async () => {console.log("Login function not initialized");},
-    logout: async () => {console.log("Logout function not initialized");},
+    login: async () => {
+        console.log("Login function not initialized");
+    },
+    logout: async () => {
+        console.log("Logout function not initialized");
+    },
 });
 
 export function useAuth() {
@@ -23,15 +32,14 @@ export function useAuth() {
     return ctx;
 }
 
-const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
+    children,
+}) => {
     const [user, setUser] = useState<User | null>(null);
 
     const login: LoginFn = async (email, password) => {
-        await signInWithEmailAndPassword(
-            auth,
-            email,
-            password
-        );
+        await setPersistence(auth, browserSessionPersistence);
+        await signInWithEmailAndPassword(auth, email, password);
     };
 
     const logout: LogoutFn = async () => {
@@ -46,9 +54,9 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
     };
 
     useEffect(() => {
-        const unsub = auth.onAuthStateChanged((user) => {
-            if (user) {
-                setUser(user);
+        const unsub = auth.onAuthStateChanged((newUser) => {
+            if (newUser) {
+                setUser(newUser);
             } else {
                 logout();
             }
@@ -58,11 +66,13 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
     }, []);
 
     return (
-        <AuthContext.Provider value={{
-            user,
-            login,
-            logout,
-        }}>
+        <AuthContext.Provider
+            value={{
+                user,
+                login,
+                logout,
+            }}
+        >
             {children}
         </AuthContext.Provider>
     );
