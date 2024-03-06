@@ -1,6 +1,12 @@
 import { MantineProvider } from "@mantine/core";
-import { BrowserRouter, Navigate, Outlet, Route, Routes } from "react-router-dom";
-import { Landing, Login } from "@/pages";
+import {
+    BrowserRouter,
+    Navigate,
+    Outlet,
+    Route,
+    Routes,
+} from "react-router-dom";
+import { AdminPage, Landing, Login } from "@/pages";
 import { mantineTheme } from "./Mantine";
 import AuthProvider, { useAuth } from "@/pages/Admin/AuthProvider";
 
@@ -28,7 +34,7 @@ const Router = () => {
                         <Route path="/" element={<Landing />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/admin" element={<AdminOnly />}>
-                            <Route path="" element={<div>admin</div>} />
+                            <Route path="" element={<AdminPage />} />
                         </Route>
                     </Routes>
                 </BrowserRouter>

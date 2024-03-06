@@ -10,7 +10,7 @@ import {
     Avatar,
     SimpleGrid,
     createStyles,
-    MantineTheme, 
+    MantineTheme,
 } from "@mantine/core";
 import { FratBoiDug } from "../../assets";
 import { store } from "../../services/firebase";
@@ -52,7 +52,7 @@ const sectionStyles = createStyles((theme: MantineTheme) => ({
     title: {
         [theme.fn.smallerThan(780)]: {
             fontSize: "2rem",
-        },  
+        },
     },
 
     description: {
@@ -110,12 +110,8 @@ const Member: React.FC<MemberProps> = ({ name, role, picture }) => {
                 />
             </Box>
             <Box>
-                <p className={classes.textName}>
-                    {name}
-                </p>
-                <p className={classes.textRole}>
-                    {role}
-                </p>
+                <p className={classes.textName}>{name}</p>
+                <p className={classes.textRole}>{role}</p>
             </Box>
         </Flex>
     );
@@ -133,7 +129,7 @@ const Department: React.FC<DepartmentProps> = ({ name, members }) => {
             <Title
                 order={2}
                 sx={{ fontSize: 40, color: "white", marginBottom: 32 }}
-                className = {classes.deptTitle}
+                className={classes.deptTitle}
             >
                 {name}
             </Title>
@@ -162,13 +158,12 @@ const Department: React.FC<DepartmentProps> = ({ name, members }) => {
     );
 };
 
-interface TeamMember {
+export interface TeamMember {
     name: string;
     role: string;
     picture: string;
     departments: string[];
 }
-
 
 const MeetTheTeam: React.FC = () => {
     const [presidents, setPresidents] = useState<TeamMember[]>([]);
@@ -255,7 +250,7 @@ const MeetTheTeam: React.FC = () => {
                         >
                             {MEET_THE_TEAM_TITLE}
                         </Title>
-                        <Text 
+                        <Text
                             sx={{ fontSize: 32 }}
                             className={classes.description}
                         >
