@@ -13,6 +13,7 @@ import {
     Badge,
     FileInput,
     Flex,
+    Text,
 } from "@mantine/core";
 import { randomId } from "@mantine/hooks";
 import { showNotification, updateNotification } from "@mantine/notifications";
@@ -25,6 +26,8 @@ import {
     query,
     updateDoc,
     addDoc,
+    deleteDoc,
+    doc,
 } from "firebase/firestore";
 import {
     deleteObject,
@@ -58,6 +61,8 @@ const AdminPage: React.FC = () => {
         useState<TeamMemberWithDocRef | null>(null);
     const [isSaving, setIsSaving] = useState(false);
     const [newPic, setNewPic] = useState<File | null>(null);
+    const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+    const [deleteMemberName, setDeleteMemberName] = useState("");
 
     useEffect(() => {
         const getData = async () => {
@@ -95,6 +100,8 @@ const AdminPage: React.FC = () => {
         setOpenModal(false);
         setActiveMember(null);
         setNewPic(null);
+        setShowConfirmDelete(false);
+        setDeleteMemberName("");
     };
 
     const addMember = () => {
@@ -171,6 +178,7 @@ const AdminPage: React.FC = () => {
             });
 
             if (activeMember.isNewMember) {
+                activeMember.isNewMember = false;
                 setTeam((old) => [...old, activeMember]);
             } else {
                 // update the table with the new changes
@@ -220,6 +228,55 @@ const AdminPage: React.FC = () => {
         }
     };
 
+    const handleDelete: FormEventHandler<HTMLFormElement> = async (e) => {
+        e.preventDefault();
+
+        if (!activeMember || !activeMember.docRef) return;
+
+        const notificationId = randomId();
+        try {
+            setIsSaving(true);
+            showNotification({
+                id: notificationId,
+                autoClose: 5000, // 5 seconds
+                color: "red",
+                title: "Deleting...",
+                message: "Deleting member from firestore...",
+                loading: true,
+            });
+
+            await deleteDoc(doc(store, "team", activeMember.docRef.id));
+
+            // update the team list
+            setTeam((old) =>
+                old.filter(
+                    (entry) => entry.docRef?.id !== activeMember.docRef?.id
+                )
+            );
+
+            closeModal();
+            updateNotification({
+                id: notificationId,
+                color: "red",
+                title: "Deleted!",
+                message: "You have forever deleted a member. How cruel... T.T",
+                loading: false,
+            });
+        } catch (err) {
+            console.error(err);
+            updateNotification({
+                id: notificationId,
+                color: "red",
+                title: "Error Deleting",
+                message:
+                    "Not able to delete member. Please contact the dev team to proceed manually.",
+                loading: false,
+            });
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
     const handleInputChange = (
         field: keyof TeamMemberWithDocRef,
         value: any
@@ -233,7 +290,10 @@ const AdminPage: React.FC = () => {
     };
 
     const rows = team.map((member) => (
-        <tr key={member.name} onClick={() => editMember(member)}>
+        <tr
+            key={member.docRef?.id ?? member.name}
+            onClick={() => editMember(member)}
+        >
             <td>
                 <Avatar src={member.picture} />
             </td>
@@ -318,10 +378,54 @@ const AdminPage: React.FC = () => {
                         label="Picture"
                     />
                     <Space h="lg" />
-                    <Button type="submit" disabled={isSaving}>
-                        Save
-                    </Button>
+                    <Flex justify="space-between">
+                        <Button type="submit" disabled={isSaving}>
+                            Save
+                        </Button>
+                        {activeMember && !activeMember.isNewMember && (
+                            <Button
+                                color="red"
+                                disabled={isSaving}
+                                onClick={() => setShowConfirmDelete(true)}
+                                variant="outline"
+                            >
+                                Delete
+                            </Button>
+                        )}
+                    </Flex>
                 </form>
+                {showConfirmDelete && (
+                    <>
+                        <Space h="xl" />
+                        <form onSubmit={handleDelete}>
+                            <Text color="red">
+                                Type {activeMember ? activeMember.name : ""} to
+                                proceed.
+                            </Text>
+                            <Space h="lg" />
+                            <TextInput
+                                label="Confirm Member Name"
+                                value={deleteMemberName}
+                                onChange={(e) =>
+                                    setDeleteMemberName(e.target.value)
+                                }
+                                required
+                            />
+                            <Space h="lg" />
+                            <Button
+                                color="red"
+                                disabled={
+                                    isSaving ||
+                                    (!!activeMember &&
+                                        activeMember.name !== deleteMemberName)
+                                }
+                                type="submit"
+                            >
+                                Erase This Member From Existence
+                            </Button>
+                        </form>
+                    </>
+                )}
             </Modal>
         </Container>
     );
