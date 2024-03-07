@@ -1,4 +1,4 @@
-# Welcome to Hawk Hacks Contributing Guide
+# Welcome to the LCS Contributing Guide
 
 Thanks for investing your time in contributing to LCS Website!
 
