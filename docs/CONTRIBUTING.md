@@ -20,7 +20,7 @@ Here is the list of tools you need to install before starting out:
 Let's start by explaining the folder structure for this project:
 
 ```
-LaurierHawkHacks/Dashboard
+LaurierCS/Website
 |
 |_ .storybook/ -> storybook configuration files
 |_ config/ -> firebase configuration files
