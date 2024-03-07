@@ -1,7 +1,8 @@
-import { Center, Button, TextInput, Box } from "@mantine/core";
+import { Center, Button, TextInput, Box, Container, Image } from "@mantine/core";
 import { FC, FormEventHandler, useState } from "react";
 import { useAuth } from "@/pages/Admin/AuthProvider";
 import { useNavigate, Navigate } from "react-router-dom";
+import { IconLogo } from "@assets";
 
 import "./Login.css";
 
@@ -35,29 +36,32 @@ const Login: FC = () => {
     }
 
     return (
-        <Center style={{ width: "100%", height: "100%" }}>
-            <Box>
-                <form onSubmit={handleSubmit} className="login-form">
-                    <TextInput
-                        type="email"
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                    <TextInput
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                    <Button type="submit" disabled={disableSubmit}>
-                        Login
-                    </Button>
-                </form>
-            </Box>
-        </Center>
+        <Container className="login-container">
+            <Center>
+                <Box>
+                    <Image src={IconLogo} />
+                    <form onSubmit={handleSubmit} className="login-form">
+                        <TextInput
+                            type="email"
+                            placeholder="Email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                        <TextInput
+                            type="password"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                        <Button type="submit" disabled={disableSubmit}>
+                            Login
+                        </Button>
+                    </form>
+                </Box>
+            </Center>
+        </Container>
     );
 };
 
