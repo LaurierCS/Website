@@ -7,6 +7,7 @@ import {
 } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "@/services/firebase";
+import { showNotification } from "@mantine/notifications";
 
 type LoginFn = (email: string, password: string) => Promise<void>;
 type LogoutFn = () => Promise<void>;
@@ -46,8 +47,14 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         try {
             await signOut(auth);
         } catch (error) {
-            // TODO: should use notification system to show an error message to user
             console.error(error);
+            showNotification({
+                autoClose: 5000,
+                title: "Error Signing In",
+                message:
+                    "Oops, this is not good. Please let the dev team know of this problem.",
+                color: "red",
+            });
         } finally {
             setUser(null);
         }
