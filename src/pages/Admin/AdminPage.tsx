@@ -279,6 +279,7 @@ const AdminPage: React.FC = () => {
 
     const handleInputChange = (
         field: keyof TeamMemberWithDocRef,
+        /* eslint-disable-next-line */
         value: any
     ) => {
         if (activeMember) {
