@@ -37,6 +37,7 @@ import {
 } from "firebase/storage";
 import { storage, store } from "@/services/firebase";
 import type { TeamMember } from "@/components/MeetTheTeam/MeetTheTeam";
+import { useAuth } from "@/pages/Admin/AuthProvider";
 
 interface TeamMemberWithDocRef extends TeamMember {
     isPublic: boolean;
@@ -63,6 +64,8 @@ const AdminPage: React.FC = () => {
     const [newPic, setNewPic] = useState<File | null>(null);
     const [showConfirmDelete, setShowConfirmDelete] = useState(false);
     const [deleteMemberName, setDeleteMemberName] = useState("");
+
+    const { logout } = useAuth();
 
     useEffect(() => {
         const getData = async () => {
@@ -312,8 +315,11 @@ const AdminPage: React.FC = () => {
     return (
         <Container size="lg">
             <Title>Admin Page</Title>
-            <Flex justify="flex-start" align="center" py="lg">
+            <Flex justify="space-between" align="center" py="lg">
                 <Button onClick={addMember}>Add Member</Button>
+                <Button onClick={logout} variant="outline">
+                    Logout
+                </Button>
             </Flex>
             <Space h="lg" />
             <Table highlightOnHover withColumnBorders horizontalSpacing="xl">
