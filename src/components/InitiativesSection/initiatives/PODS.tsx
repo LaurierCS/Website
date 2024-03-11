@@ -155,7 +155,7 @@ const PODS = () => {
                 </p>
                 <p className={classes.collapseParagraph}>
                   PODS teams are curated based on skill level, based on your
-                  application's test. Our goal is for{" "}
+                  application&apos;s test. Our goal is for{" "}
                   <span className={classes.bold}>everyone to learn</span> - not
                   just one hardcarry.
                 </p>
