@@ -1,15 +1,23 @@
 import { useEffect, useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { useDisclosure } from "@mantine/hooks";
-import { Title, Text, Box, Flex, Button, Modal } from "@mantine/core";
-import { PodsLogo, IconLogo, C3PartnerLogo, HHPartnerLogo } from "@/assets";
+import { Title, Text, Box, Flex, Button, Collapse } from "@mantine/core";
+import {
+    PodsLogo,
+    IconLogo,
+    C3PartnerLogo,
+    HHPartnerLogo,
+    DownArrowIcon,
+    Plant,
+} from "@/assets";
 import { useCommonStyles } from "./styles";
 import dayjs from "@utils/day";
 import { store } from "@services/firebase";
 
 const PODS = () => {
     const { classes } = useCommonStyles();
-    const [opened, { open, close }] = useDisclosure(false);
+
+    const [opened, { toggle }] = useDisclosure(false);
     const [data, setData] = useState({
         applicable: false,
         openDate: "TBD",
@@ -40,12 +48,14 @@ const PODS = () => {
     }, []);
 
     return (
-        <Box
-            sx={(theme) => ({
-                boxShadow: theme.shadows.lg,
-            })}
-        >
-            <Box className={classes.outerBox}>
+        <Box className={classes.podsContainer}>
+            <Box
+                className={classes.outerBox}
+                style={{
+                    borderBottomLeftRadius: opened ? "0px" : "",
+                    borderBottomRightRadius: opened ? "0px" : "",
+                }}
+            >
                 <Box className={classes.innerBox}>
                     <Flex
                         justify="center"
@@ -53,11 +63,7 @@ const PODS = () => {
                         gap={12}
                         className={classes.partnerLogoContainer}
                     >
-                        <img
-                            alt="LCS Logo"
-                            src={IconLogo}
-                            className={classes.lcsLogo}
-                        />
+                        <img alt="LCS Logo" src={IconLogo} className={classes.lcsLogo} />
                         <img
                             alt="HawkHacks Logo"
                             src={HHPartnerLogo}
@@ -69,21 +75,15 @@ const PODS = () => {
                             className={classes.c3Logo}
                         />
                     </Flex>
-                    <Title className={classes.title}>LCS PODS</Title>
+                    <Title className={classes.title} style={{ marginBottom: "2rem" }}>
+            LCS PODS
+                    </Title>
                     <Flex
                         justify="center"
                         align="center"
                         className={classes.headerLogoBox}
                     >
-                        <Box
-                            sx={(theme) => ({
-                                display: "none",
-
-                                [theme.fn.smallerThan("md")]: {
-                                    display: "block",
-                                },
-                            })}
-                        >
+                        <Box className={classes.headerLogoWrapper}>
                             <img
                                 src={PodsLogo}
                                 alt="PODS Logo"
@@ -92,108 +92,109 @@ const PODS = () => {
                         </Box>
                     </Flex>
                 </Box>
-                <Flex
-                    sx={(theme) => ({
-                        gap: 32,
-                        [theme.fn.smallerThan("sm")]: {
-                            gap: 0,
-                        },
-                    })}
-                    direction="row-reverse"
-                >
-                    <Flex align="center">
-                        <Text className={classes.description}>
+                <Flex className={classes.descriptionContainer}>
+                    <Flex align="center" justify="flex-end">
+                        <Text
+                            className={classes.description}
+                            style={{ textAlign: "right" }}
+                        >
                             {data.description}
                         </Text>
                     </Flex>
-                    <Flex align="center">
+                    <Flex align="center" justify="flex-end">
                         <img
                             src={PodsLogo}
                             alt="PODS Logo"
                             className={classes.bodyLogo}
+                            style={{ width: "26rem", height: "auto", marginLeft: "1.6rem" }}
                         />
                     </Flex>
                 </Flex>
-                {!data.applicable && (
-                    <Text className={classes.smallText}>
-                        {`Applications open on ${data.openDate}`}
-                    </Text>
-                )}
-                <Flex mt="2rem" gap="md" className={classes.actionBox}>
-                    <span className="sr-only" id="pods-details">
-                        opens a modal with more description about PODS
-                    </span>
-                    <Button
-                        aria-describedby="pods-details"
-                        size="lg"
-                        variant="subtle"
-                        onClick={open}
-                    >
-                        Show More
-                    </Button>
-                    {data.applicable && (
-                        <Box>
-                            <span className="sr-only" id="apply-pods">
-                                opens form to apply to PODS
+                <Flex className={classes.actionBox}>
+                    {!opened ? (
+                        <>
+                            <span className="sr-only" id="pods-details">
+                opens a dropdown with more description about PODS
                             </span>
                             <Button
-                                component="a"
-                                href={data.typeform}
-                                aria-describedby="apply-pods"
-                                variant="gradient"
-                                gradient={{
-                                    from: "blue.4",
-                                    to: "accents.1",
-                                }}
-                                className={classes.actionBtn}
+                                aria-describedby="pods-details"
                                 size="lg"
-                                disabled={!data.applicable}
+                                variant="subtle"
+                                onClick={toggle}
+                                rightIcon={<img src={DownArrowIcon} alt="Down arrow" />}
+                                className={classes.showMoreButton}
                             >
-                                Apply
+                Show More
+                            </Button>
+                        </>
+                    ) : (
+                        <Box className={classes.hiddenBox}>
+                            <Button
+                                size="lg"
+                                variant="subtle"
+                                rightIcon={<img src={DownArrowIcon} alt="Down arrow" />}
+                                className={classes.showMoreButton}
+                            >
+                Show More
                             </Button>
                         </Box>
                     )}
                 </Flex>
             </Box>
-            <Modal
-                opened={opened}
-                onClose={close}
-                title="LCS PODS Details"
-                size="85%"
-                centered
-            >
-                <Box
-                    sx={{
-                        padding: "2rem",
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "1rem",
-                        color: "white",
-                    }}
-                >
-                    <p>
-                        PODS has 5 major development phases -{" "}
-                        <span className="bold">
-                            Brainstorming, Design, Prototyping, MVP
-                        </span>{" "}
-                        and <span className="bold">Launch</span>.
-                    </p>
-                    <p>
-                        PODS teams are curated based on skill level, based on
-                        your application&apos;s test. Our goal is for{" "}
-                        <span className="bold">everyone to learn</span> - not
-                        just one hardcarry.
-                    </p>
-                    <p>
-                        Each POD will work on one project over the course of the
-                        next three months. These projects can be{" "}
-                        <span className="bold">websites</span>
-                        ,&nbsp;<span className="bold">video games</span>,&nbsp;
-                        <span className="bold">machine learning models</span>
-                        ,&nbsp;or whatever else the team is interested in!
-                    </p>
+            <Collapse in={opened} className={classes.collapseWrapper}>
+                <Box className={classes.collapseContent}>
+                    <Flex className={classes.collapseContainer}>
+                        <Flex align="center" justify="flex-end">
+                            <Box className={classes.collapseText}>
+                                <p className={classes.collapseParagraph}>
+                  PODS has 5 major development phases -{" "}
+                                    <span className={classes.bold}>
+                    Brainstorming, Design, Prototyping, MVP
+                                    </span>{" "}
+                  and <span className={classes.bold}>Launch</span>.
+                                </p>
+                                <p className={classes.collapseParagraph}>
+                  PODS teams are curated based on skill level, based on your
+                  application&apos;s test. Our goal is for{" "}
+                                    <span className={classes.bold}>everyone to learn</span> - not
+                  just one hardcarry.
+                                </p>
+                                <p className={classes.collapseParagraph}>
+                  Each POD will work on one project over the course of the next
+                  three months. These projects can be{" "}
+                                    <span className={classes.bold}>websites</span>,&nbsp;
+                                    <span className={classes.bold}>video games</span>,&nbsp;
+                                    <span className={classes.bold}>machine learning models</span>
+                  ,&nbsp;or whatever else the team is interested in!
+                                </p>
+                            </Box>
+                        </Flex>
+                        <Flex align="center" justify="flex-end">
+                            <img src={Plant} alt="Plant" className={classes.collapseLogo} />
+                        </Flex>
+                    </Flex>
+                    <Flex justify="flex-end" className={classes.collapseBtnContainer}>
+                        <Box>
+                            <Button
+                                aria-describedby="pods-details"
+                                size="lg"
+                                variant="subtle"
+                                onClick={toggle}
+                                rightIcon={
+                                    <img
+                                        src={DownArrowIcon}
+                                        alt="Up arrow"
+                                        className={classes.arrowUp}
+                                    />
+                                }
+                                className={classes.showMoreButton}
+                            >
+                Show Less
+                            </Button>
+                        </Box>
+                    </Flex>
                 </Box>
-            </Modal>
+            </Collapse>
         </Box>
     );
 };
