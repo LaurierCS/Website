@@ -7,7 +7,7 @@ import {
     Route,
     Routes,
 } from "react-router-dom";
-import { AdminPage, Landing, Login } from "@/pages";
+import { AdminPage, Landing, Login, Error404 } from "@/pages";
 import { mantineTheme } from "./Mantine";
 import AuthProvider, { useAuth } from "@/pages/Admin/AuthProvider";
 
@@ -34,10 +34,12 @@ const Router = () => {
                     <BrowserRouter>
                         <Routes>
                             <Route path="/" element={<Landing />} />
+                            <Route path="/404" element={<Error404 />} />
                             <Route path="/login" element={<Login />} />
                             <Route path="/admin" element={<AdminOnly />}>
                                 <Route path="" element={<AdminPage />} />
                             </Route>
+                            <Route path="*" element={<Navigate replace to="/404" />} />
                         </Routes>
                     </BrowserRouter>
                 </AuthProvider>
