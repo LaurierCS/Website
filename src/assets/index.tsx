@@ -6,8 +6,8 @@ import HHPartnerLogo from "./hh_partner_logo.png";
 import Dug from "./dug.svg";
 import Heart from "./heart.svg";
 import FratBoiDug from "./frat_boi_dug.svg";
-import DownArrowIcon from "./down_arrow.svg"
-import Plant from "./plant.svg"
+import DownArrowIcon from "./down_arrow.svg";
+import Plant from "./plant.svg";
 
 export {
     IconLogo,
