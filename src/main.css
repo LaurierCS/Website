@@ -3,6 +3,8 @@
 
 html, #root {
     background: var(--color-background-default);
+    min-height: 100%;
+    height: auto;
 }
 #top {
   background: #1A1B1E !important; /* Use !important to ensure override */
