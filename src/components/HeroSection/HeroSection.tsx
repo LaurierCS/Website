@@ -73,7 +73,7 @@ const useStyles = createStyles((theme: MantineTheme) => ({
 const HeroSection: React.FC = () => {
     const { classes } = useStyles();
     return (
-        <section style={{ marginBottom: "-24rem" }} id="top">
+        <section style={{ marginBottom: "-20rem" }} id="top">
             <Container py="8rem" size="xl" my="md" className={classes.container}>
                 <Center style={{ width: "100%", height: "100%" }}>
                     <Flex
