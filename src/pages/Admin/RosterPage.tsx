@@ -55,7 +55,7 @@ const departments = [
     { value: "president", label: "President" },
 ];
 
-const AdminPage: React.FC = () => {
+const RosterPage: React.FC = () => {
     const [team, setTeam] = useState<TeamMemberWithDocRef[]>([]);
     const [openModal, setOpenModal] = useState(false);
     const [activeMember, setActiveMember] =
@@ -314,12 +314,9 @@ const AdminPage: React.FC = () => {
 
     return (
         <Container size="lg">
-            <Title>Admin Page</Title>
+            <Title>Roster Page</Title>
             <Flex justify="space-between" align="center" py="lg">
                 <Button onClick={addMember}>Add Member</Button>
-                <Button onClick={logout} variant="outline">
-                    Logout
-                </Button>
             </Flex>
             <Space h="lg" />
             <Table highlightOnHover withColumnBorders horizontalSpacing="xl">
@@ -438,4 +435,4 @@ const AdminPage: React.FC = () => {
     );
 };
 
-export default AdminPage;
+export default RosterPage;
