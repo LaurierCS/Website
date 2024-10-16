@@ -214,7 +214,7 @@ const EventsPage: React.FC = () => {
 
             await deleteDoc(doc(store, "events", activeEvent.docRef.id));
 
-            // update the team list
+            // update the event list
             setEvents((old) =>
                 old.filter(
                     (entry) => entry.docRef?.id !== activeEvent.docRef?.id
