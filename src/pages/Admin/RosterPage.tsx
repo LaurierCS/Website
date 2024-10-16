@@ -37,7 +37,6 @@ import {
 } from "firebase/storage";
 import { storage, store } from "@/services/firebase";
 import type { TeamMember } from "@/components/MeetTheTeam/MeetTheTeam";
-import { useAuth } from "@/pages/Admin/AuthProvider";
 
 interface TeamMemberWithDocRef extends TeamMember {
     isPublic: boolean;
@@ -64,8 +63,6 @@ const RosterPage: React.FC = () => {
     const [newPic, setNewPic] = useState<File | null>(null);
     const [showConfirmDelete, setShowConfirmDelete] = useState(false);
     const [deleteMemberName, setDeleteMemberName] = useState("");
-
-    const { logout } = useAuth();
 
     useEffect(() => {
         const getData = async () => {
