@@ -1,5 +1,4 @@
 import { Container, Title, Text, Flex, createStyles, MantineTheme } from "@mantine/core";
-import PODS from "./initiatives/PODS";
 import ReviewSessions from "./initiatives/ReviewSessions";
 
 const useStyles = createStyles((theme: MantineTheme) => ({
@@ -66,7 +65,6 @@ const InitiativesSection: React.FC = () => {
                     </Text>
                 </Flex>
                 <Container fluid className="space-y-2">
-                    <PODS />
                     <ReviewSessions />
                 </Container>
             </Container>
