@@ -43,6 +43,15 @@ jobs:
         run: pnpm install
 
       - name: Build
+        env:
+          VITE_LCS_FIREBASE_APIKEY: ${{ secrets.VITE_LCS_FIREBASE_APIKEY }}
+          VITE_LCS_FIREBASE_AUTHDOMAIN: ${{ secrets.VITE_LCS_FIREBASE_AUTHDOMAIN }}
+          VITE_LCS_FIREBASE_DBURL: ${{ secrets.VITE_LCS_FIREBASE_DBURL }}
+          VITE_LCS_FIREBASE_PROJECTID: ${{ secrets.VITE_LCS_FIREBASE_PROJECTID }}
+          VITE_LCS_FIREBASE_STORAGEBUCKET: ${{ secrets.VITE_LCS_FIREBASE_STORAGEBUCKET }}
+          VITE_LCS_FIREBASE_MESSAGINGSNEDERID: ${{ secrets.VITE_LCS_FIREBASE_MESSAGINGSNEDERID }}
+          VITE_LCS_FIREBASE_APPID: ${{ secrets.VITE_LCS_FIREBASE_APPID }}
+          VITE_LCS_FIREBASE_MEASRUEMENTID: ${{ secrets.VITE_LCS_FIREBASE_MEASRUEMENTID }}
         run: pnpm build
 
       - name: Deploy to Firebase
