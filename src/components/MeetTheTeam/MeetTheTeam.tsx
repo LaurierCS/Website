@@ -274,11 +274,8 @@ const MeetTheTeam: React.FC = () => {
                 <Department name="Development" members={development} />
                 <Department name="Events" members={events} />
                 <Department name="Communication" members={communication} />
-                <Department
-                    name="Community Moderation"
-                    members={communityMod}
-                />
                 <Department name="Outreach" members={outreach} />
+                <Department name="Community Moderation" members={communityMod} />
             </Container>
         </section>
     );
