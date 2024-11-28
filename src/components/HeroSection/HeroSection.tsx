@@ -35,6 +35,7 @@ const useStyles = createStyles((theme: MantineTheme) => ({
 
     title: {
         fontSize: 50,
+        textAlign: "center", // Ensures title is centered on all devices
         [theme.fn.smallerThan(780)]: {
             fontSize: "2rem",
         },
@@ -79,6 +80,7 @@ const HeroSection: React.FC = () => {
                     <Flex
                         direction="column"
                         justify="center"
+                        align="center"
                         wrap="wrap"
                         gap="md"
                     >
