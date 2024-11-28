@@ -246,9 +246,12 @@ const FAQ: React.FC = () => {
                                 includes $20k+ in prizes for the winners and has
                                 contestants from all over the world. <br />
                                     <br />
-                                We also host LCS PODS which aims to help student
-                                start off their career with a solid project in
-                                their portfolio. <br />
+                                We also partner with Konfer to bring you exclusive tech networking events, 
+                                workshops, and opportunities. <br />
+                                    <br />
+                                Through Konfer, you can connect with industry 
+                                professionals and join exciting tech initiatives in the local community. 
+                                Stay tuned to our MyLS page for all upcoming Konfer events!
                                 </div>
                             </Accordion.Panel>
                         </Accordion.Item>
