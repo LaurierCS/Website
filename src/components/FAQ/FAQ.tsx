@@ -202,17 +202,17 @@ const FAQ: React.FC = () => {
                             </Accordion.Control>
                             <Accordion.Panel className={classes.panel}>
                                 <div style={{ padding: "1rem" }}>
-                                We post our content typically on Twitch as
-                                livestreams and post the edited version onto our
-                                YouTube page for viewing. <br />
+                                    We primarily use our MyLearningSpace as our central hub, where we post 
+                                    all event announcements, room locations, sign-up forms, and important updates. Make sure 
+                                    to check MyLS regularly to stay updated with our latest events! <br />
                                     <br />
-                                This content includes Review Sessions,
-                                Workshops, Meet The Professionals, information
-                                on the Co-op process, and more! <br />
+                                    This content includes Review Sessions,
+                                    Workshops, Meet The Professionals, information
+                                    on the Co-op process, and more!<br />
                                     <br />
-                                We also give updates on events to upcoming
-                                events on our Instagram, Discord and other
-                                socials.
+                                    We also give updates on events to upcoming
+                                    events on our Instagram, Discord and other
+                                    socials.
                                 </div>
                             </Accordion.Panel>
                         </Accordion.Item>
