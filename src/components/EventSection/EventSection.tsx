@@ -43,7 +43,7 @@ const useStyles = createStyles((theme: MantineTheme) => ({
         display: 'flex',
         alignItems: 'center',
         border: `1px solid ${theme.fn.rgba(theme.colors.gray[8], 0.5)}`,
-        height: '120px',
+        height: '130px',
         width: '100%',
     },
 
@@ -54,7 +54,7 @@ const useStyles = createStyles((theme: MantineTheme) => ({
             deg: 45 
         }),
         width: '80px',
-        height: '120px',
+        height: '135px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -66,6 +66,7 @@ const useStyles = createStyles((theme: MantineTheme) => ({
         fontSize: '2rem',
         color: 'white',
         lineHeight: 1,
+        filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.5))',
     },
 
     contentSection: {
