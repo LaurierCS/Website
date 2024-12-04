@@ -25,6 +25,8 @@ const HERO_SECTION_TEXT_3 = "Career Driven";
 const useStyles = createStyles((theme: MantineTheme) => ({
     container: {
         width: "100%",
+        maxWidth: "100vw",
+        overflow: "hidden",
         [theme.fn.smallerThan(340)]: {
             padding: "1rem",
         },  
@@ -75,10 +77,12 @@ const useStyles = createStyles((theme: MantineTheme) => ({
 
     glitchContainer: {
         width: "100%",
+        maxWidth: "100%",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         padding: "0 1rem",
+        overflow: "hidden",
     },
 }));
 const HeroSection: React.FC = () => {

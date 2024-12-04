@@ -1,26 +1,36 @@
-  .stack {
-    display: grid;
-    justify-items: center; 
-    grid-template-columns: 1fr;
-  }
+/* Prevent horizontal scroll */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.stack {
+  display: grid;
+  justify-items: center; 
+  grid-template-columns: 1fr;
+  max-width: 100vw;
+  margin: 0;
+  padding: 0;
+}
   
-  .stack span {
-    font-weight: bold;
-    grid-row-start: 1;
-    grid-column-start: 1;
-    font-size: 3.15rem;
-    width: 100%;
-    text-align: center;
-    --stack-height: calc(100% / var(--stacks) - 1px);
-    --inverse-index: calc(calc(var(--stacks) - 1) - var(--index));
-    --clip-top: calc(var(--stack-height) * var(--index));
-    --clip-bottom: calc(var(--stack-height) * var(--inverse-index));
-    clip-path: inset(var(--clip-top) 0 var(--clip-bottom) 0);
-    animation: cubic-bezier(.46,.29,0,1.24) 1 backwards calc(var(--index) * 120ms), glitch 2s ease infinite 2s alternate-reverse, glitch 2s ease 750ms;
-    background: linear-gradient(to right, #29abf4, #A1DAF5);
-    -webkit-background-clip: text;
-    color: transparent;
-  }
+.stack span {
+  font-weight: bold;
+  grid-row-start: 1;
+  grid-column-start: 1;
+  font-size: 3.15rem;
+  width: 100%;
+  text-align: center;
+  --stack-height: calc(100% / var(--stacks) - 1px);
+  --inverse-index: calc(calc(var(--stacks) - 1) - var(--index));
+  --clip-top: calc(var(--stack-height) * var(--index));
+  --clip-bottom: calc(var(--stack-height) * var(--inverse-index));
+  clip-path: inset(var(--clip-top) 0 var(--clip-bottom) 0);
+  animation: cubic-bezier(.46,.29,0,1.24) 1 backwards calc(var(--index) * 120ms), glitch 2s ease infinite 2s alternate-reverse, glitch 2s ease 750ms;
+  background: linear-gradient(to right, #29abf4, #A1DAF5);
+  -webkit-background-clip: text;
+  color: transparent;
+  box-sizing: border-box;
+}
 
 .stack span:nth-child(odd) { --glitch-translate: 20px; }
 .stack span:nth-child(even) { --glitch-translate: -20px; }
@@ -43,4 +53,11 @@
         word-break: keep-all;
         overflow-wrap: break-word;
     }
+}
+
+.glitch-container {
+  max-width: 100%;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
 }
