@@ -130,7 +130,7 @@ const useStyles = createStyles((theme: MantineTheme) => ({
 }));
 
 const EVENT_SECTION_TITLE = "<Our Upcoming Events />";
-const EVENT_SECTION_PHRASE = "*Updates every month*";
+const EVENT_SECTION_PHRASE = "";
 
 interface Event {
     id: string;
