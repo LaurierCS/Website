@@ -213,6 +213,22 @@ const MeetTheTeam: React.FC = () => {
 
             const prefix = "VP of";
             const sort = (a: TeamMember, b: TeamMember) => {
+                // Special ordering for admin department
+                const adminRoleOrder: Record<string, number> = {
+                    "VP of Strategy": 0,
+                    "VP of Operations & Internal Affairs": 1,
+                    "VP of Admin Logistics & Finance": 2,
+                    "Admin Coordinator": 3
+                };
+
+                // Check if both roles are in our admin ordering
+                const aIndex = adminRoleOrder[a.role];
+                const bIndex = adminRoleOrder[b.role];
+                if (aIndex !== undefined && bIndex !== undefined) {
+                    return aIndex - bIndex;
+                }
+
+                // Default VP sorting for other departments
                 if (a.role.startsWith(prefix) && !b.role.startsWith(prefix)) {
                     return -1;
                 }
