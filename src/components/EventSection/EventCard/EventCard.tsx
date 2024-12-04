@@ -186,18 +186,13 @@ const useStyles = createStyles((theme: MantineTheme) => ({
 interface EventCardProps {
     icon: React.ReactNode;
     title: string;
-    date: any; 
+    date: any;
     place: string;
-    description: string;
-    igPost?: string;
-    isPublicDate?: boolean;
-    isPublicPlace?: boolean;
-    isPublicTime?: boolean;
+    description?: string;
+    visible: boolean;
     isNext?: boolean;
-    disableIg?: boolean;
     hideDate?: boolean;
     hidePlace?: boolean;
-
 }
 
 const EventCard: React.FC<EventCardProps> = ({
@@ -206,12 +201,8 @@ const EventCard: React.FC<EventCardProps> = ({
     date,
     place,
     description,
-    igPost,
-    isPublicDate = false,
-    isPublicPlace = false,
-    isPublicTime = false,
+    visible,
     isNext = false,
-    disableIg = false,
     hideDate = false,
     hidePlace = false,
 }) => {
@@ -219,12 +210,7 @@ const EventCard: React.FC<EventCardProps> = ({
 
     return (
         <Box className={classes.cardRoot}>
-            <Box
-                sx={() => ({
-                    paddingLeft: '18px',
-                    paddingRight: '18px',
-                })}
-            >
+            <Box sx={() => ({ padding: '18px' })}>
                 <Box>
                     <span className={classes.icon}>{icon}</span>
                     <Tooltip label={title}>
@@ -234,48 +220,31 @@ const EventCard: React.FC<EventCardProps> = ({
                         {!hideDate && (
                             <Box>
                                 <span className={classes.date}>
-                                    {isPublicDate &&
-                                        date.format('MMMM Do, YYYY')}
-                                    {!isPublicDate && 'Date: TBD'}
+                                    {date.format('MMMM Do, YYYY')}
                                 </span>
                                 <span className={classes.time}>
-                                    {isPublicTime && date.format('hh:mm A')}
-                                    {!isPublicTime && 'Time: TBD'}
+                                    {date.format('hh:mm A')}
                                 </span>
                             </Box>
                         )}
                         {!hidePlace && (
                             <Box className={classes.placeRoot}>
                                 <Box className={classes.placeContent}>
-                                    {isPublicPlace ? place : 'Place: TBD'}
+                                    {place}
                                 </Box>
                             </Box>
                         )}
                     </Flex>
                 </Box>
 
-                <p className={classes.description}>
-                    {description}
-                </p>
-
-                {!disableIg && igPost && (
-                    <a
-                        href={igPost}
-                        target="_blank"
-                        rel="next noreferrer"
-                        className={classes.link}
-                    >
-                        Learn more about the event!
-                    </a>
+                {description && (
+                    <p className={classes.description}>
+                        {description}
+                    </p>
                 )}
 
-                {!disableIg && !igPost && (
-                    <span
-                        className={[
-                            classes.description,
-                            classes.highlight,
-                        ].join(' ')}
-                    >
+                {!description && (
+                    <span className={[classes.description, classes.highlight].join(' ')}>
                         Find out more closer to the date!
                     </span>
                 )}
@@ -299,9 +268,8 @@ EventCard.propTypes = {
     title: PropTypes.string.isRequired,
     date: PropTypes.object.isRequired,
     place: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
+    description: PropTypes.string,
     isNext: PropTypes.bool,
-    disableIg: PropTypes.bool,
     hideDate: PropTypes.bool,
     hidePlace: PropTypes.bool,
 };

@@ -7,17 +7,15 @@ const db = admin.firestore();
 
 export const syncNotionEventsToFirestore = functions
   .runWith({
-    enforceAppCheck: false,  // disable app check
+    enforceAppCheck: false,
     minInstances: 0,
-    ingressSettings: 'ALLOW_ALL'  // allow public access
+    ingressSettings: 'ALLOW_ALL'
   })
   .https.onRequest(async (request, response) => {
-    // Add CORS headers
     response.set('Access-Control-Allow-Origin', '*');
     response.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     response.set('Access-Control-Allow-Headers', '*');
-    
-    // Handle preflight requests
+
     if (request.method === 'OPTIONS') {
       response.status(204).send('');
       return;
@@ -31,13 +29,7 @@ export const syncNotionEventsToFirestore = functions
         throw new Error('Environment variables for Notion are not set.');
       }
 
-      const notion = new NotionClient({
-        auth: notionKey,
-      });
-
-      if (!notionDatabaseId) {
-        throw new Error("Environment variable NOTION_DATABASE_ID is not set.");
-      }
+      const notion = new NotionClient({ auth: notionKey });
 
       const notionResponse = await notion.databases.query({ database_id: notionDatabaseId });
       console.log(`Found ${notionResponse.results.length} events in Notion`);
@@ -49,71 +41,34 @@ export const syncNotionEventsToFirestore = functions
       }
 
       const writePromises = notionResponse.results.map(async (page: any) => {
-        const blockResponse = await notion.blocks.children.list({
-          block_id: page.id,
-        });
-
         const date = page.properties["Date"]?.date?.start ?? "";
-        console.log("date", date);
-        const eventDate = date ? new Date(date) : null; 
-        console.log("eventDate", eventDate);
+        const eventDate = date ? new Date(date) : null;
+
         if (!eventDate || eventDate < new Date()) {
           return;
         }
 
-        //const isInPersonOrOnline = page.properties["In Person/Online"]?.select?.name ?? null;
         const hasConfirmedRoom = page.properties["Confirmed Room"]?.multi_select.length > 0;
-        //const hasTypeformSignIn = page.properties["Typeform Sign In"]?.url ?? null;
-        //const hasTypeformFeedback = page.properties["Typeform Feedback"]?.url ?? null;
-
         if (!hasConfirmedRoom) {
           return;
         }
-        //console.log("isInPersonOrOnline", isInPersonOrOnline);
-        //console.log("hasConfirmedRoom", hasConfirmedRoom);
-
-        let description = "";
-
-        for (const block of blockResponse.results) {
-
-          if ('type' in block && block.type === "paragraph" && block.paragraph.rich_text.length > 0) {
-
-            const firstNonEmptyParagraph = block.paragraph.rich_text.find((rt: { plain_text: string }) => 
-              rt.plain_text.trim() !== ""
-            );
-            if (firstNonEmptyParagraph) {
-              description = firstNonEmptyParagraph.plain_text;
-              break; 
-            }
-          }
-        }
-        console.log("description", description);
 
         const title = page.properties["Name"]?.title[0]?.plain_text ?? "";
-        
         if (!title) {
           return;
         }
-        console.log("title", title);
 
         const docData = {
           title,
           date: eventDate,
-          description,
           place: page.properties["Confirmed Room"]?.multi_select.map((select: any) => select.name).join(", ") ?? "",
-          icon: page.icon.emoji ?? "✏️",
-          igPost: "", // There's nothing on the notion, done manually? :(
-          isPublicDate: page.properties["Date Public"]?.multi_select.map((select: any) => select.name).join(", ") ?? false,
-          isPublicPlace: page.properties["Place Public"]?.multi_select.map((select: any) => select.name).join(", ") ?? false,
-          isPublicTime: page.properties["Time Public"]?.multi_select.map((select: any) => select.name).join(", ") ?? false,
-          visible: page.properties["Visible"]?.multi_select.map((select: any) => select.name).join(", ") ?? true,
+          visible: page.properties["Visible On Website"]?.checkbox ?? false,
+          icon: page.icon?.emoji ?? "✏️",
         };
 
-        const sanitizedTitle = title.replace(/\W+/g, "").toLowerCase(); // Remove non-alphanumeric characters and convert to lower case
+        const sanitizedTitle = title.replace(/\W+/g, "").toLowerCase();
         const docId = `${sanitizedTitle}_${page.id.replace(/-/g, "").substring(0, 6)}`;
-        console.log("docId", docId);
-        console.log("Setting event:", docId, "With data:", docData);
-        console.log(`Attempting to write event ${docId} to Firestore`);
+
         try {
           await db.collection("events").doc(docId).set(docData, { merge: true });
           console.log(`Successfully wrote event ${docId}`);
@@ -126,7 +81,7 @@ export const syncNotionEventsToFirestore = functions
 
       const results = await Promise.all(writePromises);
       const successCount = results.filter(Boolean).length;
-      
+
       console.log(`Successfully wrote ${successCount} events to Firestore`);
       response.send(`Synced ${successCount} events to Firestore`);
     } catch (error) {

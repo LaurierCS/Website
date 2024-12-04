@@ -141,8 +141,6 @@ const EventCarousel: React.FC = () => {
 
     useEffect(() => {
         (async () => {
-            console.log("Current timestamp:", Timestamp.now());
-
             const q = query(
                 collection(store, 'events'),
                 where('date', '>=', Timestamp.now()),
@@ -152,23 +150,19 @@ const EventCarousel: React.FC = () => {
             );
 
             const docs = await getDocs(q);
-            console.log("Number of events found:", docs.size);
-            docs.forEach(doc => {
-                console.log("Event:", {
-                    id: doc.id,
-                    date: doc.data().date,
-                    title: doc.data().title,
-                    visible: doc.data().visible
-                });
-            });
-
             let _events: EventData[] = [];
+            
             docs.forEach((doc) => {
                 const data = doc.data();
-                data.date = dayjs.unix(data.date.seconds);
-                data.key = doc.id;
-                data.active = false;
-                _events.push(data);
+                _events.push({
+                    key: doc.id,
+                    title: data.title,
+                    date: dayjs.unix(data.date.seconds),
+                    place: data.place,
+                    visible: data.visible,
+                    active: false,
+                    icon: data.icon || "✏️"
+                });
             });
 
             if (!_events.length) return;
@@ -180,6 +174,7 @@ const EventCarousel: React.FC = () => {
             const firstHalf = _events.slice(1, mid + 1);
             const secondHalf = _events.slice(mid + 1);
             eventsRef.current = [...firstHalf, upnext, ...secondHalf];
+            
             const startIndex = mid - 1 >= 0 ? mid - 1 : 0;
             flushSync(() => {
                 setActiveIndex(mid);
