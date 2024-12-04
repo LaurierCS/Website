@@ -229,6 +229,14 @@ const MeetTheTeam: React.FC = () => {
                     "Graphic Designer": 3
                 };
 
+                // Special ordering for development department
+                const devRoleOrder: Record<string, number> = {
+                    "VP of Development & Technology": 0,
+                    "Technical Content Writer": 1,
+                    "Software Engineer": 2,
+                    "Software Engineer & Technical Content Writer": 3
+                };
+
                 // Check if both roles are in our admin ordering
                 const aAdminIndex = adminRoleOrder[a.role];
                 const bAdminIndex = adminRoleOrder[b.role];
@@ -241,6 +249,13 @@ const MeetTheTeam: React.FC = () => {
                 const bCommsIndex = commsRoleOrder[b.role];
                 if (aCommsIndex !== undefined && bCommsIndex !== undefined) {
                     return aCommsIndex - bCommsIndex;
+                }
+
+                // Check if both roles are in our development ordering
+                const aDevIndex = devRoleOrder[a.role];
+                const bDevIndex = devRoleOrder[b.role];
+                if (aDevIndex !== undefined && bDevIndex !== undefined) {
+                    return aDevIndex - bDevIndex;
                 }
 
                 // Default VP sorting for other departments
