@@ -14,7 +14,7 @@ import { IconLogo } from "@/assets";
 import { FaDiscord } from "react-icons/fa";
 import "./HeroSection.css";
 
-const HERO_SECTION_TITLE = "<Laurier Computing Society />";
+const HERO_SECTION_TITLE = "<Laurier Computing Society\u00A0/>";
 const HERO_SECTION_HOOK =
     "The official Computer Science club at Wilfrid Laurier University!";
 const HERO_SECTION_TEXT_1 = "Student Lead";
@@ -24,10 +24,10 @@ const HERO_SECTION_TEXT_3 = "Career Driven";
 
 const useStyles = createStyles((theme: MantineTheme) => ({
     container: {
+        width: "100%",
         [theme.fn.smallerThan(340)]: {
-            padding: "0",
+            padding: "1rem",
         },  
-
         [theme.fn.largerThan(2000)]: {
             paddingTop: "20rem",
         }
@@ -35,8 +35,11 @@ const useStyles = createStyles((theme: MantineTheme) => ({
 
     title: {
         fontSize: 50,
+        width: "100%",
+        textAlign: "center",
         [theme.fn.smallerThan(780)]: {
             fontSize: "2rem",
+            padding: "0 1rem",
         },
     },
 
@@ -69,6 +72,14 @@ const useStyles = createStyles((theme: MantineTheme) => ({
             display: "none",
         },
     },
+
+    glitchContainer: {
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: "0 1rem",
+    },
 }));
 const HeroSection: React.FC = () => {
     const { classes } = useStyles();
@@ -79,10 +90,12 @@ const HeroSection: React.FC = () => {
                     <Flex
                         direction="column"
                         justify="center"
+                        align="center"
                         wrap="wrap"
                         gap="md"
+                        style={{ width: "100%" }}
                     >
-                        <BackgroundImage src="">
+                        <BackgroundImage src="" style={{ width: "100%" }}>
                             <MediaQuery
                                 query="(max-width: 768px)"
                                 styles={{
@@ -101,16 +114,16 @@ const HeroSection: React.FC = () => {
                                 </Center>
                             </MediaQuery>
 
-
-                            <div className="glitch-container">
-                                <div className="stack" style={{ "--stacks": 3 } as React.CSSProperties}>
-                                    <span style={{ "--index": 0 } as React.CSSProperties}>{HERO_SECTION_TITLE}</span>
-                                    <span style={{ "--index": 1 } as React.CSSProperties}>{HERO_SECTION_TITLE}</span>
-                                    <span style={{ "--index": 2 } as React.CSSProperties}>{HERO_SECTION_TITLE}</span>
+                            <div className={classes.glitchContainer}>
+                                <div className="glitch-container">
+                                    <div className="stack" style={{ "--stacks": 3 } as React.CSSProperties}>
+                                        <span style={{ "--index": 0 } as React.CSSProperties}>{HERO_SECTION_TITLE}</span>
+                                        <span style={{ "--index": 1 } as React.CSSProperties}>{HERO_SECTION_TITLE}</span>
+                                        <span style={{ "--index": 2 } as React.CSSProperties}>{HERO_SECTION_TITLE}</span>
+                                    </div>
                                 </div>
                             </div>
 
-           
                             <MediaQuery
                                 query="(max-width: 768px)"
                                 styles={{ fontSize: "1.2rem" }}
