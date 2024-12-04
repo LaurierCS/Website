@@ -26,3 +26,6 @@ build
 *.sw?
 
 .env
+.env.development
+functions/.runtimeconfig.json
+/functions/lib

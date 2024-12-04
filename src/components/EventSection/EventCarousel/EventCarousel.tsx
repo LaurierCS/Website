@@ -141,6 +141,8 @@ const EventCarousel: React.FC = () => {
 
     useEffect(() => {
         (async () => {
+            console.log("Current timestamp:", Timestamp.now());
+
             const q = query(
                 collection(store, 'events'),
                 where('date', '>=', Timestamp.now()),
@@ -150,6 +152,16 @@ const EventCarousel: React.FC = () => {
             );
 
             const docs = await getDocs(q);
+            console.log("Number of events found:", docs.size);
+            docs.forEach(doc => {
+                console.log("Event:", {
+                    id: doc.id,
+                    date: doc.data().date,
+                    title: doc.data().title,
+                    visible: doc.data().visible
+                });
+            });
+
             let _events: EventData[] = [];
             docs.forEach((doc) => {
                 const data = doc.data();
