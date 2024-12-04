@@ -1,6 +1,6 @@
-import { useEffect, useState, useRef } from 'react';
-import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
-import { ActionIcon, Box, createStyles, MantineTheme } from '@mantine/core';
+import { useEffect, useState, useRef } from "react";
+import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
+import { ActionIcon, Box, createStyles, MantineTheme } from "@mantine/core";
 import {
     collection,
     query,
@@ -9,57 +9,57 @@ import {
     getDocs,
     Timestamp,
     limit,
-} from 'firebase/firestore';
-import EventCard from '../EventCard/EventCard';
-import dayjs from '../../../utils/day';
-import { store } from '../../../services/firebase';
-import { useMediaQuery } from '@mantine/hooks';
-import { flushSync } from 'react-dom';
+} from "firebase/firestore";
+import EventCard from "../EventCard/EventCard";
+import dayjs from "../../../utils/day";
+import { store } from "../../../services/firebase";
+import { useMediaQuery } from "@mantine/hooks";
+import { flushSync } from "react-dom";
 
 const CardPlaceholder = () => (
-    <Box sx={{ width: '567px', height: '535px', opacity: 0 }}></Box>
+    <Box sx={{ width: "567px", height: "535px", opacity: 0 }}></Box>
 );
 
 const useStyles = createStyles((theme: MantineTheme) => ({
     carouselRoot: {
-        paddingLeft: '15%',
-        paddingRight: '15%',
+        paddingLeft: "15%",
+        paddingRight: "15%",
 
-        [theme.fn.smallerThan('md')]: {
-            paddingLeft: '0',
-            paddingRight: '0',
+        [theme.fn.smallerThan("md")]: {
+            paddingLeft: "0",
+            paddingRight: "0",
         },
     },
 
     eventsContainer: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingTop: '8rem',
-        position: 'relative',
-        gap: '8%',
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        paddingTop: "8rem",
+        position: "relative",
+        gap: "8%",
 
-        [theme.fn.smallerThan('lg')]: {
-            gap: '2%',
-            width: '100%',
+        [theme.fn.smallerThan("lg")]: {
+            gap: "2%",
+            width: "100%",
         },
 
-        [theme.fn.smallerThan('sm')]: {
-            paddingTop: '2rem',
+        [theme.fn.smallerThan("sm")]: {
+            paddingTop: "2rem",
         },
     },
 
     midEvent: {
-        ['&:not(:only-child)']: {
-            position: 'absolute',
+        ["&:not(:only-child)"]: {
+            position: "absolute",
             zIndex: 3,
-            top: '4rem',
-            left: '50%',
-            transform: 'translateX(-50%)',
+            top: "4rem",
+            left: "50%",
+            transform: "translateX(-50%)",
         },
 
-        [theme.fn.smallerThan('md')]: {
-            width: '100%',
+        [theme.fn.smallerThan("md")]: {
+            width: "100%",
         },
     },
 
@@ -68,48 +68,48 @@ const useStyles = createStyles((theme: MantineTheme) => ({
     },
 
     controllerContainer: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
     },
 
     control: {
-        width: '2rem',
-        height: '2rem',
+        width: "2rem",
+        height: "2rem",
         borderRadius: 9999,
-        backgroundColor: 'white',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: 'black',
+        backgroundColor: "white",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        color: "black",
     },
 
     dot: {
-        width: '1rem',
-        height: '1rem',
+        width: "1rem",
+        height: "1rem",
         borderRadius: 9999,
-        backgroundColor: '#717277',
+        backgroundColor: "#717277",
         flexShrink: 0,
     },
 
     activeDot: {
-        width: '1rem',
-        height: '1rem',
+        width: "1rem",
+        height: "1rem",
         borderRadius: 9999,
-        backgroundColor: '#E7EBF5',
+        backgroundColor: "#E7EBF5",
         flexShrink: 0,
     },
 
     dotsContainer: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
         gap: 12,
-        marginLeft: '2rem',
-        marginRight: '2rem',
+        marginLeft: "2rem",
+        marginRight: "2rem",
     },
     spacer: {
-        height: '2rem',
+        height: "2rem",
     },
 }));
 
@@ -134,18 +134,18 @@ interface EventData {
 const EventCarousel: React.FC = () => {
     const [visibleEvents, setVisibleEvents] = useState<EventData[]>([]);
     const [activeIndex, setActiveIndex] = useState<number>(0);
-    const [slideDirection, setSlideDirection] = useState('left');
+    const [slideDirection, setSlideDirection] = useState("left");
     const { classes } = useStyles();
     const eventsRef = useRef<EventData[]>([]);
-    const mdBreakpoint = useMediaQuery('(max-width: 64em)');
+    const mdBreakpoint = useMediaQuery("(max-width: 64em)");
 
     useEffect(() => {
         (async () => {
             const q = query(
-                collection(store, 'events'),
-                where('date', '>=', Timestamp.now()),
-                where('visible', '==', true),
-                orderBy('date', 'asc'),
+                collection(store, "events"),
+                where("date", ">=", Timestamp.now()),
+                where("visible", "==", true),
+                orderBy("date", "asc"),
                 limit(3)
             );
 
@@ -185,11 +185,11 @@ const EventCarousel: React.FC = () => {
 
     const getNextIndex = (direction: string) => {
         const isInbound =
-            direction === 'left'
+            direction === "left"
                 ? activeIndex + 1 < eventsRef.current.length
                 : activeIndex - 1 >= 0;
         let nextIndex = -1;
-        if (direction === 'left') {
+        if (direction === "left") {
             nextIndex = isInbound
                 ? activeIndex + 1
                 : eventsRef.current.length - 1;
@@ -207,7 +207,7 @@ const EventCarousel: React.FC = () => {
         setSlideDirection(
             nextIndex === 0 || nextIndex === eventsRef.current.length - 1
                 ? direction
-                : ''
+                : ""
         );
     };
 
@@ -237,7 +237,7 @@ const EventCarousel: React.FC = () => {
         <div className={classes.carouselRoot}>
             <Box className={classes.eventsContainer}>
                 {!mdBreakpoint &&
-                    slideDirection === 'right' &&
+                    slideDirection === "right" &&
                     activeIndex === 0 && <CardPlaceholder />}
                 {visibleEvents.map(({ key, ...event }) => {
                     if (mdBreakpoint && event.active) {
@@ -266,10 +266,10 @@ const EventCarousel: React.FC = () => {
                     return null;
                 })}
                 {!mdBreakpoint &&
-                    slideDirection === 'left' &&
+                    slideDirection === "left" &&
                     activeIndex === eventsRef.current.length - 1 && (
-                        <CardPlaceholder />
-                    )}
+                    <CardPlaceholder />
+                )}
                 {!visibleEvents.length && (
                     <div className={classes.midEvent}>
                         <EventCard
@@ -292,7 +292,7 @@ const EventCarousel: React.FC = () => {
                         disabled={
                             activeIndex === 0 || !eventsRef.current.length
                         }
-                        onClick={() => slideEvents('right')}
+                        onClick={() => slideEvents("right")}
                         variant="filled"
                         className={classes.control}
                     >
@@ -317,7 +317,7 @@ const EventCarousel: React.FC = () => {
                             activeIndex === eventsRef.current.length - 1 ||
                             !eventsRef.current.length
                         }
-                        onClick={() => slideEvents('left')}
+                        onClick={() => slideEvents("left")}
                         variant="filled"
                         className={classes.control}
                     >

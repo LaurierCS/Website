@@ -1,0 +1,10 @@
+.login-container {
+    display: flex;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;        
+}
+
+.login-form>*+* {
+    margin-top: 1rem;
+}

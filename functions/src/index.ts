@@ -1,3 +1,4 @@
+/* eslint-disable */
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import { Client as NotionClient } from "@notionhq/client";

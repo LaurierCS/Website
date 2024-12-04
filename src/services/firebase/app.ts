@@ -1,4 +1,4 @@
-import { initializeApp } from 'firebase/app';
+import { initializeApp } from "firebase/app";
 
 const app = initializeApp({
     apiKey: import.meta.env.VITE_LCS_FIREBASE_APIKEY,

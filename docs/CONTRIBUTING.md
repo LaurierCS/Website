@@ -1,4 +1,4 @@
-# Welcome to Hawk Hacks Contributing Guide
+# Welcome to the LCS Contributing Guide
 
 Thanks for investing your time in contributing to LCS Website!
 
@@ -20,7 +20,7 @@ Here is the list of tools you need to install before starting out:
 Let's start by explaining the folder structure for this project:
 
 ```
-LaurierHawkHacks/Dashboard
+LaurierCS/Website
 |
 |_ .storybook/ -> storybook configuration files
 |_ config/ -> firebase configuration files

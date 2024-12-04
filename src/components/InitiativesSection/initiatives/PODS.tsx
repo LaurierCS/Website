@@ -1,31 +1,31 @@
-import { useEffect, useState } from 'react';
-import { doc, getDoc } from 'firebase/firestore';
-import { useDisclosure } from '@mantine/hooks';
-import { Title, Text, Box, Flex, Button, Modal } from '@mantine/core';
-import { PodsLogo, IconLogo, C3PartnerLogo, HHPartnerLogo } from '@/assets';
-import { useCommonStyles } from './styles';
-import dayjs from '@utils/day';
-import { store } from '@services/firebase';
+import { useEffect, useState } from "react";
+import { doc, getDoc } from "firebase/firestore";
+import { useDisclosure } from "@mantine/hooks";
+import { Title, Text, Box, Flex, Button, Modal } from "@mantine/core";
+import { PodsLogo, IconLogo, C3PartnerLogo, HHPartnerLogo } from "@/assets";
+import { useCommonStyles } from "./styles";
+import dayjs from "@utils/day";
+import { store } from "@services/firebase";
 
 const PODS = () => {
     const { classes } = useCommonStyles();
     const [opened, { open, close }] = useDisclosure(false);
     const [data, setData] = useState({
         applicable: false,
-        openDate: 'TBD',
-        description: '',
-        typeform: '',
+        openDate: "TBD",
+        description: "",
+        typeform: "",
     });
 
     const getData = async () => {
         try {
-            const docSnap = await getDoc(doc(store, 'initiatives', 'pods'));
+            const docSnap = await getDoc(doc(store, "initiatives", "pods"));
             if (docSnap.exists()) {
                 const docData = docSnap.data();
                 const date = docData.openDate.toDate();
                 setData({
                     applicable: docData.applicable,
-                    openDate: dayjs(date).format('MMMM Do, YYYY'),
+                    openDate: dayjs(date).format("MMMM Do, YYYY"),
                     description: docData.description,
                     typeform: docData.typeform,
                 });
@@ -77,10 +77,10 @@ const PODS = () => {
                     >
                         <Box
                             sx={(theme) => ({
-                                display: 'none',
+                                display: "none",
 
-                                [theme.fn.smallerThan('md')]: {
-                                    display: 'block',
+                                [theme.fn.smallerThan("md")]: {
+                                    display: "block",
                                 },
                             })}
                         >
@@ -95,7 +95,7 @@ const PODS = () => {
                 <Flex
                     sx={(theme) => ({
                         gap: 32,
-                        [theme.fn.smallerThan('sm')]: {
+                        [theme.fn.smallerThan("sm")]: {
                             gap: 0,
                         },
                     })}
@@ -142,8 +142,8 @@ const PODS = () => {
                                 aria-describedby="apply-pods"
                                 variant="gradient"
                                 gradient={{
-                                    from: 'blue.4',
-                                    to: 'accents.1',
+                                    from: "blue.4",
+                                    to: "accents.1",
                                 }}
                                 className={classes.actionBtn}
                                 size="lg"
@@ -164,29 +164,29 @@ const PODS = () => {
             >
                 <Box
                     sx={{
-                        padding: '2rem',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '1rem',
-                        color: 'white',
+                        padding: "2rem",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "1rem",
+                        color: "white",
                     }}
                 >
                     <p>
-                        PODS has 5 major development phases -{' '}
+                        PODS has 5 major development phases -{" "}
                         <span className="bold">
                             Brainstorming, Design, Prototyping, MVP
-                        </span>{' '}
+                        </span>{" "}
                         and <span className="bold">Launch</span>.
                     </p>
                     <p>
                         PODS teams are curated based on skill level, based on
-                        your application's test. Our goal is for{' '}
+                        your application&apos;s test. Our goal is for{" "}
                         <span className="bold">everyone to learn</span> - not
                         just one hardcarry.
                     </p>
                     <p>
                         Each POD will work on one project over the course of the
-                        next three months. These projects can be{' '}
+                        next three months. These projects can be{" "}
                         <span className="bold">websites</span>
                         ,&nbsp;<span className="bold">video games</span>,&nbsp;
                         <span className="bold">machine learning models</span>

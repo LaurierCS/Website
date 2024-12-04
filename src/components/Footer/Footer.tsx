@@ -1,135 +1,135 @@
-import React, { useState, useEffect } from 'react';
-import { Text, Title, Box, Flex, createStyles, MantineTheme } from '@mantine/core';
-import { IconArrowUp } from '@tabler/icons-react';
-import { Link } from 'react-scroll';
-import { Dug, Heart } from '@/assets';
+import React, { useState, useEffect } from "react";
+import { Text, Title, Box, Flex, createStyles, MantineTheme } from "@mantine/core";
+import { IconArrowUp } from "@tabler/icons-react";
+import { Link } from "react-scroll";
+import { Dug, Heart } from "@/assets";
 
-import './Footer.css';
-import { navbarHeight } from '../Navbar/Navbar';
+import "./Footer.css";
+import { navbarHeight } from "../Navbar/Navbar";
 
 const useStyles = createStyles((theme: MantineTheme) => ({
     footer: {
-        marginTop: '8rem',
+        marginTop: "8rem",
     },
     title: {
-        fontSize: '3rem',
-        color: 'white',
+        fontSize: "3rem",
+        color: "white",
 
         [theme.fn.smallerThan(600)]: {
-            fontSize: '2rem',
+            fontSize: "2rem",
         },
 
         [theme.fn.smallerThan(400)]: {
-            fontSize: '1.5rem',
+            fontSize: "1.5rem",
         },
     },
 
     text: {
         fontSize: 32,
-        color: '#E7EBF5',
-        marginTop: '2rem',
-        marginBottom: '2rem',
+        color: "#E7EBF5",
+        marginTop: "2rem",
+        marginBottom: "2rem",
 
         [theme.fn.smallerThan(600)]: {
-            fontSize: '1rem',
+            fontSize: "1rem",
         },
     },
 
     dugBox: {
-        position: 'relative',
+        position: "relative",
 
         [theme.fn.smallerThan(780)]: {
-            width: '100%',
-            paddingTop: '6rem',
-            overflow: 'hidden',
-            transform: 'translateY(-8rem)',
+            width: "100%",
+            paddingTop: "6rem",
+            overflow: "hidden",
+            transform: "translateY(-8rem)",
         },
     },
 
     dug: {
         [theme.fn.smallerThan(780)]: {
-            width: '100%',
+            width: "100%",
         },
     },
 
     heart: {
-        position: 'absolute',
+        position: "absolute",
         left: 100,
-        top: '-5rem',
-        animation: 'bounce 2s infinite',
+        top: "-5rem",
+        animation: "bounce 2s infinite",
 
         [theme.fn.smallerThan(780)]: {
-            top: '3rem',
-            left: '4rem',
-            width: '8rem',
+            top: "3rem",
+            left: "4rem",
+            width: "8rem",
 
             [theme.fn.largerThan(480)]: {
-                left: '8rem',
-                width: '10rem',
+                left: "8rem",
+                width: "10rem",
             },
 
             [theme.fn.smallerThan(660)]: {
-                left: '7rem',
-                width: '9rem',
+                left: "7rem",
+                width: "9rem",
             },
 
             [theme.fn.smallerThan(560)]: {
-                left: '6rem',
-                width: '8rem',
+                left: "6rem",
+                width: "8rem",
             },
 
             [theme.fn.smallerThan(560)]: {
-                left: '6rem',
-                width: '8rem',
+                left: "6rem",
+                width: "8rem",
             },
 
             [theme.fn.smallerThan(480)]: {
-                left: '4rem',
-                width: '7rem',
+                left: "4rem",
+                width: "7rem",
             },
 
             [theme.fn.smallerThan(400)]: {
-                top: '3rem',
-                left: '2wrem',
-                width: '6rem',
+                top: "3rem",
+                left: "2wrem",
+                width: "6rem",
             },
         },
     },
 
     footerBar: {
-        background: 'rgba(26, 27, 30, 0.9)',
-        padding: '3rem 2rem',
+        background: "rgba(26, 27, 30, 0.9)",
+        padding: "3rem 2rem",
         fontSize: 18,
-        position: 'absolute',
+        position: "absolute",
         bottom: 0,
         left: 0,
         right: 0,
     },
 
     lcsDevTeam: {
-        fontWeight: 'bold',
+        fontWeight: "bold",
     },
 
     backToTopBtn: {
         borderRadius: 9999,
-        border: 'none',
-        cursor: 'pointer',
-        position: 'fixed',
-        top: '97%',
-        transform: 'translateY(-110%)',
-        right: '2%',
-        width: '3rem',
-        height: '3rem',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        background: 'rgba(26, 27, 30, 0.9)',
-        transition: 'opacity 0.3s ease-in-out',
+        border: "none",
+        cursor: "pointer",
+        position: "fixed",
+        top: "97%",
+        transform: "translateY(-110%)",
+        right: "2%",
+        width: "3rem",
+        height: "3rem",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background: "rgba(26, 27, 30, 0.9)",
+        transition: "opacity 0.3s ease-in-out",
     },
 
     arrowUp: {
-        color: '#6998DF',
-        opacity: '0.8',
+        color: "#6998DF",
+        opacity: "0.8",
     },
 }));
 
@@ -144,10 +144,10 @@ const Footer: React.FC = () => {
             setShowBackToTop(shouldShow);
         };
 
-        window.addEventListener('scroll', handleScroll);
+        window.addEventListener("scroll", handleScroll);
 
         return () => {
-            window.removeEventListener('scroll', handleScroll);
+            window.removeEventListener("scroll", handleScroll);
         };
     }, []);
 
@@ -163,7 +163,7 @@ const Footer: React.FC = () => {
                 <span>You made it to the end!</span>
             </Title>
             <Text
-                style={{ marginLeft: '10px', marginRight: '10px' }}
+                style={{ marginLeft: "10px", marginRight: "10px" }}
                 align="center"
                 className={classes.text}
             >
@@ -176,13 +176,13 @@ const Footer: React.FC = () => {
                 </Box>
             </Flex>
             <Box className={classes.footerBar}>
-                <p style={{ textAlign: 'center' }}>
+                <p style={{ textAlign: "center" }}>
                     Made with ❤️
                 </p>
-                <p style={{ textAlign: 'center' }} className={classes.lcsDevTeam}>
+                <p style={{ textAlign: "center" }} className={classes.lcsDevTeam}>
                     LCS Development Team
                 </p>
-                <p style={{ textAlign: 'center', marginTop: '3rem' }}>
+                <p style={{ textAlign: "center", marginTop: "3rem" }}>
                     Copyright &#169; {new Date().getFullYear()} | Laurier
                     Computing Society. All rights reserved.
                 </p>

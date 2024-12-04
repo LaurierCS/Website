@@ -1,4 +1,3 @@
-import React from 'react';
 import {
     Title,
     Text,
@@ -9,31 +8,26 @@ import {
     Box,
     createStyles,
     MantineTheme,
-} from '@mantine/core';
+} from "@mantine/core";
 
-const NEWSLETTER_HEADING = '<Sign up for our Newsletter! />';
-const NEWSLETTER_CAPTION = [
-    'Subscribe to our newsletter to receive event',
-    <br />,
-    'announcements and more!',
-];
+const NEWSLETTER_HEADING = "<Sign up for our Newsletter! />";
 
 const useStyles = createStyles((theme: MantineTheme) => ({
     emailInput: {
-        backgroundColor: '#E7EBF5',
-        border: 'none',
-        color: '#1A1B1E',
-        textAlign: 'center',
-        borderRadius: '6px',
-        padding: '6px 16px',
-        width: '100%',
+        backgroundColor: "#E7EBF5",
+        border: "none",
+        color: "#1A1B1E",
+        textAlign: "center",
+        borderRadius: "6px",
+        padding: "6px 16px",
+        width: "100%",
     },
 
     title: {
-        fontWeight: 'bold',
+        fontWeight: "bold",
         fontSize: 48,
         [theme.fn.smallerThan(780)]: {
-            fontSize: '2rem',
+            fontSize: "2rem",
         },
     },
 
@@ -41,25 +35,25 @@ const useStyles = createStyles((theme: MantineTheme) => ({
         fontSize: 24,
         fontWeight: 600,
         [theme.fn.smallerThan(780)]: {
-            fontSize: '1rem',
+            fontSize: "1rem",
         },
     },
 
     button: {
-        fontSize: '1.5rem',
-        marginTop: '10px',
+        fontSize: "1.5rem",
+        marginTop: "10px",
 
         [theme.fn.smallerThan(780)]: {
-            fontSize: '1rem',
+            fontSize: "1rem",
         },
     },
 
     newsletterBtn: {
         width: 400,
-        marginLeft: 'auto',
-        marginRight: 'auto',
+        marginLeft: "auto",
+        marginRight: "auto",
         [theme.fn.smallerThan(450)]: {
-            padding: '0 4rem',
+            padding: "0 4rem",
         },
     },
 }));
@@ -75,7 +69,7 @@ function Newsletter() {
     return (
         <section id="newsletter">
             <Container size="xl" my={150}>
-                <Center style={{ width: '100%', height: '100%' }}>
+                <Center style={{ width: "100%", height: "100%" }}>
                     <Flex
                         direction="column"
                         justify="center"
