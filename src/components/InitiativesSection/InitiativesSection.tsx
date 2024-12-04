@@ -1,5 +1,6 @@
 import { Container, Title, Text, Flex, createStyles, MantineTheme } from "@mantine/core";
 import ReviewSessions from "./initiatives/ReviewSessions";
+import MTP from "./initiatives/MTP";
 
 const useStyles = createStyles((theme: MantineTheme) => ({
     title: {
@@ -66,6 +67,7 @@ const InitiativesSection: React.FC = () => {
                 </Flex>
                 <Container fluid className="space-y-2">
                     <ReviewSessions />
+                    <MTP />
                 </Container>
             </Container>
         </section>
