@@ -221,11 +221,26 @@ const MeetTheTeam: React.FC = () => {
                     "Admin Coordinator": 3
                 };
 
+                // Special ordering for communications department
+                const commsRoleOrder: Record<string, number> = {
+                    "VP of Communications & Marketing": 0,
+                    "Newsletter Chief": 1,
+                    "Social Media Coordinator": 2,
+                    "Graphic Designer": 3
+                };
+
                 // Check if both roles are in our admin ordering
-                const aIndex = adminRoleOrder[a.role];
-                const bIndex = adminRoleOrder[b.role];
-                if (aIndex !== undefined && bIndex !== undefined) {
-                    return aIndex - bIndex;
+                const aAdminIndex = adminRoleOrder[a.role];
+                const bAdminIndex = adminRoleOrder[b.role];
+                if (aAdminIndex !== undefined && bAdminIndex !== undefined) {
+                    return aAdminIndex - bAdminIndex;
+                }
+
+                // Check if both roles are in our communications ordering
+                const aCommsIndex = commsRoleOrder[a.role];
+                const bCommsIndex = commsRoleOrder[b.role];
+                if (aCommsIndex !== undefined && bCommsIndex !== undefined) {
+                    return aCommsIndex - bCommsIndex;
                 }
 
                 // Default VP sorting for other departments
