@@ -54,7 +54,10 @@ const MTP = () => {
                 </Box>
                 <Flex justify="center" gap={32}>
                     <span className={classes.emojiLogo}>🧑‍💻</span>
-                    <Box>
+                    <Box sx={{ 
+                        paddingX: '1rem',
+                        maxWidth: '90%' 
+                    }}>
                         <Text className={commonClasses.description}>
                             Join us for an exclusive opportunity to connect with professionals as we bring the coolest guest speakers from the tech industry. Hear from their experiences, learn about their journeys, make meaningful connections, and more!
                         </Text>
