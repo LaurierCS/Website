@@ -57,11 +57,13 @@ const About: React.FC = () => {
             <Container size="xl" my="md">
                 <Grid grow gutter={5} gutterXl={100} className={classes.grid}>
                     <Grid.Col md={6}>
-                        <img 
-                            src={PCDesign}
-                            style={{ width: "90%" }} 
-                            className={classes.image}
-                        />
+                        <Center sx={{ width: "100%", height: "100%" }}>
+                            <img 
+                                src={PCDesign}
+                                style={{ width: "90%", marginTop: "2rem" }} 
+                                className={classes.image}
+                            />
+                        </Center>
                     </Grid.Col>
                     <Grid.Col md={6}>
                         <Center sx={{ width: "100%", height: "100%" }}>
