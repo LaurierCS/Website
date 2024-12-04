@@ -100,7 +100,7 @@ const useStyles = createStyles((theme: MantineTheme) => ({
         alignItems: 'center',
         gap: '0.5rem',
         color: theme.colors.gray[4],
-        fontSize: '0.875rem',
+        fontSize: '1.1rem',
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
@@ -108,6 +108,8 @@ const useStyles = createStyles((theme: MantineTheme) => ({
         '& svg': {
             color: theme.colors.blue[4],
             flexShrink: 0,
+            width: '18px',
+            height: '18px'
         },
     },
 
@@ -115,11 +117,14 @@ const useStyles = createStyles((theme: MantineTheme) => ({
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
+        fontSize: '1.1rem',
+        fontWeight: 500,
     },
 
     timeHighlight: {
         color: theme.colors.blue[3],
         fontWeight: 600,
+        fontSize: '1.1rem',
     },
 
     noEvents: {
