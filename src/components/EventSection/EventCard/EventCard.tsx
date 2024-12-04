@@ -186,18 +186,16 @@ const useStyles = createStyles((theme: MantineTheme) => ({
 interface EventCardProps {
     icon: React.ReactNode;
     title: string;
-    date: dayjs.Dayjs; 
+    date: dayjs.Dayjs;
     place: string;
-    description: string;
-    igPost?: string;
-    isPublicDate?: boolean;
-    isPublicPlace?: boolean;
-    isPublicTime?: boolean;
+    description?: string;
+    visible: boolean;
     isNext?: boolean;
-    disableIg?: boolean;
     hideDate?: boolean;
     hidePlace?: boolean;
-
+    isPublicDate?: boolean;
+    isPublicTime?: boolean;
+    isPublicPlace?: boolean;
 }
 
 const EventCard: React.FC<EventCardProps> = ({
@@ -206,14 +204,13 @@ const EventCard: React.FC<EventCardProps> = ({
     date,
     place,
     description,
-    igPost,
-    isPublicDate = false,
-    isPublicPlace = false,
-    isPublicTime = false,
+    visible,
     isNext = false,
-    disableIg = false,
     hideDate = false,
     hidePlace = false,
+    isPublicDate = true,
+    isPublicTime = true,
+    isPublicPlace = true,
 }) => {
     const { classes } = useStyles();
 
@@ -234,13 +231,14 @@ const EventCard: React.FC<EventCardProps> = ({
                         {!hideDate && (
                             <Box>
                                 <span className={classes.date}>
-                                    {isPublicDate &&
-                                        date.format("MMMM Do, YYYY")}
-                                    {!isPublicDate && "Date: TBD"}
+                                    {isPublicDate
+                                        ? date.format("MMMM Do, YYYY")
+                                        : "Date: TBD"}
                                 </span>
                                 <span className={classes.time}>
-                                    {isPublicTime && date.format("hh:mm A")}
-                                    {!isPublicTime && "Time: TBD"}
+                                    {isPublicTime 
+                                        ? date.format("hh:mm A")
+                                        : "Time: TBD"}
                                 </span>
                             </Box>
                         )}
@@ -254,28 +252,14 @@ const EventCard: React.FC<EventCardProps> = ({
                     </Flex>
                 </Box>
 
-                <p className={classes.description}>
-                    {description}
-                </p>
-
-                {!disableIg && igPost && (
-                    <a
-                        href={igPost}
-                        target="_blank"
-                        rel="next noreferrer"
-                        className={classes.link}
-                    >
-                        Learn more about the event!
-                    </a>
+                {description && (
+                    <p className={classes.description}>
+                        {description}
+                    </p>
                 )}
 
-                {!disableIg && !igPost && (
-                    <span
-                        className={[
-                            classes.description,
-                            classes.highlight,
-                        ].join(" ")}
-                    >
+                {!description && (
+                    <span className={[classes.description, classes.highlight].join(" ")}>
                         Find out more closer to the date!
                     </span>
                 )}
@@ -284,7 +268,7 @@ const EventCard: React.FC<EventCardProps> = ({
             {isNext && (
                 <Box component="span" className={classes.upNext}>
                     UP NEXT
-                </Box>
+                </Box>  
             )}
         </Box>
     );

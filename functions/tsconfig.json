@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+      "module": "commonjs",
+      "noImplicitReturns": true,
+      "noUnusedLocals": true,
+      "outDir": "lib",
+      "sourceMap": true,
+      "strict": true,
+      "target": "es2017",
+      "baseUrl": "./",
+      "rootDir": "./src",
+      "types": ["node"],
+      "skipLibCheck": true,
+      "esModuleInterop": true
+    },
+    "compileOnSave": true,
+    "include": [
+      "src"
+    ],
+    "exclude": [
+      "node_modules",
+      "../src/**/*"
+    ]
+}

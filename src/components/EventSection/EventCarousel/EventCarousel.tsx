@@ -150,13 +150,19 @@ const EventCarousel: React.FC = () => {
             );
 
             const docs = await getDocs(q);
-            const _events: EventData[] = [];
+            let _events: EventData[] = [];
+            
             docs.forEach((doc) => {
                 const data = doc.data();
-                data.date = dayjs.unix(data.date.seconds);
-                data.key = doc.id;
-                data.active = false;
-                _events.push(data as EventData);
+                _events.push({
+                    key: doc.id,
+                    title: data.title,
+                    date: dayjs.unix(data.date.seconds),
+                    place: data.place,
+                    visible: data.visible,
+                    active: false,
+                    icon: data.icon || "✏️"
+                });
             });
 
             if (!_events.length) return;
@@ -168,6 +174,7 @@ const EventCarousel: React.FC = () => {
             const firstHalf = _events.slice(1, mid + 1);
             const secondHalf = _events.slice(mid + 1);
             eventsRef.current = [...firstHalf, upnext, ...secondHalf];
+            
             const startIndex = mid - 1 >= 0 ? mid - 1 : 0;
             flushSync(() => {
                 setActiveIndex(mid);

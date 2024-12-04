@@ -25,4 +25,11 @@ build
 *.sln
 *.sw?
 
+.env
+.env.development
+functions/.runtimeconfig.json
+/functions/lib
+.env.production
 .env.*
+functions/.env
+.runtimeconfig.json
