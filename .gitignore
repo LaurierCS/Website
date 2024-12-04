@@ -30,3 +30,6 @@ build
 functions/.runtimeconfig.json
 /functions/lib
 .env.production
+.env.*
+functions/.env
+.runtimeconfig.json
