@@ -11,7 +11,6 @@
     font-size: 3.15rem;
     width: 100%;
     text-align: center;
-    white-space: nowrap;
     --stack-height: calc(100% / var(--stacks) - 1px);
     --inverse-index: calc(calc(var(--stacks) - 1) - var(--index));
     --clip-top: calc(var(--stack-height) * var(--index));
@@ -35,4 +34,13 @@
     text-shadow: 2px -3px 0 rgb(255, 151, 151), -2px 3px 0 blue;
   }
   4%, 100% {  text-shadow: none; transform: none; }
+}
+
+@media screen and (max-width: 780px) {
+    .stack span {
+        font-size: 2rem;
+        --glitch-translate: 10px;
+        word-break: keep-all;
+        overflow-wrap: break-word;
+    }
 }
