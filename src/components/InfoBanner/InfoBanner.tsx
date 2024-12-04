@@ -2,9 +2,9 @@ import "./InfoBanner.css";
 import { Center } from "@mantine/core";
 import CountUp from "react-countup";
 
-const STUDENT_COUNT = 3500;
+const STUDENT_COUNT = 4000;
 const EVENT_COUNT = 20;
-const EXECUTIVE_COUNT = 53;
+const EXECUTIVE_COUNT = 44;
 
 const InfoBanner = () => {
     return (
