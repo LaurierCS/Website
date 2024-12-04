@@ -213,6 +213,52 @@ const MeetTheTeam: React.FC = () => {
 
             const prefix = "VP of";
             const sort = (a: TeamMember, b: TeamMember) => {
+                // Special ordering for admin department
+                const adminRoleOrder: Record<string, number> = {
+                    "VP of Strategy": 0,
+                    "VP of Operations & Internal Affairs": 1,
+                    "VP of Admin Logistics & Finance": 2,
+                    "Admin Coordinator": 3
+                };
+
+                // Special ordering for communications department
+                const commsRoleOrder: Record<string, number> = {
+                    "VP of Communications & Marketing": 0,
+                    "Newsletter Chief": 1,
+                    "Social Media Coordinator": 2,
+                    "Graphic Designer": 3
+                };
+
+                // Special ordering for development department
+                const devRoleOrder: Record<string, number> = {
+                    "VP of Development & Technology": 0,
+                    "Technical Content Writer": 1,
+                    "Software Engineer": 2,
+                    "Software Engineer & Technical Content Writer": 3
+                };
+
+                // Check if both roles are in our admin ordering
+                const aAdminIndex = adminRoleOrder[a.role];
+                const bAdminIndex = adminRoleOrder[b.role];
+                if (aAdminIndex !== undefined && bAdminIndex !== undefined) {
+                    return aAdminIndex - bAdminIndex;
+                }
+
+                // Check if both roles are in our communications ordering
+                const aCommsIndex = commsRoleOrder[a.role];
+                const bCommsIndex = commsRoleOrder[b.role];
+                if (aCommsIndex !== undefined && bCommsIndex !== undefined) {
+                    return aCommsIndex - bCommsIndex;
+                }
+
+                // Check if both roles are in our development ordering
+                const aDevIndex = devRoleOrder[a.role];
+                const bDevIndex = devRoleOrder[b.role];
+                if (aDevIndex !== undefined && bDevIndex !== undefined) {
+                    return aDevIndex - bDevIndex;
+                }
+
+                // Default VP sorting for other departments
                 if (a.role.startsWith(prefix) && !b.role.startsWith(prefix)) {
                     return -1;
                 }
