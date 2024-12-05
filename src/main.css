@@ -7,7 +7,7 @@ html, #root {
     height: auto;
 }
 #top {
-  background: #1A1B1E !important;
+  background: transparent !important;
 }
 
 :root {
