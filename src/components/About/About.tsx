@@ -41,14 +41,7 @@ const useStyles = createStyles((theme: MantineTheme) => ({
 
 const ABOUT_US_TITLE = "<About Us />";
 const ABOUT_US_TEXT =
-    "The Laurier Computing Society is the official student-run club for \
-computer science enthusiasts at Wilfrid Laurier University. Our mission is to empower students \
-to reach their full potential in STEM by providing a wealth of resources and opportunities for \
-academic and professional development. Our organization is dedicated to creating a vibrant community of tech-savvy students \
-who are passionate about learning, creating, and innovating. Our focus is to provide members \
-with hands-on experience through workshops, hackathons, networking events, and guest speaker \
-sessions. Whether you're a beginner or a seasoned pro, the Laurier Computing Society has \
-something for everyone. Join us today and be a part of the future of technology!";
+    "The Laurier Computing Society (LCS) is the official student-run club for computer science enthusiasts at Wilfrid Laurier University. At LCS, our mission is to empower students to thrive in STEM by offering unparalleled resources, hands-on experiences, and professional development opportunities. Through review sessions, workshops, hackathons, networking events, and industry-leading guest speaker sessions, we bridge the gap between academia and the tech industry. Whether you're just starting your coding journey or you're an experienced developer, LCS provides the tools, connections, and inspiration to help you achieve your goals. Join us to shape the future of technology together!";
 
 const About: React.FC = () => {
     const { classes } = useStyles();
@@ -57,13 +50,11 @@ const About: React.FC = () => {
             <Container size="xl" my="md">
                 <Grid grow gutter={5} gutterXl={100} className={classes.grid}>
                     <Grid.Col md={6}>
-                        <Center sx={{ width: "100%", height: "100%" }}>
-                            <img 
-                                src={PCDesign}
-                                style={{ width: "90%", marginTop: "2rem" }} 
-                                className={classes.image}
-                            />
-                        </Center>
+                        <img 
+                            src={PCDesign}
+                            style={{ width: "90%" }} 
+                            className={classes.image}
+                        />
                     </Grid.Col>
                     <Grid.Col md={6}>
                         <Center sx={{ width: "100%", height: "100%" }}>
