@@ -4,6 +4,7 @@ import { collection, query, where, orderBy, getDocs, Timestamp, limit } from 'fi
 import { store } from '../../services/firebase';
 import dayjs from '../../utils/day';
 import { IconCalendar, IconMapPin, IconClock } from '@tabler/icons-react';
+import { TypeAnimation } from 'react-type-animation';
 
 const useStyles = createStyles((theme: MantineTheme) => ({
     title: {
@@ -193,7 +194,15 @@ const EventSection: React.FC = () => {
                         sx={{ fontSize: "3rem" }}
                         className={classes.title}
                     >
-                        {EVENT_SECTION_TITLE}
+                        <TypeAnimation
+                            sequence={[
+                                '<Upcoming Events />',
+                                1000,
+                            ]}
+                            wrapper="span"
+                            speed={50}
+                            repeat={Infinity}
+                        />
                     </Title>
                     <Text
                         span
