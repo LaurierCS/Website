@@ -52,10 +52,9 @@ const MTP = () => {
             viewport={{ once: true }}
         >
             <Box className={classes.card}>
-                <Text className={classes.title}>🧑‍💻 Mentorship Program</Text>
+                <Text className={classes.title}>🧑‍💻 Meet the Professionals</Text>
                 <Text className={classes.description}>
-                    Connect with industry professionals and learn from their experiences. Our guest speakers
-                    share valuable insights about the tech industry, career development, and professional growth.
+                Join us for an exclusive opportunity to connect with professionals as we bring the coolest guest speakers from the tech industry. Hear from their experiences, learn about their journeys, make meaningful connections, and more!
                 </Text>
                 <div className={classes.listWrapper}>
                     <List spacing="md">
