@@ -1,5 +1,5 @@
 .info__banner {
-    padding-top: 1em;
+    padding-top: 0;
     padding-bottom: 1em;
     display: flex;
     justify-content: center;
@@ -8,7 +8,7 @@
     padding-right: 10%;
     gap: 12em;
     font-size: 18px;
-
+    
     background-image: url('/InfobannerBackground.svg');
     background-size: cover;
     background-position: center;
