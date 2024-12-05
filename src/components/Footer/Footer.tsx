@@ -100,10 +100,7 @@ const useStyles = createStyles((theme: MantineTheme) => ({
         background: "rgba(26, 27, 30, 0.9)",
         padding: "3rem 2rem",
         fontSize: 18,
-        position: "absolute",
-        bottom: 0,
-        left: 0,
-        right: 0,
+        width: '100%',
     },
 
     lcsDevTeam: {
@@ -175,7 +172,7 @@ const Footer: React.FC = () => {
                     <img src={Heart} alt="Heart" className={classes.heart} />
                 </Box>
             </Flex>
-            <Box className={classes.footerBar}>
+            <Box className={classes.footerBar} style={{ marginTop: '2rem' }}>
                 <p style={{ textAlign: "center" }}>
                     Made with ❤️
                 </p>

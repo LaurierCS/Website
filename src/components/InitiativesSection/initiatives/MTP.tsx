@@ -1,81 +1,98 @@
-import { Title, Text, Box, Flex } from "@mantine/core";
-import { IconLogo } from "@/assets";
-import { useCommonStyles } from "./styles";
+import { Box, Text, List, ThemeIcon, createStyles, MantineTheme } from "@mantine/core";
+import { motion } from "framer-motion";
+import { FaLightbulb, FaQuestionCircle, FaNetworkWired } from "react-icons/fa";
+
+const useStyles = createStyles((theme: MantineTheme) => ({
+    card: {
+        background: "rgba(255, 255, 255, 0.03)",
+        borderRadius: theme.radius.lg,
+        padding: "2rem",
+        border: "1px solid rgba(255, 255, 255, 0.1)",
+        transition: "transform 0.3s ease",
+        height: "425px",
+        display: "flex",
+        flexDirection: "column",
+    },
+
+    title: {
+        fontSize: "1.8rem",
+        fontWeight: 700,
+        marginBottom: "1rem",
+        background: theme.fn.gradient({ from: "blue.4", to: "cyan.4" }),
+        WebkitBackgroundClip: "text",
+    },
+
+    description: {
+        fontSize: "1.1rem",
+        lineHeight: 1.6,
+        color: theme.colors.gray[3],
+        marginBottom: "1.5rem",
+        flex: 1,
+    },
+
+    listWrapper: {
+    },
+
+    listItem: {
+        color: theme.colors.gray[3],
+        fontSize: "1.1rem",
+        lineHeight: 1.6,
+        marginBottom: "0.5rem",
+    },
+}));
 
 const MTP = () => {
-    const { classes } = useCommonStyles();
-    const { classes: commonClasses } = useCommonStyles();
+    const { classes } = useStyles();
 
     return (
-        <Box sx={(theme) => ({ boxShadow: theme.shadows.lg })}>
-            <Box className={commonClasses.outerBox}>
-                <Box className={commonClasses.innerBox}>
-                    <Flex
-                        justify="center"
-                        align="center"
-                        gap={12}
-                        className={commonClasses.partnerLogoContainer}
-                        sx={(theme) => ({
-                            [theme.fn.smallerThan("xs")]: {
-                                gridColumn: "span 1",
-                            },
-                        })}
-                    >
-                        <img
-                            alt="LCS Logo"
-                            src={IconLogo}
-                            className={classes.lcsLogo}
-                        />
-                    </Flex>
-                    <Title className={commonClasses.title}>
-                        Meet The Professionals
-                    </Title>
-                    <Flex
-                        justify="center"
-                        align="center"
-                        sx={(theme) => ({
-                            height: "100%",
-                            [theme.fn.smallerThan("xs")]: {
-                                gridColumn: "span 1",
-                            },
-                        })}
-                    >
-                        <Box
-                            sx={(theme) => ({
-                                display: "none",
-                                [theme.fn.smallerThan("md")]: {
-                                    display: "block",
-                                },
-                            })}
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+        >
+            <Box className={classes.card}>
+                <Text className={classes.title}>🧑‍💻 Mentorship Program</Text>
+                <Text className={classes.description}>
+                    Connect with industry professionals and learn from their experiences. Our guest speakers
+                    share valuable insights about the tech industry, career development, and professional growth.
+                </Text>
+                <div className={classes.listWrapper}>
+                    <List spacing="md">
+                        <List.Item 
+                            icon={
+                                <ThemeIcon color="blue" size={24} radius="xl">
+                                    <FaLightbulb size={16} />
+                                </ThemeIcon>
+                            }
+                            className={classes.listItem}
                         >
-                            <span className={classes.emojiHeaderLogo}>🧑‍💻</span>
-                        </Box>
-                    </Flex>
-                </Box>
-                <Flex justify="center" gap={32}>
-                    <span className={classes.emojiLogo}>🧑‍💻</span>
-                    <Box sx={{ 
-                        paddingX: '1rem',
-                        maxWidth: '90%' 
-                    }}>
-                        <Text className={commonClasses.description}>
-                            Join us for an exclusive opportunity to connect with professionals as we bring the coolest guest speakers from the tech industry. Hear from their experiences, learn about their journeys, make meaningful connections, and more!
-                        </Text>
-
-                        <Box mt={32}>
-                            <Text className={classes.description}>
-                                Why should you attend?
-                            </Text>
-                            <Text className={commonClasses.description} component="ul" mt={8}>
-                                <li>Get tips on job searching, interview preparation, and learn how to stand out in the tech industry</li>
-                                <li>Open Q&A to address any questions</li>
-                                <li>Network one-on-one with experts and expand your connections</li>
-                            </Text>
-                        </Box>
-                    </Box>
-                </Flex>
+                            Get insider tips on job searching and interview preparation
+                        </List.Item>
+                        <List.Item 
+                            icon={
+                                <ThemeIcon color="blue" size={24} radius="xl">
+                                    <FaQuestionCircle size={16} />
+                                </ThemeIcon>
+                            }
+                            className={classes.listItem}
+                        >
+                            Participate in open Q&A sessions with industry experts
+                        </List.Item>
+                        <List.Item 
+                            icon={
+                                <ThemeIcon color="blue" size={24} radius="xl">
+                                    <FaNetworkWired size={16} />
+                                </ThemeIcon>
+                            }
+                            className={classes.listItem}
+                        >
+                            Build your professional network through one-on-one connections
+                        </List.Item>
+                    </List>
+                </div>
             </Box>
-        </Box>
+        </motion.div>
     );
 };
 
