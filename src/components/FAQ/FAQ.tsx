@@ -157,11 +157,7 @@ const FAQ: React.FC = () => {
                                 let students and professionals connect and get
                                 information about the industry. <br />
                                     <br />
-                                We also run events such as our “Learn a Tool
-                                Series”, where we showcase and preview different
-                                popular technologies used in the industry that
-                                can help students personally, in projects, or in
-                                their careers. <br />
+                                    We also run Review Sessions for courses such as CP104 and CP213, where we review course content and provide resources to ensure your success on exams! <br />
                                     <br />
                                 We also run fun events, such as regular socials,
                                 gaming events, and competitions! Stay tuned on
