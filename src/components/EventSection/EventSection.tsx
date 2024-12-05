@@ -1,10 +1,11 @@
 import { Container, Flex, Title, Text, createStyles, MantineTheme, Box, Transition } from '@mantine/core';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { collection, query, where, orderBy, getDocs, Timestamp, limit } from 'firebase/firestore';
 import { store } from '../../services/firebase';
 import dayjs from '../../utils/day';
 import { IconCalendar, IconMapPin, IconClock } from '@tabler/icons-react';
 import { TypeAnimation } from 'react-type-animation';
+import { motion, useInView } from 'framer-motion';
 
 const useStyles = createStyles((theme: MantineTheme) => ({
     title: {
@@ -151,6 +152,8 @@ const EventSection: React.FC = () => {
     const { classes } = useStyles();
     const [events, setEvents] = useState<Event[]>([]);
     const [mounted, setMounted] = useState(false);
+    const titleRef = useRef(null);
+    const isInView = useInView(titleRef, { once: true });
 
     useEffect(() => {
         const fetchEvents = async () => {
@@ -193,16 +196,19 @@ const EventSection: React.FC = () => {
                         order={1}
                         sx={{ fontSize: "3rem" }}
                         className={classes.title}
+                        ref={titleRef}
                     >
-                        <TypeAnimation
-                            sequence={[
-                                '<Upcoming Events />',
-                                1000,
-                            ]}
-                            wrapper="span"
-                            speed={50}
-                            repeat={Infinity}
-                        />
+                        {isInView ? (
+                            <TypeAnimation
+                                sequence={[
+                                    '<Upcoming Events />',
+                                    1000,
+                                ]}
+                                wrapper="span"
+                                speed={50}
+                                repeat={Infinity}
+                            />
+                        ) : '<Upcoming Events />'}
                     </Title>
                     <Text
                         span
