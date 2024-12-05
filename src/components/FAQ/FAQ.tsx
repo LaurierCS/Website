@@ -246,8 +246,7 @@ const FAQ: React.FC = () => {
                                 workshops, and opportunities. <br />
                                     <br />
                                 Through Konfer, you can connect with industry 
-                                professionals and join exciting tech initiatives in the local community. 
-                                Stay tuned to our MyLS page for all upcoming Konfer events!
+                                professionals and join exciting tech initiatives in the local community!
                                 </div>
                             </Accordion.Panel>
                         </Accordion.Item>
