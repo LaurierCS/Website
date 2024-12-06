@@ -10,7 +10,7 @@ import {
     MantineTheme,
 } from "@mantine/core";
 
-const NEWSLETTER_HEADING = "<Sign up for our Newsletter! />";
+const NEWSLETTER_HEADING = "<Sign up for our Newsletter!\u00A0/>";
 
 const useStyles = createStyles((theme: MantineTheme) => ({
     emailInput: {
