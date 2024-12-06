@@ -93,7 +93,7 @@ const useStyles = createStyles((theme: MantineTheme) => ({
     },
 }));
 
-const FAQ_TITLE = "<Frequently Asked Questions />";
+const FAQ_TITLE = "<Frequently Asked Questions\u00A0/>";
 
 const FAQ: React.FC = () => {
     const { classes } = useStyles();

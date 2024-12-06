@@ -25,7 +25,10 @@ html, body {
   --clip-top: calc(var(--stack-height) * var(--index));
   --clip-bottom: calc(var(--stack-height) * var(--inverse-index));
   clip-path: inset(var(--clip-top) 0 var(--clip-bottom) 0);
-  animation: cubic-bezier(.46,.29,0,1.24) 1 backwards calc(var(--index) * 120ms), glitch 2s ease infinite 2s alternate-reverse, glitch 2s ease 750ms;
+  animation: 
+    stack-appear cubic-bezier(.46,.29,0,1.24) 1 backwards calc(var(--index) * 120ms),
+    glitch 2s ease infinite 2.5s alternate-reverse,
+    glitch 2s ease 2s;
   background: linear-gradient(to right, #29abf4, #A1DAF5);
   -webkit-background-clip: text;
   color: transparent;
@@ -44,6 +47,17 @@ html, body {
     text-shadow: 2px -3px 0 rgb(255, 151, 151), -2px 3px 0 blue;
   }
   4%, 100% {  text-shadow: none; transform: none; }
+}
+
+@keyframes stack-appear {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media screen and (max-width: 780px) {

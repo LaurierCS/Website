@@ -10,7 +10,7 @@ import {
     MantineTheme,
 } from "@mantine/core";
 
-const NEWSLETTER_HEADING = "<Sign up for our Newsletter! />";
+const NEWSLETTER_HEADING = "<Sign up for our Newsletter!\u00A0/>";
 
 const useStyles = createStyles((theme: MantineTheme) => ({
     emailInput: {
@@ -34,6 +34,7 @@ const useStyles = createStyles((theme: MantineTheme) => ({
     description: {
         fontSize: 24,
         fontWeight: 600,
+        padding: "0 2rem",
         [theme.fn.smallerThan(780)]: {
             fontSize: "1rem",
         },

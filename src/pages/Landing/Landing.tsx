@@ -18,7 +18,6 @@ const Landing = () => {
         <>
             <Navbar />
             <HeroSection />
-            <Spacer height="2em" />
             <InfoBanner />
             <Spacer height="2em" />
             <About />
