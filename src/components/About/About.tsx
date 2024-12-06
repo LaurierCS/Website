@@ -57,11 +57,21 @@ const useStyles = createStyles((theme: MantineTheme) => ({
     stats: {
         display: "flex",
         gap: "2rem",
-        flexWrap: "wrap",
+        flexWrap: "nowrap",
         marginTop: "2rem",
+        justifyContent: "center",
         
         "& > div": {
-            flex: "1 1 auto",
+            flex: "0 1 200px",
+            minWidth: 0,
+            textAlign: "center",
+        },
+
+        [theme.fn.smallerThan("sm")]: {
+            gap: "1rem",
+            "& > div": {
+                flex: "0 1 120px",
+            },
         },
     },
 
@@ -70,6 +80,11 @@ const useStyles = createStyles((theme: MantineTheme) => ({
         fontWeight: 700,
         color: theme.colors.blue[4],
         fontFamily: "monospace",
+        whiteSpace: "nowrap",
+        
+        [theme.fn.smallerThan("sm")]: {
+            fontSize: "1.8rem",
+        },
     },
 
     statLabel: {
