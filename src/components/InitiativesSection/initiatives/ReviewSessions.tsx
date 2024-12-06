@@ -9,17 +9,31 @@ const useStyles = createStyles((theme: MantineTheme) => ({
         borderRadius: theme.radius.lg,
         padding: "2rem",
         border: "1px solid rgba(255, 255, 255, 0.1)",
-        height: "425px",
         display: "flex",
         flexDirection: "column",
+        width: "100%",
+        maxWidth: "100%",
+        boxSizing: "border-box",
+        height: "100%",
+
+        [theme.fn.smallerThan("sm")]: {
+            padding: "1.5rem",
+        },
     },
 
     title: {
         fontSize: "1.8rem",
         fontWeight: 700,
         marginBottom: "1rem",
-        background: theme.fn.gradient({ from: "blue.4", to: "cyan.4" }),
-        WebkitBackgroundClip: "text",
+        color: "white",
+
+        [theme.fn.smallerThan("sm")]: {
+            fontSize: "1.4rem",
+        },
+
+        [theme.fn.smallerThan("xs")]: {
+            fontSize: "1.2rem",
+        },
     },
 
     description: {
@@ -28,13 +42,38 @@ const useStyles = createStyles((theme: MantineTheme) => ({
         color: theme.colors.gray[3],
         marginBottom: "2rem",
         flex: 1,
+        wordBreak: "break-word",
+
+        [theme.fn.smallerThan("sm")]: {
+            fontSize: "1rem",
+            marginBottom: "1.5rem",
+        },
     },
 
     buttonGroup: {
         display: "flex",
         gap: "1rem",
-        flexWrap: "wrap",
+        flexWrap: "nowrap",
         marginTop: "auto",
+        width: "100%",
+
+        [theme.fn.smallerThan("sm")]: {
+            gap: "0.5rem",
+            "& > a": {
+                flex: "1 1 200px",
+                maxWidth: "200px",
+                minWidth: 0,
+                fontSize: "0.9rem",
+                padding: "0.5rem",
+            },
+        },
+
+        [theme.fn.smallerThan("xs")]: {
+            "& > a": {
+                fontSize: "0.8rem",
+                padding: "0.5rem 0.25rem",
+            },
+        },
     },
 
     link: {
@@ -71,7 +110,13 @@ const ReviewSessions = () => {
     const navbarHeight = 60;
 
     return (
-        <motion.div>
+        <motion.div
+            style={{ width: "100%", height: "100%" }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+        >
             <Box className={classes.card}>
                 <Text className={classes.title}>✏️ Review Sessions</Text>
                 <Text className={classes.description}>

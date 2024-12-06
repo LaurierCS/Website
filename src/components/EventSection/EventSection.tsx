@@ -201,14 +201,14 @@ const EventSection: React.FC = () => {
                         {isInView ? (
                             <TypeAnimation
                                 sequence={[
-                                    '<Upcoming Events />',
+                                    '<Upcoming Events\u00A0/>',
                                     1000,
                                 ]}
                                 wrapper="span"
                                 speed={50}
                                 repeat={Infinity}
                             />
-                        ) : '<Upcoming Events />'}
+                        ) : '<Upcoming Events\u00A0/>'}
                     </Title>
                     <Text
                         span

@@ -39,12 +39,20 @@ const useStyles = createStyles((theme: MantineTheme) => ({
 
     initiativesGrid: {
         display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+        gridTemplateColumns: "repeat(2, 1fr)",
         gap: "2rem",
-        padding: "2rem",
-        [theme.fn.smallerThan(780)]: {
-            gridTemplateColumns: "1fr",
-            padding: "1rem",
+        width: "100%",
+        alignItems: "stretch",
+        
+        "& > div": {
+            height: "100%",
+            display: "flex",
+        },
+        
+        [theme.fn.smallerThan("md")]: {
+            gridTemplateColumns: "minmax(0, 1fr)",
+            gap: "1rem",
+            padding: 0,
         },
     },
 
@@ -82,8 +90,8 @@ const InitiativesSection: React.FC = () => {
     const isInView = useInView(titleRef, { once: true });
 
     return (
-        <section id="Initiatives">
-            <Container size="xl" my={100}>
+        <section id="Initiatives" style={{ width: "100%" }}>
+            <Container size="xl" my={100} px={{ base: "1rem", sm: "2rem" }} style={{ width: "100%" }}>
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -94,14 +102,14 @@ const InitiativesSection: React.FC = () => {
                         {isInView ? (
                             <TypeAnimation
                                 sequence={[
-                                    '<Our Initiatives />',
+                                    '<Our Initiatives\u00A0/>',
                                     1000,
                                 ]}
                                 wrapper="span"
                                 speed={50}
                                 repeat={0}
                             />
-                        ) : '<Our Initiatives />'}
+                        ) : '<Our Initiatives\u00A0/>'}
                     </Title>
                     <Text className={classes.description} mb={50}>
                         {SECTION_PHRASE}
@@ -113,6 +121,7 @@ const InitiativesSection: React.FC = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.2 }}
                     viewport={{ once: true }}
+                    style={{ height: "100%" }}
                 >
                     <div className={classes.initiativesGrid}>
                         <ReviewSessions />

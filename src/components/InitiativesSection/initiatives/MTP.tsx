@@ -9,17 +9,30 @@ const useStyles = createStyles((theme: MantineTheme) => ({
         padding: "2rem",
         border: "1px solid rgba(255, 255, 255, 0.1)",
         transition: "transform 0.3s ease",
-        height: "425px",
         display: "flex",
         flexDirection: "column",
+        width: "100%",
+        maxWidth: "100%",
+        height: "100%",
+
+        [theme.fn.smallerThan("sm")]: {
+            padding: "1.5rem",
+        },
     },
 
     title: {
         fontSize: "1.8rem",
         fontWeight: 700,
         marginBottom: "1rem",
-        background: theme.fn.gradient({ from: "blue.4", to: "cyan.4" }),
-        WebkitBackgroundClip: "text",
+        color: "white",
+
+        [theme.fn.smallerThan("sm")]: {
+            fontSize: "1.4rem",
+        },
+
+        [theme.fn.smallerThan("xs")]: {
+            fontSize: "1.2rem",
+        },
     },
 
     description: {
@@ -27,10 +40,15 @@ const useStyles = createStyles((theme: MantineTheme) => ({
         lineHeight: 1.6,
         color: theme.colors.gray[3],
         marginBottom: "1.5rem",
-        flex: 1,
+
+        [theme.fn.smallerThan("sm")]: {
+            fontSize: "1rem",
+            marginBottom: "1rem",
+        },
     },
 
     listWrapper: {
+        marginTop: 0,
     },
 
     listItem: {
@@ -38,6 +56,10 @@ const useStyles = createStyles((theme: MantineTheme) => ({
         fontSize: "1.1rem",
         lineHeight: 1.6,
         marginBottom: "0.5rem",
+
+        [theme.fn.smallerThan("sm")]: {
+            fontSize: "1rem",
+        },
     },
 }));
 
@@ -46,6 +68,7 @@ const MTP = () => {
 
     return (
         <motion.div
+            style={{ width: "100%", height: "100%" }}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
