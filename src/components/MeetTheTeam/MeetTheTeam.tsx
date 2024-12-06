@@ -15,7 +15,7 @@ import {
 import { FratBoiDug } from "../../assets";
 import { store } from "../../services/firebase";
 
-const MEET_THE_TEAM_TITLE = "<Meet The Team />";
+const MEET_THE_TEAM_TITLE = "<Meet The Team\u00A0/>";
 const MEET_THE_THEAM_PHRASE = "Meet the masterminds behind the club!";
 
 const memberStyles = createStyles((theme: MantineTheme) => ({

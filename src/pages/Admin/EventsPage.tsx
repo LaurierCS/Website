@@ -30,6 +30,21 @@ import {
     doc,
 } from "firebase/firestore";
 import { store } from "@/services/firebase";
+import { TypeAnimation } from 'react-type-animation';
+import { createStyles, type MantineTheme } from "@mantine/core";
+
+const useStyles = createStyles((theme: MantineTheme) => ({
+    title: {
+        fontSize: "3.5rem",
+        fontFamily: "monospace",
+        background: theme.fn.gradient({ from: "blue.4", to: "cyan.4" }),
+        WebkitBackgroundClip: "text",
+        WebkitTextFillColor: "transparent",
+        [theme.fn.smallerThan(780)]: {
+            fontSize: "2rem",
+        },
+    },
+}));
 
 interface EventInfo {
     date: Date;
@@ -46,6 +61,7 @@ interface EventInfo {
 }
 
 const EventsPage: React.FC = () => {
+    const { classes } = useStyles();
     const [events, setEvents] = useState<EventInfo[]>([]);
     const [openModal, setOpenModal] = useState(false);
     const [activeEvent, setActiveEvent] = useState<EventInfo | null>(null);
@@ -272,7 +288,19 @@ const EventsPage: React.FC = () => {
 
     return (
         <Container size="lg">
-            <Title>Events Page</Title>
+            <Title className={classes.title}>
+                <TypeAnimation
+                    sequence={[
+                        '{"Events Page"}',
+                        1000,
+                        '<Events />',
+                        1000,
+                    ]}
+                    wrapper="span"
+                    speed={50}
+                    repeat={Infinity}
+                />
+            </Title>
             <Flex justify="space-between" align="center" py="lg">
                 <Button onClick={addEvent}>Add Event</Button>
             </Flex>
