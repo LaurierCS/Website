@@ -58,7 +58,7 @@ const useStyles = createStyles((theme: MantineTheme) => ({
             filter: "brightness(1.2)",
             transition: "all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)",
         },
-        [theme.fn.smallerThan(340)]: {
+        [theme.fn.smallerThan(780)]: {
             display: "none",
         },
     },
@@ -71,6 +71,9 @@ const useStyles = createStyles((theme: MantineTheme) => ({
         alignItems: "center",
         padding: "0 1rem",
         overflow: "hidden",
+        [theme.fn.smallerThan(780)]: {
+            marginTop: "-2rem",
+        },
     },
 
     discordButton: {
