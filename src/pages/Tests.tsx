@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { PatternBackground } from '../components/universal/PatternBackground';
 import SeoHead from '../components/seo/SeoHead';
 import Editor from '@monaco-editor/react';
@@ -62,10 +62,11 @@ const TestsPage = () => {
     }
   };
 
-  const handleCodeChange = (newCode: string) => {
-    setCode(newCode);
+  const handleCodeChange = (newCode: string | undefined) => {
+    const val = newCode || '';
+    setCode(val);
     const savedCodes = JSON.parse(localStorage.getItem('lcs_challenge_codes') || '{}');
-    savedCodes[selectedChallenge.id] = newCode;
+    savedCodes[selectedChallenge.id] = val;
     localStorage.setItem('lcs_challenge_codes', JSON.stringify(savedCodes));
   };
 
