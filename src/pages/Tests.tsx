@@ -9,8 +9,6 @@ const CHALLENGES = [
     number: 1,
     title: 'Grade Calculator with Curve',
     difficulty: 'Easy',
-    description: 'Apply a curve to a list of 3 scores so that the top student always gets 100. Print a letter grade for each curved score and the curved class average.',
-    example: 'Input: 70, 40, 50 | Curve: +30 | Output: A, C, B, 83.3',
     initialCode: 'def get_letter_grade(score):\n    # TODO: implement your solution here\n    pass\n\ndef calculate_with_curve(scores):\n    # TODO: implement your solution here\n    pass',
   },
   {
@@ -18,8 +16,6 @@ const CHALLENGES = [
     number: 2,
     title: 'Merge Two Sorted Lists',
     difficulty: 'Easy',
-    description: 'You are given the heads of two sorted linked lists. Merge the two lists into one sorted list by splicing together the nodes.',
-    example: 'Input: l1=[1,2,4], l2=[1,3,4] | Output: [1,1,2,3,4,4]',
     initialCode: 'class ListNode(object):\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\nclass Solution(object):\n    def mergeTwoLists(self, list1, list2):\n        # TODO: implement your solution here\n        pass',
   },
   {
@@ -27,27 +23,38 @@ const CHALLENGES = [
     number: 3,
     title: 'Binary Tree Inorder Traversal',
     difficulty: 'Easy',
-    description: 'Given the root of a binary tree, return the inorder traversal of its nodes\' values. Inorder order is: Left subtree → Root → Right subtree.',
-    example: 'Input: root = [1,null,2,3] | Output: [1,3,2]',
     initialCode: 'class TreeNode(object):\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\nclass Solution(object):\n    def inorderTraversal(self, root):\n        # TODO: implement your solution here\n        pass',
   },
 ];
 
-const TestsPage = () => {
-  const [selectedChallenge, setSelectedChallenge] = useState(CHALLENGES[0]);
+export default function TestsPage() {
+  const [selectedChallenge, setSelectedChallenge] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const savedId = localStorage.getItem('lcs_selected_challenge_id');
+      const challenge = CHALLENGES.find(c => c.id === savedId);
+      return challenge || CHALLENGES[0];
+    }
+    return CHALLENGES[0];
+  });
+
   const [code, setCode] = useState(() => {
     if (typeof window !== 'undefined') {
       const savedCodes = JSON.parse(localStorage.getItem('lcs_challenge_codes') || '{}');
-      return savedCodes[CHALLENGES[0].id] || CHALLENGES[0].initialCode;
+      const currentId = localStorage.getItem('lcs_selected_challenge_id') || CHALLENGES[0].id;
+      const challenge = CHALLENGES.find(c => c.id === currentId) || CHALLENGES[0];
+      return savedCodes[challenge.id] || challenge.initialCode;
     }
     return CHALLENGES[0].initialCode;
   });
+
   const [result, setResult] = useState<{ text: string; color: string } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChallengeChange = (challenge: typeof CHALLENGES[0]) => {
     setSelectedChallenge(challenge);
     setResult(null);
+    localStorage.setItem('lcs_selected_challenge_id', challenge.id);
+
     const savedCodes = JSON.parse(localStorage.getItem('lcs_challenge_codes') || '{}');
     setCode(savedCodes[challenge.id] || challenge.initialCode);
   };
@@ -144,13 +151,6 @@ const TestsPage = () => {
                 </button>
               ))}
             </div>
-            <div className="p-4 bg-[#323232] border-t border-white/10">
-              <h3 className="text-white font-semibold text-xs mb-2">Active Challenge: Question {selectedChallenge.number}</h3>
-              <p className="text-zinc-400 text-xs mb-3">{selectedChallenge.description}</p>
-              <div className="text-[10px] font-mono text-zinc-500 bg-black/20 p-2 rounded">
-                {selectedChallenge.example}
-              </div>
-            </div>
           </div>
 
           <div className="w-4/5 flex flex-col overflow-hidden">
@@ -216,6 +216,4 @@ const TestsPage = () => {
       </main>
     </div>
   );
-};
-
-export default TestsPage;
+}

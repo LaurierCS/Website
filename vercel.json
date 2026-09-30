@@ -1,13 +1,8 @@
 {
-    "rewrites": [
-        {
-            "source": "/hack-to-the-future",
-            "destination": "/index.html"
-        },
-        {
-            "source": "/hack-to-the-future/",
-            "destination": "/index.html"
-        }
-    ]
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }
-
