@@ -21,11 +21,20 @@ function copyStaticFiles() {
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
-  
+
   return {
     plugins: [react(), tailwindcss(), copyStaticFiles()],
     build: {
       outDir: 'dist',
+    },
+    server: {
+      proxy: {
+        '/api': {
+          target: 'https://api.spencerkelly.ca',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, '/api'), // Keep /api prefix
+        },
+      },
     },
     define: {
       'import.meta.env.SUPABASE_URL': JSON.stringify(env.SUPABASE_URL),

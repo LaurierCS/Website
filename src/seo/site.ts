@@ -12,7 +12,10 @@ export const HACKATHON_DESCRIPTION =
 
 export const OG_IMAGE_PATH = '/assets/og-image.png';
 
-export function absoluteUrl(path: string): string {
+export function absoluteUrl(path: string | undefined): string {
+  if (!path) {
+    return SITE_URL;
+  }
   if (path.startsWith('http')) {
     return path;
   }

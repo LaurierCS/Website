@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import SocialLinks from './SocialLinks';
 
 export default function Header() {
@@ -7,6 +7,8 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   // Track mobile menu open state
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
+  const isTestsPage = location.pathname === '/tests';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,9 +27,11 @@ export default function Header() {
   return (
     <header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b border-white/10 ${
-        isScrolled || isMobileMenuOpen
-          ? 'backdrop-blur-lg bg-white/5' 
-          : 'bg-transparent'
+        isTestsPage
+          ? 'bg-white/5 backdrop-blur-lg'
+          : (isScrolled || isMobileMenuOpen
+              ? 'backdrop-blur-lg bg-white/5'
+              : 'bg-transparent')
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 md:py-4 flex items-center justify-between">
@@ -69,17 +73,17 @@ export default function Header() {
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label="Toggle menu"
         >
-          <span 
+          <span
             className={`block w-6 h-0.5 bg-white transition-all duration-300 ${
               isMobileMenuOpen ? 'rotate-45 translate-y-2' : ''
             }`}
           />
-          <span 
+          <span
             className={`block w-6 h-0.5 bg-white transition-all duration-300 ${
               isMobileMenuOpen ? 'opacity-0' : ''
             }`}
           />
-          <span 
+          <span
             className={`block w-6 h-0.5 bg-white transition-all duration-300 ${
               isMobileMenuOpen ? '-rotate-45 -translate-y-2' : ''
             }`}
@@ -88,7 +92,7 @@ export default function Header() {
       </div>
 
       {/* Mobile Dropdown Menu */}
-      <div 
+      <div
         className={`md:hidden overflow-hidden transition-all duration-300 ${
           isMobileMenuOpen ? 'max-h-128 opacity-100' : 'max-h-0 opacity-0'
         }`}
@@ -157,7 +161,7 @@ function NavLink({ href, children, onClick }: { href: string; children: string; 
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className="relative text-white text-base md:text-lg font-medium transition-all duration-300 whitespace-nowrap cursor-pointer"
-      style={{ 
+      style={{
         fontFamily: 'var(--font-dosis)',
         color: currentColor || 'white',
       }}
