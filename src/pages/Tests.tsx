@@ -41,7 +41,7 @@ const TestsPage = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const savedCodes = JSON.parse(localStorage.getItem('lcs_challenge_codes') || '{}');
+    const savedCodes = JSON.parse(localStorage.getItem('lcs_//_challenge_codes') || '{}');
     const currentId = CHALLENGES[0].id;
     setCode(savedCodes[currentId] || CHALLENGES[0].initialCode);
   }, []);
@@ -123,13 +123,6 @@ const TestsPage = () => {
             >
               Reset
             </button>
-            <button
-              onClick={handleSubmit}
-              disabled={isLoading}
-              className="px-6 py-1 bg-green-600 hover:bg-green-500 text-white text-xs font-bold rounded transition-colors disabled:opacity-50"
-            >
-              {isLoading ? 'Submitting...' : 'Submit'}
-            </button>
           </div>
         </div>
 
@@ -153,6 +146,13 @@ const TestsPage = () => {
                   <div className="text-xs opacity-60">{challenge.difficulty}</div>
                 </button>
               ))}
+            </div>
+            <div className="p-4 bg-[#323232] border-t border-white/10">
+              <h3 className="text-white font-semibold text-xs mb-2">Active Challenge: Question {selectedChallenge.number}</h3>
+              <p className="text-zinc-400 text-xs mb-3">{selectedChallenge.description}</p>
+              <div className="text-[10px] font-mono text-zinc-500 bg-black/20 p-2 rounded">
+                {selectedChallenge.example}
+              </div>
             </div>
           </div>
 
