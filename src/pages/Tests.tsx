@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import Footer from '../components/universal/Footer';
+import React, { useState } from 'react';
 import { PatternBackground } from '../components/universal/PatternBackground';
 import SeoHead from '../components/seo/SeoHead';
 import Editor from '@monaco-editor/react';
@@ -36,15 +35,15 @@ const CHALLENGES = [
 
 const TestsPage = () => {
   const [selectedChallenge, setSelectedChallenge] = useState(CHALLENGES[0]);
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const savedCodes = JSON.parse(localStorage.getItem('lcs_challenge_codes') || '{}');
+      return savedCodes[CHALLENGES[0].id] || CHALLENGES[0].initialCode;
+    }
+    return CHALLENGES[0].initialCode;
+  });
   const [result, setResult] = useState<{ text: string; color: string } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    const savedCodes = JSON.parse(localStorage.getItem('lcs_//_challenge_codes') || '{}');
-    const currentId = CHALLENGES[0].id;
-    setCode(savedCodes[currentId] || CHALLENGES[0].initialCode);
-  }, []);
 
   const handleChallengeChange = (challenge: typeof CHALLENGES[0]) => {
     setSelectedChallenge(challenge);
@@ -92,7 +91,7 @@ const TestsPage = () => {
       } else {
         setResult({ text: 'WRONG', color: 'text-red-500' });
       }
-    } catch (error) {
+    } catch {
       setResult({ text: 'ERROR CONNECTING TO SERVER', color: 'text-yellow-500' });
     } finally {
       setIsLoading(false);
@@ -109,7 +108,6 @@ const TestsPage = () => {
       <PatternBackground />
 
       <main className="relative z-10 flex-1 flex flex-col h-full w-full overflow-hidden">
-        {/* Top Bar */}
         <div className="h-12 bg-[#282828] border-b border-white/10 flex items-center justify-between px-4 shrink-0">
           <div className="flex items-center gap-4">
             <span className="text-zinc-400 font-mono text-sm font-bold">Question {selectedChallenge.number}</span>
@@ -126,9 +124,7 @@ const TestsPage = () => {
           </div>
         </div>
 
-        {/* Main Workspace */}
         <div className="flex-1 flex overflow-hidden">
-          {/* Left Sidebar */}
           <div className="w-1/5 bg-[#282828] border-r border-white/10 flex flex-col overflow-hidden">
             <div className="p-4 border-b border-white/10 bg-[#323232]">
               <h2 className="text-white font-bold text-sm uppercase tracking-wider">Challenges</h2>
@@ -156,9 +152,7 @@ const TestsPage = () => {
             </div>
           </div>
 
-          {/* Right Area */}
           <div className="w-4/5 flex flex-col overflow-hidden">
-            {/* Code Editor Area */}
             <div className="flex-1 min-h-0 flex flex-col">
               <div className="bg-[#323232] text-zinc-400 px-4 py-2 border-b border-white/10 flex items-center justify-between font-mono text-xs">
                 <span>solution.py</span>
@@ -187,7 +181,6 @@ const TestsPage = () => {
               </div>
             </div>
 
-            {/* Terminal Section */}
             <div className="h-1/3 bg-[#282828] border-t border-white/10 flex flex-col">
               <div className="bg-[#323232] px-4 py-2 border-b border-white/10 flex items-center justify-between">
                 <div className="flex items-center gap-4">
