@@ -9,21 +9,33 @@ const CHALLENGES = [
     number: 1,
     title: 'Grade Calculator with Curve',
     difficulty: 'Easy',
-    initialCode: 'def get_letter_grade(score):\n    # TODO: implement your solution here\n    pass\n\ndef calculate_with_curve(scores):\n    # TODO: implement your solution here\n    pass',
+    initialCode: `def solution(scores):
+    pass
+
+
+if __name__ == "__main__":
+    score1 = int(input())`,
   },
   {
     id: 'merge-two-sorted-lists',
     number: 2,
     title: 'Merge Two Sorted Lists',
     difficulty: 'Easy',
-    initialCode: 'class ListNode(object):\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\nclass Solution(object):\n    def mergeTwoLists(self, list1, list2):\n        # TODO: implement your solution here\n        pass',
+    initialCode: `class ListNode(object):
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next`,
   },
   {
     id: 'binary-tree-inorder-traversal',
     number: 3,
     title: 'Binary Tree Inorder Traversal',
     difficulty: 'Easy',
-    initialCode: 'class TreeNode(object):\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\nclass Solution(object):\n    def inorderTraversal(self, root):\n        # TODO: implement your solution here\n        pass',
+    initialCode: `class TreeNode(object):
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right`,
   },
 ];
 
