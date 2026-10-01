@@ -14,7 +14,13 @@ const CHALLENGES = [
 
 
 if __name__ == "__main__":
-    score1 = int(input())`,
+    score1 = int(input())
+    score2 = int(input())
+    score3 = int(input())
+    letter_grades, average = solution([score1, score2, score3])
+    for grade in letter_grades:
+        print(grade)
+    print(f"{average:.1f}")`,
   },
   {
     id: 'merge-two-sorted-lists',
@@ -24,7 +30,12 @@ if __name__ == "__main__":
     initialCode: `class ListNode(object):
     def __init__(self, val=0, next=None):
         self.val = val
-        self.next = next`,
+        self.next = next
+
+
+class Solution(object):
+    def solve(self, list1, list2):
+        pass`,
   },
   {
     id: 'binary-tree-inorder-traversal',
@@ -35,7 +46,12 @@ if __name__ == "__main__":
     def __init__(self, val=0, left=None, right=None):
         self.val = val
         self.left = left
-        self.right = right`,
+        self.right = right
+
+
+class Solution(object):
+    def solve(self, root):
+        pass`,
   },
 ];
 
