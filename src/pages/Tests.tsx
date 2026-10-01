@@ -118,6 +118,15 @@ export default function TestsPage() {
         body: JSON.stringify({ code }),
       });
 
+      const contentType = response.headers.get('content-type') ?? '';
+      if (!response.ok || !contentType.includes('application/json')) {
+        setResult({
+          text: `ERROR: HTTP ${response.status}`,
+          color: 'text-yellow-500',
+        });
+        return;
+      }
+
       const data = await response.json();
 
       if (data.allPassed === true) {
