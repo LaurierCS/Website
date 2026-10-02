@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import SocialLinks from './SocialLinks';
 
 export default function Header() {
@@ -7,7 +7,6 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   // Track mobile menu open state
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
