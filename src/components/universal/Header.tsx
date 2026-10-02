@@ -8,7 +8,6 @@ export default function Header() {
   // Track mobile menu open state
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
-  const isTestsPage = location.pathname === '/tests';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,11 +26,9 @@ export default function Header() {
   return (
     <header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b border-white/10 ${
-        isTestsPage
-          ? 'bg-white/5 backdrop-blur-lg'
-          : (isScrolled || isMobileMenuOpen
-              ? 'backdrop-blur-lg bg-white/5'
-              : 'bg-transparent')
+        isScrolled || isMobileMenuOpen
+          ? 'backdrop-blur-lg bg-white/5'
+          : 'bg-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 md:py-4 flex items-center justify-between">
