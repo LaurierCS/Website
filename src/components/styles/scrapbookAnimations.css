@@ -1,0 +1,50 @@
+/**
+ * Scrapbook-style animations for letter reveals and mascot appearances
+ * Creates a playful, postcarded effect as elements load
+ */
+
+/* ScrapbookLetter animation - letter by letter reveal left to right */
+@keyframes scrapbookLetterAppear {
+    0% {
+        opacity: 0;
+        transform: scale(0.3) rotate(-15deg) translateY(20px);
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg) translateY(0px);
+    }
+}
+
+/* Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+
+    [style*="scrapbookLetterAppear"],
+    [style*="mascotAppear"] {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+
+/* Mascot animation - smooth bounce appearance left to right */
+@keyframes mascotAppear {
+    0% {
+        opacity: 0;
+        transform: scale(0) translateX(-30px);
+    }
+
+    60% {
+        opacity: 1;
+        transform: scale(1.08) translateX(0px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) translateX(0px);
+    }
+}

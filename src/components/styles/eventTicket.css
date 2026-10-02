@@ -1,0 +1,197 @@
+.event-ticket {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: var(--event-card-height, 16.5rem);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--event-accent);
+    overflow: hidden;
+    transition: box-shadow 200ms cubic-bezier(0.16, 1, 0.3, 1),
+        transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.event-ticket:hover {
+    box-shadow: 4px 10px 28px var(--event-accent-shadow);
+    transform: translateY(-2px);
+}
+
+.event-ticket:hover .event-ticket-title {
+    color: var(--event-accent);
+}
+
+.event-ticket-image {
+    position: relative;
+    width: 100%;
+    height: 8.5rem;
+    flex-shrink: 0;
+    overflow: hidden;
+    background: #1e2a33;
+}
+
+.event-ticket-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.event-ticket:hover .event-ticket-image img {
+    transform: scale(1.05);
+}
+
+.event-ticket-fallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-dosis);
+    font-weight: 700;
+    font-size: 3.5rem;
+    color: var(--event-accent);
+    background: #1e2a33;
+}
+
+.event-date-sticker {
+    position: absolute;
+    top: 0.7rem;
+    left: 0.7rem;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 4.25rem;
+    padding: 0.45rem 0.55rem 0.5rem;
+    border-radius: 12px;
+    background: var(--event-accent);
+    color: var(--event-ink);
+    box-shadow: 2px 6px 14px rgba(0, 0, 0, 0.28);
+    transform: rotate(-3deg);
+    line-height: 1;
+}
+
+.event-date-month {
+    font-family: var(--font-montserrat);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+.event-date-day {
+    font-family: var(--font-dosis);
+    font-size: 1.7rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    margin: 0.1rem 0;
+}
+
+.event-date-weekday {
+    font-family: var(--font-montserrat);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+
+.event-ticket-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    padding: 0.9rem 1.1rem 1.05rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.event-ticket-title {
+    font-family: var(--font-dosis);
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.2;
+    color: #fff;
+    transition: color 200ms ease;
+}
+
+.event-ticket-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem 0.9rem;
+    font-family: var(--font-dosis);
+    font-size: 0.875rem;
+    color: color-mix(in srgb, var(--event-accent) 35%, #fff);
+}
+
+.event-ticket-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    white-space: nowrap;
+}
+
+.event-ticket-desc {
+    font-family: var(--font-dosis);
+    font-weight: 400;
+    font-size: 0.95rem;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.82);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+@media (min-width: 768px) {
+    .event-ticket {
+        flex-direction: row;
+        align-items: stretch;
+        height: var(--event-card-height);
+        min-height: var(--event-card-height);
+    }
+
+    .event-ticket-image {
+        width: 12.5rem;
+        height: 100%;
+        order: 1;
+    }
+
+    .event-date-sticker {
+        position: relative;
+        top: auto;
+        left: auto;
+        margin: auto 0 auto 1rem;
+        order: 0;
+        flex-shrink: 0;
+    }
+
+    .event-ticket-body {
+        order: 2;
+        justify-content: center;
+        padding: 1rem 1.25rem;
+        gap: 0.55rem;
+    }
+
+    .event-ticket-title {
+        font-size: 1.5rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .event-ticket,
+    .event-ticket-image img,
+    .event-ticket-title {
+        transition: none;
+    }
+
+    .event-ticket:hover {
+        transform: none;
+    }
+
+    .event-ticket:hover .event-ticket-image img {
+        transform: none;
+    }
+
+    .event-date-sticker {
+        transform: none;
+    }
+}
