@@ -1,0 +1,84 @@
+.events-scroll-shell {
+    --event-card-height: 16.5rem;
+    --event-card-gap: 0.55rem;
+    --events-visible-cards: 1.7;
+    --events-list-pad-top: 1.5rem;
+    --events-panel-max-height: calc(
+        var(--event-card-height) * var(--events-visible-cards) + var(--event-card-gap) + var(--events-list-pad-top)
+    );
+    position: relative;
+}
+
+@media (min-width: 768px) {
+    .events-scroll-shell {
+        --event-card-height: 12.5rem;
+        --events-visible-cards: 2.85;
+        --events-panel-max-height: calc(
+            var(--event-card-height) * var(--events-visible-cards) + var(--event-card-gap) * 2 + var(--events-list-pad-top)
+        );
+    }
+}
+
+.events-scroll-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--event-card-gap);
+}
+
+.events-scroll-panel {
+    max-height: var(--events-panel-max-height);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-color) transparent;
+    padding-top: var(--events-list-pad-top);
+    padding-right: 0;
+}
+
+.events-scroll-panel:focus-visible {
+    outline: 2px solid var(--color-accent-yellow);
+    outline-offset: 4px;
+}
+
+.events-scroll-panel::-webkit-scrollbar {
+    width: 6px;
+    background: transparent;
+}
+
+.events-scroll-panel::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.events-scroll-panel::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-color);
+    border-radius: 6px;
+}
+
+.events-scroll-panel::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+.events-scroll-fade {
+    pointer-events: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 2;
+}
+
+.events-scroll-fade-top {
+    top: 0;
+    height: var(--events-list-pad-top);
+    background: linear-gradient(to bottom, #0e263d, transparent);
+}
+
+.events-scroll-fade-bottom {
+    bottom: 0;
+    height: 5rem;
+    background: linear-gradient(to top, #0e263d 0%, #0e263d 22%, transparent);
+}
+
+.events-scroll-shell ::selection {
+    background: var(--color-accent-yellow);
+    color: var(--color-bg);
+}

@@ -1,0 +1,91 @@
+/* Event Section Transition Animations */
+
+/* Fade transition for event details */
+@keyframes eventFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes eventFadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(-12px);
+    }
+}
+
+.event-detail-enter {
+    animation: eventFadeIn 0.4s ease-out forwards;
+}
+
+.event-detail-exit {
+    animation: eventFadeOut 0.3s ease-in forwards;
+}
+
+/* Staggered fade for detail items */
+.event-detail-item {
+    opacity: 0;
+    transform: translateX(-10px);
+    animation: eventDetailSlide 0.5s ease-out forwards;
+}
+
+@keyframes eventDetailSlide {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.event-detail-item:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.event-detail-item:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.event-detail-item:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.event-detail-item:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+/* Date badge pulse animation */
+@keyframes datePulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 214, 112, 0.4);
+    }
+
+    50% {
+        box-shadow: 0 0 20px 4px rgba(255, 214, 112, 0.2);
+    }
+}
+
+.date-badge {
+    animation: datePulse 3s ease-in-out infinite;
+}
+
+/* Smooth color transition for accent elements */
+.accent-transition {
+    transition: color 0.4s ease, border-color 0.4s ease, background-color 0.4s ease;
+}

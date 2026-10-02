@@ -1,0 +1,174 @@
+.hack-glow-orb {
+    position: fixed;
+    pointer-events: none;
+    filter: blur(60px);
+    opacity: 0.45;
+    z-index: 1;
+    animation: orbFloat 9s ease-in-out infinite;
+}
+
+.hack-glow-orb-one {
+    width: min(42vw, 420px);
+    height: min(42vw, 420px);
+    top: -8%;
+    left: -8%;
+    background: radial-gradient(circle at center, rgba(255, 159, 196, 0.65), rgba(255, 159, 196, 0));
+}
+
+.hack-glow-orb-two {
+    width: min(48vw, 480px);
+    height: min(48vw, 480px);
+    right: -14%;
+    top: 24%;
+    background: radial-gradient(circle at center, rgba(38, 138, 249, 0.48), rgba(38, 138, 249, 0));
+    animation-delay: 0.6s;
+}
+
+.hack-hero-grid {
+    background-image:
+        linear-gradient(to right, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+    background-size: 34px 34px;
+    opacity: 0.24;
+    mask-image: radial-gradient(circle at 52% 40%, black 30%, transparent 85%);
+}
+
+.hack-cta {
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.24);
+    transition-duration: 0.4s;
+}
+
+.hack-cta:hover {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 20px 38px rgba(0, 0, 0, 0.33);
+}
+
+.hack-timeline-item {
+    opacity: 0;
+    transform: translateY(8px);
+    animation: timelineAppear 0.55s ease-out forwards;
+}
+
+.hack-accordion {
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+}
+
+.hack-hover-card {
+    transition: transform 0.32s ease, box-shadow 0.32s ease, border-color 0.32s ease;
+}
+
+.hack-hover-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.35);
+    box-shadow: 0 20px 38px rgba(0, 0, 0, 0.33);
+}
+
+.hack-panel-grid {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.32s ease;
+}
+
+.hack-panel-grid-open {
+    grid-template-rows: 1fr;
+}
+
+.hack-panel-content {
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.22s ease;
+}
+
+.hack-panel-grid-open .hack-panel-content {
+    opacity: 1;
+}
+
+#challenge-options,
+#schedule,
+#prizes,
+#submission-guide {
+    scroll-margin-top: 6.5rem;
+}
+
+@keyframes timelineAppear {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes orbFloat {
+
+    0%,
+    100% {
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    50% {
+        transform: translate3d(0, 18px, 0) scale(1.03);
+    }
+}
+
+/* Staggered load-in animations for card elements */
+.hack-card-stagger {
+    animation: fadeSlideUpFast 0.5s ease-out both;
+}
+
+.hack-card-stagger:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.hack-card-stagger:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.hack-card-stagger:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.hack-card-stagger:nth-child(4) {
+    animation-delay: 0.3s;
+}
+
+.hack-card-stagger:nth-child(5) {
+    animation-delay: 0.4s;
+}
+
+.hack-card-stagger:nth-child(6) {
+    animation-delay: 0.5s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .hack-glow-orb,
+    .hack-timeline-item,
+    .hack-card-stagger {
+        animation: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+    }
+
+    .hack-cta,
+    .hack-cta:hover,
+    .hack-hover-card,
+    .hack-hover-card:hover,
+    .hack-panel-grid,
+    .hack-panel-grid-open,
+    .hack-panel-content,
+    .hack-panel-grid-open .hack-panel-content {
+        transition: none !important;
+        transform: none !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .hack-glow-orb {
+        opacity: 0.32;
+        filter: blur(48px);
+    }
+}

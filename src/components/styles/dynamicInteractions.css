@@ -1,0 +1,118 @@
+/* Shared post-load motion utilities for non-nav sections */
+
+:root {
+    --motion-ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes softPulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 214, 112, 0.12);
+    }
+
+    50% {
+        box-shadow: 0 10px 30px -14px rgba(255, 214, 112, 0.35);
+    }
+}
+
+@keyframes sheenSweep {
+    from {
+        transform: translateX(-120%);
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 0.65;
+    }
+
+    75% {
+        opacity: 0.2;
+    }
+
+    to {
+        transform: translateX(120%);
+        opacity: 0;
+    }
+}
+
+@keyframes footerGlow {
+
+    0%,
+    100% {
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    50% {
+        box-shadow: inset 0 1px 0 rgba(255, 214, 112, 0.35);
+    }
+}
+
+@keyframes heartBeatGlow {
+
+    0%,
+    100% {
+        text-shadow: 0 0 0 rgba(255, 159, 196, 0.2);
+    }
+
+    50% {
+        text-shadow: 0 0 12px rgba(255, 159, 196, 0.5);
+    }
+}
+
+.dynamic-hover-lift {
+    transition: transform 0.35s var(--motion-ease-standard), box-shadow 0.35s var(--motion-ease-standard), border-color 0.35s var(--motion-ease-standard);
+}
+
+.dynamic-hover-lift:hover {
+    transform: translateY(-3px);
+}
+
+.dynamic-sheen {
+    position: relative;
+    overflow: hidden;
+}
+
+.dynamic-sheen::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-120%);
+    background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.12) 48%, transparent 60%);
+    pointer-events: none;
+}
+
+.dynamic-sheen:hover::after,
+.dynamic-sheen:focus-within::after {
+    animation: sheenSweep 1.1s var(--motion-ease-standard);
+}
+
+.idle-soft-pulse {
+    animation: softPulse 4.4s ease-in-out infinite;
+}
+
+.footer-alive {
+    animation: footerGlow 6s ease-in-out infinite;
+}
+
+.footer-heartbeat {
+    animation: heartBeatGlow 4.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .dynamic-hover-lift,
+    .dynamic-sheen,
+    .dynamic-sheen::after,
+    .idle-soft-pulse,
+    .footer-alive,
+    .footer-heartbeat {
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+    }
+
+    .dynamic-sheen::after {
+        display: none !important;
+    }
+}
