@@ -6,13 +6,11 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-*.cache
 
 node_modules
 dist
 dist-ssr
 *.local
-build
 
 # Editor directories and files
 .vscode/*
@@ -26,10 +24,4 @@ build
 *.sw?
 
 .env
-.env.development
-functions/.runtimeconfig.json
-/functions/lib
-.env.production
-.env.*
-functions/.env
-.runtimeconfig.json
+.github/copilot-*.md
