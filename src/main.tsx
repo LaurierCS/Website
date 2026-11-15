@@ -5,15 +5,18 @@ import './index.css'
 import App from './App.tsx'
 import HackToTheFuturePage from './pages/HackToTheFuture.tsx'
 import NotFound from './pages/NotFound.tsx'
+import { SmoothScroll } from './components/layout/SmoothScroll.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/hack-to-the-future" element={<HackToTheFuturePage />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <SmoothScroll>
+        <Routes>
+          <Route path="/" element={<App />} />
+          <Route path="/hack-to-the-future" element={<HackToTheFuturePage />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </SmoothScroll>
     </BrowserRouter>
   </StrictMode>,
 )

@@ -3,10 +3,11 @@
  * Displays the three mascot characters (Coco, Doug, Krill) in an overlapping arrangement
  * Similar to ScrapbookText but with mascot SVGs instead of letters
  * 
- * Now supports scroll-reveal animations - mascots animate when scrolled into view!
+ * Scroll-reveal animations: Mascots start hidden (opacity: 0) and animate in once on appearance,
+ * settling permanently without flickering, disappearing, or replaying on re-renders.
  */
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import '../styles/scrapbookAnimations.css';
 
@@ -49,10 +50,10 @@ interface MascotItemProps {
   size: number;
   overlapAmount: number;
   mascotIndex: number;
-  isVisible?: boolean; // Whether element is visible in viewport
+  isVisible: boolean;
 }
 
-const MascotItem: React.FC<MascotItemProps> = ({
+const MascotItem: React.FC<MascotItemProps> = React.memo(({
   name,
   path,
   rotation,
@@ -62,9 +63,27 @@ const MascotItem: React.FC<MascotItemProps> = ({
   size,
   overlapAmount,
   mascotIndex,
-  isVisible = true,
+  isVisible,
 }) => {
+  const [isSettled, setIsSettled] = useState(false);
   const staggerDelay = mascotIndex * 120; // 120ms stagger between mascots
+
+  useEffect(() => {
+    if (isVisible && !isSettled) {
+      const timer = setTimeout(() => {
+        setIsSettled(true);
+      }, staggerDelay + 850);
+      return () => clearTimeout(timer);
+    }
+  }, [isVisible, isSettled, staggerDelay]);
+
+  const animationStyle = isSettled
+    ? 'none'
+    : isVisible
+      ? `mascotAppear 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) ${staggerDelay}ms forwards`
+      : 'none';
+
+  const opacityStyle = isSettled ? 1 : isVisible ? undefined : 0;
 
   return (
     <div
@@ -74,18 +93,29 @@ const MascotItem: React.FC<MascotItemProps> = ({
         transition: 'transform 0.2s ease-out',
         marginRight: `-${overlapAmount}px`,
         zIndex,
-        animation: isVisible ? `mascotAppear 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) ${staggerDelay}ms both` : 'none',
       }}
     >
-      <img
-        src={path}
-        alt={name}
-        className="object-contain drop-shadow-lg hover:drop-shadow-xl transition-shadow"
-        style={{ width: `${size}px`, height: `${size}px` }}
-      />
+      <div
+        onAnimationEnd={() => setIsSettled(true)}
+        style={{
+          animation: animationStyle,
+          opacity: opacityStyle,
+        }}
+      >
+        <img
+          src={path}
+          alt={name}
+          loading="eager"
+          decoding="async"
+          className="object-contain drop-shadow-lg hover:drop-shadow-xl transition-shadow"
+          style={{ width: `${size}px`, height: `${size}px` }}
+        />
+      </div>
     </div>
   );
-};
+});
+
+MascotItem.displayName = 'MascotItem';
 
 /**
  * Mascots Component
@@ -99,16 +129,16 @@ export const Mascots: React.FC<MascotsProps> = ({
   mascotNames,
 }) => {
   // Track window width for responsive sizing
-  const [isMobile, setIsMobile] = React.useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
-  // Observer for scroll-reveal animation
+  // Observer for scroll-reveal animation (once: true retains visibility permanently)
   const { ref, isVisible } = useIntersectionObserver({
-    rootMargin: '50px',
+    rootMargin: '60px',
     threshold: 0.1,
     once: true,
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
@@ -125,7 +155,7 @@ export const Mascots: React.FC<MascotsProps> = ({
     ? mascots.filter(m => mascotNames.includes(m.name))
     : mascots;
 
-  // Calculate overlap amount (more pronounced overlap)
+  // Calculate overlap amount
   const overlapAmount = showOverlap ? responsiveMascotSize * 0.38 : 0;
 
   // Generate random transforms once per component instance
@@ -135,21 +165,24 @@ export const Mascots: React.FC<MascotsProps> = ({
 
   return (
     <div ref={ref} className={`flex items-center justify-center ${className}`}>
-      {displayedMascots.map((mascot, index) => (
-        <MascotItem
-          key={mascot.name}
-          name={mascot.name}
-          path={mascot.path}
-          rotation={transforms[index].rotation}
-          mascotIndex={index}
-          offsetY={transforms[index].offsetY}
-          scale={transforms[index].scale}
-          zIndex={index + 1}
-          size={responsiveMascotSize}
-          overlapAmount={overlapAmount}
-          isVisible={isVisible}
-        />
-      ))}
+      {displayedMascots.map((mascot, index) => {
+        const transform = transforms[index] ?? { rotation: 0, offsetY: 0, scale: 1 };
+        return (
+          <MascotItem
+            key={mascot.name}
+            name={mascot.name}
+            path={mascot.path}
+            rotation={transform.rotation}
+            mascotIndex={index}
+            offsetY={transform.offsetY}
+            scale={transform.scale}
+            zIndex={index + 1}
+            size={responsiveMascotSize}
+            overlapAmount={overlapAmount}
+            isVisible={isVisible}
+          />
+        );
+      })}
     </div>
   );
 };
