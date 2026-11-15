@@ -3,10 +3,11 @@
  * Universal component for displaying text in scrapbook style using letter assets
  * Supports letters: A, C, D, E, F, G, H, I, K, L, M, N, O, P, R, S, T, U, V, W
  * 
- * Now supports scroll-reveal animations - letters animate when scrolled into view!
+ * Scroll-reveal animations: Letters start hidden (opacity: 0) and animate in once on appearance,
+ * settling permanently without flickering, disappearing, or replaying on re-renders.
  */
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import '../styles/scrapbookAnimations.css';
 
@@ -87,11 +88,11 @@ interface ScrapbookLetterProps {
   zIndex: number;
   size: number;
   letterClassName?: string;
-  isVisible?: boolean; // Whether element is visible in viewport
-  skipAnimation?: boolean; // Skip entrance animation - element was already visible on mount
+  letterIndex: number;
+  isVisible: boolean;
 }
 
-const ScrapbookLetter: React.FC<ScrapbookLetterProps & { letterIndex: number }> = ({
+const ScrapbookLetter: React.FC<ScrapbookLetterProps> = React.memo(({
   letter,
   rotation,
   offsetY,
@@ -100,21 +101,33 @@ const ScrapbookLetter: React.FC<ScrapbookLetterProps & { letterIndex: number }> 
   size,
   letterClassName,
   letterIndex,
-  isVisible = true,
-  skipAnimation = false,
+  isVisible,
 }) => {
+  const [isSettled, setIsSettled] = useState(false);
   const assetPath = letterAssets[letter];
   const staggerDelay = letterIndex * 60; // 60ms stagger between letters
 
-  // Determine animation value:
-  //  • skipAnimation → already visible on mount, no animation
-  //  • isVisible      → scrolled into view, play the entrance animation
-  //  • otherwise      → hidden (waiting to scroll into view)
-  const animationStyle = (() => {
-    if (skipAnimation) return 'none';
-    if (isVisible) return `scrapbookLetterAppear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) ${staggerDelay}ms both`;
-    return 'none';
-  })();
+  // Safety fallback to settle animation even if onAnimationEnd doesn't fire
+  useEffect(() => {
+    if (isVisible && !isSettled) {
+      const timer = setTimeout(() => {
+        setIsSettled(true);
+      }, staggerDelay + 750);
+      return () => clearTimeout(timer);
+    }
+  }, [isVisible, isSettled, staggerDelay]);
+
+  // Entrance animation logic:
+  // - Settled: 'none' (stays permanent at opacity 1)
+  // - Visible & not settled: play 'scrapbookLetterAppear' with forwards fill-mode
+  // - Not yet visible: 'none' (kept at opacity 0 to prevent flash before animation)
+  const animationStyle = isSettled
+    ? 'none'
+    : isVisible
+      ? `scrapbookLetterAppear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) ${staggerDelay}ms forwards`
+      : 'none';
+
+  const opacityStyle = isSettled ? 1 : isVisible ? undefined : 0;
 
   return (
     <div
@@ -127,22 +140,26 @@ const ScrapbookLetter: React.FC<ScrapbookLetterProps & { letterIndex: number }> 
       }}
     >
       <div
+        onAnimationEnd={() => setIsSettled(true)}
         style={{
           animation: animationStyle,
-          // When skipping the animation render fully opaque immediately
-          opacity: skipAnimation ? 1 : undefined,
+          opacity: opacityStyle,
         }}
       >
         <img
           src={assetPath}
           alt={letter}
+          loading="eager"
+          decoding="async"
           className={`object-contain drop-shadow-lg hover:drop-shadow-xl transition-shadow ${letterClassName || ''}`}
           style={{ width: `${size}px`, height: `${size}px` }}
         />
       </div>
     </div>
   );
-};
+});
+
+ScrapbookLetter.displayName = 'ScrapbookLetter';
 
 /**
  * ScrapbookText Component
@@ -157,19 +174,20 @@ export const ScrapbookText: React.FC<ScrapbookTextProps> = ({
   playAnimationOnMount = false,
 }) => {
   // Track window width for responsive sizing
-  // Uses two breakpoints: sm (640px) and md (768px)
-  const [windowWidth, setWindowWidth] = React.useState(() =>
+  const [windowWidth, setWindowWidth] = useState(() =>
     typeof window !== 'undefined' ? window.innerWidth : 1024
   );
 
-  // Observer for scroll-reveal animation
-  const { ref, isVisible, skipAnimation } = useIntersectionObserver({
-    rootMargin: '0px',
+  // Observer for scroll-reveal animation (once: true retains visibility permanently)
+  const { ref, isVisible: isObserverVisible } = useIntersectionObserver({
+    rootMargin: '60px',
     threshold: 0.05,
     once: true,
   });
 
-  React.useEffect(() => {
+  const isVisible = playAnimationOnMount || isObserverVisible;
+
+  useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
@@ -178,11 +196,9 @@ export const ScrapbookText: React.FC<ScrapbookTextProps> = ({
   // Calculate responsive letter size with sm breakpoint
   const responsiveLetterSize = (() => {
     if (windowWidth < 640) {
-      // Mobile: explicit mobileLetterSize or 45% of desktop
       return mobileLetterSize ?? Math.round(letterSize * 0.45);
     }
     if (windowWidth < 768) {
-      // Tablet-small: 65% of desktop
       return Math.round(letterSize * 0.65);
     }
     return letterSize;
@@ -196,7 +212,7 @@ export const ScrapbookText: React.FC<ScrapbookTextProps> = ({
   const uppercaseText = text.toUpperCase();
   const totalLetters = uppercaseText.replace(/ /g, '').length;
 
-  // Generate random transforms once per component instance (changes on reload)
+  // Generate random transforms once per component instance
   const transforms = useMemo(() => {
     return generateRandomTransforms(totalLetters);
   }, [totalLetters]);
@@ -214,7 +230,6 @@ export const ScrapbookText: React.FC<ScrapbookTextProps> = ({
   }, [uppercaseText]);
 
   return (
-    // Words can wrap to new lines, but letters within a word never break
     <div ref={ref} className={`flex items-center justify-center flex-wrap gap-y-1 p-4 ${className}`}>
       {wordGroups.map(({ word, start }, wordIndex) => (
         <React.Fragment key={`word-${wordIndex}`}>
@@ -226,7 +241,7 @@ export const ScrapbookText: React.FC<ScrapbookTextProps> = ({
           <div className="flex items-center" style={{ flexShrink: 0 }}>
             {word.split('').map((char, charIndex) => {
               const currentLetterIdx = start + charIndex;
-              const transform = transforms[currentLetterIdx];
+              const transform = transforms[currentLetterIdx] ?? { rotation: 0, offsetY: 0, scale: 1 };
               return (
                 <ScrapbookLetter
                   key={`${char}-${wordIndex}-${charIndex}`}
@@ -238,8 +253,7 @@ export const ScrapbookText: React.FC<ScrapbookTextProps> = ({
                   scale={transform.scale}
                   size={responsiveLetterSize}
                   letterClassName={letterClassName}
-                  isVisible={playAnimationOnMount ? true : isVisible}
-                  skipAnimation={playAnimationOnMount ? false : skipAnimation}
+                  isVisible={isVisible}
                 />
               );
             })}

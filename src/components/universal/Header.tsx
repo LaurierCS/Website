@@ -1,12 +1,16 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import SocialLinks from './SocialLinks';
+import { useSmoothScroll } from '../../hooks/useSmoothScroll';
 
 export default function Header() {
   // Track scroll state for background blur effect
   const [isScrolled, setIsScrolled] = useState(false);
   // Track mobile menu open state
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { scrollTo } = useSmoothScroll();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,7 +37,13 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 md:py-4 flex items-center justify-between">
         {/* Logo - responsive sizing */}
         <button
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          onClick={() => {
+            if (location.pathname !== '/') {
+              navigate('/');
+            } else {
+              scrollTo(0);
+            }
+          }}
           className="flex items-center shrink-0 bg-none border-none p-0 cursor-pointer"
           aria-label="Scroll to top"
         >
@@ -111,6 +121,8 @@ export default function Header() {
 // Individual nav link with random accent color on hover
 function NavLink({ href, children, onClick }: { href: string; children: string; onClick?: () => void }) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { scrollTo } = useSmoothScroll();
   const [currentColor, setCurrentColor] = useState('');
   const [lastColor, setLastColor] = useState('');
 
@@ -139,9 +151,13 @@ function NavLink({ href, children, onClick }: { href: string; children: string; 
     if (href.startsWith('#')) {
       e.preventDefault();
       const sectionId = href.slice(1);
-      const element = document.getElementById(sectionId);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
+      if (location.pathname !== '/') {
+        navigate(`/${href}`);
+      } else {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          scrollTo(element, { offset: -80 });
+        }
       }
     } else if (href.startsWith('/')) {
       e.preventDefault();
