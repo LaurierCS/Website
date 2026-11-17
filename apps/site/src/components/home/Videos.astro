@@ -1,11 +1,11 @@
 ---
 import { YOUTUBE_URL } from '../../lib/site';
-import { videoStubs } from '../../lib/todo-data';
+import { getRecentYouTubeVideos } from '../../lib/youtube';
 
-const videos = videoStubs.filter((video) => video.url);
+// Fetch real videos from YouTube
+const videos = await getRecentYouTubeVideos(3);
 const featured = videos[0];
 const rest = videos.slice(1, 3);
-const preview = videos.some((video) => video.placeholder);
 ---
 <section class="section light" id="videos">
   <div class="wrap">
@@ -17,8 +17,8 @@ const preview = videos.some((video) => video.placeholder);
       <a class="btn btn-secondary btn-sm" href={YOUTUBE_URL}>Visit our channel →</a>
     </div>
     <div class="live">
-      <span class="dot">COMING SOON</span>
-      <p>The next stream shows up here once an event can be marked as streamed.</p>
+      <span class="dot">TODO</span>
+      <p>Add upcoming stream display when Supabase event streaming is configured. Fetch events with is_streamed = true and display next scheduled stream here.</p>
     </div>
     {videos.length === 0 ? (
       <p class="soon">Latest videos coming soon. Nothing here is a stand-in upload.</p>
@@ -44,6 +44,5 @@ const preview = videos.some((video) => video.placeholder);
         </div>
       </div>
     )}
-    {preview && <p class="note">Preview titles. These are not live channel data.</p>}
   </div>
 </section>

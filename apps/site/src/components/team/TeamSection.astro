@@ -1,7 +1,6 @@
 ---
 import { groupByDepartment } from '../../lib/department';
 import type { TeamMember } from '../../lib/queries/team';
-import ScrapbookText from '../scrapbook/ScrapbookText.astro';
 import TeamCard from './TeamCard.astro';
 
 interface Props {
@@ -17,7 +16,7 @@ const groups = groupByDepartment(members);
     <div class="sec-head">
       <div>
         <p class="eyebrow">The people</p>
-        <div data-reveal><ScrapbookText text="Meet the Team" size={96} /></div>
+        <h2 class="h-sec">Meet the Team</h2>
         <p class="lede">The public executive team, grouped the same way as the current site.</p>
       </div>
     </div>
@@ -26,8 +25,8 @@ const groups = groupByDepartment(members);
     <div class="team-block">
       {groups.map((group) => (
         <div class="team-dept">
-          <ScrapbookText text={group.department} size={64} />
-          <div class="team-grid">
+          <h3 class="h-dept">{group.department}</h3>
+          <div class="team-list">
             {group.members.map((member) => <TeamCard member={member} />)}
           </div>
         </div>
