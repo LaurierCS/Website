@@ -1,6 +1,8 @@
 .nav {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 50;
   background: transparent;
   border-bottom: 1px solid transparent;
@@ -15,7 +17,7 @@
 .nav .wrap { display: flex; align-items: center; height: var(--nav-h); gap: 24px; }
 .nav-logo img { height: 38px; width: auto; }
 .nav-panel { display: flex; align-items: center; gap: 28px; margin-left: auto; }
-.nav-links { display: flex; gap: 28px; font-weight: 500; font-size: 15px; }
+.nav-links { display: flex; gap: 28px; font-weight: 500; font-size: 15px; justify-content: center; text-align: center; }
 .nav-links a { position: relative; color: var(--text-2); padding-bottom: 2px; }
 .nav-links a::after {
   content: "";

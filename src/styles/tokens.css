@@ -40,6 +40,7 @@ body {
   min-height: 100vh;
   background: #0f172a;
   -webkit-font-smoothing: antialiased;
+  padding-top: var(--nav-h);
 }
 /* Live-site pattern: fixed, faint, tilted. Size swaps under 768px. */
 body::before {
