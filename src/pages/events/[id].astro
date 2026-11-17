@@ -1,0 +1,43 @@
+---
+export const prerender = false;
+// TODO: switch to slug once events.slug exists
+
+import Base from '../../layouts/Base.astro';
+import EventAside from '../../components/events/EventAside.astro';
+import EventHero from '../../components/events/EventHero.astro';
+import EventMain from '../../components/events/EventMain.astro';
+import RelatedEvents from '../../components/events/RelatedEvents.astro';
+import { getEventById, getEvents } from '../../lib/queries/events';
+
+const { id } = Astro.params;
+const [{ event, error }, list] = await Promise.all([
+  getEventById(id ?? ''),
+  getEvents(),
+]);
+
+if (!event && !error) Astro.response.status = 404;
+---
+<Base title={event ? `${event.title} — LCS` : 'Event — LCS'}>
+  {!event && (
+    <section class="section">
+      <div class="wrap">
+        <p class="eyebrow">Events</p>
+        <h1 class="h-sec">{error ? error.message : 'That event is not on the calendar.'}</h1>
+        <p class="lede" style="margin-bottom:24px">It may have been removed, or the link is missing an id.</p>
+        <a class="btn btn-primary" href="/events">Back to events</a>
+      </div>
+    </section>
+  )}
+  {event && (
+    <>
+      <EventHero event={event} />
+      <section class="section" style="padding-top:64px">
+        <div class="wrap ev-body">
+          <EventMain event={event} />
+          <EventAside event={event} />
+        </div>
+      </section>
+      <RelatedEvents event={event} events={list.events} />
+    </>
+  )}
+</Base>

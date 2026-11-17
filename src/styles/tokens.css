@@ -104,6 +104,8 @@ html::-webkit-scrollbar-thumb {
 .section.light .eyebrow.o { color: var(--orange-ink); }
 .section.light .upnext h3 { color: var(--yellow-ink); }
 .section.light .link { color: var(--pink-ink); }
+.section.light .btn-secondary { border-color: var(--blue); color: var(--blue-ink); }
+.section.light .btn-secondary:hover { background: rgba(38, 138, 249, 0.08); }
 .eyebrow {
   font-size: 13px;
   font-weight: 600;

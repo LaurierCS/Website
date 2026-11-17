@@ -1,0 +1,41 @@
+---
+import { dateParts } from '../../lib/dates';
+import type { EventRecord } from '../../lib/queries/events';
+import { stubFor, TYPE_LABEL } from '../../lib/todo-data';
+
+interface Props {
+  event: EventRecord;
+}
+
+const { event } = Astro.props;
+const parts = dateParts(event.date);
+const stub = stubFor(event.id);
+const live = stub && !stub.placeholder ? stub : undefined;
+const colors = ['var(--yellow)', 'var(--pink)', 'var(--orange)', 'var(--light-blue)'];
+const bg = colors[event.title.length % colors.length];
+const mark = event.title.match(/[A-Za-z]{2,}\s?\d{2,}/)?.[0] ?? event.title.slice(0, 6);
+const search = `${event.title} ${event.description ?? ''} ${event.location ?? ''}`.toLowerCase();
+---
+<a
+  class="mini"
+  href={`/events/${event.id}`}
+  data-item
+  data-type={live?.type ?? ''}
+  data-search={search}
+>
+  {event.picture_url ? (
+    <div class="mini-cover" style={`background-image:url("${event.picture_url}")`}>
+      {live?.type && <span class:list={['pill', TYPE_LABEL[live.type].pill]}>{TYPE_LABEL[live.type].label}</span>}
+    </div>
+  ) : (
+    <div class="mini-cover ph" style={`background:${bg}`}>
+      {mark}
+      {live?.type && <span class:list={['pill', TYPE_LABEL[live.type].pill]}>{TYPE_LABEL[live.type].label}</span>}
+    </div>
+  )}
+  <div class="mini-body">
+    <span class="date">{parts.month} {parts.day}, {parts.year}</span>
+    <h4>{event.title}</h4>
+    <span class="res">{event.location?.trim() || 'Location TBA'}</span>
+  </div>
+</a>
