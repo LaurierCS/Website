@@ -38,7 +38,7 @@ body {
   color: var(--text);
   line-height: 1.5;
   min-height: 100vh;
-  background: linear-gradient(135deg, #0e263d 0%, #0c2238 100%);
+  background: #0f172a;
   -webkit-font-smoothing: antialiased;
 }
 /* Live-site pattern: fixed, faint, tilted. Size swaps under 768px. */
@@ -77,7 +77,7 @@ html::-webkit-scrollbar-thumb {
   min-height: 220px;
   border-radius: 50%;
   filter: blur(90px);
-  opacity: 0.16;
+  opacity: 0;
   will-change: transform, opacity;
   animation: glow-drift 32s ease-in-out infinite;
 }
@@ -92,8 +92,8 @@ html::-webkit-scrollbar-thumb {
 }
 
 .wrap { max-width: var(--max); margin: 0 auto; padding: 0 40px; }
-.section { padding: 96px 0; }
-.section.light { background: var(--bg-light); color: var(--ink); }
+.section { padding: 96px 0; background: transparent; transition: background 0.6s ease; }
+.section.light { background: #e8f2ff; color: var(--ink); }
 .section.light .h-sec,
 .section.light .sec-head h2 { color: var(--ink); }
 .section.light .lede,
