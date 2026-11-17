@@ -1,0 +1,23 @@
+:root {
+  --text-h: #08060d;
+  --bg: #fff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-h: #f3f4f6;
+    --bg: #16171d;
+  }
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  color-scheme: light dark;
+  background: var(--bg);
+  color: var(--text-h);
+}
+
+#root {
+  min-height: 100vh;
+}
