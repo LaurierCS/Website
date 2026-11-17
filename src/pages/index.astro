@@ -2,11 +2,18 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import HeroSection from '@/components/home/HeroSection.astro';
 import WhoWeAre from '@/components/home/WhoWeAre.astro';
+import StatsSection from '@/components/home/StatsSection';
+import NextEventCard from '@/components/home/NextEventCard';
 import TeamPreview from '@/components/home/TeamPreview.astro';
+import { getNextEvent } from '@/lib/queries/events';
+
+const nextEvent = await getNextEvent();
 ---
 
 <BaseLayout title="Home">
   <HeroSection />
+  <NextEventCard client:visible event={nextEvent} />
   <WhoWeAre />
+  <StatsSection client:visible />
   <TeamPreview />
 </BaseLayout>
