@@ -1,11 +1,32 @@
 ---
+export const prerender = false;
+
 import Base from '../layouts/Base.astro';
+import Hero from '../components/home/Hero.astro';
+import MonthEvents from '../components/home/MonthEvents.astro';
+import HostGrid from '../components/home/HostGrid.astro';
+import Videos from '../components/home/Videos.astro';
+import TeamSection from '../components/team/TeamSection.astro';
+import { dateParts, todayIso } from '../lib/dates';
+import { getEvents } from '../lib/queries/events';
+import { getPublicTeam } from '../lib/queries/team';
+import { splitEvents } from '../lib/schedule';
+
+const { events, error } = await getEvents();
+const { members, error: teamError } = await getPublicTeam();
+const { upcoming, next } = splitEvents(events);
+const focus = dateParts(next?.date ?? todayIso());
 ---
-<Base>
-  <section class="section" id="about">
-    <div class="wrap">
-      <p class="eyebrow b">Wilfrid Laurier University's CS club · since 2012</p>
-      <h1 class="h-sec">Laurier Computing Society</h1>
-    </div>
-  </section>
+<Base title="Laurier Computing Society">
+  <Hero next={next} />
+  <MonthEvents
+    events={events}
+    upcoming={upcoming}
+    year={focus.year}
+    month={focus.monthIndex}
+    error={error?.message ?? null}
+  />
+  <HostGrid />
+  <Videos />
+  <TeamSection members={members} error={teamError?.message ?? null} />
 </Base>

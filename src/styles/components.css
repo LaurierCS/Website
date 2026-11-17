@@ -174,7 +174,15 @@ a.card, .card { transition: transform 0.15s, border-color 0.15s; }
 .ticket-body { padding: 24px 28px; display: flex; flex-direction: column; gap: 10px; }
 .ticket-body h3 { font-size: 26px; }
 .ticket-meta { color: var(--light-blue); font-weight: 500; font-size: 14px; }
-.ticket-body p { color: var(--text-2); font-size: 15px; font-weight: 300; }
+.ticket-body p {
+  color: var(--text-2);
+  font-size: 15px;
+  font-weight: 300;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 .ticket-actions { display: flex; gap: 12px; align-items: center; margin-top: 6px; flex-wrap: wrap; }
 
 .g2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }

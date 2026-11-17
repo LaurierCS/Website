@@ -1,0 +1,41 @@
+---
+import { dateParts, whenWhere } from '../../lib/dates';
+import type { EventRecord } from '../../lib/queries/events';
+import { stubFor, TYPE_LABEL } from '../../lib/todo-data';
+
+interface Props {
+  event: EventRecord;
+  compact?: boolean;
+}
+
+const { event, compact = false } = Astro.props;
+const parts = dateParts(event.date);
+const stub = stubFor(event.id);
+const live = stub && !stub.placeholder ? stub : undefined;
+const sticker = live?.type ? TYPE_LABEL[live.type].sticker : '';
+const search = `${event.title} ${event.description ?? ''} ${event.location ?? ''}`.toLowerCase();
+---
+<article class="ticket" data-item data-type={live?.type ?? ''} data-search={search}>
+  <div class="ticket-date">
+    <div class:list={['sticker', sticker]}>
+      <small>{parts.month}</small>
+      <b>{parts.day}</b>
+    </div>
+    <span class="wd">{parts.weekday}</span>
+  </div>
+  <div class="ticket-body">
+    {(live?.type || live?.streamed) && (
+      <div class="pills">
+        {live?.type && <span class:list={['pill', TYPE_LABEL[live.type].pill]}>{TYPE_LABEL[live.type].label}</span>}
+        {live?.streamed && <span class="pill">Streamed</span>}
+      </div>
+    )}
+    <h3>{event.title}</h3>
+    <span class="ticket-meta">{whenWhere(event.time, event.location)}</span>
+    {!compact && event.description && <p>{event.description}</p>}
+    <div class="ticket-actions">
+      <a class="btn btn-primary btn-sm" href={`/events/${event.id}`}>View details</a>
+      {!compact && <a class="link" href={`/events/${event.id}#add`}>Add to calendar</a>}
+    </div>
+  </div>
+</article>
