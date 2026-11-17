@@ -142,9 +142,13 @@ Read-only. No migrations, writes, or new columns.
 
 ## Stack
 
-Astro + TypeScript + Tailwind v4 (`@tailwindcss/vite`) for tokens and a few utilities. Mockup layout lives in ported global CSS (`src/styles/tokens.css`, `components.css`, `pages.css`) so spacing matches `lcs.css`. React (`@astrojs/react`) only for the countdown island and scrapbook letters. `@astrojs/vercel` is the adapter. `output` stays static; home, `/events`, and `/events/[id]` set `prerender = false`.
+Astro + TypeScript + Tailwind v4 (`@tailwindcss/vite`). Mockup layout lives in ported global CSS (`src/styles/tokens.css`, `components.css`, `pages.css`, `detail.css`, `hack.css`) so spacing matches `lcs.css`. Interactivity is small client scripts (nav, calendar, filters, scrapbook, Lenis). No React islands. The behaviours do not need a component runtime.
 
-`vercel.json` loses the SPA rewrite. The Vercel adapter serves the routes. Keeping the rewrite would send every path to `index.html`.
+`@astrojs/vercel` is the adapter. Home, `/events`, and `/events/[id]` set `prerender = false`. Hack to the Future is prerendered.
+
+`vercel.json` is empty. The old SPA rewrite would send every path to `index.html`.
+
+Unknown URLs use `public/404.html`. An Astro `404.astro` is skipped while that file exists.
 
 Every file stays under 250 lines.
 
