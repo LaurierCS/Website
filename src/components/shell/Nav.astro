@@ -5,9 +5,8 @@ import Socials from './Socials.astro';
 const path = Astro.url.pathname;
 
 function active(href: string): boolean {
-  if (href === '/#events') return path === '/' || path === '/index.html';
+  if (href === '/events') return path === '/events' || path.startsWith('/events/');
   if (href === '/hack-to-the-future') return path.startsWith('/hack-to-the-future');
-  if (href.startsWith('/#')) return path === '/' || path === '/index.html';
   return false;
 }
 ---
@@ -17,34 +16,13 @@ function active(href: string): boolean {
       <img src="/assets/logos/LCS_Logo_Long_White_SVG.svg" alt="" />
     </a>
     <div class="nav-panel">
-      <div class="nav-menu">
-        <button class="nav-toggle" type="button" data-nav-toggle aria-haspopup="true" aria-expanded="false">
-          Navigate
-        </button>
-        <div class="nav-dropdown" role="menu" data-nav-dropdown>
-          {NAV.map((item) => (
-            <a 
-              href={item.href} 
-              class="nav-dropdown-item" 
-              role="menuitem"
-              class:list={[{ active: active(item.href) }]}
-            >
-              {item.label}
-            </a>
-          ))}
-        </div>
-      </div>
+      <nav class="nav-links" aria-label="Primary">
+        {NAV.map((item) => (
+          <a href={item.href} data-nav-link class:list={[{ active: active(item.href) }]}>{item.label}</a>
+        ))}
+      </nav>
       <Socials />
     </div>
-    
-    <!-- Mobile menu -->
-    <nav class="nav-links" aria-label="Primary" data-nav-links>
-      {NAV.map((item) => (
-        <a href={item.href} data-nav-link class:list={[{ active: active(item.href) }]}>{item.label}</a>
-      ))}
-    </nav>
-    <Socials />
-    
     <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false" data-burger>
       <span></span><span></span><span></span>
     </button>

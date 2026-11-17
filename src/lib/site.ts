@@ -18,7 +18,7 @@ export const SOCIALS = [
 
 export const NAV = [
   { href: '/#about', label: 'About' },
-  { href: '/#events', label: 'Events' },
+  { href: '/events', label: 'Events' },
   { href: '/#host', label: 'What We Host' },
   { href: '/#videos', label: 'Videos' },
   { href: '/#team', label: 'Team' },
