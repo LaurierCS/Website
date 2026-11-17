@@ -1,0 +1,114 @@
+---
+/**
+ * Footer - Links, copyright, contact
+ */
+import SocialLinks from './SocialLinks.astro';
+---
+
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-section">
+      <h3>Laurier Computing Society</h3>
+      <p>Building community and advancing computing at Wilfrid Laurier University</p>
+    </div>
+
+    <div class="footer-section">
+      <h4>Links</h4>
+      <ul>
+        <li><a href="/#hero">Home</a></li>
+        <li><a href="/#events">Events</a></li>
+        <li><a href="/#team">Team</a></li>
+        <li><a href="/hack-to-the-future">Hack to the Future</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-section">
+      <h4>Connect</h4>
+      <SocialLinks />
+    </div>
+
+    <div class="footer-section">
+      <h4>Contact</h4>
+      <p><a href="mailto:contact@lauriercs.com">contact@lauriercs.com</a></p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2024 Laurier Computing Society. All rights reserved.</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: rgba(12, 34, 56, 0.9);
+    border-top: 1px solid rgba(255, 159, 196, 0.1);
+    color: white;
+    margin-top: 6rem;
+    position: relative;
+    z-index: 20;
+  }
+
+  .footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+  }
+
+  .footer-section h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    font-family: Dosis, sans-serif;
+  }
+
+  .footer-section h4 {
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: #B1E0FF;
+  }
+
+  .footer-section p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+  }
+
+  .footer-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .footer-section a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    font-size: 0.9rem;
+  }
+
+  .footer-section a:hover {
+    color: #FF9FC4;
+  }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(255, 159, 196, 0.1);
+    padding: 1.5rem 2rem;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 768px) {
+    .footer-container {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+</style>

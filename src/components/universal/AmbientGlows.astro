@@ -1,0 +1,105 @@
+---
+/**
+ * AmbientGlows - Slow-moving blurred gradient glows
+ * Brand accents: pink, orange, yellow, blue, light-blue
+ * GPU-friendly (transform/opacity only), respects prefers-reduced-motion
+ */
+---
+
+<div class="glows-container">
+  <div class="glow glow-pink"></div>
+  <div class="glow glow-orange"></div>
+  <div class="glow glow-yellow"></div>
+  <div class="glow glow-blue"></div>
+  <div class="glow glow-light-blue"></div>
+</div>
+
+<style>
+  .glows-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.15;
+    mix-blend-mode: screen;
+  }
+
+  .glow-pink {
+    width: 500px;
+    height: 500px;
+    background: #FF9FC4;
+    top: -10%;
+    left: 5%;
+    animation: float 20s ease-in-out infinite;
+  }
+
+  .glow-orange {
+    width: 400px;
+    height: 400px;
+    background: #FF9770;
+    top: 20%;
+    right: 10%;
+    animation: float 24s ease-in-out infinite 2s;
+  }
+
+  .glow-yellow {
+    width: 450px;
+    height: 450px;
+    background: #FFD670;
+    bottom: 10%;
+    left: 15%;
+    animation: float 28s ease-in-out infinite 4s;
+  }
+
+  .glow-blue {
+    width: 380px;
+    height: 380px;
+    background: #268AF9;
+    bottom: 20%;
+    right: 5%;
+    animation: float 26s ease-in-out infinite 1s;
+  }
+
+  .glow-light-blue {
+    width: 420px;
+    height: 420px;
+    background: #B1E0FF;
+    top: 40%;
+    left: 40%;
+    animation: float 22s ease-in-out infinite 3s;
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+    25% {
+      transform: translate(30px, -50px) scale(1.05);
+    }
+    50% {
+      transform: translate(-40px, 40px) scale(0.95);
+    }
+    75% {
+      transform: translate(50px, 50px) scale(1.02);
+    }
+  }
+
+  /* Reduce motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    .glow {
+      animation: none !important;
+      opacity: 0.08 !important;
+    }
+  }
+</style>

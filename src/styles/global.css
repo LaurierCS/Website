@@ -1,0 +1,50 @@
+@import 'tailwindcss';
+
+/* Root background and smooth scrolling */
+:root {
+  scroll-behavior: smooth;
+}
+
+html {
+  scroll-behavior: auto; /* Lenis will handle smooth scrolling */
+}
+
+body {
+  background: linear-gradient(135deg, rgb(14 38 61) 0%, rgb(12 34 56) 100%);
+  background-attachment: fixed;
+  color: rgb(17 24 39);
+}
+
+/* Scrollbar accent color (will be set by JS) */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-color, rgb(255 159 196));
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-color-hover, rgb(255 126 169));
+}
+
+/* Dosis font import */
+@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@400;600;700&display=swap');
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

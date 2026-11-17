@@ -1,0 +1,39 @@
+---
+/**
+ * ScrollbarColor - Sets a random accent color on the scrollbar
+ * Runs on page load, never repeats the same color twice in a row
+ */
+---
+
+<script>
+  const colors = ['#FF9FC4', '#FF9770', '#FFD670', '#268AF9', '#B1E0FF'];
+  let lastColor = '';
+
+  function setScrollbarColor() {
+    let color = colors[Math.floor(Math.random() * colors.length)];
+
+    // Ensure we never pick the same color twice
+    while (color === lastColor && colors.length > 1) {
+      color = colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    lastColor = color;
+    document.documentElement.style.setProperty('--scrollbar-color', color);
+    document.documentElement.style.setProperty(
+      '--scrollbar-color-hover',
+      adjustColor(color, 0.8),
+    );
+  }
+
+  function adjustColor(hex: string, factor: number): string {
+    const num = parseInt(hex.replace('#', ''), 16);
+    const r = Math.floor((num >> 16) * factor);
+    const g = Math.floor(((num >> 8) & 0x00ff) * factor);
+    const b = Math.floor((num & 0x0000ff) * factor);
+    return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
+  }
+
+  // Set on page load
+  window.addEventListener('load', setScrollbarColor);
+  setScrollbarColor(); // Also try immediately
+</script>

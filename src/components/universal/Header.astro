@@ -1,0 +1,225 @@
+---
+/**
+ * Header - Navigation with random accent colors, blur-on-scroll, mobile menu
+ */
+import SocialLinks from './SocialLinks.astro';
+import NavLink from './NavLink.astro';
+---
+
+<header class="header" id="header">
+  <nav class="nav-container">
+    <div class="logo">
+      <a href="/">LCS</a>
+    </div>
+
+    <ul class="nav-links">
+      <li><NavLink href="/#hero">Home</NavLink></li>
+      <li><NavLink href="/#events">Events</NavLink></li>
+      <li><NavLink href="/#team">Team</NavLink></li>
+      <li><NavLink href="/hack-to-the-future">Hack to the Future</NavLink></li>
+    </ul>
+
+    <div class="nav-socials">
+      <SocialLinks />
+    </div>
+
+    <!-- Mobile menu button -->
+    <button class="menu-toggle" aria-label="Toggle menu" id="menu-toggle">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <!-- Mobile menu -->
+    <div class="mobile-menu" id="mobile-menu">
+      <ul class="mobile-nav-links">
+        <li><a href="/#hero">Home</a></li>
+        <li><a href="/#events">Events</a></li>
+        <li><a href="/#team">Team</a></li>
+        <li><a href="/hack-to-the-future">Hack to the Future</a></li>
+      </ul>
+      <div class="mobile-socials">
+        <SocialLinks />
+      </div>
+    </div>
+  </nav>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(14, 38, 61, 0.7);
+    backdrop-filter: blur(10px);
+    transition: background-color 0.3s ease;
+  }
+
+  .header.scrolled {
+    background: rgba(14, 38, 61, 0.95);
+  }
+
+  .nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo a {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+    text-decoration: none;
+    font-family: Dosis, sans-serif;
+    letter-spacing: 0.05em;
+  }
+
+  .nav-links {
+    display: none;
+    list-style: none;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+  }
+
+  @media (min-width: 768px) {
+    .nav-links {
+      display: flex;
+    }
+  }
+
+  .nav-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.2s ease;
+  }
+
+  .nav-socials {
+    display: none;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .nav-socials {
+      display: flex;
+    }
+  }
+
+  .menu-toggle {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    z-index: 101;
+  }
+
+  @media (min-width: 768px) {
+    .menu-toggle {
+      display: none;
+    }
+  }
+
+  .menu-toggle span {
+    width: 24px;
+    height: 2px;
+    background: white;
+    transition: all 0.3s ease;
+    display: block;
+  }
+
+  .menu-toggle.active span:nth-child(1) {
+    transform: translateY(10px) rotate(45deg);
+  }
+
+  .menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .menu-toggle.active span:nth-child(3) {
+    transform: translateY(-10px) rotate(-45deg);
+  }
+
+  .mobile-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(14, 38, 61, 0.98);
+    backdrop-filter: blur(10px);
+    display: none;
+    flex-direction: column;
+    padding: 2rem;
+    gap: 2rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  @media (min-width: 768px) {
+    .mobile-menu {
+      display: none !important;
+    }
+  }
+
+  .mobile-menu.active {
+    display: flex;
+    max-height: 500px;
+  }
+
+  .mobile-nav-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .mobile-nav-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+  }
+
+  .mobile-socials {
+    display: flex;
+    gap: 1.5rem;
+  }
+</style>
+
+<script>
+  // Blur-on-scroll effect
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 10) {
+      header?.classList.add('scrolled');
+    } else {
+      header?.classList.remove('scrolled');
+    }
+  });
+
+  // Mobile menu toggle
+  const menuToggle = document.getElementById('menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  menuToggle?.addEventListener('click', () => {
+    menuToggle.classList.toggle('active');
+    mobileMenu?.classList.toggle('active');
+  });
+
+  // Close mobile menu on link click
+  document.querySelectorAll('.mobile-nav-links a').forEach((link) => {
+    link.addEventListener('click', () => {
+      menuToggle?.classList.remove('active');
+      mobileMenu?.classList.remove('active');
+    });
+  });
+</script>

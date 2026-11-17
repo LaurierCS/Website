@@ -1,0 +1,72 @@
+---
+/**
+ * NavLink - Link with random accent color on hover (never same twice in a row)
+ */
+
+interface Props {
+  href: string;
+}
+
+const { href } = Astro.props;
+---
+
+<a href={href} class="nav-link"><slot /></a>
+
+<style>
+  .nav-link {
+    position: relative;
+    color: white;
+    text-decoration: none;
+    padding-bottom: 0.25rem;
+    transition: color 0.2s ease;
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+  }
+
+  .nav-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+</style>
+
+<script>
+  const accentColors = [
+    '#FF9FC4', // pink
+    '#FF9770', // orange
+    '#FFD670', // yellow
+    '#268AF9', // blue
+    '#B1E0FF', // light-blue
+  ];
+
+  let lastColor = '';
+
+  document.querySelectorAll('.nav-link').forEach((link) => {
+    link.addEventListener('mouseenter', () => {
+      let color = accentColors[Math.floor(Math.random() * accentColors.length)];
+
+      // Ensure we never pick the same color twice
+      while (color === lastColor && accentColors.length > 1) {
+        color =
+          accentColors[Math.floor(Math.random() * accentColors.length)];
+      }
+
+      lastColor = color;
+      (link as HTMLElement).style.color = color;
+    });
+
+    link.addEventListener('mouseleave', () => {
+      (link as HTMLElement).style.color = 'white';
+    });
+  });
+</script>

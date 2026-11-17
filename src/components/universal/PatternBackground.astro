@@ -1,0 +1,43 @@
+---
+/**
+ * PatternBackground - Fixed gradient + tiled pattern overlay
+ * Desktop: 800px, Mobile: 600px, ~2% opacity, -15° rotation
+ */
+---
+
+<div class="pattern-bg" />
+
+<style>
+  .pattern-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #0e263d 0%, #0c2238 100%);
+    background-attachment: fixed;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .pattern-bg::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('/assets/patterns/Icon_Pattern.svg');
+    background-size: 800px;
+    background-attachment: fixed;
+    opacity: 0.02;
+    transform: rotate(-15deg);
+    z-index: 1;
+  }
+
+  @media (max-width: 768px) {
+    .pattern-bg::after {
+      background-size: 600px;
+    }
+  }
+</style>
