@@ -68,7 +68,7 @@ html::-webkit-scrollbar-thumb {
 }
 [id] { scroll-margin-top: calc(var(--nav-h) + 8px); }
 
-.glows { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.glows { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; display: none; }
 .glows span {
   position: absolute;
   width: 38vw;
@@ -93,19 +93,19 @@ html::-webkit-scrollbar-thumb {
 
 .wrap { max-width: var(--max); margin: 0 auto; padding: 0 40px; }
 .section { padding: 96px 0; background: transparent; transition: background 0.6s ease; }
-.section.light { background: #e8f2ff; color: var(--ink); }
+.section.light { background: #1a2841; color: #fff; }
 .section.light .h-sec,
-.section.light .sec-head h2 { color: var(--ink); }
+.section.light .sec-head h2 { color: #fff; }
 .section.light .lede,
-.section.light .ticket-body p { color: var(--ink-2); }
-.section.light .eyebrow { color: var(--pink-ink); }
-.section.light .eyebrow.y { color: var(--yellow-ink); }
-.section.light .eyebrow.b { color: var(--blue-ink); }
-.section.light .eyebrow.o { color: var(--orange-ink); }
-.section.light .upnext h3 { color: var(--yellow-ink); }
-.section.light .link { color: var(--pink-ink); }
-.section.light .btn-secondary { border-color: var(--blue); color: var(--blue-ink); }
-.section.light .btn-secondary:hover { background: rgba(38, 138, 249, 0.08); }
+.section.light .ticket-body p { color: var(--text-2); }
+.section.light .eyebrow { color: var(--pink); }
+.section.light .eyebrow.y { color: var(--yellow); }
+.section.light .eyebrow.b { color: var(--light-blue); }
+.section.light .eyebrow.o { color: var(--orange); }
+.section.light .upnext h3 { color: var(--yellow); }
+.section.light .link { color: var(--pink); }
+.section.light .btn-secondary { border-color: var(--light-blue); color: var(--light-blue); }
+.section.light .btn-secondary:hover { background: rgba(177, 224, 255, 0.1); }
 .eyebrow {
   font-size: 13px;
   font-weight: 600;
@@ -131,7 +131,7 @@ html::-webkit-scrollbar-thumb {
 .muted { color: var(--muted); }
 .hl { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .soon { font-size: 14px; color: var(--muted); font-style: italic; }
-.section.light .soon { color: #64748b; }
+.section.light .soon { color: var(--muted); }
 .note { font-size: 12px; color: var(--muted); font-style: italic; }
 
 .btn {
