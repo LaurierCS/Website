@@ -1,0 +1,40 @@
+---
+import { CATEGORY_AWARDS, PODIUM } from '../../lib/hackathon';
+---
+<section class="section">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow y">Winners</p>
+        <h2 class="h-sec">The top three</h2>
+      </div>
+    </div>
+    <div class="podium">
+      {PODIUM.map((place) => (
+        <div class:list={['place', place.className]}>
+          {place.place === '1st' && <span class="crown" aria-hidden="true">👑</span>}
+          <span class="rank">{place.rank}</span>
+          <h3>{place.name}</h3>
+          <span class="amt">{place.amount}</span>
+          <p>{place.blurb}</p>
+          <a href={place.url}>View on Devpost ↗</a>
+        </div>
+      ))}
+    </div>
+
+    <div style="margin-top:72px">
+      <p class="eyebrow">Category awards</p>
+      <h2 class="h-sec" style="font-size:38px;margin-bottom:28px">$50 each</h2>
+      <div class="g3">
+        {CATEGORY_AWARDS.map((award) => (
+          <a class="card award" href={award.url}>
+            <span class="cat">{award.cat}</span>
+            <h4>{award.name}</h4>
+            <p class="muted">{award.blurb}</p>
+            <span class="link">Devpost ↗</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

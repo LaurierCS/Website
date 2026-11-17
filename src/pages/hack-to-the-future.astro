@@ -1,0 +1,62 @@
+---
+import Base from '../layouts/Base.astro';
+import Gallery from '../components/hack/Gallery.astro';
+import Podium from '../components/hack/Podium.astro';
+import { DISCORD_URL } from '../lib/site';
+import { HACKATHON } from '../lib/hackathon';
+
+const challenge = `<span class="c-p">"duration"</span>: <span class="c-s">"48 hours"</span>,
+  <span class="c-p">"rooms"</span>: [<span class="c-s">"LH1011"</span>, <span class="c-s">"N2085"</span>],
+  <span class="c-p">"judges"</span>: <span class="c-s">"industry + alumni"</span>,
+  <span class="c-p">"office_hours"</span>: <span class="c-s">"Saturday on Discord"</span>`;
+---
+<Base title="Hack to the Future — Laurier Computing Society">
+  <section class="hh">
+    <div class="wrap">
+      <span class="tag">RECAP · MARCH 27–29, 2026</span>
+      <h1><span class="hl">Hack to the Future</span></h1>
+      <p>48 hours, build anything. Here's who won and what everyone built.</p>
+      <div class="hstats">
+        {HACKATHON.stats.map((stat) => (
+          <div><b>{stat.value}</b><span>{stat.label}</span></div>
+        ))}
+      </div>
+      <div class="hh-ctas">
+        <a class="btn btn-primary" href={HACKATHON.devpost}>See every project on Devpost</a>
+        <a class="btn btn-secondary" href="#gallery">Browse projects</a>
+      </div>
+    </div>
+    <img class="m1" data-parallax="14" src="/assets/mascots/Coco.svg" alt="" />
+    <img class="m2" data-parallax="14" src="/assets/mascots/Krill.svg" alt="" />
+  </section>
+
+  <Podium />
+
+  <section class="section light">
+    <div class="wrap g2" style="align-items:center">
+      <div>
+        <p class="eyebrow b">The challenge</p>
+        <h2 class="h-sec">Build anything, or help students with money</h2>
+        <p class="lede">Teams could run with their own idea, or take the suggested challenge: an app or resource that helps students track, budget and understand their finances at university.</p>
+      </div>
+      <div class="window">
+        <div class="window-bar"><i></i><i></i><i></i><span>hackathon.json</span></div>
+        <pre set:html={`{\n  ${challenge}\n}`} />
+      </div>
+    </div>
+  </section>
+
+  <Gallery />
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <div class="recap-cta">
+        <div>
+          <h2>Want in next time?</h2>
+          <p>The next hackathon gets announced on Discord first.</p>
+        </div>
+        <a class="btn btn-ink" href={DISCORD_URL}>Join the Discord</a>
+      </div>
+    </div>
+  </section>
+</Base>
