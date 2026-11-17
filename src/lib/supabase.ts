@@ -11,9 +11,16 @@ let client: SupabaseClient | null = null;
 export function getSupabase(): { client: SupabaseClient } | { error: QueryError } {
   const url = import.meta.env.SUPABASE_URL;
   const key = import.meta.env.SUPABASE_ANON_KEY;
-  if (!url || !key) {
+  // A missing or non-HTTP value must not throw out of the page render.
+  if (!url || !key || !/^https?:\/\//.test(url)) {
     return { error: { message: 'Events are temporarily unavailable.' } };
   }
-  if (!client) client = createClient(url, key);
+  if (!client) {
+    try {
+      client = createClient(url, key);
+    } catch {
+      return { error: { message: 'Events are temporarily unavailable.' } };
+    }
+  }
   return { client };
 }
