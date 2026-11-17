@@ -45,3 +45,5 @@ document.querySelectorAll<HTMLElement>('[data-browser]').forEach((root) => {
   root.querySelector('[data-search-input]')?.addEventListener('input', () => apply(root));
   apply(root);
 });
+
+export {};

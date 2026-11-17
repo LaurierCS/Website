@@ -14,3 +14,5 @@ document.querySelectorAll<HTMLElement>('[data-team-card]').forEach((card) => {
     avatar.style.borderColor = base;
   });
 });
+
+export {};

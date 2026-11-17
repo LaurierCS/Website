@@ -35,3 +35,5 @@ nav.querySelectorAll<HTMLAnchorElement>('[data-nav-link]').forEach((link) => {
   });
 });
 }
+
+export {};

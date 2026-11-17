@@ -11,3 +11,5 @@ document.querySelectorAll<HTMLElement>('[data-scrapbook]').forEach((root) => {
     }
   });
 });
+
+export {};

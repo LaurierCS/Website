@@ -20,3 +20,5 @@ document.querySelectorAll<HTMLElement>('[data-count]').forEach((el) => {
 
   observer.observe(el);
 });
+
+export {};

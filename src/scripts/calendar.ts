@@ -49,3 +49,5 @@ document.querySelectorAll<HTMLElement>('[data-calendar]').forEach((root) => {
     paint(root);
   });
 });
+
+export {};

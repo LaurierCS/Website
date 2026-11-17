@@ -19,3 +19,5 @@ if (reduce) {
     lenis.scrollTo(target as HTMLElement, { offset: -84 });
   });
 }
+
+export {};

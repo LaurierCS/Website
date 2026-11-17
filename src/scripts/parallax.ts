@@ -19,3 +19,5 @@ if (!reduce && nodes.length) {
   paint();
   window.addEventListener('scroll', request, { passive: true });
 }
+
+export {};

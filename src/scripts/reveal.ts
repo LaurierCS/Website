@@ -13,3 +13,5 @@ if (!reduce && nodes.length) {
   );
   nodes.forEach((node) => observer.observe(node));
 }
+
+export {};
