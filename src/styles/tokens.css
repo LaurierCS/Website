@@ -93,7 +93,7 @@ html::-webkit-scrollbar-thumb {
 
 .wrap { max-width: var(--max); margin: 0 auto; padding: 0 40px; }
 .section { padding: 96px 0; background: transparent; transition: background 0.6s ease; }
-.section.light { background: #1a2841; color: #fff; }
+.section.light { background: rgba(26, 40, 65, 0.4); backdrop-filter: blur(10px); color: #fff; }
 .section.light .h-sec,
 .section.light .sec-head h2 { color: #fff; }
 .section.light .lede,
