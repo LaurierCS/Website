@@ -1,3 +1,5 @@
 {
-  "nodeVersion": "22.x"
+  "nodeVersion": "22.x",
+  "buildCommand": "pnpm run build",
+  "outputDirectory": "dist"
 }
