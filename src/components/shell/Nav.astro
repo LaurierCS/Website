@@ -1,0 +1,30 @@
+---
+import { NAV } from '../../lib/site';
+import Socials from './Socials.astro';
+
+const path = Astro.url.pathname;
+
+function active(href: string): boolean {
+  if (href === '/events') return path === '/events' || path.startsWith('/events/');
+  if (href === '/hack-to-the-future') return path.startsWith('/hack-to-the-future');
+  return false;
+}
+---
+<header class="nav" data-nav>
+  <div class="wrap">
+    <a class="nav-logo" href="/" aria-label="Laurier Computing Society, home">
+      <img src="/assets/logos/LCS_Logo_Long_White_SVG.svg" alt="" />
+    </a>
+    <div class="nav-panel">
+      <nav class="nav-links" aria-label="Primary">
+        {NAV.map((item) => (
+          <a href={item.href} data-nav-link class:list={[{ active: active(item.href) }]}>{item.label}</a>
+        ))}
+      </nav>
+      <Socials />
+    </div>
+    <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false" data-burger>
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
