@@ -7,11 +7,19 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies and builds
 node_modules
 dist
 dist-ssr
 .astro
+.vercel
 *.local
+
+# Environment variables (keep .env.example)
+.env
+.env.*
+!.env.example
+!**/.env.example
 
 # Editor directories and files
 .vscode/*
@@ -24,6 +32,5 @@ dist-ssr
 *.sln
 *.sw?
 
-.env
+# GitHub
 .github/copilot-*.md
-.vercel

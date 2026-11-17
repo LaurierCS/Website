@@ -1,81 +1,129 @@
 # Laurier Computing Society
 
-The public LCS site. Astro, TypeScript, and Tailwind v4. Pages that read Supabase render on each request so a new event shows up without a redeploy.
+Public website and admin dashboard for LCS. Two independently deployable apps sharing one repository.
 
-## Setup
+## Repository Structure
 
-Node.js and pnpm.
-
-```sh
-git clone https://github.com/LaurierCS/Website
-cd Website
-pnpm i
-cp .env.example .env
+```
+lcs/
+├── apps/
+│   ├── site/          → Public website (Astro + TypeScript + Tailwind)
+│   └── admin/         → Admin dashboard (Vite + React + TypeScript)
+├── .github/           → Shared CI/CD workflows
+├── docs/              → Documentation
+└── README.md          → This file
 ```
 
-Ask a VP of Engineering for `SUPABASE_URL` and `SUPABASE_ANON_KEY`. Put them in `.env`. They are server-only. Do not prefix them with `PUBLIC_` and do not commit `.env`.
+## Quick Start
+
+### Prerequisites
+- Node.js 20+
+- pnpm 9+
+
+### Running the public site
 
 ```sh
+cd apps/site
+pnpm install
+cp .env.example .env
+# Add SUPABASE_URL and SUPABASE_ANON_KEY from a VP of Engineering
 pnpm dev
 ```
 
-## Scripts
+Server runs on `http://localhost:3000`.
 
-| Command | What it does |
-| --- | --- |
-| `pnpm dev` | Local server |
-| `pnpm check` | `astro check` |
-| `pnpm build` | Production build (Vercel output) |
-| `pnpm preview` | Serve the build locally |
+### Running the admin dashboard
 
-## Structure
+```sh
+cd apps/admin
+pnpm install
+cp .env.example .env
+# Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY (public anon key only)
+pnpm dev
+```
 
-- `src/pages/` routes. `/`, `/events`, and `/events/[id]` set `prerender = false`. `/hack-to-the-future` is prerendered.
-- `src/components/` UI, split by page.
-- `src/layouts/Base.astro` nav, footer, background, glows.
-- `src/styles/` tokens ported from the redesign mockups.
-- `src/lib/supabase.ts` server client.
-- `src/lib/queries/` read-only `events` and `team` queries.
-- `src/lib/department.ts` role to department and hierarchy, from the previous site.
-- `src/lib/site.ts` hero stat numbers and social URLs.
-- `src/lib/todo-data.ts` empty stubs for fields that are not in the database yet.
-- `src/lib/hackathon.ts` March 2026 winners and the project list.
-- `public/` logos, mascots, letter assets, favicons.
+Server runs on `http://localhost:5173`.
 
-`design-ref/` is a local copy of the HTML mockups. It is git-excluded.
+## Site (`apps/site/`)
+
+Astro-based static + on-demand rendering. Renders events and team pages on each request via Supabase.
+
+### Scripts
+- `pnpm dev` — Local server
+- `pnpm build` — Production build (Vercel output)
+- `pnpm preview` — Serve the build locally
+- `pnpm check` — Astro type check
+
+### Structure
+- `src/pages/` — Routes. `/`, `/events`, `/events/[id]` render on-demand. `/hack-to-the-future` is prerendered.
+- `src/components/` — UI split by page.
+- `src/layouts/Base.astro` — Nav, footer, background, glows.
+- `src/lib/queries/` — Read-only Supabase queries.
+- `public/` — Logos, mascots, favicons.
+
+### Deployment
+Each Vercel project has one environment variable pair: `SUPABASE_URL` and `SUPABASE_ANON_KEY` (never the service role key).
+
+## Admin (`apps/admin/`)
+
+Vite + React for a fast, future-proof admin dashboard. Currently minimal; expand with user auth, forms, and Supabase integration.
+
+### Scripts
+- `pnpm dev` — Local dev server
+- `pnpm build` — Production build
+- `pnpm preview` — Serve the build locally
+- `pnpm lint` — Run oxlint
+
+### Structure
+- `src/App.tsx` — Root component.
+- `src/main.tsx` — React entry point.
+- `public/` — Static assets.
+
+### Environment Variables
+Vite env vars are public (shipped to the browser) and must be prefixed with `VITE_`. Never add a Supabase service role key.
+
+### Deployment
+Each Vercel project has: `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
+
+## Vercel Deployment
+
+Two separate Vercel projects, each with its own Root Directory and environment variables.
+
+### Site project
+- **Root Directory**: `apps/site`
+- **Framework**: Astro
+- **Environment**: `SUPABASE_URL`, `SUPABASE_ANON_KEY`
+
+### Admin project
+- **Root Directory**: `apps/admin`
+- **Framework**: Vite
+- **Environment**: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`
+
+## Environment Variables
+
+### Site (server-only)
+- `SUPABASE_URL` — Supabase project URL
+- `SUPABASE_ANON_KEY` — Supabase public anon key
+
+### Admin (public, shipped to browser)
+- `VITE_SUPABASE_URL` — Supabase project URL
+- `VITE_SUPABASE_ANON_KEY` — Supabase public anon key
+
+See `apps/site/.env.example` and `apps/admin/.env.example` for templates.
+
+## GitHub Workflows
+
+CI runs on every branch. Workflows run in their respective app directories.
 
 ## Supabase
 
-Read-only. No migrations and no writes from this app.
+Read-only queries. Tables:
+- `events` — Event list and detail pages
+- `team` — Team page
 
-`events`: `id`, `title`, `description`, `date`, `time`, `location`, `picture_url`, `created_at`.
+## Notes
 
-`team`: `id`, `name`, `picture_url`, `role`, `department`, `github_url`, `linkedin_url`, `is_public`, `created_at`. The team page loads `is_public = true` and groups people with the role map, not the `department` column.
-
-The event URL is `/events/[id]`. Switch that to a slug once `events.slug` exists.
-
-Null `description`, `time`, and `picture_url` render as "coming soon", "Time TBA", or a letter poster. A failed query shows a short error and does not crash the page.
-
-## TODO(db)
-
-These components are built. The arrays in `src/lib/todo-data.ts` are empty, so the UI says coming soon instead of inventing records.
-
-| Stub | Needs |
-| --- | --- |
-| Event type | `events.type` (`review`, `mtp`, `workshop`, `hackathon`, `other`) |
-| Series | `events.series` |
-| Streamed flag | `events.is_streamed` |
-| Recording | `events.youtube_url` |
-| Slug | `events.slug` |
-| Resources | `event_resources` (`event_id`, `title`, `kind`, `url`, `note`) |
-| Related events | `event_links` (`event_id`, `related_event_id`, `sort`) |
-| Photos | `event_photos` |
-| Latest videos | `videos`, or the YouTube API |
-
-`docs/redesign-plan.md` maps each mockup section to the component that renders it.
-
-## Deploy
-
-Vercel, via `@astrojs/vercel`. Set the same two env vars on the project. `vercel.json` does not rewrite routes. The adapter serves them.
-
-Pushing `main` is the production deploy. Feature work stays on a branch.
+- No monorepo tooling (Turborepo, Nx, workspaces). Each app is independent.
+- Each app has its own `package.json` and `pnpm-lock.yaml`.
+- Root `.gitignore` covers both apps: `node_modules`, `dist`, `.astro`, `.vercel`, `.env*`.
+- See `docs/restructure-plan.md` for migration notes.
