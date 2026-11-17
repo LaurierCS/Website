@@ -19,6 +19,11 @@ const { title = 'Laurier Computing Society' } = Astro.props;
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@500;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <script is:inline>
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('motion');
+      }
+    </script>
   </head>
   <body>
     <div class="glows" aria-hidden="true">
@@ -32,6 +37,11 @@ const { title = 'Laurier Computing Society' } = Astro.props;
     <script>
       import '../scripts/nav';
       import '../scripts/scrollbar';
+      import '../scripts/lenis';
+      import '../scripts/reveal';
+      import '../scripts/parallax';
+      import '../scripts/count-up';
+      import '../scripts/countdown';
     </script>
   </body>
 </html>

@@ -40,8 +40,8 @@ const cards = [
       </div>
     </div>
     <div class="g4">
-      {cards.map((card) => (
-        <a class="card init" href={card.href} data-reveal>
+      {cards.map((card, index) => (
+        <a class="card init" href={card.href} data-reveal style={`--d:${index * 70}ms`}>
           <div class="badge" style={`background:${card.color}`}>{card.badge}</div>
           <h3>{card.title}</h3>
           <p>{card.copy}</p>
