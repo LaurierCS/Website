@@ -1,0 +1,71 @@
+---
+/**
+ * Hack to the Future - Hackathon landing and info page
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+// TODO: Port winners data from hackathonData.ts
+const winners = {
+  '2025': {
+    overall: [],
+    categories: [
+      {
+        name: 'Best Design',
+        winner: 'Coming Soon',
+        description: 'TODO: Load from database',
+      },
+      {
+        name: 'Most Innovative',
+        winner: 'Coming Soon',
+        description: 'TODO: Load from database',
+      },
+      {
+        name: 'Best Use of Technology',
+        winner: 'Coming Soon',
+        description: 'TODO: Load from database',
+      },
+    ],
+  },
+};
+---
+
+<BaseLayout title="Hack to the Future">
+  <section class="py-20 relative z-10">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Hero -->
+      <div class="text-center mb-16">
+        <h1 class="text-5xl sm:text-6xl font-bold font-dosis text-white mb-4">Hack to the Future</h1>
+        <p class="text-xl text-gray-300 mb-8">
+          Laurier Computing Society's annual hackathon—where innovation meets opportunity
+        </p>
+        <a
+          href="/events"
+          class="inline-block px-8 py-3 bg-lcs-pink text-white font-semibold rounded-lg hover:bg-lcs-orange transition-all"
+        >
+          Learn More
+        </a>
+      </div>
+
+      <!-- Winners Section -->
+      <div class="mb-16">
+        <h2 class="text-3xl font-bold font-dosis text-lcs-light-blue mb-8">2025 Winners</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {winners['2025'].categories.map((category) => (
+            <div key={category.name} class="bg-gradient-to-br from-lcs-dark to-lcs-darker rounded-lg p-6 border border-gray-600">
+              <h3 class="text-lg font-bold text-lcs-pink mb-2">{category.name}</h3>
+              <p class="text-white font-semibold">{category.winner}</p>
+              <p class="text-gray-400 text-sm mt-2">{category.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Coming Soon Section -->
+      <div class="bg-lcs-light-section rounded-lg p-8">
+        <p class="text-gray-600">
+          🔄 More details, event history, and photo galleries coming soon. Check back for updates!
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

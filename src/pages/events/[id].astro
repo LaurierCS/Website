@@ -1,0 +1,116 @@
+---
+/**
+ * Event Detail Page
+ * Note: Uses UUID; TODO switch to slug once events.slug exists
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getEventById, getEvents } from '@/lib/queries/events';
+
+export async function getStaticPaths() {
+  const events = await getEvents();
+  return events.map((event) => ({
+    params: { id: event.id },
+  }));
+}
+
+const { id } = Astro.params;
+
+if (!id) {
+  return Astro.redirect('/events');
+}
+
+const event = await getEventById(id);
+
+if (!event) {
+  return Astro.redirect('/events');
+}
+
+// Get all events for navigation
+const allEvents = await getEvents();
+const eventIndex = allEvents.findIndex((e) => e.id === id);
+const prevEvent = eventIndex > 0 ? allEvents[eventIndex - 1] : null;
+const nextEvent = eventIndex < allEvents.length - 1 ? allEvents[eventIndex + 1] : null;
+---
+
+<BaseLayout title={event.title}>
+  <section class="py-20 relative z-10">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Back link -->
+      <a href="/events" class="text-lcs-light-blue hover:text-lcs-pink transition-colors mb-8 inline-block">
+        ← Back to Events
+      </a>
+
+      <!-- Hero/Banner -->
+      {event.picture_url && (
+        <div class="mb-8 rounded-lg overflow-hidden">
+          <img src={event.picture_url} alt={event.title} class="w-full h-96 object-cover" />
+        </div>
+      )}
+
+      <!-- Event Header -->
+      <h1 class="text-4xl sm:text-5xl font-bold font-dosis text-white mb-4">{event.title}</h1>
+
+      <!-- Event Details -->
+      <div class="bg-lcs-dark border border-gray-600 rounded-lg p-6 mb-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <p class="text-gray-400 text-sm">Date</p>
+            <p class="text-white font-semibold">
+              {new Date(event.date).toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}
+            </p>
+          </div>
+          {event.time && (
+            <div>
+              <p class="text-gray-400 text-sm">Time</p>
+              <p class="text-white font-semibold">{event.time}</p>
+            </div>
+          )}
+          {event.location && (
+            <div>
+              <p class="text-gray-400 text-sm">Location</p>
+              <p class="text-white font-semibold">{event.location}</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <!-- Description -->
+      {event.description && (
+        <div class="mb-8">
+          <h2 class="text-2xl font-bold font-dosis text-lcs-light-blue mb-4">About This Event</h2>
+          <p class="text-gray-300 leading-relaxed whitespace-pre-wrap">{event.description}</p>
+        </div>
+      )}
+
+      <!-- TODO Sections -->
+      <div class="space-y-6 mb-12">
+        <div class="bg-lcs-light-section rounded-lg p-6">
+          <p class="text-gray-600 text-sm">
+            📝 Event details like event type, series, resources, recordings, and related events are coming soon!
+          </p>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <div class="flex justify-between gap-4 mt-12">
+        {prevEvent ? (
+          <a href={`/events/${prevEvent.id}`} class="text-lcs-light-blue hover:text-lcs-pink transition-colors">
+            ← Previous
+          </a>
+        ) : (
+          <div></div>
+        )}
+        {nextEvent && (
+          <a href={`/events/${nextEvent.id}`} class="text-lcs-light-blue hover:text-lcs-pink transition-colors">
+            Next →
+          </a>
+        )}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

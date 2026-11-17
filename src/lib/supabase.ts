@@ -1,13 +1,29 @@
-import { createClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.SUPABASE_ANON_KEY;
+let supabaseInstance: SupabaseClient | null = null;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables');
+export async function getSupabase() {
+  if (supabaseInstance) return supabaseInstance;
+
+  const supabaseUrl = import.meta.env.SUPABASE_URL;
+  const supabaseAnonKey = import.meta.env.SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    console.warn('Supabase environment variables not set');
+    return null;
+  }
+
+  // Only import and create client when actually needed
+  const { createClient } = await import('@supabase/supabase-js');
+
+  try {
+    supabaseInstance = createClient(supabaseUrl, supabaseAnonKey);
+    return supabaseInstance;
+  } catch (err) {
+    console.error('Failed to create Supabase client:', err);
+    return null;
+  }
 }
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // Type definitions for database tables
 export interface Event {

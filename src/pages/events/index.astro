@@ -1,0 +1,83 @@
+---
+/**
+ * Events Index Page
+ * Lists all events with upcoming and archive sections
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getEvents } from '@/lib/queries/events';
+
+const allEvents = await getEvents();
+const now = new Date();
+const upcomingEvents = allEvents.filter((e) => new Date(e.date) >= now);
+const pastEvents = allEvents.filter((e) => new Date(e.date) < now);
+---
+
+<BaseLayout title="Events">
+  <section id="events" class="py-20 relative z-10">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-4xl sm:text-5xl font-bold font-dosis mb-4 text-white">Our Events</h1>
+      <p class="text-gray-300 text-lg mb-12">
+        Join us for workshops, socials, and our annual hackathon!
+      </p>
+
+      <!-- Upcoming Events -->
+      <div class="mb-16">
+        <h2 class="text-2xl font-bold font-dosis text-lcs-light-blue mb-6">Upcoming Events</h2>
+        {upcomingEvents.length > 0 ? (
+          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {upcomingEvents.map((event) => (
+              <a href={`/events/${event.id}`} class="group">
+                <div class="bg-gradient-to-br from-lcs-dark to-lcs-darker rounded-lg p-6 border border-gray-600 hover:border-lcs-pink transition-all transform hover:scale-105">
+                  <h3 class="text-lg font-bold text-white group-hover:text-lcs-pink transition-colors">
+                    {event.title}
+                  </h3>
+                  <p class="text-sm text-gray-400 mt-2">
+                    {new Date(event.date).toLocaleDateString('en-US', {
+                      weekday: 'short',
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric',
+                    })}
+                  </p>
+                  {event.time && <p class="text-sm text-gray-400">{event.time}</p>}
+                  {event.location && <p class="text-sm text-gray-400">{event.location}</p>}
+                </div>
+              </a>
+            ))}
+          </div>
+        ) : (
+          <p class="text-gray-400">No upcoming events at this time. Check back soon!</p>
+        )}
+      </div>
+
+      <!-- Past Events -->
+      {pastEvents.length > 0 && (
+        <div>
+          <h2 class="text-2xl font-bold font-dosis text-lcs-light-blue mb-6">Past Events</h2>
+          <div class="space-y-3">
+            {pastEvents.reverse().map((event) => (
+              <a
+                href={`/events/${event.id}`}
+                class="block p-4 border-l-4 border-lcs-pink hover:border-lcs-orange transition-colors"
+              >
+                <div class="flex items-center justify-between">
+                  <div>
+                    <h3 class="font-semibold text-white">{event.title}</h3>
+                    <p class="text-sm text-gray-400">
+                      {new Date(event.date).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                      })}
+                    </p>
+                  </div>
+                  <span class="text-lcs-orange text-sm">→</span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>

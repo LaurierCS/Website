@@ -1,14 +1,12 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-
-// TODO: Add sections as they're built
+import HeroSection from '@/components/home/HeroSection.astro';
+import WhoWeAre from '@/components/home/WhoWeAre.astro';
+import TeamPreview from '@/components/home/TeamPreview.astro';
 ---
 
-<BaseLayout title="Laurier Computing Society">
-  <div class="min-h-screen flex items-center justify-center">
-    <div class="text-center text-white">
-      <h1 class="text-6xl font-bold mb-4 font-dosis">Laurier Computing Society</h1>
-      <p class="text-xl text-gray-300">Building community and advancing computing at Wilfrid Laurier University</p>
-    </div>
-  </div>
+<BaseLayout title="Home">
+  <HeroSection />
+  <WhoWeAre />
+  <TeamPreview />
 </BaseLayout>

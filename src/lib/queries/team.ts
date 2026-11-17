@@ -1,4 +1,4 @@
-import { supabase, type TeamMember } from '../supabase';
+import { getSupabase, type TeamMember } from '../supabase';
 
 export type Department =
   | 'Admin'
@@ -19,7 +19,6 @@ export const DEPARTMENTS: Department[] = [
   'Engineering',
 ];
 
-// Role to Department mapping
 const roleMap: Record<string, Department> = {
   admin: 'Admin',
   president: 'Admin',
@@ -55,7 +54,6 @@ const roleMap: Record<string, Department> = {
   engineering: 'Engineering',
 };
 
-// Role hierarchy: lower number = higher rank
 const hierarchyMap: Record<string, number> = {
   president: 1,
   evp: 2,
@@ -105,6 +103,9 @@ export function getRoleHierarchy(role?: string): number {
  * Fetch all public team members, grouped and sorted by department and role hierarchy
  */
 export async function getTeamMembers(): Promise<TeamMember[]> {
+  const supabase = await getSupabase();
+  if (!supabase) return [];
+
   try {
     const { data, error } = await supabase
       .from('team')
@@ -114,7 +115,6 @@ export async function getTeamMembers(): Promise<TeamMember[]> {
 
     if (error) throw error;
 
-    // Sort by department order, then by role hierarchy
     const members = data || [];
     return members.sort((a, b) => {
       const deptA = getDepartmentFromRole(a.role);
@@ -126,14 +126,12 @@ export async function getTeamMembers(): Promise<TeamMember[]> {
         return deptIndexA - deptIndexB;
       }
 
-      // Same department: sort by hierarchy
       const hierarchyA = getRoleHierarchy(a.role);
       const hierarchyB = getRoleHierarchy(b.role);
       if (hierarchyA !== hierarchyB) {
         return hierarchyA - hierarchyB;
       }
 
-      // Same hierarchy: sort by name
       return (a.name || '').localeCompare(b.name || '');
     });
   } catch (err) {

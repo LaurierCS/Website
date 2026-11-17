@@ -1,9 +1,12 @@
-import { supabase, type Event } from '../supabase';
+import { getSupabase, type Event } from '../supabase';
 
 /**
  * Fetch all events, ordered by date ascending
  */
 export async function getEvents(): Promise<Event[]> {
+  const supabase = await getSupabase();
+  if (!supabase) return [];
+
   try {
     const { data, error } = await supabase
       .from('events')
@@ -22,6 +25,9 @@ export async function getEvents(): Promise<Event[]> {
  * Fetch an event by ID
  */
 export async function getEventById(id: string): Promise<Event | null> {
+  const supabase = await getSupabase();
+  if (!supabase) return null;
+
   try {
     const { data, error } = await supabase
       .from('events')
@@ -41,6 +47,9 @@ export async function getEventById(id: string): Promise<Event | null> {
  * Fetch upcoming events (from today onwards)
  */
 export async function getUpcomingEvents(limit = 5): Promise<Event[]> {
+  const supabase = await getSupabase();
+  if (!supabase) return [];
+
   try {
     const today = new Date().toISOString().split('T')[0];
     const { data, error } = await supabase
@@ -70,6 +79,9 @@ export async function getNextEvent(): Promise<Event | null> {
  * Fetch past events (before today)
  */
 export async function getPastEvents(): Promise<Event[]> {
+  const supabase = await getSupabase();
+  if (!supabase) return [];
+
   try {
     const today = new Date().toISOString().split('T')[0];
     const { data, error } = await supabase
@@ -82,29 +94,6 @@ export async function getPastEvents(): Promise<Event[]> {
     return data || [];
   } catch (err) {
     console.error('Error fetching past events:', err);
-    return [];
-  }
-}
-
-/**
- * Filter events by date range
- */
-export async function getEventsByDateRange(
-  startDate: string,
-  endDate: string,
-): Promise<Event[]> {
-  try {
-    const { data, error } = await supabase
-      .from('events')
-      .select('*')
-      .gte('date', startDate)
-      .lte('date', endDate)
-      .order('date', { ascending: true });
-
-    if (error) throw error;
-    return data || [];
-  } catch (err) {
-    console.error('Error fetching events by date range:', err);
     return [];
   }
 }

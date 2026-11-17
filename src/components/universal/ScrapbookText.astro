@@ -1,0 +1,22 @@
+---
+/**
+ * ScrapbookText - Server-side rendering wrapper for Scrapbook component
+ * Imported as React component from ScrapbookText.tsx
+ */
+import ScrapbookTextComponent from './ScrapbookText';
+
+interface Props {
+  text: string;
+  letterSize?: number;
+  className?: string;
+}
+
+const { text, letterSize = 112, className = '' } = Astro.props;
+---
+
+<ScrapbookTextComponent
+  client:visible
+  text={text}
+  letterSize={letterSize}
+  className={className}
+/>
