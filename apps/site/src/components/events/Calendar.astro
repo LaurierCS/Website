@@ -1,0 +1,53 @@
+---
+import { monthCells, monthLabel, todayIso } from '../../lib/dates';
+import type { EventRecord } from '../../lib/queries/events';
+
+interface Props {
+  events: EventRecord[];
+  year: number;
+  month: number;
+}
+
+const { events, year, month } = Astro.props;
+const today = todayIso();
+const cells = monthCells(year, month);
+const payload = events.map((event) => ({ id: event.id, title: event.title, date: event.date }));
+const dows = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+---
+<div
+  class="cal"
+  data-calendar
+  data-year={year}
+  data-month={month}
+  data-today={today}
+  data-events={JSON.stringify(payload)}
+>
+  <div class="cal-head">
+    <h3 data-cal-label>{monthLabel(year, month)}</h3>
+    <div class="cal-nav">
+      <button type="button" data-cal="prev" aria-label="Previous month">&lsaquo;</button>
+      <button type="button" data-cal="next" aria-label="Next month">&rsaquo;</button>
+    </div>
+  </div>
+  <div class="cal-grid" data-cal-grid>
+    {dows.map((dow) => <div class="cal-dow">{dow}</div>)}
+    {cells.map((cell) => {
+      const hits = events.filter((event) => event.date === cell.iso);
+      return (
+        <div class:list={['cal-day', { out: !cell.inMonth, today: cell.iso === today }]}>
+          {cell.day}
+          {hits.map((hit) => <a class="ev" href={`/events/${hit.id}`}>{hit.title}</a>)}
+        </div>
+      );
+    })}
+  </div>
+  <div class="legend">
+    <span style="--c:var(--yellow)">Reviews</span>
+    <span style="--c:var(--pink)">Industry</span>
+    <span style="--c:var(--orange)">Workshops</span>
+    <span style="--c:var(--light-blue)">Hackathons / other</span>
+  </div>
+</div>
+<script>
+  import '../../scripts/calendar';
+</script>

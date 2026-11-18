@@ -1,0 +1,40 @@
+---
+import { dateParts } from '../../lib/dates';
+import type { EventRecord } from '../../lib/queries/events';
+import { stubFor } from '../../lib/todo-data';
+
+interface Props {
+  event: EventRecord;
+}
+
+const { event } = Astro.props;
+const parts = dateParts(event.date);
+const stub = stubFor(event.id);
+const live = stub && !stub.placeholder ? stub : undefined;
+---
+<aside class="side">
+  <div class="card">
+    <h3 style="font-size:22px">Details</h3>
+    <dl>
+      <div class="kv"><dt>WHEN</dt><dd>{parts.long}<br />{event.time?.trim() || 'Time TBA'}</dd></div>
+      <div class="kv"><dt>WHERE</dt><dd>{event.location?.trim() || 'Location TBA'}</dd></div>
+      {live?.host && <div class="kv"><dt>HOSTED BY</dt><dd>{live.host}</dd></div>}
+      <div class="kv">
+        <dt>STREAM</dt>
+        <dd>{live?.streamed ? 'Live on the LCS YouTube channel' : 'Stream details coming soon'}</dd>
+      </div>
+    </dl>
+  </div>
+  <div class="card deep">
+    <p class="eyebrow y">Part of a series</p>
+    {live?.series ? (
+      <>
+        <h3 style="font-size:22px;margin-top:8px">{live.series}</h3>
+        {live.seriesBlurb && <p style="color:var(--text-2);font-size:14px;margin:8px 0 12px">{live.seriesBlurb}</p>}
+        <a class="link" href={`/events?q=${encodeURIComponent(live.series)}`}>See the whole series →</a>
+      </>
+    ) : (
+      <p class="soon" style="margin-top:10px">Series cards turn on with events.series.</p>
+    )}
+  </div>
+</aside>

@@ -1,0 +1,36 @@
+---
+import { groupByDepartment } from '../../lib/department';
+import type { TeamMember } from '../../lib/queries/team';
+import TeamCard from './TeamCard.astro';
+
+interface Props {
+  members: TeamMember[];
+  error: string | null;
+}
+
+const { members, error } = Astro.props;
+const groups = groupByDepartment(members);
+---
+<section class="section" id="team">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">The people</p>
+        <h2 class="h-sec">Meet the Team</h2>
+        <p class="lede">The public executive team, grouped the same way as the current site.</p>
+      </div>
+    </div>
+    {error && <p class="soon">{error}</p>}
+    {!error && groups.length === 0 && <p class="soon">Team profiles are coming soon.</p>}
+    <div class="team-block">
+      {groups.map((group) => (
+        <div class="team-dept">
+          <h3 class="h-dept">{group.department}</h3>
+          <div class="team-list">
+            {group.members.map((member) => <TeamCard member={member} />)}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

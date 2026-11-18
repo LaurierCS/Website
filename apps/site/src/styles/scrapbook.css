@@ -1,0 +1,44 @@
+.scrapbook {
+  --letter: var(--letter-desktop, 68px);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+.scrapbook-word { display: flex; align-items: flex-end; flex-shrink: 0; }
+.scrapbook-gap { width: calc(var(--letter) * 0.36); flex-shrink: 0; }
+.scrapbook img {
+  width: var(--letter);
+  height: var(--letter);
+  object-fit: contain;
+  /* Same overlap as the previous ScrapbookText: -45% of the letter size. */
+  margin-right: calc(var(--letter) * -0.45);
+  filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.04)) drop-shadow(0 4px 3px rgba(0, 0, 0, 0.28));
+}
+.scrapbook-fallback {
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: var(--letter-desktop, 68px);
+  line-height: 0.9;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+@keyframes scrapbook-in {
+  from { opacity: 0; transform: scale(0.3) rotate(-12deg) translateY(12px); }
+  to { opacity: 1; }
+}
+@media (max-width: 640px) {
+  .scrapbook { --letter: calc(var(--letter-desktop, 68px) * 0.5); }
+  .scrapbook-fallback { font-size: calc(var(--letter-desktop, 68px) * 0.5); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scrapbook img { animation: none !important; }
+}

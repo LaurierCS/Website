@@ -1,0 +1,13 @@
+---
+import { STATS } from '../../lib/site';
+---
+<div class="stats">
+  {STATS.map((stat) => (
+    <div class:list={['stat', stat.accent]}>
+      <b data-count={stat.count ? String(stat.value) : undefined} data-suffix={stat.suffix}>
+        {stat.value}{stat.suffix}
+      </b>
+      <span>{stat.label}</span>
+    </div>
+  ))}
+</div>

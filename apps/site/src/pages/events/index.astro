@@ -1,0 +1,86 @@
+---
+export const prerender = false;
+
+import Base from '../../layouts/Base.astro';
+import Calendar from '../../components/events/Calendar.astro';
+import MiniCard from '../../components/events/MiniCard.astro';
+import Ticket from '../../components/events/Ticket.astro';
+import { dateParts, todayIso } from '../../lib/dates';
+import { getEvents } from '../../lib/queries/events';
+import { groupByTerm, splitEvents } from '../../lib/schedule';
+
+const { events, error } = await getEvents();
+const { upcoming, past, next } = splitEvents(events);
+const focus = dateParts(next?.date ?? todayIso());
+const terms = groupByTerm(past);
+const initial = Astro.url.searchParams.get('type') ?? 'all';
+const chips = [
+  ['all', 'All'],
+  ['review', 'Reviews'],
+  ['mtp', 'Meet the Pros'],
+  ['workshop', 'Workshops'],
+  ['hackathon', 'Hackathons'],
+  ['other', 'Socials & other'],
+] as const;
+---
+<Base title="Events — Laurier Computing Society">
+  <section class="page-head" style="background: rgba(26, 40, 65, 0.4); backdrop-filter: blur(10px);">
+    <div class="wrap">
+      <p class="eyebrow y">Events</p>
+      <h1>What's happening at LCS</h1>
+      <p class="lede">Everything coming up, plus every past event with its slides, recordings and photos.</p>
+    </div>
+    <img class="doug" data-parallax="12" src="/assets/mascots/Doug.svg" alt="" />
+  </section>
+
+  <section class="section" style="padding-top:56px" data-browser data-initial={initial}>
+    <div class="wrap">
+      <div class="toolbar">
+        <div class="filters">
+          {chips.map(([id, label]) => (
+            <button type="button" class:list={['chip', { on: id === initial }]} data-f={id}>{label}</button>
+          ))}
+        </div>
+        <input class="search" data-search-input type="search" placeholder="Search events, courses, series…" />
+      </div>
+
+      {error && <p class="soon">{error.message}</p>}
+
+      {!error && (
+        <div class="split">
+          <Calendar events={events} year={focus.year} month={focus.monthIndex} />
+          <div class="list" data-upcoming>
+            <h3>Upcoming</h3>
+            {upcoming.length === 0 && <p class="soon">No upcoming events yet.</p>}
+            {upcoming.map((event) => <Ticket event={event} compact />)}
+          </div>
+        </div>
+      )}
+
+      <div style="margin-top:96px">
+        <div class="sec-head">
+          <div>
+            <p class="eyebrow">Archive</p>
+            <h2 class="h-sec">Past events</h2>
+            <p class="lede">Click any event for its slides, recordings, photos and related events.</p>
+          </div>
+        </div>
+        <div data-archive>
+          {terms.map((term) => (
+            <div class="term-block" data-term>
+              <p class="term">{term.label}</p>
+              <div class="g4">
+                {term.events.map((event) => <MiniCard event={event} />)}
+              </div>
+            </div>
+          ))}
+          {past.length === 0 && <p class="soon">Past events will show up here after they happen.</p>}
+        </div>
+        <p class="soon" data-empty hidden style="margin-top:20px"></p>
+      </div>
+    </div>
+  </section>
+</Base>
+<script>
+  import '../../scripts/events-browser';
+</script>

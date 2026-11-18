@@ -1,0 +1,53 @@
+---
+const cards = [
+  {
+    href: '/events?type=review',
+    badge: '{ }',
+    color: 'var(--yellow)',
+    title: 'Midterm & Exam Reviews',
+    copy: 'Upper-year students walk through practice problems before the big tests. Slides and solutions stay posted.',
+  },
+  {
+    href: '/events?type=mtp',
+    badge: 'MTP',
+    color: 'var(--pink)',
+    title: 'Meet the Professionals',
+    copy: 'Industry night with alumni and engineers. Real talk about jobs, co-op and getting hired.',
+  },
+  {
+    href: '/hack-to-the-future',
+    badge: '</>',
+    color: 'var(--light-blue)',
+    title: 'Hackathons',
+    copy: '48 hours to build anything. Mentors, judges and prizes, open to every skill level.',
+  },
+  {
+    href: '/events?type=workshop',
+    badge: '$_',
+    color: 'var(--orange)',
+    title: 'Workshops',
+    copy: 'Hands-on sessions on Git, Docker, cloud and building your portfolio.',
+  },
+];
+---
+<section class="section" id="host">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">What we host</p>
+        <h2 class="h-sec">Something for every part of your degree</h2>
+        <p class="lede">Every series has an archive with slides, recordings and photos.</p>
+      </div>
+    </div>
+    <div class="g4">
+      {cards.map((card, index) => (
+        <a class="card init" href={card.href} data-reveal style={`--d:${index * 70}ms`}>
+          <div class="badge" style={`background:${card.color}`}>{card.badge}</div>
+          <h3>{card.title}</h3>
+          <p>{card.copy}</p>
+          <span class="link">See the archive →</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

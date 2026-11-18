@@ -1,0 +1,42 @@
+---
+import { HACKATHON, PROJECTS } from '../../lib/hackathon';
+import { photoStubs } from '../../lib/todo-data';
+
+const photos = photoStubs.filter((photo) => photo.eventId === 'hack-to-the-future' && photo.url);
+const slots = photos.length > 0 ? photos.length : 5;
+---
+<section class="section" id="gallery">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow o">Project gallery</p>
+        <h2 class="h-sec">Everything that got built</h2>
+        <p class="lede">All {PROJECTS.length} presented projects. Winners are highlighted.</p>
+      </div>
+    </div>
+    <div class="gallery-chips">
+      {PROJECTS.map((project) => (
+        <a class:list={[{ win: project.winner }]} href={HACKATHON.gallery}>
+          {project.winner ? '🏆 ' : ''}{project.name}
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">Photos</p>
+        <h2 class="h-sec">The weekend</h2>
+      </div>
+    </div>
+    <div class="photos">
+      {photos.length > 0
+        ? photos.map((photo) => <img src={photo.url} alt={photo.alt} />)
+        : Array.from({ length: slots }, () => <div>Photos coming soon</div>)}
+    </div>
+    <p class="note" style="margin-top:14px">Photo slots fill from event photos once that table is wired up. These boxes are empty on purpose.</p>
+  </div>
+</section>

@@ -1,0 +1,42 @@
+---
+import { EMAIL, ROOM, SOCIALS } from '../../lib/site';
+const year = new Date().getFullYear();
+---
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <img class="footer-logo" src="/assets/logos/LCS_Logo_Long_White_SVG.svg" alt="Laurier Computing Society" />
+        <p class="muted blurb">Wilfrid Laurier University's official computer science club. Formerly PHI Society, since 2012.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="/events">Events</a></li>
+          <li><a href="/#host">What We Host</a></li>
+          <li><a href="/#videos">Videos</a></li>
+          <li><a href="/hack-to-the-future">Hack to the Future</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Community</h4>
+        <ul>
+          {SOCIALS.map((social) => (
+            <li><a href={social.url} target="_blank" rel="noopener noreferrer">{social.name}</a></li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h4>Find us</h4>
+        <ul>
+          <li>{ROOM}</li>
+          <li><a href={`mailto:${EMAIL}`}>{EMAIL}</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="fine">
+      <span>&copy; {year} Laurier Computing Society</span>
+      <span>Built by LCS Engineering &amp; Marketing</span>
+    </div>
+  </div>
+</footer>

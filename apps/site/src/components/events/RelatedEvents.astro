@@ -1,0 +1,34 @@
+---
+import type { EventRecord } from '../../lib/queries/events';
+import { relatedFor } from '../../lib/todo-data';
+import MiniCard from './MiniCard.astro';
+
+interface Props {
+  event: EventRecord;
+  events: EventRecord[];
+}
+
+const { event, events } = Astro.props;
+const linked = relatedFor(event.id)
+  .filter((row) => !row.placeholder)
+  .map((row) => events.find((item) => item.id === row.relatedId))
+  .filter((item): item is EventRecord => Boolean(item));
+---
+<section class="section" style="padding-top:16px">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">Linked by admins</p>
+        <h2 class="h-sec">Similar past events</h2>
+      </div>
+      <a class="link" href="/events">View all events →</a>
+    </div>
+    {linked.length === 0 ? (
+      <p class="soon">Related events are picked by hand. That list is empty until event links exist.</p>
+    ) : (
+      <div class="g4">
+        {linked.map((item) => <MiniCard event={item} />)}
+      </div>
+    )}
+  </div>
+</section>
