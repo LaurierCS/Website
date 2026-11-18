@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@astrojs/vercel": "^11.0.22",
+    "@lcs/brand": "workspace:*",
     "@supabase/supabase-js": "^2.119.0",
     "@tailwindcss/vite": "^4.3.5",
     "astro": "^7.4.12",

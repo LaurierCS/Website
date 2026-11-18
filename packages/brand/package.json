@@ -1,0 +1,11 @@
+{
+  "name": "@lcs/brand",
+  "private": true,
+  "version": "0.0.0",
+  "description": "LCS brand kit shared by the site and the admin: design tokens, fonts and brand assets.",
+  "type": "module",
+  "dependencies": {
+    "@fontsource-variable/dosis": "^5.3.0",
+    "@fontsource-variable/montserrat": "^5.3.0"
+  }
+}

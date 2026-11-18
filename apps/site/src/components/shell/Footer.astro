@@ -1,4 +1,5 @@
 ---
+import { LOGO_LONG_WHITE } from '../../lib/brand-assets';
 import { EMAIL, ROOM, SOCIALS } from '../../lib/site';
 const year = new Date().getFullYear();
 ---
@@ -6,7 +7,7 @@ const year = new Date().getFullYear();
   <div class="wrap">
     <div class="footer-grid">
       <div>
-        <img class="footer-logo" src="/assets/logos/LCS_Logo_Long_White_SVG.svg" alt="Laurier Computing Society" />
+        <img class="footer-logo" src={LOGO_LONG_WHITE} alt="Laurier Computing Society" />
         <p class="muted blurb">Wilfrid Laurier University's official computer science club. Formerly PHI Society, since 2012.</p>
       </div>
       <div>

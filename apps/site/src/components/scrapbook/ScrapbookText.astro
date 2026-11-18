@@ -1,4 +1,6 @@
 ---
+import { SCRAPBOOK_LETTERS } from '../../lib/brand-assets';
+
 interface Props {
   text: string;
   size?: number;
@@ -6,9 +8,9 @@ interface Props {
 }
 
 const { text, size = 68, class: className } = Astro.props;
-const supported = 'ACDEFGHIKLMNOPRSTUVW';
 const upper = text.toUpperCase();
-const lettersOk = [...upper].every((char) => char === ' ' || supported.includes(char));
+// Falls back to plain text when a letter has no scrapbook image yet.
+const lettersOk = [...upper].every((char) => char === ' ' || SCRAPBOOK_LETTERS.has(char));
 const words = upper.split(/\s+/).filter(Boolean);
 ---
 {lettersOk ? (
@@ -18,7 +20,7 @@ const words = upper.split(/\s+/).filter(Boolean);
         {index > 0 && <span class="scrapbook-gap" aria-hidden="true"></span>}
         <span class="scrapbook-word">
           {[...word].map((letter) => (
-            <img src={`/assets/letters/${letter}.webp`} alt="" data-letter width={size} height={size} />
+            <img src={SCRAPBOOK_LETTERS.get(letter)} alt="" data-letter width={size} height={size} />
           ))}
         </span>
       </>

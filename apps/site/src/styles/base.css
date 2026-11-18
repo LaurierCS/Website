@@ -1,33 +1,7 @@
+/* Site-wide base styles. Brand values come from @lcs/brand/tokens.css. */
 :root {
-  --bg-deep: #0f172a;
-  --bg-card: #344250;
-  --bg-titlebar: #1e2429;
-  --bg-light: #f3f7fc;
-  --border: #475569;
-  --pink: #ff9fc4;
-  --orange: #ff9770;
-  --yellow: #ffd670;
-  --blue: #268af9;
-  --light-blue: #b1e0ff;
-  --code-tag: #6b98c4;
-  --text: #fff;
-  --text-2: #cbd5e1;
-  --muted: #94a3b8;
-  --ink: #0f172a;
-  --ink-2: #334155;
-  --pink-ink: #9a4d6c;
-  --yellow-ink: #8a6414;
-  --blue-ink: #0b5cad;
-  --orange-ink: #b85a32;
-  --grad: linear-gradient(90deg, #6cb3ff, #89f7fe);
-  --radius: 20px;
-  --radius-sm: 14px;
-  --max: 1280px;
-  --nav-h: 76px;
-  --font-head: "Dosis", system-ui, sans-serif;
-  --font-body: "Montserrat", system-ui, sans-serif;
-  --scrollbar-color: #ff9fc4;
-  --page: #0e263d;
+  /* Starting colour; scripts/scrollbar.ts rotates it through the accents. */
+  --scrollbar-color: var(--pink);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -47,7 +21,7 @@ body::before {
   content: "";
   position: fixed;
   inset: -50%;
-  background: url("/assets/patterns/Icon_Pattern.svg") center / 800px repeat;
+  background: var(--pattern-icons) center / 800px repeat;
   opacity: 0.02;
   transform: rotate(-15deg);
   pointer-events: none;

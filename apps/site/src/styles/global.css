@@ -1,5 +1,6 @@
 @import "tailwindcss";
-@import "./tokens.css";
+@import "@lcs/brand/tokens.css";
+@import "./base.css";
 @import "./components.css";
 @import "./pages.css";
 @import "./scrapbook.css";

@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import { MASCOTS } from '../lib/brand-assets';
 import Gallery from '../components/hack/Gallery.astro';
 import Podium from '../components/hack/Podium.astro';
 import { DISCORD_URL } from '../lib/site';
@@ -26,8 +27,8 @@ const challenge = `<span class="c-p">"duration"</span>: <span class="c-s">"48 ho
         <a class="btn btn-secondary" href="#gallery">Browse projects</a>
       </div>
     </div>
-    <img class="m1" data-parallax="14" src="/assets/mascots/Coco.svg" alt="" />
-    <img class="m2" data-parallax="14" src="/assets/mascots/Krill.svg" alt="" />
+    <img class="m1" data-parallax="14" src={MASCOTS.coco} alt="" />
+    <img class="m2" data-parallax="14" src={MASCOTS.krill} alt="" />
   </section>
 
   <Podium />

@@ -1,4 +1,5 @@
 ---
+import { MASCOTS } from '../../lib/brand-assets';
 import { dateParts } from '../../lib/dates';
 import { icsHref } from '../../lib/ics';
 import type { EventRecord } from '../../lib/queries/events';
@@ -46,7 +47,7 @@ const when = `${parts.long} · ${event.time?.trim() || 'Time TBA'} · ${event.lo
           <span>EVENT</span>
         </>
       )}
-      <img class="poster-coco" data-parallax="10" src="/assets/mascots/Coco.svg" alt="" />
+      <img class="poster-coco" data-parallax="10" src={MASCOTS.coco} alt="" />
     </div>
   </div>
 </section>

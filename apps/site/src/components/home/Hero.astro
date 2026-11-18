@@ -1,4 +1,5 @@
 ---
+import { MASCOTS } from '../../lib/brand-assets';
 import { startsInLabel } from '../../lib/dates';
 import { DISCORD_URL } from '../../lib/site';
 import type { EventRecord } from '../../lib/queries/events';
@@ -24,7 +25,7 @@ const { next } = Astro.props;
         </div>
       </div>
       <div class="next" data-reveal style="--d:80ms">
-        <img class="krill" data-parallax="18" src="/assets/mascots/Krill.svg" alt="Krill the mascot" />
+        <img class="krill" data-parallax="18" src={MASCOTS.krill} alt="Krill the mascot" />
         <div class="window">
           <div class="window-bar"><i></i><i></i><i></i><span>next_event.js</span></div>
           {next ? (

@@ -4,71 +4,63 @@ on:
   push:
     branches: ['**']
 
+# One pnpm workspace: install once at the root, then check each app.
 jobs:
   site:
     name: Site (Astro)
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # The pnpm version comes from `packageManager` in the root package.json.
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 9
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'pnpm'
-          cache-dependency-path: apps/site/pnpm-lock.yaml
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-        working-directory: apps/site
 
       - name: Run TypeScript check
-        run: pnpm exec astro check
-        working-directory: apps/site
+        run: pnpm --dir apps/site exec astro check
 
       - name: Build
-        run: pnpm build
-        working-directory: apps/site
+        run: pnpm --dir apps/site build
 
   admin:
     name: Admin (Vite + React)
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 9
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'pnpm'
-          cache-dependency-path: apps/admin/pnpm-lock.yaml
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-        working-directory: apps/admin
 
       - name: Run linter
-        run: pnpm lint
-        working-directory: apps/admin
+        run: pnpm --dir apps/admin lint
 
       - name: Run TypeScript type check
-        run: pnpm exec tsc -b --noEmit
-        working-directory: apps/admin
+        run: pnpm --dir apps/admin exec tsc -b --noEmit
+
+      - name: Run tests
+        run: pnpm --dir apps/admin test
 
       - name: Build
-        run: pnpm build
-        working-directory: apps/admin
+        run: pnpm --dir apps/admin build

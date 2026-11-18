@@ -1,4 +1,5 @@
 ---
+import { LOGO_LONG_WHITE } from '../../lib/brand-assets';
 import { NAV } from '../../lib/site';
 import Socials from './Socials.astro';
 
@@ -13,7 +14,7 @@ function active(href: string): boolean {
 <header class="nav" data-nav>
   <div class="wrap">
     <a class="nav-logo" href="/" aria-label="Laurier Computing Society, home">
-      <img src="/assets/logos/LCS_Logo_Long_White_SVG.svg" alt="" />
+      <img src={LOGO_LONG_WHITE} alt="" />
     </a>
     <div class="nav-panel">
       <nav class="nav-links" aria-label="Primary">

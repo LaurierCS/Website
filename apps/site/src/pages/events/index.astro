@@ -2,6 +2,7 @@
 export const prerender = false;
 
 import Base from '../../layouts/Base.astro';
+import { MASCOTS } from '../../lib/brand-assets';
 import Calendar from '../../components/events/Calendar.astro';
 import MiniCard from '../../components/events/MiniCard.astro';
 import Ticket from '../../components/events/Ticket.astro';
@@ -30,7 +31,7 @@ const chips = [
       <h1>What's happening at LCS</h1>
       <p class="lede">Everything coming up, plus every past event with its slides, recordings and photos.</p>
     </div>
-    <img class="doug" data-parallax="12" src="/assets/mascots/Doug.svg" alt="" />
+    <img class="doug" data-parallax="12" src={MASCOTS.doug} alt="" />
   </section>
 
   <section class="section" style="padding-top:56px" data-browser data-initial={initial}>

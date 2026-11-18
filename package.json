@@ -1,0 +1,9 @@
+{
+  "name": "lcs-website",
+  "private": true,
+  "packageManager": "pnpm@9.15.9",
+  "scripts": {
+    "dev:site": "pnpm --filter lcs-site dev",
+    "dev:admin": "pnpm --filter admin dev"
+  }
+}
