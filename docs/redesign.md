@@ -80,7 +80,7 @@ YouTube videos come from the channel feed, not the database.
 
 A separate app in `apps/admin` so execs can add and edit events, photos and team members without touching code or the Supabase dashboard.
 
-- **Login:** Supabase Auth, invite only. No public sign-up. Execs get an invite and log in with their own email, so we know who changed what and can remove someone when they leave.
+- **Login:** Supabase Auth, invite only or discord Oauth. No public sign-up. Execs get an invite and log in with their own email, so we know who changed what and can remove someone when they leave.
 - **Access:** every invited exec gets the same access. Row-level security lets anyone read public rows and only signed-in admins insert, update or delete. Storage policies do the same for the image buckets.
 - **Keys:** the admin app only ever uses the public anon key. The service role key never goes in client code. If we need something that requires it, it goes in a Supabase Edge Function.
 
@@ -110,11 +110,9 @@ What we need from Marketing: a visual direction, designs for every section on de
 
 - Current live site: [lauriercs.org](https://www.lauriercs.org/)
 - Older versions: [GitHub releases](https://github.com/LaurierCS/Website/releases)
-- Redesign preview: the Vercel deploy of `feat/astro-redesign-v2`
 
 ## How we work on it
 
 - Every piece of work starts with a short plan (an issue or a note) before code.
-- Pick something, open a branch off `feat/astro-redesign-v2`, and open a PR back into it using the PR template.
 - Frontend PRs include screenshots on desktop and mobile.
 - Big changes get run by the exec (Michelle) first.

@@ -1,129 +1,94 @@
-# Laurier Computing Society
+<div align="center">
 
-Public website and admin dashboard for LCS. Two independently deployable apps sharing one repository.
+  ```
+ __                                  __                    ______   ______
+|  \                                |  \                  /      \ /      \
+| ▓▓       ______  __    __  ______  \▓▓ ______   ______ |  ▓▓▓▓▓▓\  ▓▓▓▓▓▓\
+| ▓▓      |      \|  \  |  \/      \|  \/      \ /      \| ▓▓   \▓▓ ▓▓___\▓▓
+| ▓▓       \▓▓▓▓▓▓\ ▓▓  | ▓▓  ▓▓▓▓▓▓\ ▓▓  ▓▓▓▓▓▓\  ▓▓▓▓▓▓\ ▓▓      \▓▓    \
+| ▓▓      /      ▓▓ ▓▓  | ▓▓ ▓▓   \▓▓ ▓▓ ▓▓    ▓▓ ▓▓   \▓▓ ▓▓   __ _\▓▓▓▓▓▓\
+| ▓▓_____|  ▓▓▓▓▓▓▓ ▓▓__/ ▓▓ ▓▓     | ▓▓ ▓▓▓▓▓▓▓▓ ▓▓     | ▓▓__/  \  \__| ▓▓
+| ▓▓     \\▓▓    ▓▓\▓▓    ▓▓ ▓▓     | ▓▓\▓▓     \ ▓▓      \▓▓    ▓▓\▓▓    ▓▓
+ \▓▓▓▓▓▓▓▓ \▓▓▓▓▓▓▓ \▓▓▓▓▓▓ \▓▓      \▓▓ \▓▓▓▓▓▓▓\▓▓       \▓▓▓▓▓▓  \▓▓▓▓▓▓
 
-## Repository Structure
 
-```
-lcs/
-├── apps/
-│   ├── site/          → Public website (Astro + TypeScript + Tailwind)
-│   └── admin/         → Admin dashboard (Vite + React + TypeScript)
-├── .github/           → Shared CI/CD workflows
-├── docs/              → Documentation
-└── README.md          → This file
-```
 
-## Quick Start
+2026 / 2027
 
-### Prerequisites
-- Node.js 20+
+  ```
+
+![GitHub](https://img.shields.io/github/license/LaurierCS/Website?style=flat-square)
+
+</div>
+
+## Overview
+
+The official Laurier Computing Society website and admin app, made with :heart:
+
+## Development
+
+![Astro](https://img.shields.io/badge/Astro-BC52EE?style=for-the-badge&logo=astro&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+
+This repository contains two independently deployable apps:
+
+- `apps/site/` — Public Astro website
+- `apps/admin/` — Vite and React admin dashboard
+
+Every change starts as a GitHub issue and goes in through a small PR using the [PR template](.github/pull_request_template.md). Frontend PRs need screenshots; backend/admin and docs PRs do not.
+
+### Requirements
+
+- Node.js 22+
 - pnpm 9+
 
-### Running the public site
+### Setup
+
+Clone the repository:
+
+```sh
+git clone https://github.com/LaurierCS/Website
+cd Website
+```
+
+Set up the public site:
 
 ```sh
 cd apps/site
 pnpm install
 cp .env.example .env
-# Add SUPABASE_URL and SUPABASE_ANON_KEY from a VP of Engineering
 pnpm dev
 ```
 
-Server runs on `http://localhost:3000`.
-
-### Running the admin dashboard
+Set up the admin dashboard:
 
 ```sh
 cd apps/admin
 pnpm install
 cp .env.example .env
-# Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY (public anon key only)
 pnpm dev
 ```
 
-Server runs on `http://localhost:5173`.
+Ask a VP of Engineering for the Supabase values. Never commit `.env` files or a Supabase service role key.
 
-## Site (`apps/site/`)
+### Commands
 
-Astro-based static + on-demand rendering. Renders events and team pages on each request via Supabase.
+Run these from `apps/site/`:
 
-### Scripts
-- `pnpm dev` — Local server
-- `pnpm build` — Production build (Vercel output)
-- `pnpm preview` — Serve the build locally
-- `pnpm check` — Astro type check
+| Command | What it does |
+| --- | --- |
+| `pnpm dev` | Start the Astro dev server |
+| `pnpm build` | Create a production build |
+| `pnpm preview` | Preview the production build |
+| `pnpm check` | Run Astro and TypeScript checks |
 
-### Structure
-- `src/pages/` — Routes. `/`, `/events`, `/events/[id]` render on-demand. `/hack-to-the-future` is prerendered.
-- `src/components/` — UI split by page.
-- `src/layouts/Base.astro` — Nav, footer, background, glows.
-- `src/lib/queries/` — Read-only Supabase queries.
-- `public/` — Logos, mascots, favicons.
+Run these from `apps/admin/`:
 
-### Deployment
-Each Vercel project has one environment variable pair: `SUPABASE_URL` and `SUPABASE_ANON_KEY` (never the service role key).
-
-## Admin (`apps/admin/`)
-
-Vite + React for a fast, future-proof admin dashboard. Currently minimal; expand with user auth, forms, and Supabase integration.
-
-### Scripts
-- `pnpm dev` — Local dev server
-- `pnpm build` — Production build
-- `pnpm preview` — Serve the build locally
-- `pnpm lint` — Run oxlint
-
-### Structure
-- `src/App.tsx` — Root component.
-- `src/main.tsx` — React entry point.
-- `public/` — Static assets.
-
-### Environment Variables
-Vite env vars are public (shipped to the browser) and must be prefixed with `VITE_`. Never add a Supabase service role key.
-
-### Deployment
-Each Vercel project has: `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
-
-## Vercel Deployment
-
-Two separate Vercel projects, each with its own Root Directory and environment variables.
-
-### Site project
-- **Root Directory**: `apps/site`
-- **Framework**: Astro
-- **Environment**: `SUPABASE_URL`, `SUPABASE_ANON_KEY`
-
-### Admin project
-- **Root Directory**: `apps/admin`
-- **Framework**: Vite
-- **Environment**: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`
-
-## Environment Variables
-
-### Site (server-only)
-- `SUPABASE_URL` — Supabase project URL
-- `SUPABASE_ANON_KEY` — Supabase public anon key
-
-### Admin (public, shipped to browser)
-- `VITE_SUPABASE_URL` — Supabase project URL
-- `VITE_SUPABASE_ANON_KEY` — Supabase public anon key
-
-See `apps/site/.env.example` and `apps/admin/.env.example` for templates.
-
-## GitHub Workflows
-
-CI runs on every branch. Workflows run in their respective app directories.
-
-## Supabase
-
-Read-only queries. Tables:
-- `events` — Event list and detail pages
-- `team` — Team page
-
-## Notes
-
-- No monorepo tooling (Turborepo, Nx, workspaces). Each app is independent.
-- Each app has its own `package.json` and `pnpm-lock.yaml`.
-- Root `.gitignore` covers both apps: `node_modules`, `dist`, `.astro`, `.vercel`, `.env*`.
-- See `docs/redesign.md` for what the redesign covers and why.
+| Command | What it does |
+| --- | --- |
+| `pnpm dev` | Start the Vite dev server |
+| `pnpm build` | Type check and create a production build |
+| `pnpm preview` | Preview the production build |
+| `pnpm lint` | Run the oxlint linter |
