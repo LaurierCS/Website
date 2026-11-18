@@ -126,4 +126,4 @@ Read-only queries. Tables:
 - No monorepo tooling (Turborepo, Nx, workspaces). Each app is independent.
 - Each app has its own `package.json` and `pnpm-lock.yaml`.
 - Root `.gitignore` covers both apps: `node_modules`, `dist`, `.astro`, `.vercel`, `.env*`.
-- See `docs/restructure-plan.md` for migration notes.
+- See `docs/redesign.md` for what the redesign covers and why.
