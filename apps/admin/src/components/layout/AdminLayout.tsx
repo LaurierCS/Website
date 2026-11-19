@@ -17,7 +17,7 @@ export function AdminLayout() {
           <Link to={PATHS.events} className="flex items-center gap-3 rounded-lg" aria-label="LCS Admin, events">
             <img src={ICON_WHITE} alt="" className="h-8 w-auto header:hidden" />
             <img src={LOGO_LONG_WHITE} alt="" className="hidden h-8 w-auto header:block" />
-            <span className="-rotate-6 rounded-md bg-yellow px-2 py-0.5 font-display text-sm font-extrabold uppercase tracking-widest text-ink shadow-[2px_3px_0_var(--yellow-ink)]">
+            <span className="-rotate-6 rounded-md bg-yellow px-2 py-0.5 font-display text-sm font-extrabold uppercase tracking-widest text-ink shadow-(--shadow-sticker)">
               Admin
             </span>
           </Link>
