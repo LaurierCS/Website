@@ -6,8 +6,8 @@ decides what each person may change.
 
 ## Setup
 
-1. Copy `.env.example` to `.env` and fill in `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` (ask a VP of
-   Engineering). Only the anon key goes here, never the service role key. `.env` is never committed.
+1. Copy `.env.example` to `.env` and fill in `DATABASE_URL` (the Supabase project URL) and `DATABASE_KEY`
+   (the anon key); ask a VP of Engineering for both. Only the anon key goes here, never the service role key. `.env` is never committed.
 2. `pnpm install`, then `pnpm dev` and open http://localhost:5173. Without a valid `.env` the app shows a setup
    page that names what is missing.
 

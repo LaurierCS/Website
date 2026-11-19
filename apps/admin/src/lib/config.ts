@@ -5,8 +5,8 @@
 import { z } from 'zod';
 
 const EnvSchema = z.object({
-  VITE_SUPABASE_URL: z.url({ message: 'VITE_SUPABASE_URL must be the Supabase project URL.' }),
-  VITE_SUPABASE_ANON_KEY: z.string().min(1, 'VITE_SUPABASE_ANON_KEY is missing. Use the anon key, never the service role key.'),
+  DATABASE_URL: z.url({ message: 'DATABASE_URL must be the Supabase project URL (https://<project-ref>.supabase.co).' }),
+  DATABASE_KEY: z.string().min(1, 'DATABASE_KEY is missing. Use the anon key, never the service role key.'),
 });
 
 export type AppConfig = Readonly<{
@@ -23,5 +23,5 @@ export function loadConfig(env: Readonly<Record<string, unknown>> = import.meta.
   if (!parsed.success) {
     throw new Error(`Admin configuration is invalid:\n${z.prettifyError(parsed.error)}\nSee apps/admin/.env.example.`);
   }
-  return { supabaseUrl: parsed.data.VITE_SUPABASE_URL, supabaseAnonKey: parsed.data.VITE_SUPABASE_ANON_KEY };
+  return { supabaseUrl: parsed.data.DATABASE_URL, supabaseAnonKey: parsed.data.DATABASE_KEY };
 }
