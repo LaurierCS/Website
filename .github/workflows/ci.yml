@@ -1,8 +1,10 @@
 name: CI
 
+# main, plus every pull request. Pushing to a branch with an open PR used to run the same checks twice.
 on:
   push:
-    branches: ['**']
+    branches: [main]
+  pull_request:
 
 jobs:
   site:
