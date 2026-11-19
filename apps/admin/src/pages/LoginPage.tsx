@@ -95,7 +95,7 @@ export function LoginPage() {
           <BackstagePass
             mascot="krill"
             mascotUp
-            stamp={<Stamp text="Access granted" tone="granted" onStamped={() => navigate(PATHS.home, { replace: true })} />}
+            stamp={<Stamp text="Access granted" tone="granted" onStamped={() => navigate(PATHS.events, { replace: true })} />}
           >
             <GrantedPanel account={access.data.account} />
           </BackstagePass>
