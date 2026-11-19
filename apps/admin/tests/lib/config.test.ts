@@ -1,4 +1,4 @@
-import { loadConfig } from './config';
+import { loadConfig } from '../../src/lib/config';
 
 const VALID = { VITE_SUPABASE_URL: 'https://abc.supabase.co', VITE_SUPABASE_ANON_KEY: 'anon-key' };
 

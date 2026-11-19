@@ -2,8 +2,8 @@
  * Test answers for `lib/auth`. A test file calls `vi.mock('…/lib/auth')` first, then `mockAccess(...)` to set what
  * the access check returns (or throws).
  */
-import { checkAccess, onSignInChange, signIn, signOut } from '../../lib/auth';
-import type { Access, Account, Admin } from '../../types/auth';
+import { checkAccess, onSignInChange, signIn, signOut } from '../../src/lib/auth';
+import type { Access, Account, Admin } from '../../src/types/auth';
 
 export const SAM: Account = {
   id: '6f1c2b8e-2d1a-4c5e-9b7f-0a1b2c3d4e5f',

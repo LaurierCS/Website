@@ -1,12 +1,12 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { UnavailableError } from '../../lib/errors';
-import { listEvents } from '../../lib/events';
-import { mockAccess, SAM, SAM_ADMIN } from '../../test/mocks/auth';
-import { renderApp } from '../../test/renderApp';
+import { UnavailableError } from '../../../src/lib/errors';
+import { listEvents } from '../../../src/lib/events';
+import { mockAccess, SAM, SAM_ADMIN } from '../../mocks/auth';
+import { renderApp } from '../../renderApp';
 
-vi.mock('../../lib/auth');
-vi.mock('../../lib/events');
+vi.mock('../../../src/lib/auth');
+vi.mock('../../../src/lib/events');
 
 describe('RequireAdmin', () => {
   it('sends a signed-out visitor to the login page', async () => {

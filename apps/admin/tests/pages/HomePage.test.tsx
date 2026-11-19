@@ -1,12 +1,12 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { UnavailableError } from '../lib/errors';
-import { listEvents } from '../lib/events';
-import type { Event } from '../types/event';
-import { HomePage } from './HomePage';
+import { UnavailableError } from '../../src/lib/errors';
+import { listEvents } from '../../src/lib/events';
+import type { Event } from '../../src/types/event';
+import { HomePage } from '../../src/pages/HomePage';
 
-vi.mock('../lib/events');
+vi.mock('../../src/lib/events');
 
 const CP312_REVIEW: Event = {
   id: '0b6f9c2e-7a41-4d5b-8e3c-2f1a9b8c7d6e',
