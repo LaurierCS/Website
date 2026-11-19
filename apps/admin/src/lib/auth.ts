@@ -25,7 +25,8 @@ const SCOPES: Readonly<Record<SignInProvider, string | undefined>> = {
 const ProfileSchema = z.object({
   full_name: z.string().nullish(),
   name: z.string().nullish(),
-  avatar_url: z.url().nullish(),
+  // A malformed avatar link from a provider is dropped rather than failing the whole access check.
+  avatar_url: z.url().nullish().catch(null),
   custom_claims: z.object({ global_name: z.string().nullish() }).nullish(),
 });
 
@@ -72,7 +73,9 @@ export async function checkAccess(): Promise<Access> {
   if (error) throw new UnavailableError('Your session could not be checked.', { cause: error });
   if (!data.session) return { kind: 'signed_out' };
 
-  const user = SessionUserSchema.parse(data.session.user);
+  const parsedUser = SessionUserSchema.safeParse(data.session.user);
+  if (!parsedUser.success) throw new UnavailableError('Your account details could not be read.', { cause: parsedUser.error });
+  const user = parsedUser.data;
   const providerToken = data.session.provider_token;
   const verdict = (await readAccessRow(user.id)) ?? (providerToken ? await verifyMembership(providerToken) : null);
 
