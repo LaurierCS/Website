@@ -43,7 +43,7 @@ $types = npx supabase gen types typescript --project-id <project-ref> --schema p
 | `src/context/` | The signed-in admin, for pages behind the guard (`useCurrentAdmin`) |
 | `src/lib/` | The only code that talks to Supabase: the client, config, auth, and one file per table |
 | `src/types/` | Generated database types and the app's own types, checked with zod |
-| `src/test/` | Test setup and mocks. Tests sit next to the file they test and mock `lib/` with `vi.mock` |
+| `tests/` | Every test, mirroring `src/` (`tests/pages/LoginPage.test.tsx` tests `src/pages/LoginPage.tsx`), plus setup, `renderApp` and mocks. Tests mock `src/lib/` with `vi.mock` |
 
 ## Sign-in
 

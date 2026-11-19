@@ -2,7 +2,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
-import { AppRoutes } from '../App';
+import { AppRoutes } from '../src/App';
 
 export function renderApp(at: string) {
   // No retries, so a failure shows its error straight away.
