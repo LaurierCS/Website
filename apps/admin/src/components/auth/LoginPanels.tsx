@@ -106,6 +106,34 @@ export function NotMemberPanel({ account, onCheckAgain, onSignOut, busy, actionF
   );
 }
 
+type ExpiredPanelProps = {
+  account: Account;
+  onRenew: () => void;
+  onSignOut: () => void;
+  busy: boolean;
+  actionFailed: boolean;
+};
+
+/** A member whose 7-day pass ran out. Nothing says they left LCS, so this asks them to renew, not to join. */
+export function ExpiredPanel({ account, onRenew, onSignOut, busy, actionFailed }: ExpiredPanelProps) {
+  const { label } = PROVIDERS[account.provider];
+  return (
+    <>
+      <Title>{`Your pass ran out, ${firstName(account)}.`}</Title>
+      <Body>{`Passes last 7 days. Sign in with ${label} again and we'll check you're still in ${PROVIDERS[account.provider].community}.`}</Body>
+      <div className="mt-6 flex flex-wrap gap-3">
+        <Button variant={account.provider} icon={<ProviderLogo provider={account.provider} />} onClick={onRenew} disabled={busy}>
+          {`Renew with ${label}`}
+        </Button>
+        <Button variant="ghost" onClick={onSignOut} disabled={busy}>
+          Sign out
+        </Button>
+      </div>
+      {actionFailed && <Problem>That didn't work. Try once more in a moment.</Problem>}
+    </>
+  );
+}
+
 type JammedPanelProps = {
   /** What went wrong, already safe to show. */
   message: string;

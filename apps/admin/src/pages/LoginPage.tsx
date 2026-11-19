@@ -1,13 +1,14 @@
 /**
  * The admin's front door. One backstage pass shows whatever the login is doing: two ways in (Discord, Notion),
- * the check, "not on the list", a failed check, or an "Access granted" stamp straight through to the dashboard.
+ * the check, "not on the list", a pass that ran out, a failed check, or an "Access granted" stamp straight
+ * through to the dashboard.
  */
 import { motion } from 'motion/react';
 import { type ReactNode, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { DOODLES } from '../assets/brand';
 import { BackstagePass } from '../components/auth/BackstagePass';
-import { CheckingPanel, GrantedPanel, JammedPanel, NotMemberPanel, SignedOutPanel } from '../components/auth/LoginPanels';
+import { CheckingPanel, ExpiredPanel, GrantedPanel, JammedPanel, NotMemberPanel, SignedOutPanel } from '../components/auth/LoginPanels';
 import { Stamp } from '../components/auth/Stamp';
 import { useAccess, useSignIn, useSignOut } from '../hooks/useAuth';
 import { useMinimumWait } from '../hooks/useMinimumWait';
@@ -68,6 +69,20 @@ export function LoginPage() {
             <NotMemberPanel
               account={account}
               onCheckAgain={() => signIn.mutate(account.provider)}
+              onSignOut={() => signOut.mutate()}
+              busy={signIn.isPending || signOut.isPending}
+              actionFailed={signIn.isError || signOut.isError}
+            />
+          </BackstagePass>
+        );
+      }
+      case 'expired': {
+        const { account } = access.data;
+        return (
+          <BackstagePass mascot="coco" mascotUp={false}>
+            <ExpiredPanel
+              account={account}
+              onRenew={() => signIn.mutate(account.provider)}
               onSignOut={() => signOut.mutate()}
               busy={signIn.isPending || signOut.isPending}
               actionFailed={signIn.isError || signOut.isError}

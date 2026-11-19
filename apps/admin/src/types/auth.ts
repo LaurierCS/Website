@@ -26,6 +26,8 @@ export type Account = Readonly<z.infer<typeof AccountSchema>>;
 export type Access =
   | { readonly kind: 'signed_out' }
   | { readonly kind: 'not_member'; readonly account: Account }
+  /** Signed in, but the 7-day pass ran out and there's no fresh provider token to recheck with: sign in again. */
+  | { readonly kind: 'expired'; readonly account: Account }
   | { readonly kind: 'admin'; readonly account: Account; readonly verifiedUntil: Date };
 
 export type Admin = Extract<Access, { kind: 'admin' }>;
