@@ -13,14 +13,14 @@ describe('RequireAdmin', () => {
     mockAccess({ kind: 'signed_out' });
     renderApp('/');
 
-    expect(await screen.findByRole('heading', { name: 'Sign in' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Execs only beyond this point.' })).toBeInTheDocument();
   });
 
   it('sends someone outside the LCS community to the login page', async () => {
     mockAccess({ kind: 'not_member', account: SAM });
     renderApp('/');
 
-    expect(await screen.findByRole('heading', { name: 'Not on the list' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: "Hey Sam, you're not on the list (yet)." })).toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: 'Events in Supabase' })).not.toBeInTheDocument();
   });
 
@@ -28,7 +28,7 @@ describe('RequireAdmin', () => {
     mockAccess(new UnavailableError('Your session could not be checked.'));
     renderApp('/');
 
-    expect(await screen.findByRole('alert')).toHaveTextContent("Couldn't check your sign-in");
+    expect(await screen.findByRole('alert')).toHaveTextContent("The door's jammed.");
   });
 
   it('lets an admin in and signs them out', async () => {
@@ -36,10 +36,10 @@ describe('RequireAdmin', () => {
     vi.mocked(listEvents).mockResolvedValue([]);
     renderApp('/');
 
-    expect(await screen.findByText('Signed in as Sam Rivera')).toBeInTheDocument();
+    expect(await screen.findByText('Sam Rivera')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Events in Supabase' })).toBeInTheDocument();
 
     await userEvent.click(screen.getByRole('button', { name: 'Sign out' }));
-    expect(await screen.findByRole('heading', { name: 'Sign in' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Execs only beyond this point.' })).toBeInTheDocument();
   });
 });

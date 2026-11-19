@@ -38,11 +38,13 @@ $types = npx supabase gen types typescript --project-id <project-ref> --schema p
 | --- | --- |
 | `src/App.tsx`, `src/paths.ts` | Which page shows at which URL. A new section is one `<Route>` |
 | `src/pages/` | One file per screen |
-| `src/components/` | Pieces of screens; `layout/` holds the route guard and the frame around admin pages |
-| `src/hooks/` | Data for pages, through TanStack Query (`useEvents`, `useAuth`) |
+| `src/components/` | Pieces of screens: `ui/` (buttons, loader, scrapbook letters), `auth/` (the backstage pass and stamp), `events/`, and `layout/` (the route guard and the frame around admin pages) |
+| `src/hooks/` | Data for pages, through TanStack Query (`useEvents`, `useAuth`), and small UI hooks |
 | `src/context/` | The signed-in admin, for pages behind the guard (`useCurrentAdmin`) |
-| `src/lib/` | The only code that talks to Supabase: the client, config, auth, and one file per table |
+| `src/lib/` | The only code that talks to Supabase (the client, config, auth, one file per table), plus date formatting |
 | `src/types/` | Generated database types and the app's own types, checked with zod |
+| `src/assets/` | Brand images (logo, mascots, doodles, scrapbook letters), listed by name in `brand.ts` |
+| `src/styles/tokens.css`, `src/index.css` | Every brand colour, font and shadow as a token; Tailwind uses only these |
 | `tests/` | Every test, mirroring `src/` (`tests/pages/LoginPage.test.tsx` tests `src/pages/LoginPage.tsx`), plus setup, `renderApp` and mocks. Tests mock `src/lib/` with `vi.mock` |
 
 ## Sign-in
