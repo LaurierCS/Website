@@ -20,13 +20,13 @@ describe('AdminLayout', () => {
   it('sends / to the Events section', async () => {
     renderApp('/');
 
-    expect(await screen.findByRole('heading', { name: 'Hey Sam.' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Events', level: 1 })).toBeInTheDocument();
     expect(sectionLink('Events')).toHaveAttribute('aria-current', 'page');
   });
 
   it('switches between Events and Team and marks the current section', async () => {
     renderApp('/events');
-    await screen.findByRole('heading', { name: 'Hey Sam.' });
+    await screen.findByRole('heading', { name: 'Events', level: 1 });
 
     await userEvent.click(sectionLink('Team'));
     expect(await screen.findByRole('heading', { name: 'Team' })).toBeInTheDocument();
@@ -34,7 +34,7 @@ describe('AdminLayout', () => {
     expect(sectionLink('Events')).not.toHaveAttribute('aria-current');
 
     await userEvent.click(sectionLink('Events'));
-    expect(await screen.findByRole('heading', { name: 'Hey Sam.' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Events', level: 1 })).toBeInTheDocument();
     expect(sectionLink('Events')).toHaveAttribute('aria-current', 'page');
   });
 
@@ -51,7 +51,7 @@ describe('AdminLayout', () => {
     expect(await screen.findByRole('heading', { name: 'Wrong door.' })).toBeInTheDocument();
     expect(screen.getByText('404')).toBeInTheDocument();
     await userEvent.click(screen.getByRole('link', { name: 'Back to Events' }));
-    expect(await screen.findByRole('heading', { name: 'Hey Sam.' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Events', level: 1 })).toBeInTheDocument();
   });
 
   it('sends a signed-out visitor at an unknown URL to the login page', async () => {
