@@ -22,7 +22,7 @@ describe('RequireAdmin', () => {
     renderApp('/');
 
     expect(await screen.findByRole('heading', { name: "Hey Sam, you're not on the list (yet)." })).toBeInTheDocument();
-    expect(screen.queryByRole('heading', { name: 'Events in Supabase' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Events', level: 1 })).not.toBeInTheDocument();
   });
 
   it('sends someone whose pass ran out to the login page to renew it', async () => {
@@ -30,14 +30,14 @@ describe('RequireAdmin', () => {
     renderApp('/');
 
     expect(await screen.findByRole('heading', { name: 'Your pass ran out, Sam.' })).toBeInTheDocument();
-    expect(screen.queryByRole('heading', { name: 'Events in Supabase' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Events', level: 1 })).not.toBeInTheDocument();
   });
 
   it('checks access again when the pass runs out, without a reload', async () => {
     mockAccess({ ...SAM_ADMIN, verifiedUntil: new Date(Date.now() + 1000) });
     vi.mocked(listEvents).mockResolvedValue([]);
     renderApp('/');
-    expect(await screen.findByRole('heading', { name: 'Events in Supabase' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Events', level: 1 })).toBeInTheDocument();
 
     vi.mocked(checkAccess).mockResolvedValue({ kind: 'expired', account: SAM });
 
@@ -58,7 +58,7 @@ describe('RequireAdmin', () => {
     renderApp('/');
 
     expect(await screen.findByText('Sam Rivera')).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Events in Supabase' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Events', level: 1 })).toBeInTheDocument();
 
     await userEvent.click(screen.getByRole('button', { name: 'Sign out' }));
     expect(await screen.findByRole('heading', { name: 'Execs only beyond this point.' })).toBeInTheDocument();

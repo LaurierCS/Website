@@ -90,6 +90,6 @@ describe('LoginPage', () => {
     vi.mocked(listEvents).mockResolvedValue([]);
     renderApp('/login');
 
-    expect(await screen.findByRole('heading', { name: 'Events in Supabase' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Events', level: 1 })).toBeInTheDocument();
   });
 });
