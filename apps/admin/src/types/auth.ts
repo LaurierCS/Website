@@ -18,7 +18,8 @@ export const PROVIDERS: Readonly<Record<SignInProvider, { label: string; communi
 export const AccountSchema = z.object({
   id: z.uuid(),
   name: z.string().trim().min(1),
-  avatarUrl: z.url().nullable(),
+  // A broken avatar link only costs the picture, never the sign-in.
+  avatarUrl: z.url().nullable().catch(null),
   provider: z.enum(SIGN_IN_PROVIDERS),
 });
 export type Account = Readonly<z.infer<typeof AccountSchema>>;
