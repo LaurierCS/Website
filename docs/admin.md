@@ -11,12 +11,15 @@ secret goes in the repo.
   provider's token. It checks the person is in the **LCS Discord server** (guild `1479628976744960060`) or the
   **LCS Notion workspace** (`d5403402-1a5a-43fe-bfb8-3ad1b5a482d3`), and records them in `public.admins` for
   7 days. Until then the admin reads that row and does not ask Discord or Notion again (Discord rate-limits the
-  lookup). Signing in after it expires renews it; someone who leaves the server or workspace loses access within
-  a week.
+  lookup). When the pass runs out, an open dashboard notices on its own and shows "Your pass ran out" with a
+  button to renew it by signing in again; someone who leaves the server or workspace loses access within a week.
 - `public.is_admin()` is true for anyone with an unexpired `admins` row. The RLS policies on the data tables
   (#204) use it, so only admins can write.
 - **Adding an admin** means they join the LCS Discord server or Notion workspace and sign in. **Removing one**
-  right away: delete their row in `public.admins` (and remove them from the server/workspace).
+  right away: remove them from the server/workspace, then in the SQL editor find their row with
+  `select user_id, provider, verified_until from public.admins;` and run
+  `delete from public.admins where user_id = '<their user_id>';`. Their next save is refused, and their
+  dashboard drops them at their next access check.
 
 Execs will later keep only one of the two providers. Dropping the other means turning it off in Supabase and
 removing it from the admin's sign-in options and from `MEMBERSHIP_CHECKS` in the Edge Function.
@@ -65,9 +68,20 @@ npx supabase secrets set DISCORD_GUILD_ID=1479628976744960060 NOTION_WORKSPACE_I
 npx supabase functions deploy verify-member --no-verify-jwt
 ```
 
-- **Migrations:** `supabase/migrations/20261118120000_admin_access.sql` (the `admins` table, its read-own-row
-  policy, `is_admin()`) and `20261118151500_admin_access_grants.sql`. Apply with `npx supabase db push --remote`. On LCS-Site they were run in the SQL editor instead, because `db push`
-  refuses while the project has older migrations the repo does not have yet.
+- **Migrations** are in `supabase/migrations/` and listed in [`supabase/README.md`](../supabase/README.md). Apply
+  with `npx supabase db push --remote`. On LCS-Site they were run by hand instead, because `db push` refuses
+  while the project has older migrations the repo does not have yet:
+
+  | Migration | Applied to LCS-Site |
+  | --- | --- |
+  | `20261118120000_admin_access.sql` | Yes, by hand in the SQL editor |
+  | `20261118151500_admin_access_grants.sql` | Yes, by hand in the SQL editor |
+  | `20261118170000_admin_read_events_team.sql` | Yes, by hand in the SQL editor |
+  | `20261119090000_admin_write_rules.sql` | 2026-11-19, recorded in the migration history |
+  | `20261119100000_admin_image_uploads.sql` | 2026-11-19, recorded in the migration history |
+  | `20261119150000_admin_revoke_truncate.sql` | Not yet |
+
+  Update this table when you apply one.
 - **`--no-verify-jwt` is required.** The gateway's JWT check rejects this project's sessions; the function
   verifies the caller itself with `auth.getUser()` and refuses anyone not signed in.
 - `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are provided to the function by Supabase. The service role
@@ -88,3 +102,4 @@ Steps 1 and 4 need the admin's login page (#207).
    the list" and no `admins` row.
 5. Problems: Supabase → **Edge Functions → verify-member → Logs**. `verify-member.provider_failed` and
    `verify-member.store_failed` lines say what Discord, Notion or the database answered, check here for auth fails.
+   `verify-member.misconfigured` means a secret from step 4 is missing; the dashboard shows "door's jammed".
