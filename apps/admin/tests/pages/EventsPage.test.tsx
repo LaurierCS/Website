@@ -19,12 +19,12 @@ const CP312_REVIEW: Event = {
   pictureUrl: null,
 };
 
-describe('HomePage', () => {
+describe('EventsPage', () => {
   beforeEach(() => mockAccess(SAM_ADMIN));
 
   it('greets the admin and says how long their pass lasts', async () => {
     vi.mocked(listEvents).mockResolvedValue([]);
-    renderApp('/');
+    renderApp('/events');
 
     expect(await screen.findByRole('heading', { name: 'Hey Sam.' })).toBeInTheDocument();
     expect(screen.getByText(/good until Wednesday, November 25/)).toBeInTheDocument();
@@ -32,7 +32,7 @@ describe('HomePage', () => {
 
   it('shows how many events there are and the latest one', async () => {
     vi.mocked(listEvents).mockResolvedValue([CP312_REVIEW, { ...CP312_REVIEW, id: '1c7a0d3f-8b52-4e6c-9f4d-3a2b1c0d9e8f', title: 'Club Fair' }]);
-    renderApp('/');
+    renderApp('/events');
 
     const summary = await screen.findByRole('region', { name: 'Events in Supabase' });
     expect(await screen.findByText('2')).toBeInTheDocument();
@@ -41,14 +41,14 @@ describe('HomePage', () => {
 
   it('says so when there are no events', async () => {
     vi.mocked(listEvents).mockResolvedValue([]);
-    renderApp('/');
+    renderApp('/events');
 
     expect(await screen.findByText(/No events yet/)).toBeInTheDocument();
   });
 
   it('shows a failure as a failure, never as "no events", and recovers on retry', async () => {
     vi.mocked(listEvents).mockRejectedValue(new UnavailableError('Events could not be loaded.'));
-    renderApp('/');
+    renderApp('/events');
 
     expect(await screen.findByRole('alert')).toHaveTextContent('Events could not be loaded.');
     expect(screen.queryByText(/No events yet/)).not.toBeInTheDocument();
