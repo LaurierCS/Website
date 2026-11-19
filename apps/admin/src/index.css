@@ -37,6 +37,13 @@
 
   --radius-card: var(--radius);
   --ease-brand: var(--ease-out);
+
+  /*
+   * The width where the admin header has room for everything on one row: the long logo, the section links,
+   * the admin's name and "Sign out" in words. Narrower screens get the compact header (`header:` variant).
+   * Media queries can't read CSS variables, so the value is written here rather than in tokens.css.
+   */
+  --breakpoint-header: 64rem;
 }
 
 @layer base {
