@@ -36,8 +36,18 @@ $types = npx supabase gen types typescript --project-id <project-ref> --schema p
 
 | Folder | What |
 | --- | --- |
+| `src/App.tsx`, `src/paths.ts` | Which page shows at which URL. A new section is one `<Route>` |
 | `src/pages/` | One file per screen |
-| `src/hooks/` | Data for pages, through TanStack Query (`useEvents`) |
-| `src/lib/` | The only code that talks to Supabase: the client, config, and one file per table |
+| `src/components/` | Pieces of screens; `layout/` holds the route guard and the frame around admin pages |
+| `src/hooks/` | Data for pages, through TanStack Query (`useEvents`, `useAuth`) |
+| `src/context/` | The signed-in admin, for pages behind the guard (`useCurrentAdmin`) |
+| `src/lib/` | The only code that talks to Supabase: the client, config, auth, and one file per table |
 | `src/types/` | Generated database types and the app's own types, checked with zod |
-| `src/test/` | Test setup. Tests sit next to the file they test and mock `lib/` with `vi.mock` |
+| `src/test/` | Test setup and mocks. Tests sit next to the file they test and mock `lib/` with `vi.mock` |
+
+## Sign-in
+
+People sign in with Discord or Notion. Signing in isn't access: the `verify-member` Edge Function checks they
+are in the LCS Discord server or Notion workspace and records a 7-day pass in `admins`, which the admin reads on
+later visits. Sign-in only returns to `http://localhost:5173/login`, so the dev server refuses to start on any
+other port. Setup steps are in `docs/admin.md`.
