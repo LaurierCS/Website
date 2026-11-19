@@ -136,7 +136,15 @@ Deno.serve(async (request) => {
   if (request.method === 'OPTIONS') return new Response(null, { headers: CORS_HEADERS });
   if (request.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
 
-  const config = readConfig();
+  // A missing secret is our setup problem, not the caller's. Answer like any other outage, with CORS headers, so
+  // the browser shows "door's jammed" instead of a CORS error that hides the cause; the log names the secret.
+  let config: Config;
+  try {
+    config = readConfig();
+  } catch (error) {
+    console.error('verify-member.misconfigured', { reason: error instanceof Error ? error.message : 'unknown' });
+    return json({ error: 'unavailable' }, 503);
+  }
   const supabase = createClient(config.supabaseUrl, config.serviceRoleKey, { auth: { persistSession: false } });
 
   const jwt = request.headers.get('Authorization')?.replace(/^Bearer /, '');
