@@ -32,5 +32,10 @@ dist-ssr
 *.sln
 *.sw?
 
+# Supabase CLI local state
+supabase/.temp/
+supabase/.branches/
+
 # GitHub
 .github/copilot-*.md
+
