@@ -62,7 +62,8 @@ export async function signIn(provider: SignInProvider): Promise<void> {
 }
 
 /**
- * The visitor's access: signed out, signed in but not part of LCS on that provider, or an admin.
+ * The visitor's access: signed out, signed in but not part of LCS on that provider, signed in with a pass that
+ * ran out, or an admin.
  * @throws UnavailableError when Supabase or the provider cannot be reached. An outage is never reported as
  * "not a member".
  */
@@ -76,10 +77,12 @@ export async function checkAccess(): Promise<Access> {
   const verdict = (await readAccessRow(user.id)) ?? (providerToken ? await verifyMembership(providerToken) : null);
 
   if (!verdict) {
+    // No unexpired pass and no fresh provider token: nobody has said they're *not* a member, their pass just ran
+    // out (Supabase drops the provider token after the first hour). Signing in again gets a token to recheck with.
     // An account with no Discord or Notion identity (e.g. an email user made in the Supabase dashboard) has no
-    // provider to name in the "not on the list" message, so show the sign-in buttons instead of crashing.
+    // provider to sign in again with, so it gets the sign-in buttons instead.
     const provider = fallbackProvider(user);
-    return provider ? { kind: 'not_member', account: toAccount(user, provider) } : { kind: 'signed_out' };
+    return provider ? { kind: 'expired', account: toAccount(user, provider) } : { kind: 'signed_out' };
   }
   const account = toAccount(user, verdict.provider);
   return verdict.verifiedUntil ? { kind: 'admin', account, verifiedUntil: verdict.verifiedUntil } : { kind: 'not_member', account };
@@ -141,7 +144,7 @@ function toAccount(user: SessionUser, provider: SignInProvider): Account {
 
 /**
  * With no fresh token and no access row, nothing on the server says which provider was used. Any linked one is
- * right for the "not on the list" message, which then names a real place to join. Null when none is linked.
+ * fine to sign in again with, since the membership check then works out the right one. Null when none is linked.
  */
 function fallbackProvider(user: SessionUser): SignInProvider | null {
   for (const identity of user.identities) {

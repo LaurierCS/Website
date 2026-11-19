@@ -24,6 +24,14 @@ describe('RequireAdmin', () => {
     expect(screen.queryByRole('heading', { name: 'Events in Supabase' })).not.toBeInTheDocument();
   });
 
+  it('sends someone whose pass ran out to the login page to renew it', async () => {
+    mockAccess({ kind: 'expired', account: SAM });
+    renderApp('/');
+
+    expect(await screen.findByRole('heading', { name: 'Your pass ran out, Sam.' })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Events in Supabase' })).not.toBeInTheDocument();
+  });
+
   it('fails closed during an outage', async () => {
     mockAccess(new UnavailableError('Your session could not be checked.'));
     renderApp('/');

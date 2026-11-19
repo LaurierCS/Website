@@ -61,6 +61,17 @@ describe('LoginPage', () => {
     expect(signOut).toHaveBeenCalled();
   });
 
+  it('asks a member whose pass ran out to renew it, not that they are off the list', async () => {
+    mockAccess({ kind: 'expired', account: SAM });
+    renderApp('/login');
+
+    expect(await screen.findByRole('heading', { name: 'Your pass ran out, Sam.' })).toBeInTheDocument();
+    expect(screen.queryByText(/not on the list/i)).not.toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Renew with Discord' }));
+    expect(signIn).toHaveBeenCalledWith('discord');
+  });
+
   it('shows an outage as an outage, never as "not on the list", and recovers on retry', async () => {
     mockAccess(new UnavailableError('Your session could not be checked.'));
     renderApp('/login');
