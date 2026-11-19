@@ -34,6 +34,8 @@
   --font-*: initial;
   --font-display: var(--font-head);
   --font-sans: var(--font-body);
+  --text-hero: var(--size-hero);
+  --tracking-label: var(--label-spacing);
 
   --radius-card: var(--radius);
   --ease-brand: var(--ease-out);

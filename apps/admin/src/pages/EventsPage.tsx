@@ -15,8 +15,8 @@ export function EventsPage() {
   return (
     <main className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 sm:px-8 md:grid-cols-[1fr_auto]">
       <div>
-        <p className="font-display text-sm font-bold uppercase tracking-[0.3em] text-pink">You're in</p>
-        <h1 className="mt-3 text-[clamp(3rem,8vw,5.5rem)] font-extrabold">{`Hey ${firstName(account)}.`}</h1>
+        <p className="font-display text-sm font-bold uppercase tracking-label text-pink">You're in</p>
+        <h1 className="mt-3 text-hero font-extrabold">{`Hey ${firstName(account)}.`}</h1>
         <p className="mt-5 max-w-lg text-lg font-light leading-relaxed text-text-2">
           {`Your backstage pass is good until ${formatClubDay(verifiedUntil)}. When it runs out, sign in again to renew it, as long as you're still in ${PROVIDERS[account.provider].community}.`}
         </p>

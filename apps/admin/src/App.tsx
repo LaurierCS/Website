@@ -4,6 +4,7 @@
  * admin layout plus one entry in its nav.
  */
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { MotionConfig } from 'motion/react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
 import { AdminLayout } from './components/layout/AdminLayout';
 import { RequireAdmin } from './components/layout/RequireAdmin';
@@ -18,9 +19,12 @@ const queryClient = new QueryClient();
 export function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
+      {/* With "reduce motion" turned on in the device settings, things appear in place instead of moving there. */}
+      <MotionConfig reducedMotion="user">
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
+      </MotionConfig>
     </QueryClientProvider>
   );
 }

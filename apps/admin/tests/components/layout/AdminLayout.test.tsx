@@ -48,7 +48,8 @@ describe('AdminLayout', () => {
   it('shows a not-found page at an unknown URL, with a way back to Events', async () => {
     renderApp('/sponsors');
 
-    expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Wrong door.' })).toBeInTheDocument();
+    expect(screen.getByText('404')).toBeInTheDocument();
     await userEvent.click(screen.getByRole('link', { name: 'Back to Events' }));
     expect(await screen.findByRole('heading', { name: 'Hey Sam.' })).toBeInTheDocument();
   });

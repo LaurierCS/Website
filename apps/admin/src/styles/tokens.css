@@ -40,6 +40,8 @@
   /* Type: Dosis for display, numbers, names and buttons; Montserrat for body. */
   --font-head: "Dosis Variable", "Dosis", system-ui, sans-serif;
   --font-body: "Montserrat Variable", "Montserrat", system-ui, sans-serif;
+  --size-hero: clamp(3rem, 8vw, 5.5rem); /* the one big headline on a page */
+  --label-spacing: 0.3em; /* small upper-case labels above a headline */
 
   /* Shape */
   --radius: 20px;
@@ -50,6 +52,7 @@
   /* Depth */
   --shadow-float: 0 30px 60px -20px rgb(0 0 0 / 0.6); /* held up off the page, like the login pass */
   --shadow-cutout: 0 6px 0 rgb(0 0 0 / 0.25); /* a paper cut-out lying on the page */
+  --shadow-sticker: 2px 3px 0 var(--yellow-ink); /* a sticker pressed on, like the "Admin" label */
 
   /* Motion: springy for things you touch, eased for things that appear. */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
