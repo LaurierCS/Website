@@ -1,6 +1,6 @@
 /**
- * The admin's landing page after sign-in: a greeting, how long the visitor's pass is good for, and what is in the
- * events table.
+ * The Events section, where the admin lands after sign-in: a greeting, how long the visitor's pass is good for,
+ * and what is in the events table.
  */
 import { motion } from 'motion/react';
 import { MASCOTS } from '../assets/brand';
@@ -9,7 +9,7 @@ import { useCurrentAdmin } from '../context/AuthContext';
 import { formatClubDay } from '../lib/dates';
 import { firstName, PROVIDERS } from '../types/auth';
 
-export function HomePage() {
+export function EventsPage() {
   const { account, verifiedUntil } = useCurrentAdmin();
 
   return (
@@ -30,7 +30,7 @@ export function HomePage() {
       <motion.img
         src={MASCOTS.krill}
         alt=""
-        className="mx-auto h-56 w-auto md:h-72"
+        className="hidden h-72 w-auto md:block"
         initial={{ y: 30, rotate: -8, opacity: 0 }}
         animate={{ y: 0, rotate: 4, opacity: 1 }}
         whileHover={{ rotate: -4, y: -8 }}
