@@ -1,11 +1,12 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { UnavailableError } from '../../src/lib/errors';
 import { listEvents } from '../../src/lib/events';
 import type { Event } from '../../src/types/event';
-import { HomePage } from '../../src/pages/HomePage';
+import { mockAccess, SAM_ADMIN } from '../mocks/auth';
+import { renderApp } from '../renderApp';
 
+vi.mock('../../src/lib/auth');
 vi.mock('../../src/lib/events');
 
 const CP312_REVIEW: Event = {
@@ -18,40 +19,42 @@ const CP312_REVIEW: Event = {
   pictureUrl: null,
 };
 
-function renderHomePage() {
-  // No retries, so a failure shows its error straight away.
-  const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
-  render(
-    <QueryClientProvider client={queryClient}>
-      <HomePage />
-    </QueryClientProvider>,
-  );
-}
-
 describe('HomePage', () => {
+  beforeEach(() => mockAccess(SAM_ADMIN));
+
+  it('greets the admin and says how long their pass lasts', async () => {
+    vi.mocked(listEvents).mockResolvedValue([]);
+    renderApp('/');
+
+    expect(await screen.findByRole('heading', { name: 'Hey Sam.' })).toBeInTheDocument();
+    expect(screen.getByText(/good until Wednesday, November 25/)).toBeInTheDocument();
+  });
+
   it('shows how many events there are and the latest one', async () => {
     vi.mocked(listEvents).mockResolvedValue([CP312_REVIEW, { ...CP312_REVIEW, id: '1c7a0d3f-8b52-4e6c-9f4d-3a2b1c0d9e8f', title: 'Club Fair' }]);
-    renderHomePage();
+    renderApp('/');
 
-    expect(await screen.findByText('2 events. Latest: CP312 Midterm Review (2026-11-12)')).toBeInTheDocument();
+    const summary = await screen.findByRole('region', { name: 'Events in Supabase' });
+    expect(await screen.findByText('2')).toBeInTheDocument();
+    expect(summary).toHaveTextContent('Latest: CP312 Midterm Review on Thursday, November 12, 2026');
   });
 
   it('says so when there are no events', async () => {
     vi.mocked(listEvents).mockResolvedValue([]);
-    renderHomePage();
+    renderApp('/');
 
-    expect(await screen.findByText('No events yet.')).toBeInTheDocument();
+    expect(await screen.findByText(/No events yet/)).toBeInTheDocument();
   });
 
   it('shows a failure as a failure, never as "no events", and recovers on retry', async () => {
     vi.mocked(listEvents).mockRejectedValue(new UnavailableError('Events could not be loaded.'));
-    renderHomePage();
+    renderApp('/');
 
     expect(await screen.findByRole('alert')).toHaveTextContent('Events could not be loaded.');
-    expect(screen.queryByText('No events yet.')).not.toBeInTheDocument();
+    expect(screen.queryByText(/No events yet/)).not.toBeInTheDocument();
 
     vi.mocked(listEvents).mockResolvedValue([CP312_REVIEW]);
     await userEvent.click(screen.getByRole('button', { name: 'Try again' }));
-    expect(await screen.findByText('1 event. Latest: CP312 Midterm Review (2026-11-12)')).toBeInTheDocument();
+    expect(await screen.findByText(/CP312 Midterm Review/)).toBeInTheDocument();
   });
 });

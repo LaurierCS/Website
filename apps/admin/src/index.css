@@ -1,23 +1,89 @@
-:root {
-  --text-h: #08060d;
-  --bg: #fff;
+@import "tailwindcss";
+/* Self-hosted brand fonts: no request to a third party. */
+@import "@fontsource-variable/dosis";
+@import "@fontsource-variable/montserrat";
+@import "./styles/tokens.css";
+
+/*
+ * Tailwind utilities map onto the brand tokens and nothing else: the default palette and fonts are switched
+ * off, so `bg-pink` works and `bg-purple-500` does not.
+ */
+@theme inline {
+  --color-*: initial;
+  --color-white: #fff;
+  --color-deep: var(--bg-deep);
+  --color-slate: var(--slate);
+  --color-card: var(--bg-card);
+  --color-paper: var(--bg-light);
+  --color-line: var(--border);
+  --color-pink: var(--pink);
+  --color-orange: var(--orange);
+  --color-yellow: var(--yellow);
+  --color-blue: var(--blue);
+  --color-sky: var(--light-blue);
+  --color-pink-ink: var(--pink-ink);
+  --color-orange-ink: var(--orange-ink);
+  --color-yellow-ink: var(--yellow-ink);
+  --color-blue-ink: var(--blue-ink);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-text-2: var(--text-2);
+  --color-muted: var(--muted);
+  --color-discord: var(--discord);
+
+  --font-*: initial;
+  --font-display: var(--font-head);
+  --font-sans: var(--font-body);
+
+  --radius-card: var(--radius);
+  --ease-brand: var(--ease-out);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text-h: #f3f4f6;
-    --bg: #16171d;
+@layer base {
+  html {
+    background: var(--bg-deep);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    min-height: 100dvh;
+  }
+
+  /* The site's tilted icon pattern, faint, behind everything. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: -50%;
+    z-index: -1;
+    background: var(--pattern-icons) center / 720px repeat;
+    opacity: 0.035;
+    transform: rotate(-15deg);
+    pointer-events: none;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-head);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+
+  ::selection {
+    background: var(--yellow);
+    color: var(--ink);
+  }
+
+  :focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
   }
 }
 
-body {
-  margin: 0;
-  font-family: system-ui, -apple-system, sans-serif;
-  color-scheme: light dark;
-  background: var(--bg);
-  color: var(--text-h);
-}
-
-#root {
-  min-height: 100vh;
+@layer components {
+  /* Perforated tear-off edge for tickets and passes. */
+  .perforated {
+    background-image: radial-gradient(circle at 6px 0, var(--bg-deep) 5px, transparent 5.5px);
+    background-size: 18px 10px;
+    background-repeat: repeat-x;
+  }
 }

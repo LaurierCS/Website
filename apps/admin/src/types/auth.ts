@@ -29,3 +29,8 @@ export type Access =
   | { readonly kind: 'admin'; readonly account: Account; readonly verifiedUntil: Date };
 
 export type Admin = Extract<Access, { kind: 'admin' }>;
+
+/** The first word of a display name, for a friendly greeting. */
+export function firstName(account: Account): string {
+  return account.name.split(/\s+/)[0] ?? account.name;
+}

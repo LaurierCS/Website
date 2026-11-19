@@ -22,6 +22,15 @@ describe('LoginPage', () => {
     expect(signIn).toHaveBeenCalledWith(provider);
   });
 
+  it('shows a signed-out visitor the sign-in buttons straight away, without checking a pass', async () => {
+    mockAccess({ kind: 'signed_out' });
+    renderApp('/login');
+
+    // Shorter than the 500 ms a signed-in visitor's check is held for, so a held check fails this.
+    expect(await screen.findByRole('button', { name: 'Continue with Discord' }, { timeout: 300 })).toBeInTheDocument();
+    expect(screen.queryByText('Checking your pass…')).not.toBeInTheDocument();
+  });
+
   it('says so when a sign-in cannot start', async () => {
     mockAccess({ kind: 'signed_out' });
     vi.mocked(signIn).mockRejectedValue(new UnavailableError('Sign-in could not be started.'));
@@ -36,7 +45,7 @@ describe('LoginPage', () => {
     mockAccess({ kind: 'not_member', account: { ...SAM, provider: 'notion' } });
     renderApp('/login');
 
-    expect(await screen.findByRole('heading', { name: 'Not on the list' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: "Hey Sam, you're not on the list (yet)." })).toBeInTheDocument();
     expect(screen.getByText(/the LCS Notion workspace/)).toBeInTheDocument();
   });
 
@@ -48,7 +57,7 @@ describe('LoginPage', () => {
     expect(signIn).toHaveBeenCalledWith('discord');
 
     await userEvent.click(screen.getByRole('button', { name: 'Sign out' }));
-    expect(await screen.findByRole('heading', { name: 'Sign in' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Execs only beyond this point.' })).toBeInTheDocument();
     expect(signOut).toHaveBeenCalled();
   });
 
@@ -61,7 +70,7 @@ describe('LoginPage', () => {
 
     vi.mocked(checkAccess).mockResolvedValue({ kind: 'signed_out' });
     await userEvent.click(screen.getByRole('button', { name: 'Try again' }));
-    expect(await screen.findByRole('heading', { name: 'Sign in' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Execs only beyond this point.' })).toBeInTheDocument();
   });
 
   it('sends a verified admin straight to the dashboard', async () => {
