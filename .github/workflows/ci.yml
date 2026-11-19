@@ -69,6 +69,10 @@ jobs:
         run: pnpm exec tsc -b --noEmit
         working-directory: apps/admin
 
+      - name: Run tests
+        run: pnpm test
+        working-directory: apps/admin
+
       - name: Build
         run: pnpm build
         working-directory: apps/admin

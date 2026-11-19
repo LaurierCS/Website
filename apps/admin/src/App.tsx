@@ -1,11 +1,13 @@
-import './App.css'
+/** The admin app: data loading for every page, and the pages themselves. */
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { HomePage } from './pages/HomePage';
 
-function App() {
+const queryClient = new QueryClient();
+
+export function App() {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
-      <h1>LCS Admin</h1>
-    </div>
-  )
+    <QueryClientProvider client={queryClient}>
+      <HomePage />
+    </QueryClientProvider>
+  );
 }
-
-export default App
