@@ -75,7 +75,12 @@ export async function checkAccess(): Promise<Access> {
   const providerToken = data.session.provider_token;
   const verdict = (await readAccessRow(user.id)) ?? (providerToken ? await verifyMembership(providerToken) : null);
 
-  if (!verdict) return { kind: 'not_member', account: toAccount(user, fallbackProvider(user)) };
+  if (!verdict) {
+    // An account with no Discord or Notion identity (e.g. an email user made in the Supabase dashboard) has no
+    // provider to name in the "not on the list" message, so show the sign-in buttons instead of crashing.
+    const provider = fallbackProvider(user);
+    return provider ? { kind: 'not_member', account: toAccount(user, provider) } : { kind: 'signed_out' };
+  }
   const account = toAccount(user, verdict.provider);
   return verdict.verifiedUntil ? { kind: 'admin', account, verifiedUntil: verdict.verifiedUntil } : { kind: 'not_member', account };
 }
@@ -136,8 +141,12 @@ function toAccount(user: SessionUser, provider: SignInProvider): Account {
 
 /**
  * With no fresh token and no access row, nothing on the server says which provider was used. Any linked one is
- * right for the "not on the list" message, which then names a real place to join.
+ * right for the "not on the list" message, which then names a real place to join. Null when none is linked.
  */
-function fallbackProvider(user: SessionUser): SignInProvider {
-  return ProviderSchema.parse(user.identities.find((identity) => ProviderSchema.safeParse(identity.provider).success)?.provider);
+function fallbackProvider(user: SessionUser): SignInProvider | null {
+  for (const identity of user.identities) {
+    const provider = ProviderSchema.safeParse(identity.provider);
+    if (provider.success) return provider.data;
+  }
+  return null;
 }
