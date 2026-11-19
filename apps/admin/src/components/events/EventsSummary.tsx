@@ -1,5 +1,5 @@
 /**
- * A ticket-stub card on the home page showing what is in the events table: how many, and the latest one. It
+ * A ticket-stub card on the Events page showing what is in the events table: how many, and the latest one. It
  * has a look for each state: loading, failed, none yet, and some.
  */
 import { motion } from 'motion/react';
