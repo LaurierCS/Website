@@ -4,7 +4,8 @@
 const CLUB_TIME_ZONE = 'America/Toronto';
 
 const DAY = new Intl.DateTimeFormat('en-CA', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
-const DAY_LONG = new Intl.DateTimeFormat('en-CA', { weekday: 'long', month: 'long', day: 'numeric', timeZone: CLUB_TIME_ZONE });
+// en-CA writes dates as YYYY-MM-DD, the same shape as an event's `date`.
+const ISO_DAY = new Intl.DateTimeFormat('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit', timeZone: CLUB_TIME_ZONE });
 
 /**
  * An event's `YYYY-MM-DD` day, e.g. "Thursday, November 12, 2026". The day is already a calendar date in the club's zone,
@@ -14,7 +15,10 @@ export function formatEventDay(isoDate: string): string {
   return DAY.format(new Date(`${isoDate}T00:00:00Z`));
 }
 
-/** A moment in time as a day in the club's zone, e.g. "Wednesday, November 25". */
-export function formatClubDay(moment: Date): string {
-  return DAY_LONG.format(moment);
+/**
+ * Today as `YYYY-MM-DD` in the club's zone, to compare with an event's `date`. Late on a Tuesday evening it is
+ * still Tuesday here, even though it is already Wednesday in UTC.
+ */
+export function clubToday(now: Date = new Date()): string {
+  return ISO_DAY.format(now);
 }
