@@ -76,7 +76,8 @@ describe('LoginPage', () => {
     mockAccess(new UnavailableError('Your session could not be checked.'));
     renderApp('/login');
 
-    expect(await screen.findByRole('alert')).toHaveTextContent('Your session could not be checked.');
+    // The access check retries once (about a second) before calling it an outage.
+    expect(await screen.findByRole('alert', {}, { timeout: 3000 })).toHaveTextContent('Your session could not be checked.');
     expect(screen.queryByText(/not on the list/i)).not.toBeInTheDocument();
 
     vi.mocked(checkAccess).mockResolvedValue({ kind: 'signed_out' });

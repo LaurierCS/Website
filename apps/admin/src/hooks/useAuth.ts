@@ -7,7 +7,20 @@ import type { Access, SignInProvider } from '../types/auth';
 const ACCESS_KEY = ['access'] as const;
 const SIGNED_OUT: Access = { kind: 'signed_out' };
 
-/** The visitor's access, checked again whenever someone signs in or out. */
+// Browsers cap timers at about 24.8 days; a pass is 7, so this only guards against a far-future expiry.
+const LONGEST_TIMER_MS = 2 ** 31 - 1;
+
+/**
+ * Milliseconds until an admin's pass runs out (at least a second), or false for anyone who isn't an admin. Their
+ * access is checked again then: until it is, the page would look signed in while row-level security refuses
+ * every save.
+ */
+export function untilPassRunsOut(access: Access | undefined): number | false {
+  if (access?.kind !== 'admin') return false;
+  return Math.min(Math.max(access.verifiedUntil.getTime() - Date.now(), 1000), LONGEST_TIMER_MS);
+}
+
+/** The visitor's access, checked again whenever someone signs in or out, and when an admin's pass runs out. */
 export function useAccess() {
   const queryClient = useQueryClient();
 
@@ -17,8 +30,12 @@ export function useAccess() {
   return useQuery({
     queryKey: ACCESS_KEY,
     queryFn: checkAccess,
-    // Access only changes when someone signs in or out, which invalidates it above.
-    staleTime: Infinity,
+    // Otherwise access only changes when someone signs in or out, which invalidates it above.
+    staleTime: (query) => untilPassRunsOut(query.state.data) || Infinity,
+    refetchInterval: (query) => untilPassRunsOut(query.state.data),
+    // One retry rides out a blip. More would only delay the "door's jammed" message, and each retry can call
+    // verify-member, which asks Discord, which rate-limits.
+    retry: 1,
   });
 }
 
