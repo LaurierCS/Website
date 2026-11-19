@@ -1,5 +1,6 @@
 /**
- * Reading events from Supabase. Rows are checked and turned into `Event`s here, once, so pages get typed data.
+ * Reading and deleting events in Supabase. Rows are checked and turned into `Event`s here, once, so pages get
+ * typed data.
  */
 import type { Database } from '../types/database.types';
 import { type Event, EventSchema } from '../types/event';
@@ -10,6 +11,9 @@ type EventRow = Database['public']['Tables']['events']['Row'];
 
 const COLUMNS = 'id, title, description, date, time, location, picture_url';
 
+/** The storage bucket that holds event pictures uploaded through LCS tools. */
+const EVENTS_BUCKET = 'events-images';
+
 /**
  * Every event, newest first. Empty when there are none. A row that doesn't fit `Event` (say, a hand-edited
  * picture link that isn't a URL) is left out and logged, so one bad row can't hide every other event.
@@ -19,6 +23,34 @@ export async function listEvents(): Promise<readonly Event[]> {
   const { data, error } = await getSupabase().from('events').select(COLUMNS).order('date', { ascending: false });
   if (error) throw new UnavailableError('Events could not be loaded.', { cause: error });
   return data.flatMap((row) => toEvent(row) ?? []);
+}
+
+/**
+ * Deletes an event, then its picture if the picture is a file in our `events-images` bucket. A picture linked
+ * from anywhere else is left alone. The row goes first, so the site never shows an event whose picture is gone.
+ * If the picture can't be removed after that, the event is still deleted; the leftover file is logged.
+ * @throws UnavailableError when the event could not be deleted (Supabase down, or the delete was refused).
+ */
+export async function deleteEvent(event: Event): Promise<void> {
+  const supabase = getSupabase();
+  const failure = `"${event.title}" couldn't be deleted.`;
+  const { data, error } = await supabase.from('events').delete().eq('id', event.id).select('id');
+  if (error) throw new UnavailableError(failure, { cause: error });
+  // Row-level security refuses a delete by deleting nothing rather than by failing, so check a row came back.
+  if (data.length === 0) throw new UnavailableError(failure);
+
+  const imagePath = event.pictureUrl && pathInEventsBucket(event.pictureUrl);
+  if (!imagePath) return;
+  const removed = await supabase.storage.from(EVENTS_BUCKET).remove([imagePath]);
+  if (removed.error) console.warn('events.image_not_removed', { id: event.id, path: imagePath });
+}
+
+/** The file's path inside our events bucket, or null when the URL points somewhere else. */
+function pathInEventsBucket(url: string): string | null {
+  const bucketUrl = getSupabase().storage.from(EVENTS_BUCKET).getPublicUrl('').data.publicUrl;
+  if (!url.startsWith(bucketUrl)) return null;
+  // Public URLs escape characters such as spaces in file names; storage wants the name as written.
+  return decodeURIComponent(url.slice(bucketUrl.length));
 }
 
 /**

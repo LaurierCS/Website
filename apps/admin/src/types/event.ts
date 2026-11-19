@@ -16,3 +16,9 @@ export const EventSchema = z.object({
   pictureUrl: z.url().nullable(),
 });
 export type Event = Readonly<z.infer<typeof EventSchema>>;
+
+/** Whether an event is today or later. `today` is `YYYY-MM-DD` in the club's zone (`clubToday()`). */
+export function isUpcoming(event: Event, today: string): boolean {
+  // Both are YYYY-MM-DD, so comparing the text compares the days.
+  return event.date >= today;
+}

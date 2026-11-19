@@ -2,5 +2,8 @@
 export const PATHS = {
   login: '/login',
   events: '/events',
+  newEvent: '/events/new',
+  /** Fill in with React Router's `generatePath(PATHS.editEvent, { id })`. */
+  editEvent: '/events/:id',
   team: '/team',
 } as const;
