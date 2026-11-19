@@ -1,44 +1,78 @@
 /**
- * The Events section, where the admin lands after sign-in: a greeting, how long the visitor's pass is good for,
- * and what is in the events table.
+ * The Events section, where the admin lands after sign-in: every event, newest first, with a title search, a
+ * link to add one, and edit and delete on each.
  */
-import { motion } from 'motion/react';
-import { MASCOTS } from '../assets/brand';
-import { EventsSummary } from '../components/events/EventsSummary';
-import { useCurrentAdmin } from '../context/AuthContext';
-import { formatClubDay } from '../lib/dates';
-import { firstName, PROVIDERS } from '../types/auth';
+import { useState } from 'react';
+import { Link } from 'react-router';
+import { EventList } from '../components/events/EventList';
+import { Button } from '../components/ui/Button';
+import { useEvents } from '../hooks/useEvents';
+import { messageFor } from '../lib/errors';
+import { PATHS } from '../paths';
 
 export function EventsPage() {
-  const { account, verifiedUntil } = useCurrentAdmin();
+  const [search, setSearch] = useState('');
 
   return (
-    <main className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 sm:px-8 md:grid-cols-[1fr_auto]">
-      <div>
-        <p className="font-display text-sm font-bold uppercase tracking-label text-pink">You're in</p>
-        <h1 className="mt-3 text-hero font-extrabold">{`Hey ${firstName(account)}.`}</h1>
-        <p className="mt-5 max-w-lg text-lg font-light leading-relaxed text-text-2">
-          {`Your backstage pass is good until ${formatClubDay(verifiedUntil)}. When it runs out, sign in again to renew it, as long as you're still in ${PROVIDERS[account.provider].community}.`}
-        </p>
-        <a
-          href="https://lauriercs.org"
-          className="mt-8 inline-flex font-display text-lg font-bold text-sky underline-offset-4 hover:underline"
+    <main className="mx-auto max-w-6xl px-4 py-10 sm:px-8">
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <h1 className="text-hero font-extrabold">Events</h1>
+        <Link
+          to={PATHS.newEvent}
+          className="inline-flex min-h-11 items-center rounded-full bg-pink px-6 font-display text-lg font-bold text-ink"
         >
-          See the live site at lauriercs.org
-        </a>
+          New event
+        </Link>
       </div>
-      <motion.img
-        src={MASCOTS.krill}
-        alt=""
-        className="hidden h-72 w-auto md:block"
-        initial={{ y: 30, rotate: -8, opacity: 0 }}
-        animate={{ y: 0, rotate: 4, opacity: 1 }}
-        whileHover={{ rotate: -4, y: -8 }}
-        transition={{ type: 'spring', stiffness: 260, damping: 14 }}
-      />
-      <div className="md:col-span-2 md:max-w-md">
-        <EventsSummary />
+
+      <label className="mt-8 block max-w-md">
+        <span className="font-display text-lg font-bold">Search by title</span>
+        <input
+          type="search"
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          className="mt-2 block w-full rounded-full border-2 border-line bg-deep px-5 py-2.5 text-white placeholder:text-muted focus:border-sky"
+          placeholder="CP312, hackathon…"
+        />
+      </label>
+
+      <div className="mt-6">
+        <EventResults search={search} />
       </div>
     </main>
   );
+}
+
+/** The list for the current search, or why there isn't one: still loading, failed, no events, or no matches. */
+function EventResults({ search }: { search: string }) {
+  const events = useEvents();
+
+  switch (events.status) {
+    case 'pending':
+      return (
+        <div role="status" aria-label="Loading events" className="grid gap-3">
+          {[0, 1, 2].map((row) => (
+            <div key={row} className="h-24 animate-pulse rounded-card bg-card motion-reduce:animate-none" />
+          ))}
+        </div>
+      );
+    case 'error':
+      return (
+        <div role="alert">
+          <p className="text-text-2">{messageFor(events.error)}</p>
+          <Button variant="quiet" className="mt-4 px-4 py-2 text-base" onClick={() => void events.refetch()}>
+            Try again
+          </Button>
+        </div>
+      );
+    case 'success': {
+      if (events.data.length === 0) {
+        return <p className="text-text-2">No events yet. The first one you add will show up here.</p>;
+      }
+      const query = search.trim().toLowerCase();
+      const matches = events.data.filter((event) => event.title.toLowerCase().includes(query));
+      if (matches.length === 0) return <p className="text-text-2">{`No events match "${search.trim()}".`}</p>;
+      return <EventList events={matches} />;
+    }
+  }
 }
