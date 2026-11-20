@@ -21,9 +21,12 @@ export function NewEventPage() {
         submitLabel="Create event"
         saving={create.isPending}
         error={create.isError ? messageFor(create.error) : null}
-        onSave={(values) => {
+        onSave={(values, _changed, picture) => {
           const fields = toEventFields(values);
-          create.mutate(fields, { onSuccess: () => navigate(PATHS.events, { state: savedNotice(fields.title) }) });
+          create.mutate(
+            { fields, picture },
+            { onSuccess: () => navigate(PATHS.events, { state: savedNotice(fields.title) }) },
+          );
         }}
       />
     </main>

@@ -1,9 +1,16 @@
 import { UnavailableError } from '../../src/lib/errors';
 import { createEvent, deleteEvent, getEvent, listEvents, updateEvent } from '../../src/lib/events';
+import type { PictureChange } from '../../src/lib/images';
+import { BUCKETS, removeImage, uploadImage } from '../../src/lib/storage';
 import { getSupabase } from '../../src/lib/supabase';
 import type { Event } from '../../src/types/event';
 
 vi.mock('../../src/lib/supabase');
+vi.mock('../../src/lib/storage', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('../../src/lib/storage')>()),
+  uploadImage: vi.fn(),
+  removeImage: vi.fn(),
+}));
 
 const GOOD_ROW = {
   id: '0b6f9c2e-7a41-4d5b-8e3c-2f1a9b8c7d6e',
@@ -15,8 +22,6 @@ const GOOD_ROW = {
   picture_url: '',
 };
 
-const BUCKET_URL = 'https://lcs.supabase.co/storage/v1/object/public/events-images/';
-
 const EVENT: Event = {
   id: GOOD_ROW.id,
   title: 'CP312 Midterm Review',
@@ -27,26 +32,23 @@ const EVENT: Event = {
   pictureUrl: null,
 };
 
+const OLD_PICTURE = 'https://lcs.supabase.co/storage/v1/object/public/events-images/old.png';
+const NEW_PICTURE = 'https://lcs.supabase.co/storage/v1/object/public/events-images/new.png';
+const NEW_IMAGE = { file: new File(['x'], 'new.png', { type: 'image/png' }), extension: 'png' };
+const KEEP: PictureChange = { kind: 'keep' };
+const REPLACE: PictureChange = { kind: 'replace', image: NEW_IMAGE };
+const REMOVE: PictureChange = { kind: 'remove' };
+
+const FIELDS = { title: 'Hack Night', date: '2026-12-01', time: '7:30PM', location: 'BA110', description: null };
+const SAVED = { data: [{ id: EVENT.id }], error: null };
+const FAILED = { data: null, error: { message: 'boom' } };
+const NOTHING_SAVED = { data: [], error: null };
+
 /** Makes `from('events').select(...).order(...)` answer with `result`, the way supabase-js does. */
 function mockEventsQuery(result: { data: unknown; error: unknown }) {
   const order = vi.fn().mockResolvedValue(result);
   const query = { select: vi.fn(() => ({ order })) };
   vi.mocked(getSupabase).mockReturnValue({ from: vi.fn(() => query) } as unknown as ReturnType<typeof getSupabase>);
-}
-
-/**
- * Makes `from('events').delete().eq(...).select(...)` answer with `deleted`, and storage `remove` with `removed`.
- * Returns the mocks a test checks.
- */
-function mockDelete(deleted: { data: unknown; error: unknown }, removed: { error: unknown } = { error: null }) {
-  const eq = vi.fn(() => ({ select: vi.fn().mockResolvedValue(deleted) }));
-  const remove = vi.fn().mockResolvedValue({ data: null, ...removed });
-  const bucket = { remove, getPublicUrl: vi.fn(() => ({ data: { publicUrl: BUCKET_URL } })) };
-  vi.mocked(getSupabase).mockReturnValue({
-    from: vi.fn(() => ({ delete: vi.fn(() => ({ eq })) })),
-    storage: { from: vi.fn(() => bucket) },
-  } as unknown as ReturnType<typeof getSupabase>);
-  return { eq, remove };
 }
 
 /** Makes `from('events').select(...).eq(...).maybeSingle()` answer with `result`. Returns the `select` mock. */
@@ -71,7 +73,41 @@ function mockUpdate(result: { data: unknown; error: unknown }) {
   return { update, eq };
 }
 
-const FIELDS = { title: 'Hack Night', date: '2026-12-01', time: '7:30PM', location: 'BA110', description: null };
+/** Makes `from('events').delete().eq(...).select(...)` answer with `result`. Returns the `eq` mock. */
+function mockDelete(result: { data: unknown; error: unknown }) {
+  const eq = vi.fn(() => ({ select: vi.fn().mockResolvedValue(result) }));
+  vi.mocked(getSupabase).mockReturnValue({
+    from: vi.fn(() => ({ delete: vi.fn(() => ({ eq })) })),
+  } as unknown as ReturnType<typeof getSupabase>);
+  return eq;
+}
+
+beforeEach(() => vi.mocked(uploadImage).mockResolvedValue(NEW_PICTURE));
+
+describe('listEvents', () => {
+  it('turns rows into events, with an empty picture as no picture', async () => {
+    mockEventsQuery({ data: [GOOD_ROW], error: null });
+
+    expect(await listEvents()).toEqual([EVENT]);
+  });
+
+  it('leaves out a malformed row instead of failing every event', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const badRow = { ...GOOD_ROW, id: '1c7a0d3f-8b52-4e6c-9f4d-3a2b1c0d9e8f', picture_url: 'not a link' };
+    mockEventsQuery({ data: [GOOD_ROW, badRow], error: null });
+
+    const events = await listEvents();
+
+    expect(events.map((event) => event.id)).toEqual([GOOD_ROW.id]);
+    expect(warn).toHaveBeenCalledWith('events.row_skipped', { id: badRow.id, problems: ['pictureUrl'] });
+  });
+
+  it('reports a failed read as unavailable', async () => {
+    mockEventsQuery(FAILED);
+
+    await expect(listEvents()).rejects.toBeInstanceOf(UnavailableError);
+  });
+});
 
 describe('getEvent', () => {
   it('returns the event', async () => {
@@ -94,7 +130,7 @@ describe('getEvent', () => {
   });
 
   it('fails, rather than saying "not found", when the read fails or the row is malformed', async () => {
-    mockGet({ data: null, error: { message: 'boom' } });
+    mockGet(FAILED);
     await expect(getEvent(EVENT.id)).rejects.toBeInstanceOf(UnavailableError);
 
     vi.spyOn(console, 'warn').mockImplementation(() => {});
@@ -104,113 +140,116 @@ describe('getEvent', () => {
 });
 
 describe('createEvent', () => {
-  it('saves the fields as they are', async () => {
-    const insert = mockInsert({ data: [{ id: EVENT.id }], error: null });
+  it('saves the fields as they are, with no picture', async () => {
+    const insert = mockInsert(SAVED);
 
-    await createEvent(FIELDS);
+    await createEvent(FIELDS, KEEP);
 
-    expect(insert).toHaveBeenCalledWith(FIELDS);
+    expect(insert).toHaveBeenCalledWith({ ...FIELDS, picture_url: null });
+    expect(uploadImage).not.toHaveBeenCalled();
+  });
+
+  it('uploads the picture first and saves its public URL', async () => {
+    const insert = mockInsert(SAVED);
+
+    await createEvent(FIELDS, REPLACE);
+
+    expect(uploadImage).toHaveBeenCalledWith(BUCKETS.events, NEW_IMAGE);
+    expect(insert).toHaveBeenCalledWith({ ...FIELDS, picture_url: NEW_PICTURE });
   });
 
   it.each([
-    ['Supabase errors', { data: null, error: { message: 'boom' } }],
-    ['nothing was saved', { data: [], error: null }],
-  ])('fails when %s', async (_, result) => {
+    ['Supabase errors', FAILED],
+    ['nothing was saved', NOTHING_SAVED],
+  ])('fails when %s, and deletes the picture it uploaded', async (_, result) => {
     mockInsert(result);
 
-    await expect(createEvent(FIELDS)).rejects.toThrow('"Hack Night" couldn\'t be saved.');
+    await expect(createEvent(FIELDS, REPLACE)).rejects.toThrow('"Hack Night" couldn\'t be saved.');
+    expect(removeImage).toHaveBeenCalledWith(BUCKETS.events, NEW_PICTURE);
+  });
+
+  it('saves nothing when the picture cannot be uploaded', async () => {
+    const insert = mockInsert(SAVED);
+    vi.mocked(uploadImage).mockRejectedValue(new UnavailableError("The picture couldn't be uploaded."));
+
+    await expect(createEvent(FIELDS, REPLACE)).rejects.toThrow("The picture couldn't be uploaded.");
+    expect(insert).not.toHaveBeenCalled();
   });
 });
 
 describe('updateEvent', () => {
-  it('sends only the changed fields, for that event', async () => {
-    const { update, eq } = mockUpdate({ data: [{ id: EVENT.id }], error: null });
+  const withPicture = { ...EVENT, pictureUrl: OLD_PICTURE };
 
-    await updateEvent(EVENT.id, { location: 'BA201' });
+  it('sends only the changed fields, for that event, and leaves the picture alone', async () => {
+    const { update, eq } = mockUpdate(SAVED);
+
+    await updateEvent(withPicture, { location: 'BA201' }, KEEP);
 
     expect(update).toHaveBeenCalledWith({ location: 'BA201' });
     expect(eq).toHaveBeenCalledWith('id', EVENT.id);
+    expect(uploadImage).not.toHaveBeenCalled();
+    expect(removeImage).not.toHaveBeenCalled();
+  });
+
+  it('replaces the picture: uploads the new one, saves its URL, then deletes the old file', async () => {
+    const { update } = mockUpdate(SAVED);
+
+    await updateEvent(withPicture, {}, REPLACE);
+
+    expect(update).toHaveBeenCalledWith({ picture_url: NEW_PICTURE });
+    expect(removeImage).toHaveBeenCalledWith(BUCKETS.events, OLD_PICTURE);
+  });
+
+  it('removes the picture: clears picture_url, then deletes the file', async () => {
+    const { update } = mockUpdate(SAVED);
+
+    await updateEvent(withPicture, {}, REMOVE);
+
+    expect(update).toHaveBeenCalledWith({ picture_url: null });
+    expect(uploadImage).not.toHaveBeenCalled();
+    expect(removeImage).toHaveBeenCalledWith(BUCKETS.events, OLD_PICTURE);
   });
 
   it.each([
-    ['Supabase errors', { data: null, error: { message: 'boom' } }],
-    ['nothing was changed, as when row-level security refuses it', { data: [], error: null }],
-  ])('fails when %s', async (_, result) => {
+    ['Supabase errors', FAILED],
+    ['nothing was changed, as when row-level security refuses it', NOTHING_SAVED],
+  ])('fails when %s, keeping the old picture and deleting the new upload', async (_, result) => {
     mockUpdate(result);
 
-    await expect(updateEvent(EVENT.id, { location: 'BA201' })).rejects.toThrow("Your changes couldn't be saved.");
-  });
-});
-
-describe('listEvents', () => {
-  it('turns rows into events, with an empty picture as no picture', async () => {
-    mockEventsQuery({ data: [GOOD_ROW], error: null });
-
-    expect(await listEvents()).toEqual([EVENT]);
-  });
-
-  it('leaves out a malformed row instead of failing every event', async () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    const badRow = { ...GOOD_ROW, id: '1c7a0d3f-8b52-4e6c-9f4d-3a2b1c0d9e8f', picture_url: 'not a link' };
-    mockEventsQuery({ data: [GOOD_ROW, badRow], error: null });
-
-    const events = await listEvents();
-
-    expect(events.map((event) => event.id)).toEqual([GOOD_ROW.id]);
-    expect(warn).toHaveBeenCalledWith('events.row_skipped', { id: badRow.id, problems: ['pictureUrl'] });
-  });
-
-  it('reports a failed read as unavailable', async () => {
-    mockEventsQuery({ data: null, error: { message: 'boom' } });
-
-    await expect(listEvents()).rejects.toBeInstanceOf(UnavailableError);
+    await expect(updateEvent(withPicture, {}, REPLACE)).rejects.toThrow("Your changes couldn't be saved.");
+    expect(removeImage).toHaveBeenCalledWith(BUCKETS.events, NEW_PICTURE);
+    expect(removeImage).not.toHaveBeenCalledWith(BUCKETS.events, OLD_PICTURE);
   });
 });
 
 describe('deleteEvent', () => {
-  it('deletes the event and its picture from our bucket', async () => {
-    const { eq, remove } = mockDelete({ data: [{ id: EVENT.id }], error: null });
+  it('deletes the event, then its picture', async () => {
+    const eq = mockDelete(SAVED);
 
-    await deleteEvent({ ...EVENT, pictureUrl: `${BUCKET_URL}midterm%20review.png` });
+    await deleteEvent({ ...EVENT, pictureUrl: OLD_PICTURE });
 
     expect(eq).toHaveBeenCalledWith('id', EVENT.id);
-    expect(remove).toHaveBeenCalledWith(['midterm review.png']);
-  });
-
-  it('leaves a picture linked from somewhere else alone', async () => {
-    const { remove } = mockDelete({ data: [{ id: EVENT.id }], error: null });
-
-    await deleteEvent({ ...EVENT, pictureUrl: 'https://i.imgur.com/abc123.png' });
-
-    expect(remove).not.toHaveBeenCalled();
+    expect(removeImage).toHaveBeenCalledWith(BUCKETS.events, OLD_PICTURE);
   });
 
   it('deletes an event with no picture without touching storage', async () => {
-    const { remove } = mockDelete({ data: [{ id: EVENT.id }], error: null });
+    mockDelete(SAVED);
 
     await deleteEvent(EVENT);
 
-    expect(remove).not.toHaveBeenCalled();
+    expect(removeImage).not.toHaveBeenCalled();
   });
 
   it('fails when Supabase errors', async () => {
-    mockDelete({ data: null, error: { message: 'boom' } });
+    mockDelete(FAILED);
 
     await expect(deleteEvent(EVENT)).rejects.toThrow('"CP312 Midterm Review" couldn\'t be deleted.');
   });
 
-  it('fails when nothing was deleted, as when row-level security refuses it', async () => {
-    const { remove } = mockDelete({ data: [], error: null });
+  it('fails when nothing was deleted, as when row-level security refuses it, and keeps the picture', async () => {
+    mockDelete(NOTHING_SAVED);
 
-    await expect(deleteEvent({ ...EVENT, pictureUrl: `${BUCKET_URL}a.png` })).rejects.toBeInstanceOf(UnavailableError);
-    expect(remove).not.toHaveBeenCalled();
-  });
-
-  it('still counts as deleted when the picture cannot be removed, and logs the leftover file', async () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    mockDelete({ data: [{ id: EVENT.id }], error: null }, { error: { message: 'boom' } });
-
-    await expect(deleteEvent({ ...EVENT, pictureUrl: `${BUCKET_URL}a.png` })).resolves.toBeUndefined();
-    expect(warn).toHaveBeenCalledWith('events.image_not_removed', { id: EVENT.id, path: 'a.png' });
+    await expect(deleteEvent({ ...EVENT, pictureUrl: OLD_PICTURE })).rejects.toBeInstanceOf(UnavailableError);
+    expect(removeImage).not.toHaveBeenCalled();
   });
 });
