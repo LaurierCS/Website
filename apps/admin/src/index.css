@@ -43,6 +43,7 @@
 
   --radius-card: var(--radius);
   --radius-tag: var(--radius-label);
+  --radius-field: var(--radius-sm);
   --ease-brand: var(--ease-out);
 
   /*
@@ -97,6 +98,11 @@
   :focus-visible {
     outline: none;
     box-shadow: var(--focus-ring);
+  }
+
+  /* Search boxes draw their own clear button, so Chrome and Safari's built-in one would be a second ×. */
+  input[type="search"]::-webkit-search-cancel-button {
+    appearance: none;
   }
 }
 
