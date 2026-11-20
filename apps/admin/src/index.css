@@ -27,6 +27,7 @@
   --color-blue-ink: var(--blue-ink);
   --color-ink: var(--ink);
   --color-ink-2: var(--ink-2);
+  --color-titlebar: var(--bg-titlebar);
   --color-text-2: var(--text-2);
   --color-muted: var(--muted);
   --color-discord: var(--discord);
