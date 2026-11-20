@@ -20,6 +20,9 @@ export type Event = Readonly<z.infer<typeof EventSchema>>;
 /** The parts of an event an exec types in. Their names match the `events` columns, so they are saved as they are. */
 export type EventFields = Pick<Event, 'title' | 'date' | 'time' | 'location' | 'description'>;
 
+/** What an event's ticket shows. A ticket for an event still being filled in may not have a day yet. */
+export type TicketFace = Readonly<Pick<Event, 'title' | 'time' | 'location' | 'pictureUrl'> & { date: string | null }>;
+
 /** Whether an event is today or later. `today` is `YYYY-MM-DD` in the club's zone (`clubToday()`). */
 export function isUpcoming(event: Event, today: string): boolean {
   // Both are YYYY-MM-DD, so comparing the text compares the days.
