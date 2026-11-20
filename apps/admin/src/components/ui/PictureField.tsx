@@ -83,16 +83,12 @@ export function PictureField({ id, label, currentUrl, value, onChange }: Picture
             />
           </label>
           {shownUrl && (
-            <Button
-              variant="quiet"
-              className="px-5 py-2 text-base"
-              onClick={() => onChange(currentUrl ? { kind: 'remove' } : { kind: 'keep' })}
-            >
+            <Button variant="quiet" size="small" onClick={() => onChange(currentUrl ? { kind: 'remove' } : { kind: 'keep' })}>
               Remove picture
             </Button>
           )}
           {value.kind === 'remove' && (
-            <Button variant="quiet" className="px-5 py-2 text-base" onClick={() => onChange({ kind: 'keep' })}>
+            <Button variant="quiet" size="small" onClick={() => onChange({ kind: 'keep' })}>
               Keep the current picture
             </Button>
           )}

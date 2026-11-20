@@ -2,9 +2,10 @@
  * The Team section: everyone on the team, hidden members included, grouped by department, with a link to add
  * someone and, on each person, showing or hiding them on the site, editing and deleting.
  */
-import { Link } from 'react-router';
+import { Plus } from 'lucide-react';
 import { MemberCard } from '../components/team/MemberCard';
 import { Button } from '../components/ui/Button';
+import { ButtonLink } from '../components/ui/ButtonLink';
 import { useTeam } from '../hooks/useTeam';
 import { messageFor } from '../lib/errors';
 import { PATHS } from '../paths';
@@ -15,12 +16,9 @@ export function TeamPage() {
     <main className="mx-auto max-w-6xl px-4 py-10 sm:px-8">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <h1 className="text-hero font-extrabold">Team</h1>
-        <Link
-          to={PATHS.newMember}
-          className="inline-flex min-h-11 items-center rounded-full bg-pink px-6 font-display text-lg font-bold text-ink"
-        >
+        <ButtonLink to={PATHS.newMember} variant="primary" size="small" icon={<Plus aria-hidden="true" className="size-4" />}>
           Add member
-        </Link>
+        </ButtonLink>
       </div>
       <div className="mt-8">
         <TeamResults />
@@ -46,7 +44,7 @@ function TeamResults() {
       return (
         <div role="alert">
           <p className="text-text-2">{messageFor(team.error)}</p>
-          <Button variant="quiet" className="mt-4 px-4 py-2 text-base" onClick={() => void team.refetch()}>
+          <Button variant="quiet" size="small" className="mt-4" onClick={() => void team.refetch()}>
             Try again
           </Button>
         </div>

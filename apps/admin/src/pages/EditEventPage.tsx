@@ -37,7 +37,7 @@ function EventToEdit({ id }: { id: string }) {
       return (
         <div role="alert" className="mt-8">
           <p className="text-text-2">{messageFor(event.error)}</p>
-          <Button variant="quiet" className="mt-4 px-4 py-2 text-base" onClick={() => void event.refetch()}>
+          <Button variant="quiet" size="small" className="mt-4" onClick={() => void event.refetch()}>
             Try again
           </Button>
         </div>

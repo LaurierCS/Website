@@ -20,7 +20,7 @@ export function AccountMenu() {
       {/* Below the `header` breakpoint the button is just the icon, so it never wraps; the hidden text still names it. */}
       <Button
         variant="quiet"
-        className="px-4 py-2 text-base whitespace-nowrap"
+        size="small"
         icon={<SignOutIcon />}
         title="Sign out"
         onClick={() => signOut.mutate()}
