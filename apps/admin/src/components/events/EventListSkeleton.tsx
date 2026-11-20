@@ -1,0 +1,22 @@
+/** Grey tickets in the shape of the real ones, shown while the events load. */
+export function EventListSkeleton() {
+  return (
+    <div role="status" aria-label="Loading events" aria-busy="true" className="grid gap-4">
+      {[0, 1, 2, 3].map((ticket) => (
+        <div
+          key={ticket}
+          className="grid animate-pulse overflow-hidden rounded-card bg-card motion-reduce:animate-none md:grid-cols-[8rem_minmax(0,1fr)]"
+        >
+          <div className="h-12 bg-slate md:h-auto" />
+          <div className="flex items-center gap-5 p-4 md:px-6 md:py-5">
+            <div className="size-16 shrink-0 rounded-xl bg-slate md:size-21" />
+            <div className="grid flex-1 gap-3">
+              <div className="h-4 w-1/2 rounded-full bg-slate" />
+              <div className="h-3 w-3/4 rounded-full bg-slate" />
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}

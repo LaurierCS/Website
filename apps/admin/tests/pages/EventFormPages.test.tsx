@@ -57,6 +57,9 @@ describe('NewEventPage', () => {
     );
     expect(await screen.findByText('Saved "Hack Night".')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Events', level: 1 })).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Dismiss' }));
+    expect(screen.queryByText('Saved "Hack Night".')).not.toBeInTheDocument();
   });
 
   it('previews a chosen picture and saves it with the new event', async () => {
