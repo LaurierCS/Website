@@ -1,46 +1,22 @@
 /**
- * The admin's pages and which URL shows each. Every page except the login sits behind `RequireAdmin`, so a
- * signed-out visitor is sent to the login even from an unknown URL. A new section is one `<Route>` inside the
- * admin layout plus one entry in its nav.
+ * The admin app: server data through TanStack Query and pages from `routes.tsx`. It uses React Router's data
+ * router (`createBrowserRouter`), which is what lets a form warn before you leave it with unsaved changes.
  */
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MotionConfig } from 'motion/react';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
-import { AdminLayout } from './components/layout/AdminLayout';
-import { RequireAdmin } from './components/layout/RequireAdmin';
-import { EventsPage } from './pages/EventsPage';
-import { LoginPage } from './pages/LoginPage';
-import { NotFoundPage } from './pages/NotFoundPage';
-import { TeamPage } from './pages/TeamPage';
-import { PATHS } from './paths';
+import { createBrowserRouter, RouterProvider } from 'react-router';
+import { routes } from './routes';
 
 const queryClient = new QueryClient();
+const router = createBrowserRouter(routes);
 
 export function App() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* With "reduce motion" turned on in the device settings, things appear in place instead of moving there. */}
       <MotionConfig reducedMotion="user">
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
+        <RouterProvider router={router} />
       </MotionConfig>
     </QueryClientProvider>
-  );
-}
-
-export function AppRoutes() {
-  return (
-    <Routes>
-      <Route path={PATHS.login} element={<LoginPage />} />
-      <Route element={<RequireAdmin />}>
-        <Route element={<AdminLayout />}>
-          <Route index element={<Navigate to={PATHS.events} replace />} />
-          <Route path={PATHS.events} element={<EventsPage />} />
-          <Route path={PATHS.team} element={<TeamPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Route>
-      </Route>
-    </Routes>
   );
 }
