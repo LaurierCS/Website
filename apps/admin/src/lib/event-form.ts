@@ -3,7 +3,7 @@
  * `EventSchema`, so the form and the rest of the admin can't disagree about them.
  */
 import { z } from 'zod';
-import { type Event, type EventFields, EventSchema } from '../types/event';
+import { type Event, type EventFields, EventSchema, type EventStatus, type TicketFace } from '../types/event';
 import { toPickerTime, toStoredTime } from './dates';
 
 export const EventFormSchema = z.object({
@@ -46,6 +46,27 @@ export function toEventFields(values: EventFormValues): EventFields {
     time: values.time ? toStoredTime(values.time) : null,
     location: values.location.trim() || null,
     description: values.description.trim() || null,
+  };
+}
+
+/**
+ * The ticket for the form as it stands, so it can be seen before it is saved. `savedTime` is a saved time the
+ * picker can't show (`unreadableTime`), kept while the time is left empty, as saving does. `today` is
+ * `YYYY-MM-DD` in the club's zone (`clubToday()`).
+ */
+export function ticketPreview(
+  values: EventFormValues,
+  savedTime: string | null,
+  pictureUrl: string | null,
+  today: string,
+): Readonly<{ face: TicketFace; status: EventStatus }> {
+  const fields = toEventFields(values);
+  const date = EventSchema.shape.date.safeParse(values.date).success ? values.date : null;
+  return {
+    face: { title: fields.title || 'Untitled event', date, time: fields.time ?? savedTime, location: fields.location, pictureUrl },
+    // "Next up" depends on every other event, which the form doesn't load, so a preview is upcoming or past.
+    // Both are YYYY-MM-DD, so comparing the text compares the days.
+    status: date !== null && date < today ? 'past' : 'upcoming',
   };
 }
 
