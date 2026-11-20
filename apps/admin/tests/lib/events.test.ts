@@ -82,7 +82,10 @@ function mockDelete(result: { data: unknown; error: unknown }) {
   return eq;
 }
 
-beforeEach(() => vi.mocked(uploadImage).mockResolvedValue(NEW_PICTURE));
+// Braces matter: a function returned from beforeEach runs as clean-up, and mockResolvedValue returns the mock.
+beforeEach(() => {
+  vi.mocked(uploadImage).mockResolvedValue(NEW_PICTURE);
+});
 
 describe('listEvents', () => {
   it('turns rows into events, with an empty picture as no picture', async () => {
