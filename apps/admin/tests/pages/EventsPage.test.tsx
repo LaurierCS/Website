@@ -120,6 +120,7 @@ describe('EventsPage', () => {
 
     await userEvent.click(screen.getByRole('button', { name: 'Delete CP312 Midterm Review' }));
     const dialog = screen.getByRole('dialog', { name: 'Delete CP312 Midterm Review?' });
+    expect(dialog).toHaveAccessibleDescription("This can't be undone.");
 
     vi.mocked(listEvents).mockResolvedValue([HACK_NIGHT]);
     await userEvent.click(within(dialog).getByRole('button', { name: 'Delete' }));

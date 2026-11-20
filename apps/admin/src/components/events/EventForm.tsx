@@ -6,12 +6,12 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router';
 import { useUnsavedChangesWarning } from '../../hooks/useUnsavedChangesWarning';
 import { type ChangedFields, EventFormSchema, type EventFormValues } from '../../lib/event-form';
 import type { PictureChange } from '../../lib/images';
 import { PATHS } from '../../paths';
 import { Button } from '../ui/Button';
+import { ButtonLink } from '../ui/ButtonLink';
 import { ConfirmDialog } from '../ui/ConfirmDialog';
 import { FormField } from '../ui/FormField';
 import { PictureField } from '../ui/PictureField';
@@ -79,16 +79,14 @@ export function EventForm({ defaultValues, unreadableTime, pictureUrl, submitLab
         <Button type="submit" variant="primary" disabled={saving || !hasChanges}>
           {saving ? 'Saving…' : submitLabel}
         </Button>
-        <Link
-          to={PATHS.events}
-          className="inline-flex min-h-11 items-center rounded-full border-2 border-line px-6 font-display text-lg font-bold text-text-2 hover:border-sky hover:text-sky"
-        >
+        <ButtonLink to={PATHS.events} variant="quiet">
           Cancel
-        </Link>
+        </ButtonLink>
       </div>
 
       {leave.state === 'blocked' && (
         <ConfirmDialog
+          kind="leave"
           question="Leave without saving?"
           confirmLabel="Leave"
           pendingLabel="Leaving…"

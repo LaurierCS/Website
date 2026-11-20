@@ -117,6 +117,7 @@ describe('NewEventPage', () => {
 
     await userEvent.click(screen.getByRole('link', { name: 'Events' }));
     const dialog = screen.getByRole('dialog', { name: 'Leave without saving?' });
+    expect(dialog).toHaveAccessibleDescription("Your changes haven't been saved.");
     await userEvent.click(within(dialog).getByRole('button', { name: 'Cancel' }));
     expect(screen.getByLabelText('Title')).toHaveValue('Hack Night');
 
