@@ -2,14 +2,16 @@
  * One event in the list: its picture, title, when and where, whether it's coming up, and links to edit or
  * delete it. A card on a phone; a row of columns on wider screens.
  */
+import { Pencil, Trash } from 'lucide-react';
 import { useState } from 'react';
-import { generatePath, Link } from 'react-router';
+import { generatePath } from 'react-router';
 import { useDeleteEvent } from '../../hooks/useEvents';
 import { formatEventDay } from '../../lib/dates';
 import { messageFor } from '../../lib/errors';
 import { PATHS } from '../../paths';
 import { type Event, isUpcoming } from '../../types/event';
 import { Button } from '../ui/Button';
+import { ButtonLink } from '../ui/ButtonLink';
 import { ConfirmDialog } from '../ui/ConfirmDialog';
 
 type EventRowProps = {
@@ -46,16 +48,19 @@ export function EventRow({ event, today }: EventRowProps) {
       <p className="col-start-2 text-text-2 md:col-start-auto">{event.location ?? 'Location TBA'}</p>
       <div className="col-span-2 mt-3 flex gap-2 md:col-span-1 md:mt-0">
         {/* Every row has an Edit and a Delete, so each one's name says which event it is for. */}
-        <Link
+        <ButtonLink
           to={generatePath(PATHS.editEvent, { id: event.id })}
+          variant="quiet"
+          size="small"
+          icon={<Pencil aria-hidden="true" className="size-4" />}
           aria-label={`Edit ${event.title}`}
-          className="inline-flex min-h-11 items-center rounded-full border-2 border-line px-5 font-display font-bold text-text-2 hover:border-sky hover:text-sky"
         >
           Edit
-        </Link>
+        </ButtonLink>
         <Button
-          variant="quiet"
-          className="min-h-11 px-5 py-0 text-base"
+          variant="danger-quiet"
+          size="small"
+          icon={<Trash aria-hidden="true" className="size-4" />}
           aria-label={`Delete ${event.title}`}
           onClick={() => setConfirming(true)}
         >
@@ -65,6 +70,7 @@ export function EventRow({ event, today }: EventRowProps) {
 
       {confirming && (
         <ConfirmDialog
+          kind="delete"
           question={`Delete ${event.title}?`}
           confirmLabel="Delete"
           pendingLabel="Deleting…"

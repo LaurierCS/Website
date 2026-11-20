@@ -2,13 +2,15 @@
  * One team member: photo (or their initial), name, role, profile links, a switch that shows or hides them on the
  * public site and saves straight away, and links to edit or delete them.
  */
+import { Pencil, Trash } from 'lucide-react';
 import { useState } from 'react';
-import { generatePath, Link } from 'react-router';
+import { generatePath } from 'react-router';
 import { useDeleteMember, useSetMemberPublic } from '../../hooks/useTeam';
 import { messageFor } from '../../lib/errors';
 import { PATHS } from '../../paths';
 import type { TeamMember } from '../../types/team';
 import { Button } from '../ui/Button';
+import { ButtonLink } from '../ui/ButtonLink';
 import { ConfirmDialog } from '../ui/ConfirmDialog';
 import { ProfileIcon, type ProfileSite } from '../ui/ProfileIcon';
 
@@ -72,16 +74,19 @@ export function MemberCard({ member }: { member: TeamMember }) {
           {/* A fixed width, so switching between the two words doesn't shift the buttons next to it. */}
           <span className="w-24 text-left">{shown ? 'On the site' : 'Hidden'}</span>
         </button>
-        <Link
+        <ButtonLink
           to={generatePath(PATHS.editMember, { id: member.id })}
+          variant="quiet"
+          size="small"
+          icon={<Pencil aria-hidden="true" className="size-4" />}
           aria-label={`Edit ${member.name}`}
-          className="inline-flex min-h-11 items-center rounded-full border-2 border-line px-5 font-display font-bold text-text-2 hover:border-sky hover:text-sky"
         >
           Edit
-        </Link>
+        </ButtonLink>
         <Button
-          variant="quiet"
-          className="min-h-11 px-5 py-0 text-base"
+          variant="danger-quiet"
+          size="small"
+          icon={<Trash aria-hidden="true" className="size-4" />}
           aria-label={`Delete ${member.name}`}
           onClick={() => setConfirming(true)}
         >
@@ -97,6 +102,7 @@ export function MemberCard({ member }: { member: TeamMember }) {
 
       {confirming && (
         <ConfirmDialog
+          kind="delete"
           question={`Delete ${member.name}?`}
           confirmLabel="Delete"
           pendingLabel="Deleting…"
