@@ -1,4 +1,4 @@
-import { checkImage } from '../../src/lib/images';
+import { checkImage, fileSize } from '../../src/lib/images';
 
 /** A file of a given type and size, without allocating the bytes. */
 function fileOf(type: string, sizeMb = 1, name = 'poster') {
@@ -35,5 +35,16 @@ describe('checkImage', () => {
 
   it('accepts a picture of exactly 5 MB', () => {
     expect(checkImage(fileOf('image/png', 5)).kind).toBe('accepted');
+  });
+});
+
+describe('fileSize', () => {
+  it.each([
+    [1.24, '1.2 MB'],
+    [5, '5.0 MB'],
+    [0.5, '512 KB'],
+    [0.0000001, '1 KB'],
+  ])('writes %f MB as %j', (sizeMb, words) => {
+    expect(fileSize(fileOf('image/png', sizeMb))).toBe(words);
   });
 });

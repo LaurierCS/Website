@@ -32,10 +32,16 @@ export function checkImage(file: File): ImageCheck {
     return { kind: 'rejected', reason: `That file isn't a picture we can use. Choose a ${TYPE_NAMES}.` };
   }
   if (file.size > MAX_BYTES) {
-    const sizeMb = (file.size / 1024 / 1024).toFixed(1);
-    return { kind: 'rejected', reason: `That picture is ${sizeMb} MB. Pictures can be up to ${MAX_MB} MB.` };
+    return { kind: 'rejected', reason: `That picture is ${fileSize(file)}. Pictures can be up to ${MAX_MB} MB.` };
   }
   return { kind: 'accepted', image: { file, extension } };
+}
+
+/** A file's size in words: "1.2 MB", or "340 KB" under a megabyte so a small file never reads "0.0 MB". */
+export function fileSize(file: File): string {
+  const kilobytes = file.size / 1024;
+  if (kilobytes < 1024) return `${Math.max(1, Math.round(kilobytes))} KB`;
+  return `${(kilobytes / 1024).toFixed(1)} MB`;
 }
 
 /** What saving does to a picture: leave it, put a new one in its place, or take it off. */
