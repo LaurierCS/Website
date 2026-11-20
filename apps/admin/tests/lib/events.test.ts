@@ -1,5 +1,5 @@
 import { UnavailableError } from '../../src/lib/errors';
-import { deleteEvent, listEvents } from '../../src/lib/events';
+import { createEvent, deleteEvent, getEvent, listEvents, updateEvent } from '../../src/lib/events';
 import { getSupabase } from '../../src/lib/supabase';
 import type { Event } from '../../src/types/event';
 
@@ -48,6 +48,99 @@ function mockDelete(deleted: { data: unknown; error: unknown }, removed: { error
   } as unknown as ReturnType<typeof getSupabase>);
   return { eq, remove };
 }
+
+/** Makes `from('events').select(...).eq(...).maybeSingle()` answer with `result`. Returns the `select` mock. */
+function mockGet(result: { data: unknown; error: unknown }) {
+  const select = vi.fn(() => ({ eq: vi.fn(() => ({ maybeSingle: vi.fn().mockResolvedValue(result) })) }));
+  vi.mocked(getSupabase).mockReturnValue({ from: vi.fn(() => ({ select })) } as unknown as ReturnType<typeof getSupabase>);
+  return select;
+}
+
+/** Makes `from('events').insert(...).select(...)` answer with `result`. Returns the `insert` mock. */
+function mockInsert(result: { data: unknown; error: unknown }) {
+  const insert = vi.fn(() => ({ select: vi.fn().mockResolvedValue(result) }));
+  vi.mocked(getSupabase).mockReturnValue({ from: vi.fn(() => ({ insert })) } as unknown as ReturnType<typeof getSupabase>);
+  return insert;
+}
+
+/** Makes `from('events').update(...).eq(...).select(...)` answer with `result`. Returns the mocks a test checks. */
+function mockUpdate(result: { data: unknown; error: unknown }) {
+  const eq = vi.fn(() => ({ select: vi.fn().mockResolvedValue(result) }));
+  const update = vi.fn(() => ({ eq }));
+  vi.mocked(getSupabase).mockReturnValue({ from: vi.fn(() => ({ update })) } as unknown as ReturnType<typeof getSupabase>);
+  return { update, eq };
+}
+
+const FIELDS = { title: 'Hack Night', date: '2026-12-01', time: '7:30PM', location: 'BA110', description: null };
+
+describe('getEvent', () => {
+  it('returns the event', async () => {
+    mockGet({ data: GOOD_ROW, error: null });
+
+    expect(await getEvent(EVENT.id)).toEqual(EVENT);
+  });
+
+  it('returns null when there is no such event', async () => {
+    mockGet({ data: null, error: null });
+
+    expect(await getEvent(EVENT.id)).toBeNull();
+  });
+
+  it('returns null for an id that is not an id, without asking Supabase', async () => {
+    const select = mockGet({ data: null, error: null });
+
+    expect(await getEvent('not-an-id')).toBeNull();
+    expect(select).not.toHaveBeenCalled();
+  });
+
+  it('fails, rather than saying "not found", when the read fails or the row is malformed', async () => {
+    mockGet({ data: null, error: { message: 'boom' } });
+    await expect(getEvent(EVENT.id)).rejects.toBeInstanceOf(UnavailableError);
+
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    mockGet({ data: { ...GOOD_ROW, picture_url: 'not a link' }, error: null });
+    await expect(getEvent(EVENT.id)).rejects.toBeInstanceOf(UnavailableError);
+  });
+});
+
+describe('createEvent', () => {
+  it('saves the fields as they are', async () => {
+    const insert = mockInsert({ data: [{ id: EVENT.id }], error: null });
+
+    await createEvent(FIELDS);
+
+    expect(insert).toHaveBeenCalledWith(FIELDS);
+  });
+
+  it.each([
+    ['Supabase errors', { data: null, error: { message: 'boom' } }],
+    ['nothing was saved', { data: [], error: null }],
+  ])('fails when %s', async (_, result) => {
+    mockInsert(result);
+
+    await expect(createEvent(FIELDS)).rejects.toThrow('"Hack Night" couldn\'t be saved.');
+  });
+});
+
+describe('updateEvent', () => {
+  it('sends only the changed fields, for that event', async () => {
+    const { update, eq } = mockUpdate({ data: [{ id: EVENT.id }], error: null });
+
+    await updateEvent(EVENT.id, { location: 'BA201' });
+
+    expect(update).toHaveBeenCalledWith({ location: 'BA201' });
+    expect(eq).toHaveBeenCalledWith('id', EVENT.id);
+  });
+
+  it.each([
+    ['Supabase errors', { data: null, error: { message: 'boom' } }],
+    ['nothing was changed, as when row-level security refuses it', { data: [], error: null }],
+  ])('fails when %s', async (_, result) => {
+    mockUpdate(result);
+
+    await expect(updateEvent(EVENT.id, { location: 'BA201' })).rejects.toThrow("Your changes couldn't be saved.");
+  });
+});
 
 describe('listEvents', () => {
   it('turns rows into events, with an empty picture as no picture', async () => {

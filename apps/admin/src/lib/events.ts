@@ -1,9 +1,10 @@
 /**
- * Reading and deleting events in Supabase. Rows are checked and turned into `Event`s here, once, so pages get
- * typed data.
+ * Reading, adding, changing and deleting events in Supabase. Rows are checked and turned into `Event`s here,
+ * once, so pages get typed data.
  */
+import { z } from 'zod';
 import type { Database } from '../types/database.types';
-import { type Event, EventSchema } from '../types/event';
+import { type Event, type EventFields, EventSchema } from '../types/event';
 import { UnavailableError } from './errors';
 import { getSupabase } from './supabase';
 
@@ -23,6 +24,44 @@ export async function listEvents(): Promise<readonly Event[]> {
   const { data, error } = await getSupabase().from('events').select(COLUMNS).order('date', { ascending: false });
   if (error) throw new UnavailableError('Events could not be loaded.', { cause: error });
   return data.flatMap((row) => toEvent(row) ?? []);
+}
+
+/**
+ * One event by id, or null when there is no such event (including an id that isn't a valid id at all).
+ * @throws UnavailableError when Supabase cannot be reached, or the saved event has data the admin can't read.
+ */
+export async function getEvent(id: string): Promise<Event | null> {
+  // The id comes from the URL; anything that isn't a uuid can't be an event, so don't ask Supabase.
+  if (!z.uuid().safeParse(id).success) return null;
+  const { data, error } = await getSupabase().from('events').select(COLUMNS).eq('id', id).maybeSingle();
+  if (error) throw new UnavailableError('This event could not be loaded.', { cause: error });
+  if (!data) return null;
+  const event = toEvent(data);
+  if (!event) throw new UnavailableError("This event has saved data the admin can't read. It needs fixing in Supabase.");
+  return event;
+}
+
+/**
+ * Adds an event with no picture yet.
+ * @throws UnavailableError when it could not be saved (Supabase down, or the insert was refused).
+ */
+export async function createEvent(fields: EventFields): Promise<void> {
+  const failure = `"${fields.title}" couldn't be saved.`;
+  const { data, error } = await getSupabase().from('events').insert(fields).select('id');
+  if (error) throw new UnavailableError(failure, { cause: error });
+  if (data.length === 0) throw new UnavailableError(failure);
+}
+
+/**
+ * Saves only the fields given, so anything the exec didn't touch stays exactly as it was.
+ * @throws UnavailableError when it could not be saved (Supabase down, the event is gone, or the update was refused).
+ */
+export async function updateEvent(id: string, changes: Partial<EventFields>): Promise<void> {
+  const failure = "Your changes couldn't be saved.";
+  const { data, error } = await getSupabase().from('events').update(changes).eq('id', id).select('id');
+  if (error) throw new UnavailableError(failure, { cause: error });
+  // Row-level security refuses an update by changing nothing rather than by failing, so check a row came back.
+  if (data.length === 0) throw new UnavailableError(failure);
 }
 
 /**
