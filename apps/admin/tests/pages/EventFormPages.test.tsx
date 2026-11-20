@@ -114,6 +114,50 @@ describe('NewEventPage', () => {
     expect(screen.getByLabelText('Title')).toHaveValue('Hack Night');
   });
 
+  it('prints the ticket as you type, so it can be checked before saving', async () => {
+    renderApp('/events/new');
+    // The printed ticket repeats the form for the eyes only, so it is hidden from screen readers.
+    const printed = (title: string) => screen.queryByRole('heading', { name: title, hidden: true });
+
+    expect(await screen.findByLabelText('Title')).toBeInTheDocument();
+    expect(printed('Untitled event')).toBeInTheDocument();
+    expect(screen.getByText('Day not set')).toBeInTheDocument();
+
+    await userEvent.type(screen.getByLabelText('Title'), 'Hack Night');
+    await userEvent.type(screen.getByLabelText('Date'), '2026-12-01');
+
+    expect(printed('Hack Night')).toBeInTheDocument();
+    expect(screen.getByText('Tuesday, December 1, 2026')).toBeInTheDocument();
+  });
+
+  it('marks the title and date as required', async () => {
+    renderApp('/events/new');
+
+    expect(await screen.findByLabelText('Title')).toBeRequired();
+    expect(screen.getByLabelText('Date')).toBeRequired();
+    expect(screen.getByLabelText('Location')).not.toBeRequired();
+  });
+
+  it('moves focus to the save failure, so it is not missed', async () => {
+    vi.mocked(createEvent).mockRejectedValue(new UnavailableError('"Hack Night" couldn\'t be saved.'));
+    renderApp('/events/new');
+
+    await userEvent.type(await screen.findByLabelText('Title'), 'Hack Night');
+    await userEvent.type(screen.getByLabelText('Date'), '2026-12-01');
+    await userEvent.click(screen.getByRole('button', { name: 'Create event' }));
+
+    expect(await screen.findByRole('alert')).toHaveFocus();
+  });
+
+  it("names a chosen picture and says it isn't saved yet", async () => {
+    renderApp('/events/new');
+
+    await userEvent.upload(await screen.findByLabelText(/Choose a picture/), POSTER);
+
+    expect(await screen.findByText('poster.png')).toBeInTheDocument();
+    expect(screen.getByText('1 KB · not saved yet')).toBeInTheDocument();
+  });
+
   it('asks before leaving with unsaved changes, and stays when told to', async () => {
     renderApp('/events/new');
     await userEvent.type(await screen.findByLabelText('Title'), 'Hack Night');
@@ -169,6 +213,20 @@ describe('EditEventPage', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Save changes' }));
 
     expect(updateEvent).toHaveBeenCalledWith(event, {}, { kind: 'replace', image: { file: POSTER, extension: 'png' } });
+  });
+
+  it('goes back to the current picture after choosing a new one', async () => {
+    vi.mocked(getEvent).mockResolvedValue({ ...CP312_REVIEW, pictureUrl: PICTURE_URL });
+    renderApp(`/events/${CP312_REVIEW.id}`);
+
+    expect(await screen.findByText('Current picture')).toBeInTheDocument();
+    await userEvent.upload(screen.getByLabelText(/Choose a different picture/), POSTER);
+    await screen.findByRole('img', { name: 'The new picture' });
+
+    await userEvent.click(screen.getByRole('button', { name: 'Keep the current picture' }));
+
+    expect(screen.getByRole('img', { name: 'The current picture' })).toHaveAttribute('src', PICTURE_URL);
+    expect(screen.getByRole('button', { name: 'Save changes' })).toBeDisabled();
   });
 
   it('removes the picture, and can be talked out of it', async () => {

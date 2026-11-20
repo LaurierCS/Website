@@ -1,27 +1,34 @@
 /**
- * Choosing a picture: pick a file (or drag one in on a computer), see it before saving, or remove the current
- * one. Only files `checkImage` accepts get through; anything else shows why under the field. Nothing is
- * uploaded here: the field reports a `PictureChange` and saving applies it.
+ * Choosing a picture: pick a file (or drag one in on a computer), see it as a taped print before saving, or
+ * remove the current one. Only files `checkImage` accepts get through; anything else shows why under the field.
+ * Nothing is uploaded here: the field reports a `PictureChange` and saving applies it.
  */
+import { RotateCw, Trash, Upload } from 'lucide-react';
 import { useState } from 'react';
-import { usePreviewUrl } from '../../hooks/usePreviewUrl';
-import { ACCEPTED_IMAGE_TYPES, checkImage, IMAGE_RULES, type PictureChange } from '../../lib/images';
+import { ACCEPTED_IMAGE_TYPES, checkImage, fileSize, IMAGE_RULES, type PictureChange } from '../../lib/images';
 import { Button } from './Button';
+import { buttonClasses } from './button-styles';
+import { FieldError } from './FieldError';
+import { type DropTargetProps, PictureDropZone } from './PictureDropZone';
+import { PicturePrint } from './PicturePrint';
 
 type PictureFieldProps = {
   id: string;
   label: string;
   /** The picture saved now, if any. */
   currentUrl: string | null;
+  /** The picture to show for `value`, from `useShownPicture`. */
+  shownUrl: string | null;
   value: PictureChange;
   onChange: (change: PictureChange) => void;
 };
 
-export function PictureField({ id, label, currentUrl, value, onChange }: PictureFieldProps) {
+export function PictureField({ id, label, currentUrl, shownUrl, value, onChange }: PictureFieldProps) {
   const [problem, setProblem] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
-  const previewUrl = usePreviewUrl(value.kind === 'replace' ? value.image.file : null);
-  const shownUrl = value.kind === 'replace' ? previewUrl : value.kind === 'keep' ? currentUrl : null;
+  const newFile = value.kind === 'replace' ? value.image.file : null;
+  const rulesId = `${id}-rules`;
+  const problemId = `${id}-problem`;
 
   function choose(file: File | undefined) {
     if (!file) return;
@@ -34,74 +41,111 @@ export function PictureField({ id, label, currentUrl, value, onChange }: Picture
     onChange({ kind: 'replace', image: check.image });
   }
 
+  // Files can be dropped on the empty zone, or on "Choose a different picture" when a picture is shown.
+  const dropTarget: DropTargetProps = {
+    onDragOver: (event) => {
+      event.preventDefault();
+      setDragging(true);
+    },
+    onDragLeave: (event) => {
+      // Moving onto the target's own icon or text fires a leave too; only leaving the target counts.
+      if (event.relatedTarget instanceof Node && event.currentTarget.contains(event.relatedTarget)) return;
+      setDragging(false);
+    },
+    onDrop: (event) => {
+      event.preventDefault();
+      setDragging(false);
+      choose(event.dataTransfer.files[0]);
+    },
+  };
+
+  const fileInput = (
+    <input
+      id={id}
+      type="file"
+      accept={ACCEPTED_IMAGE_TYPES}
+      aria-describedby={problem ? `${rulesId} ${problemId}` : rulesId}
+      className="sr-only"
+      onChange={(event) => {
+        choose(event.target.files?.[0]);
+        // Clear it so choosing the same file again still counts as a change.
+        event.target.value = '';
+      }}
+    />
+  );
+
   return (
     <fieldset>
-      <legend className="font-display text-lg font-bold">{label}</legend>
-      <div className="mt-2 flex flex-wrap items-start gap-4">
-        {shownUrl ? (
-          <img
-            src={shownUrl}
-            alt={value.kind === 'replace' ? 'The new picture' : 'The current picture'}
-            className="h-32 w-auto max-w-full rounded-xl object-cover"
-          />
-        ) : (
-          <div className="grid h-32 w-48 place-items-center rounded-xl border-2 border-dashed border-line p-3 text-center text-sm text-muted">
-            {value.kind === 'remove' ? 'The picture will be removed when you save.' : 'No picture'}
-          </div>
-        )}
+      <legend className="mb-2 font-display text-base font-bold text-white">{label}</legend>
 
-        <div className="grid gap-2">
-          <label
-            htmlFor={id}
-            onDragOver={(event) => {
-              event.preventDefault();
-              setDragging(true);
-            }}
-            onDragLeave={() => setDragging(false)}
-            onDrop={(event) => {
-              event.preventDefault();
-              setDragging(false);
-              choose(event.dataTransfer.files[0]);
-            }}
-            className={`inline-flex min-h-11 cursor-pointer items-center rounded-xl border-2 border-dashed px-5 py-3 font-display font-bold focus-within:shadow-(--focus-ring) ${
-              dragging ? 'border-sky text-sky' : 'border-line text-text-2 hover:border-sky hover:text-sky'
-            }`}
-          >
-            {shownUrl ? 'Choose a different picture' : 'Choose a picture'}
-            <span className="hidden sm:inline">&nbsp;or drag one here</span>
-            <input
-              id={id}
-              type="file"
-              accept={ACCEPTED_IMAGE_TYPES}
-              aria-describedby={problem ? `${id}-rules ${id}-problem` : `${id}-rules`}
-              className="sr-only"
-              onChange={(event) => {
-                choose(event.target.files?.[0]);
-                // Clear it so choosing the same file again still counts as a change.
-                event.target.value = '';
-              }}
-            />
-          </label>
-          {shownUrl && (
-            <Button variant="quiet" size="small" onClick={() => onChange(currentUrl ? { kind: 'remove' } : { kind: 'keep' })}>
-              Remove picture
-            </Button>
-          )}
-          {value.kind === 'remove' && (
-            <Button variant="quiet" size="small" onClick={() => onChange({ kind: 'keep' })}>
-              Keep the current picture
-            </Button>
-          )}
+      {shownUrl ? (
+        <div className="flex flex-wrap items-start gap-5">
+          <PicturePrint url={shownUrl} alt={newFile ? 'The new picture' : 'The current picture'} settle={Boolean(newFile)} />
+          <div className="grid min-w-0 gap-2.5">
+            <div>
+              {newFile && <p className="truncate text-sm font-semibold text-white">{newFile.name}</p>}
+              <p className="text-sm font-medium text-text-2">
+                {newFile ? `${fileSize(newFile)} · not saved yet` : 'Current picture'}
+              </p>
+            </div>
+            <label
+              htmlFor={id}
+              {...dropTarget}
+              // While a file is dragged over it, a dashed outline marks it as somewhere to drop. An outline, so it
+              // never fights the button's own border and colours.
+              className={`${buttonClasses('quiet', 'small')} w-fit cursor-pointer focus-within:shadow-(--focus-ring) ${dragging ? 'outline-2 outline-offset-2 outline-sky outline-dashed' : ''}`}
+            >
+              <Upload aria-hidden="true" className="size-4" />
+              Choose a different picture
+              {fileInput}
+            </label>
+            <p id={rulesId} className="sr-only">
+              {IMAGE_RULES}
+            </p>
+            {newFile && currentUrl ? (
+              <KeepCurrentButton onClick={() => onChange({ kind: 'keep' })} />
+            ) : (
+              <Button
+                variant="danger-quiet"
+                size="small"
+                className="w-fit"
+                icon={<Trash aria-hidden="true" className="size-4" />}
+                // A new picture with nothing saved before goes back to none; a saved picture is marked for removal.
+                onClick={() => onChange(newFile ? { kind: 'keep' } : { kind: 'remove' })}
+              >
+                Remove picture
+              </Button>
+            )}
+          </div>
         </div>
-      </div>
-      <p id={`${id}-rules`} className="mt-2 text-sm text-text-2">
-        {IMAGE_RULES}
-      </p>
-      {problem && (
-        <p id={`${id}-problem`} className="mt-1 text-sm font-medium text-orange">
-          {problem}
-        </p>
+      ) : (
+        <>
+          <PictureDropZone
+            inputId={id}
+            rulesId={rulesId}
+            dragging={dragging}
+            invalid={Boolean(problem)}
+            dropTarget={dropTarget}
+            fileInput={fileInput}
+          />
+          {value.kind === 'remove' && (
+            <div className="mt-3 flex flex-wrap items-center gap-3">
+              <p className="text-sm font-medium text-text-2">The picture will be removed when you save.</p>
+              <KeepCurrentButton onClick={() => onChange({ kind: 'keep' })} />
+            </div>
+          )}
+        </>
       )}
+
+      {problem && <FieldError id={problemId}>{problem}</FieldError>}
     </fieldset>
+  );
+}
+
+function KeepCurrentButton({ onClick }: { onClick: () => void }) {
+  return (
+    <Button variant="quiet" size="small" className="w-fit" icon={<RotateCw aria-hidden="true" className="size-4" />} onClick={onClick}>
+      Keep the current picture
+    </Button>
   );
 }
