@@ -2,10 +2,12 @@
  * The Events section, where the admin lands after sign-in: every event, newest first, with a title search, a
  * link to add one, and edit and delete on each. After a save it says which event was saved.
  */
+import { Plus } from 'lucide-react';
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router';
+import { useLocation } from 'react-router';
 import { EventList } from '../components/events/EventList';
 import { Button } from '../components/ui/Button';
+import { ButtonLink } from '../components/ui/ButtonLink';
 import { useEvents } from '../hooks/useEvents';
 import { messageFor } from '../lib/errors';
 import { savedNameFrom } from '../lib/saved-notice';
@@ -24,12 +26,9 @@ export function EventsPage() {
       )}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <h1 className="text-hero font-extrabold">Events</h1>
-        <Link
-          to={PATHS.newEvent}
-          className="inline-flex min-h-11 items-center rounded-full bg-pink px-6 font-display text-lg font-bold text-ink"
-        >
+        <ButtonLink to={PATHS.newEvent} variant="primary" size="small" icon={<Plus aria-hidden="true" className="size-4" />}>
           New event
-        </Link>
+        </ButtonLink>
       </div>
 
       <label className="mt-8 block max-w-md">
@@ -67,7 +66,7 @@ function EventResults({ search }: { search: string }) {
       return (
         <div role="alert">
           <p className="text-text-2">{messageFor(events.error)}</p>
-          <Button variant="quiet" className="mt-4 px-4 py-2 text-base" onClick={() => void events.refetch()}>
+          <Button variant="quiet" size="small" className="mt-4" onClick={() => void events.refetch()}>
             Try again
           </Button>
         </div>
