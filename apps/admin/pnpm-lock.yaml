@@ -14,6 +14,9 @@ importers:
       '@fontsource-variable/montserrat':
         specifier: ^5.3.0
         version: 5.3.0
+      '@hookform/resolvers':
+        specifier: 7.0.7
+        version: 7.0.7(react-hook-form@7.92.0(@types/react@19.3.0)(react@19.3.1))(zod@4.6.7)
       '@supabase/supabase-js':
         specifier: ^2.119.1
         version: 2.119.1
@@ -29,6 +32,9 @@ importers:
       react-dom:
         specifier: ^19.3.1
         version: 19.3.1(react@19.3.1)
+      react-hook-form:
+        specifier: 7.92.0
+        version: 7.92.0(@types/react@19.3.0)(react@19.3.1)
       react-router:
         specifier: ^8.5.2
         version: 8.5.2(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
@@ -122,6 +128,81 @@ packages:
 
   '@fontsource-variable/montserrat@5.3.0':
     resolution: {integrity: sha512-7PaZoxaxrWLAyrhO46v65An9LhUhfkTExWLhfbywYZCnZEgg/W1rEHnlNmZKjNZ3nJTVYyicqxlJt10z/26yTA==}
+
+  '@hookform/resolvers@7.0.7':
+    resolution: {integrity: sha512-sxiEGu5dhg6gMEsGznEQ/++634YiRLmxclw+/B1+yNN9uuhKIfNCRTE4xwqkRcKNqBPwtmDXg5oDhLw3i/wklw==}
+    peerDependencies:
+      '@standard-schema/spec': ^1.0.0
+      '@vinejs/vine': ^2.0.0 || ^3.0.0 || ^4.0.0
+      ajv: ^8.12.0
+      ajv-errors: ^3.0.0
+      ajv-formats: ^2.1.1 || ^3.0.0
+      arktype: ^2.0.0
+      ata-validator: ^1.23.0
+      class-transformer: '>=0.4.0'
+      class-validator: '>=0.12.0'
+      computed-types: ^1.0.0
+      effect: ^4.0.0
+      fluentvalidation-ts: ^3.0.0
+      fp-ts: ^2.7.0
+      io-ts: ^2.0.0
+      joi: ^17.0.0 || ^18.0.0
+      nope-validator: '>=0.12.0'
+      react-hook-form: ^7.55.0
+      superstruct: '>=0.12.0'
+      typanion: ^3.3.2
+      typebox: ^1.0.0
+      valibot: '>=0.31.0 || ^1.0.0-beta.4 || ^1.0.0-rc'
+      vest: '>=6.0.0'
+      yup: ^1.0.0
+      zod: ^3.25.0 || ^4.0.0
+    peerDependenciesMeta:
+      '@standard-schema/spec':
+        optional: true
+      '@vinejs/vine':
+        optional: true
+      ajv:
+        optional: true
+      ajv-errors:
+        optional: true
+      ajv-formats:
+        optional: true
+      arktype:
+        optional: true
+      ata-validator:
+        optional: true
+      class-transformer:
+        optional: true
+      class-validator:
+        optional: true
+      computed-types:
+        optional: true
+      effect:
+        optional: true
+      fluentvalidation-ts:
+        optional: true
+      fp-ts:
+        optional: true
+      io-ts:
+        optional: true
+      joi:
+        optional: true
+      nope-validator:
+        optional: true
+      superstruct:
+        optional: true
+      typanion:
+        optional: true
+      typebox:
+        optional: true
+      valibot:
+        optional: true
+      vest:
+        optional: true
+      yup:
+        optional: true
+      zod:
+        optional: true
 
   '@jridgewell/gen-mapping@0.3.13':
     resolution: {integrity: sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA==}
@@ -377,6 +458,9 @@ packages:
 
   '@rolldown/pluginutils@1.1.1':
     resolution: {integrity: sha512-glFIJDvLNDtJhT9qrMFWLPbvS+skxgt4L0K8Ei2YtnhPysAJnsI7nyxSJxKj4ADeKX0OLjC4ntRkwpLOoS3rwA==}
+
+  '@standard-schema/utils@0.3.0':
+    resolution: {integrity: sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==}
 
   '@supabase/auth-js@2.119.1':
     resolution: {integrity: sha512-EE7nQBWvNbfRPTDaPuDlpKqa+be+HFm29iuOFeoWSH+kWGdkTb1dif8Beu70TOaZyPauLuP8++ksbrlxbK4vyA==}
@@ -1035,6 +1119,16 @@ packages:
     peerDependencies:
       react: ^19.3.1
 
+  react-hook-form@7.92.0:
+    resolution: {integrity: sha512-O5ILyY5fYHN7N13Pfxpe55KboyNFsJdM03BHpshQkClJd8raugiAUGY7VjifITrfhVxyx81ko25azXCoayhf1w==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      '@types/react': '*'
+      react: ^16.8.0 || ^17 || ^18 || ^19
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+
   react-is@17.0.2:
     resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
 
@@ -1292,6 +1386,13 @@ snapshots:
 
   '@fontsource-variable/montserrat@5.3.0': {}
 
+  '@hookform/resolvers@7.0.7(react-hook-form@7.92.0(@types/react@19.3.0)(react@19.3.1))(zod@4.6.7)':
+    dependencies:
+      '@standard-schema/utils': 0.3.0
+      react-hook-form: 7.92.0(@types/react@19.3.0)(react@19.3.1)
+    optionalDependencies:
+      zod: 4.6.7
+
   '@jridgewell/gen-mapping@0.3.13':
     dependencies:
       '@jridgewell/sourcemap-codec': 1.6.0
@@ -1432,6 +1533,8 @@ snapshots:
     optional: true
 
   '@rolldown/pluginutils@1.1.1': {}
+
+  '@standard-schema/utils@0.3.0': {}
 
   '@supabase/auth-js@2.119.1':
     dependencies:
@@ -1938,6 +2041,12 @@ snapshots:
     dependencies:
       react: 19.3.1
       scheduler: 0.28.0
+
+  react-hook-form@7.92.0(@types/react@19.3.0)(react@19.3.1):
+    dependencies:
+      react: 19.3.1
+    optionalDependencies:
+      '@types/react': 19.3.0
 
   react-is@17.0.2: {}
 
