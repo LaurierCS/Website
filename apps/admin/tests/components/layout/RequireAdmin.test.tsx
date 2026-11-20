@@ -58,7 +58,8 @@ describe('RequireAdmin', () => {
     renderApp('/');
 
     expect(await screen.findByText('Sam Rivera')).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Events', level: 1 })).toBeInTheDocument();
+    // The header shows on "/" before the redirect to /events lands, so wait for the page too.
+    expect(await screen.findByRole('heading', { name: 'Events', level: 1 })).toBeInTheDocument();
 
     await userEvent.click(screen.getByRole('button', { name: 'Sign out' }));
     expect(await screen.findByRole('heading', { name: 'Execs only beyond this point.' })).toBeInTheDocument();
