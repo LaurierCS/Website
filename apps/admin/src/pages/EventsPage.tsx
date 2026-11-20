@@ -1,84 +1,98 @@
 /**
- * The Events section, where the admin lands after sign-in: every event, newest first, with a title search, a
- * link to add one, and edit and delete on each. After a save it says which event was saved.
+ * The Events section, where the admin lands after sign-in: every event as a ticket, newest first, with a title
+ * search, a link to add one, and edit and delete on each. After a save it says which event was saved.
  */
-import { Plus } from 'lucide-react';
-import { useState } from 'react';
-import { useLocation } from 'react-router';
-import { EventList } from '../components/events/EventList';
+import { Plus, RotateCw } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router';
+import { DOODLES } from '../assets/brand';
+import { EventListSkeleton } from '../components/events/EventListSkeleton';
+import { SearchableEvents } from '../components/events/SearchableEvents';
 import { Button } from '../components/ui/Button';
 import { ButtonLink } from '../components/ui/ButtonLink';
+import { SavedNotice } from '../components/ui/SavedNotice';
+import { ScrapbookWord } from '../components/ui/ScrapbookWord';
+import { StateBlock } from '../components/ui/StateBlock';
 import { useEvents } from '../hooks/useEvents';
 import { messageFor } from '../lib/errors';
 import { savedNameFrom } from '../lib/saved-notice';
 import { PATHS } from '../paths';
 
 export function EventsPage() {
-  const [search, setSearch] = useState('');
+  const navigate = useNavigate();
   const saved = savedNameFrom(useLocation().state);
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-10 sm:px-8">
-      {saved && (
-        <p role="status" className="mb-6 rounded-xl border-2 border-sky px-4 py-3 font-medium text-sky">
-          {`Saved "${saved}".`}
-        </p>
-      )}
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <h1 className="text-hero font-extrabold">Events</h1>
-        <ButtonLink to={PATHS.newEvent} variant="primary" size="small" icon={<Plus aria-hidden="true" className="size-4" />}>
-          New event
-        </ButtonLink>
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <h1>
+            <ScrapbookWord word="Events" className="text-hero" />
+          </h1>
+          <img src={DOODLES.asterisk} alt="" className="hidden h-10 w-auto sm:block" />
+        </div>
+        <NewEventLink />
       </div>
 
-      <label className="mt-8 block max-w-md">
-        <span className="font-display text-lg font-bold">Search by title</span>
-        <input
-          type="search"
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          className="mt-2 block w-full rounded-full border-2 border-line bg-deep px-5 py-2.5 text-white placeholder:text-muted focus:border-sky"
-          placeholder="CP312, hackathon…"
-        />
-      </label>
+      {saved && (
+        <div className="mt-6">
+          {/* Dismissing also clears it from the history entry, so going back here doesn't show it again. */}
+          <SavedNotice message={`Saved "${saved}".`} onDismiss={() => navigate('.', { replace: true, state: null })} />
+        </div>
+      )}
 
-      <div className="mt-6">
-        <EventResults search={search} />
+      <div className="mt-8">
+        <EventResults />
       </div>
     </main>
   );
 }
 
-/** The list for the current search, or why there isn't one: still loading, failed, no events, or no matches. */
-function EventResults({ search }: { search: string }) {
+/** The events, or why there aren't any: still loading, failed, or none yet. */
+function EventResults() {
   const events = useEvents();
 
   switch (events.status) {
     case 'pending':
-      return (
-        <div role="status" aria-label="Loading events" className="grid gap-3">
-          {[0, 1, 2].map((row) => (
-            <div key={row} className="h-24 animate-pulse rounded-card bg-card motion-reduce:animate-none" />
-          ))}
-        </div>
-      );
+      return <EventListSkeleton />;
     case 'error':
       return (
-        <div role="alert">
-          <p className="text-text-2">{messageFor(events.error)}</p>
-          <Button variant="quiet" size="small" className="mt-4" onClick={() => void events.refetch()}>
-            Try again
-          </Button>
-        </div>
+        <StateBlock
+          tone="failed"
+          mascot="doug"
+          title={messageFor(events.error)}
+          body="Check your connection, then try again. Nothing was changed."
+          action={
+            <Button
+              variant="primary"
+              size="small"
+              icon={<RotateCw aria-hidden="true" className="size-4" />}
+              onClick={() => void events.refetch()}
+            >
+              Try again
+            </Button>
+          }
+        />
       );
-    case 'success': {
+    case 'success':
       if (events.data.length === 0) {
-        return <p className="text-text-2">No events yet. The first one you add will show up here.</p>;
+        return (
+          <StateBlock
+            tone="calm"
+            mascot="krill"
+            title="No events yet."
+            body="The first one you add will show up here."
+            action={<NewEventLink />}
+          />
+        );
       }
-      const query = search.trim().toLowerCase();
-      const matches = events.data.filter((event) => event.title.toLowerCase().includes(query));
-      if (matches.length === 0) return <p className="text-text-2">{`No events match "${search.trim()}".`}</p>;
-      return <EventList events={matches} />;
-    }
+      return <SearchableEvents events={events.data} />;
   }
+}
+
+function NewEventLink() {
+  return (
+    <ButtonLink to={PATHS.newEvent} variant="primary" size="small" icon={<Plus aria-hidden="true" className="size-4" />}>
+      New event
+    </ButtonLink>
+  );
 }

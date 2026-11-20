@@ -29,6 +29,16 @@ const CP312_REVIEW: Event = {
   pictureUrl: 'https://lcs.supabase.co/storage/v1/object/public/events-images/cp312.png',
 };
 
+const FINAL_REVIEW: Event = {
+  id: '5d2e8a1b-3c4f-4a6b-9d7e-1f2a3b4c5d6e',
+  title: 'CP312 Final Review',
+  description: null,
+  date: '2026-12-03',
+  time: null,
+  location: null,
+  pictureUrl: null,
+};
+
 /** The list item for an event, found by its title. */
 function rowFor(title: string) {
   const row = screen.getByRole('heading', { name: title }).closest('li');
@@ -46,18 +56,50 @@ describe('EventsPage', () => {
 
   afterEach(() => vi.useRealTimers());
 
-  it('lists every event in the order loaded, with when, where and whether it is coming up', async () => {
-    vi.mocked(listEvents).mockResolvedValue([HACK_NIGHT, CP312_REVIEW]);
+  it('lists every event in the order loaded, with when, where and whether it is next, coming up or past', async () => {
+    vi.mocked(listEvents).mockResolvedValue([FINAL_REVIEW, HACK_NIGHT, CP312_REVIEW]);
     renderApp('/events');
 
     const titles = await screen.findAllByRole('heading', { level: 2 });
-    expect(titles.map((title) => title.textContent)).toEqual(['Hack Night', 'CP312 Midterm Review']);
+    expect(titles.map((title) => title.textContent)).toEqual(['CP312 Final Review', 'Hack Night', 'CP312 Midterm Review']);
+    expect(screen.getByText('3 events · newest first')).toBeInTheDocument();
 
     const review = rowFor('CP312 Midterm Review');
-    expect(review.getByText(/Thursday, November 12, 2026/)).toHaveTextContent('7:30PM');
+    expect(review.getByText('Thursday, November 12, 2026')).toBeInTheDocument();
+    expect(review.getByText('7:30PM')).toBeInTheDocument();
     expect(review.getByText('N2085')).toBeInTheDocument();
     expect(review.getByText('Past')).toBeInTheDocument();
-    expect(rowFor('Hack Night').getByText('Upcoming')).toBeInTheDocument();
+    expect(rowFor('Hack Night').getByText('Next up')).toBeInTheDocument();
+    expect(rowFor('CP312 Final Review').getByText('Upcoming')).toBeInTheDocument();
+  });
+
+  it('keeps "next up" on the soonest event while searching, and counts what matches', async () => {
+    vi.mocked(listEvents).mockResolvedValue([FINAL_REVIEW, HACK_NIGHT, CP312_REVIEW]);
+    renderApp('/events');
+    await screen.findByRole('heading', { name: 'Hack Night' });
+
+    await userEvent.type(screen.getByRole('searchbox', { name: 'Search by title' }), 'final');
+
+    expect(rowFor('CP312 Final Review').getByText('Upcoming')).toBeInTheDocument();
+    expect(screen.getByText('1 of 3 events')).toBeInTheDocument();
+  });
+
+  it('clears the search with the clear button, and from the no-matches message', async () => {
+    vi.mocked(listEvents).mockResolvedValue([HACK_NIGHT, CP312_REVIEW]);
+    renderApp('/events');
+    await screen.findByRole('heading', { name: 'Hack Night' });
+    const search = screen.getByRole('searchbox', { name: 'Search by title' });
+
+    await userEvent.type(search, 'cp312');
+    await userEvent.click(screen.getByRole('button', { name: 'Clear' }));
+    expect(search).toHaveValue('');
+    expect(search).toHaveFocus();
+    expect(screen.getByRole('heading', { name: 'Hack Night' })).toBeInTheDocument();
+
+    await userEvent.type(search, 'nothing like this');
+    await userEvent.click(screen.getByRole('button', { name: 'Clear search' }));
+    expect(search).toHaveValue('');
+    expect(screen.getByRole('heading', { name: 'CP312 Midterm Review' })).toBeInTheDocument();
   });
 
   it('shows an event with no picture, time or location without breaking', async () => {

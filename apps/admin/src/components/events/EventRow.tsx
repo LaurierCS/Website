@@ -1,28 +1,42 @@
 /**
- * One event in the list: its picture, title, when and where, whether it's coming up, and links to edit or
- * delete it. A card on a phone; a row of columns on wider screens.
+ * One event as a ticket: a date stub coloured by its status, a perforated tear line, the picture, title, when
+ * and where, Edit and Delete, and a barcode end. On a phone the stub becomes a band across the top.
  */
-import { Pencil, Trash } from 'lucide-react';
-import { useState } from 'react';
+import { Calendar, Clock, ImageIcon, MapPin, Pencil, Trash } from 'lucide-react';
+import { type ReactNode, useState } from 'react';
 import { generatePath } from 'react-router';
 import { useDeleteEvent } from '../../hooks/useEvents';
 import { formatEventDay } from '../../lib/dates';
 import { messageFor } from '../../lib/errors';
 import { PATHS } from '../../paths';
-import { type Event, isUpcoming } from '../../types/event';
+import type { Event, EventStatus } from '../../types/event';
 import { Button } from '../ui/Button';
 import { ButtonLink } from '../ui/ButtonLink';
 import { ConfirmDialog } from '../ui/ConfirmDialog';
+import { Tag, type TagTone } from '../ui/Tag';
+import { TicketStub } from './TicketStub';
 
-type EventRowProps = {
-  event: Event;
-  /** `YYYY-MM-DD` in the club's zone, read once for the whole list. */
-  today: string;
+type TicketLook = {
+  stub: string;
+  tag: TagTone;
+  label: string;
+  /** Past events fade back: dimmer title, photo and barcode, and a punched stub. */
+  faded: boolean;
 };
 
-export function EventRow({ event, today }: EventRowProps) {
+const LOOKS: Readonly<Record<EventStatus, TicketLook>> = {
+  'next-up': { stub: 'bg-yellow text-ink', tag: 'highlight', label: 'Next up', faded: false },
+  upcoming: { stub: 'bg-sky text-ink', tag: 'info', label: 'Upcoming', faded: false },
+  past: { stub: 'bg-slate text-text-2', tag: 'muted', label: 'Past', faded: true },
+};
+
+// Bar heights for the decorative barcode; fixed so every ticket prints the same code.
+const BARS = ['h-0.5', 'h-px', 'h-0.75', 'h-px', 'h-px', 'h-0.5', 'h-1', 'h-px', 'h-0.5', 'h-px', 'h-0.75', 'h-0.5', 'h-px', 'h-px', 'h-0.5', 'h-0.75'];
+
+export function EventRow({ event, status }: { event: Event; status: EventStatus }) {
   const [confirming, setConfirming] = useState(false);
   const deletion = useDeleteEvent();
+  const look = LOOKS[status];
 
   function stopConfirming() {
     setConfirming(false);
@@ -30,42 +44,64 @@ export function EventRow({ event, today }: EventRowProps) {
   }
 
   return (
-    <li className="grid grid-cols-[4rem_minmax(0,1fr)] items-center gap-x-4 gap-y-1 rounded-card bg-card p-4 md:grid-cols-[4rem_minmax(0,2fr)_minmax(0,1.6fr)_minmax(0,1fr)_auto] md:gap-y-0">
-      <Thumbnail url={event.pictureUrl} />
-      <div className="min-w-0">
-        <h2 className="truncate font-display text-xl font-bold">{event.title}</h2>
-        {isUpcoming(event, today) ? (
-          <span className="mt-1 inline-block rounded-full bg-sky px-2.5 py-0.5 text-xs font-bold text-ink">Upcoming</span>
-        ) : (
-          <span className="mt-1 inline-block rounded-full border border-line px-2.5 py-0.5 text-xs font-bold text-muted">Past</span>
-        )}
+    <div className="grid overflow-hidden rounded-card bg-card shadow-(--shadow-cutout) md:grid-cols-[8rem_minmax(0,1fr)_3.5rem]">
+      <TicketStub date={event.date} colours={look.stub} punched={look.faded} />
+
+      {/* The tear line is this border; the two notches are bites out of the ticket at each end of it. */}
+      <div className="relative grid grid-cols-[auto_minmax(0,1fr)] gap-4 border-t-3 border-dashed border-deep p-4 md:grid-cols-[auto_minmax(0,1fr)_auto] md:items-center md:gap-5 md:border-t-0 md:border-l-3 md:px-6 md:py-5">
+        <span aria-hidden="true" className="absolute -top-2.5 -left-2.5 size-5 rounded-full bg-deep" />
+        <span
+          aria-hidden="true"
+          className="absolute -top-2.5 -right-2.5 size-5 rounded-full bg-deep md:top-auto md:right-auto md:-bottom-2.5 md:-left-2.5"
+        />
+
+        <Thumbnail url={event.pictureUrl} faded={look.faded} />
+
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+            {/* Long titles wrap to two lines on a phone and cut to one on wider screens; the tooltip has it all. */}
+            <h2
+              title={event.title}
+              className={`min-w-0 font-display text-xl font-bold line-clamp-2 md:flex-1 md:text-2xl md:line-clamp-1 ${look.faded ? 'text-text-2' : 'text-white'}`}
+            >
+              {event.title}
+            </h2>
+            <Tag tone={look.tag}>{look.label}</Tag>
+          </div>
+          <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-sm text-text-2">
+            <Detail icon={<Calendar aria-hidden="true" className="size-4" />}>{formatEventDay(event.date)}</Detail>
+            <Detail icon={<Clock aria-hidden="true" className="size-4" />}>{event.time ?? 'Time TBA'}</Detail>
+            <Detail icon={<MapPin aria-hidden="true" className="size-4" />}>{event.location ?? 'Location TBA'}</Detail>
+          </div>
+        </div>
+
+        <div className="col-span-2 grid grid-cols-2 gap-2.5 md:col-span-1 md:flex">
+          {/* Every ticket has an Edit and a Delete, so each one's name says which event it is for. */}
+          <ButtonLink
+            to={generatePath(PATHS.editEvent, { id: event.id })}
+            variant="quiet"
+            size="small"
+            icon={<Pencil aria-hidden="true" className="size-4" />}
+            aria-label={`Edit ${event.title}`}
+          >
+            Edit
+          </ButtonLink>
+          <Button
+            variant="danger-quiet"
+            size="small"
+            icon={<Trash aria-hidden="true" className="size-4" />}
+            aria-label={`Delete ${event.title}`}
+            onClick={() => setConfirming(true)}
+          >
+            Delete
+          </Button>
+        </div>
       </div>
-      <p className="col-start-2 text-text-2 md:col-start-auto">
-        {formatEventDay(event.date)}
-        <br />
-        {event.time ?? 'Time TBA'}
-      </p>
-      <p className="col-start-2 text-text-2 md:col-start-auto">{event.location ?? 'Location TBA'}</p>
-      <div className="col-span-2 mt-3 flex gap-2 md:col-span-1 md:mt-0">
-        {/* Every row has an Edit and a Delete, so each one's name says which event it is for. */}
-        <ButtonLink
-          to={generatePath(PATHS.editEvent, { id: event.id })}
-          variant="quiet"
-          size="small"
-          icon={<Pencil aria-hidden="true" className="size-4" />}
-          aria-label={`Edit ${event.title}`}
-        >
-          Edit
-        </ButtonLink>
-        <Button
-          variant="danger-quiet"
-          size="small"
-          icon={<Trash aria-hidden="true" className="size-4" />}
-          aria-label={`Delete ${event.title}`}
-          onClick={() => setConfirming(true)}
-        >
-          Delete
-        </Button>
+
+      <div aria-hidden="true" className="hidden flex-col items-center justify-center gap-0.5 border-l border-line/60 md:flex">
+        {BARS.map((height, index) => (
+          <span key={index} className={`w-5.5 ${height} ${look.faded ? 'bg-line' : 'bg-muted'}`} />
+        ))}
       </div>
 
       {confirming && (
@@ -80,18 +116,36 @@ export function EventRow({ event, today }: EventRowProps) {
           onCancel={stopConfirming}
         />
       )}
-    </li>
+    </div>
+  );
+}
+
+/** One fact about the event with its icon, like the time. */
+function Detail({ icon, children }: { icon: ReactNode; children: string }) {
+  return (
+    <span className="inline-flex items-center gap-1.5">
+      {icon}
+      {children}
+    </span>
   );
 }
 
 /** The event's picture, or a labelled empty frame when it has none. */
-function Thumbnail({ url }: { url: string | null }) {
+function Thumbnail({ url, faded }: { url: string | null; faded: boolean }) {
   if (!url) {
     return (
-      <div className="row-span-3 grid size-16 place-items-center rounded-md border-2 border-dashed border-line text-center text-xs text-muted md:row-span-1">
+      <div className="grid size-16 shrink-0 place-content-center justify-items-center gap-1 rounded-xl border-2 border-dashed border-line bg-slate font-display text-xs font-bold text-text-2 uppercase md:size-21">
+        <ImageIcon aria-hidden="true" className="size-5" />
         No photo
       </div>
     );
   }
-  return <img src={url} alt="" loading="lazy" className="row-span-3 size-16 rounded-md object-cover md:row-span-1" />;
+  return (
+    <img
+      src={url}
+      alt=""
+      loading="lazy"
+      className={`size-16 shrink-0 rounded-xl object-cover md:size-21 ${faded ? 'opacity-60' : ''}`}
+    />
+  );
 }
