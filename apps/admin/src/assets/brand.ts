@@ -4,6 +4,7 @@
  */
 import asterisk from './doodles/Asteriks.svg';
 import bracket from './doodles/Bracket.svg';
+import brackets from './doodles/Brackets.svg';
 import iconWhite from './logos/LCS_Icon_White_SVG.svg';
 import logoLongWhite from './logos/LCS_Logo_Long_White_SVG.svg';
 import coco from './mascots/Coco.svg';
@@ -13,7 +14,7 @@ import krill from './mascots/Krill.svg';
 export const LOGO_LONG_WHITE = logoLongWhite;
 export const ICON_WHITE = iconWhite;
 
-export const DOODLES = { asterisk, bracket } as const;
+export const DOODLES = { asterisk, bracket, brackets } as const;
 
 export const MASCOTS = { coco, doug, krill } as const;
 export type MascotName = keyof typeof MASCOTS;
