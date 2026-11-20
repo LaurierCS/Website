@@ -25,3 +25,24 @@ export function isUpcoming(event: Event, today: string): boolean {
   // Both are YYYY-MM-DD, so comparing the text compares the days.
   return event.date >= today;
 }
+
+/** Where an event sits in time: the very next one, any other one still to come, or one that has happened. */
+export const EVENT_STATUSES = ['next-up', 'upcoming', 'past'] as const;
+export type EventStatus = (typeof EVENT_STATUSES)[number];
+
+export type EventWithStatus = Readonly<{ event: Event; status: EventStatus }>;
+
+/**
+ * Each event with its status, in the order given. "Next up" is the soonest event dated today or later; when two
+ * share that day, the first one given wins. `today` is `YYYY-MM-DD` in the club's zone (`clubToday()`).
+ */
+export function withStatuses(events: readonly Event[], today: string): readonly EventWithStatus[] {
+  const nextUp = events
+    .filter((event) => isUpcoming(event, today))
+    // Dates are YYYY-MM-DD, so comparing the text compares the days.
+    .reduce<Event | undefined>((soonest, event) => (soonest === undefined || event.date < soonest.date ? event : soonest), undefined);
+  return events.map((event) => ({
+    event,
+    status: event === nextUp ? 'next-up' : isUpcoming(event, today) ? 'upcoming' : 'past',
+  }));
+}
