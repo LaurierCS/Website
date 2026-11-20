@@ -1,11 +1,13 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { listEvents } from '../../../src/lib/events';
+import { listTeam } from '../../../src/lib/team';
 import { mockAccess, SAM_ADMIN } from '../../mocks/auth';
 import { renderApp } from '../../renderApp';
 
 vi.mock('../../../src/lib/auth');
 vi.mock('../../../src/lib/events');
+vi.mock('../../../src/lib/team');
 
 function sectionLink(name: 'Events' | 'Team') {
   return screen.getByRole('link', { name });
@@ -15,6 +17,7 @@ describe('AdminLayout', () => {
   beforeEach(() => {
     mockAccess(SAM_ADMIN);
     vi.mocked(listEvents).mockResolvedValue([]);
+    vi.mocked(listTeam).mockResolvedValue([]);
   });
 
   it('sends / to the Events section', async () => {
