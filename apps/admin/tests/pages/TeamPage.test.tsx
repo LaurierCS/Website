@@ -55,6 +55,45 @@ describe('TeamPage', () => {
     ]);
   });
 
+  it("lists departments in the site's order and counts the crew", async () => {
+    const president: TeamMember = { ...ALEX, id: '9d8c7b6a-5f4e-4d3c-8b2a-1f0e9d8c7b6a', name: 'Amara Okonkwo', department: 'Admin', isPublic: true };
+    vi.mocked(listTeam).mockResolvedValue([SAM, ALEX, president]);
+    renderApp('/team');
+
+    await screen.findByRole('heading', { name: 'Sam Rivera' });
+    expect(screen.getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent)).toEqual([
+      'Admin',
+      'Academics',
+      'Engineering',
+    ]);
+    expect(screen.getByText('3 crew · 3 departments · 1 hidden from the site')).toBeInTheDocument();
+  });
+
+  it('marks a hidden member in words, not just colour', async () => {
+    vi.mocked(listTeam).mockResolvedValue([SAM, ALEX]);
+    renderApp('/team');
+    await screen.findByRole('heading', { name: 'Alex Chen' });
+
+    expect(cardFor('Alex Chen').getByRole('switch', { name: 'Show Alex Chen on the site' })).toHaveTextContent('Hidden');
+    expect(cardFor('Sam Rivera').getByRole('switch', { name: 'Show Sam Rivera on the site' })).toHaveTextContent('On the site');
+    expect(screen.getByText('1 crew · 1 hidden')).toBeInTheDocument();
+    expect(cardFor('Alex Chen').getByText('No role yet')).toBeInTheDocument();
+  });
+
+  it('says "Saving…" and waits while the switch saves', async () => {
+    vi.mocked(listTeam).mockResolvedValue([SAM]);
+    // Never settles, so the switch stays mid-save for the test.
+    vi.mocked(setMemberPublic).mockReturnValue(new Promise(() => {}));
+    renderApp('/team');
+
+    const samSwitch = await screen.findByRole('switch', { name: 'Show Sam Rivera on the site' });
+    await userEvent.click(samSwitch);
+
+    expect(samSwitch).toHaveTextContent('Saving…');
+    expect(samSwitch).toBeDisabled();
+    expect(samSwitch).not.toBeChecked();
+  });
+
   it('shows photo, role and profile links when a member has them, and still works without', async () => {
     vi.mocked(listTeam).mockResolvedValue([SAM, ALEX]);
     renderApp('/team');
