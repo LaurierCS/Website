@@ -1,4 +1,14 @@
-import { clubToday, toPickerTime, toStoredTime } from '../../src/lib/dates';
+import { clubToday, stubDay, toPickerTime, toStoredTime } from '../../src/lib/dates';
+
+describe('stubDay', () => {
+  it('splits a day into the weekday, the day of the month and the month with its year', () => {
+    expect(stubDay('2026-11-26')).toEqual({ weekday: 'Thu', day: '26', month: 'Nov 2026' });
+  });
+
+  it('writes the first of the month without a leading zero', () => {
+    expect(stubDay('2026-12-01')).toEqual({ weekday: 'Tue', day: '1', month: 'Dec 2026' });
+  });
+});
 
 describe('clubToday', () => {
   it("is still the club's day late in the evening, when UTC has moved on", () => {

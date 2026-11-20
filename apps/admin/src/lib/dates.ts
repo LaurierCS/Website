@@ -15,6 +15,17 @@ export function formatEventDay(isoDate: string): string {
   return DAY.format(new Date(`${isoDate}T00:00:00Z`));
 }
 
+const STUB_WEEKDAY = new Intl.DateTimeFormat('en-US', { weekday: 'short', timeZone: 'UTC' });
+const STUB_DAY = new Intl.DateTimeFormat('en-US', { day: 'numeric', timeZone: 'UTC' });
+const STUB_MONTH = new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+
+/** An event's `YYYY-MM-DD` day in the pieces a ticket stub prints: "Thu", "26" and "Nov 2026". */
+export function stubDay(isoDate: string): Readonly<{ weekday: string; day: string; month: string }> {
+  // Formatted in UTC for the same reason as `formatEventDay`: the day is already the club's.
+  const date = new Date(`${isoDate}T00:00:00Z`);
+  return { weekday: STUB_WEEKDAY.format(date), day: STUB_DAY.format(date), month: STUB_MONTH.format(date) };
+}
+
 /**
  * Today as `YYYY-MM-DD` in the club's zone, to compare with an event's `date`. Late on a Tuesday evening it is
  * still Tuesday here, even though it is already Wednesday in UTC.
