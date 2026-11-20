@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router';
 import { DOODLES } from '../assets/brand';
 import { BackstagePass } from '../components/auth/BackstagePass';
 import { CheckingPanel, ExpiredPanel, GrantedPanel, JammedPanel, NotMemberPanel, SignedOutPanel } from '../components/auth/LoginPanels';
-import { Stamp } from '../components/auth/Stamp';
+import { Stamp } from '../components/ui/Stamp';
 import { useAccess, useSignIn, useSignOut } from '../hooks/useAuth';
 import { useMinimumWait } from '../hooks/useMinimumWait';
 import { messageFor } from '../lib/errors';
