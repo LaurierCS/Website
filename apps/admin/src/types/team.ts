@@ -4,7 +4,7 @@
 import { z } from 'zod';
 
 /** The club's departments, in the order the site lists them. The team form offers exactly these. */
-export const DEPARTMENTS = ['Academics', 'Admin', 'Engineering', 'Events', 'Finance', 'Marketing', 'Outreach'] as const;
+export const DEPARTMENTS = ['Admin', 'Finance', 'Marketing', 'Outreach', 'Events', 'Academics', 'Engineering'] as const;
 
 export const TeamMemberSchema = z.object({
   id: z.uuid(),
