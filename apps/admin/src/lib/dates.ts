@@ -1,5 +1,5 @@
 /**
- * Dates shown in the admin, always in the club's time zone (Toronto), never the viewer's.
+ * Dates and times shown in the admin, always in the club's time zone (Toronto), never the viewer's.
  */
 const CLUB_TIME_ZONE = 'America/Toronto';
 
@@ -21,4 +21,29 @@ export function formatEventDay(isoDate: string): string {
  */
 export function clubToday(now: Date = new Date()): string {
   return ISO_DAY.format(now);
+}
+
+// How the site and the table write an event's time: "7:30PM". Older rows sometimes have a space or lower case.
+const STORED_TIME = /^(\d{1,2})(?::(\d{2}))?\s*([ap])\.?m\.?$/i;
+
+/** A time picker's `19:30` written the way events store it, `7:30PM`. */
+export function toStoredTime(pickerTime: string): string {
+  const [hours = 0, minutes = 0] = pickerTime.split(':').map(Number);
+  const suffix = hours < 12 ? 'AM' : 'PM';
+  return `${hours % 12 || 12}:${String(minutes).padStart(2, '0')}${suffix}`;
+}
+
+/**
+ * A stored time such as `7:30PM`, `7:30 pm` or `7PM` as a time picker's `19:30`. Null when the text isn't a
+ * time (say, "TBD"), so the form can show it as written instead of guessing.
+ */
+export function toPickerTime(stored: string): string | null {
+  const match = STORED_TIME.exec(stored.trim());
+  if (!match) return null;
+  const [, hourText = '', minuteText = '00', half = ''] = match;
+  const hours = Number(hourText);
+  const minutes = Number(minuteText);
+  if (hours < 1 || hours > 12 || minutes > 59) return null;
+  const hours24 = (hours % 12) + (half.toLowerCase() === 'p' ? 12 : 0);
+  return `${String(hours24).padStart(2, '0')}:${minuteText}`;
 }
