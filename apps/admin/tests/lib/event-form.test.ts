@@ -1,4 +1,4 @@
-import { changedEventFields, formValuesFor, toEventFields, unreadableTime } from '../../src/lib/event-form';
+import { changedEventFields, formValuesFor, ticketPreview, toEventFields, unreadableTime } from '../../src/lib/event-form';
 import type { Event } from '../../src/types/event';
 
 const EVENT: Event = {
@@ -45,5 +45,44 @@ describe('the event form', () => {
 
     expect(changedEventFields(values, { location: true })).toEqual({ location: 'BA201' });
     expect(changedEventFields(values, {})).toEqual({});
+  });
+});
+
+describe('the ticket preview', () => {
+  const TODAY = '2026-11-20';
+  const PICTURE = 'https://lcs.supabase.co/storage/v1/object/public/events-images/hack.png';
+
+  it('shows the event as it will be saved', () => {
+    const values = { title: ' Hack Night ', date: '2026-12-01', time: '19:30', location: ' BA110 ', description: '' };
+
+    expect(ticketPreview(values, null, PICTURE, TODAY)).toEqual({
+      face: { title: 'Hack Night', date: '2026-12-01', time: '7:30PM', location: 'BA110', pictureUrl: PICTURE },
+      status: 'upcoming',
+    });
+  });
+
+  it('fills in what is still missing instead of showing blanks', () => {
+    const empty = { title: '  ', date: '', time: '', location: '', description: '' };
+
+    expect(ticketPreview(empty, null, null, TODAY).face).toEqual({
+      title: 'Untitled event',
+      date: null,
+      time: null,
+      location: null,
+      pictureUrl: null,
+    });
+  });
+
+  it('keeps a saved time the picker cannot show while the time is left empty', () => {
+    const values = formValuesFor({ ...EVENT, time: 'TBD' });
+
+    expect(ticketPreview(values, 'TBD', null, TODAY).face.time).toBe('TBD');
+  });
+
+  it('marks a day before today as past, and today as upcoming', () => {
+    const values = formValuesFor(EVENT);
+
+    expect(ticketPreview(values, null, null, TODAY).status).toBe('past');
+    expect(ticketPreview({ ...values, date: TODAY }, null, null, TODAY).status).toBe('upcoming');
   });
 });
