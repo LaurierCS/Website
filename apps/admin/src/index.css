@@ -30,6 +30,10 @@
   --color-text-2: var(--text-2);
   --color-muted: var(--muted);
   --color-discord: var(--discord);
+  --color-discord-ink: var(--discord-ink);
+  --color-danger: var(--danger);
+  --color-danger-ink: var(--danger-ink);
+  --color-danger-soft: var(--danger-soft);
 
   --font-*: initial;
   --font-display: var(--font-head);
@@ -38,7 +42,15 @@
   --tracking-label: var(--label-spacing);
 
   --radius-card: var(--radius);
+  --radius-tag: var(--radius-label);
   --ease-brand: var(--ease-out);
+
+  /*
+   * A button's solid edge. The colour is written out so Tailwind can swap it per button with a colour utility:
+   * `shadow-key shadow-pink-ink`.
+   */
+  --shadow-key: 0 var(--key-depth) 0 #000;
+  --shadow-key-lifted: 0 var(--key-depth-lifted) 0 #000;
 
   /*
    * The width where the admin header has room for everything on one row: the long logo, the section links,
