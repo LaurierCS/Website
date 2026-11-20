@@ -1,71 +1,131 @@
 /**
- * The Team section: everyone on the team, hidden members included, grouped by department, with a link to add
- * someone and, on each person, showing or hiding them on the site, editing and deleting.
+ * The Team section as a crew board: everyone on the team, hidden members included, as lanyard badges under
+ * their department, in the site's order. It counts the crew, links to adding someone, and on each badge shows or
+ * hides them on the site, edits or deletes them.
  */
-import { Plus } from 'lucide-react';
-import { MemberCard } from '../components/team/MemberCard';
+import { Plus, RotateCw } from 'lucide-react';
+import { DOODLES } from '../assets/brand';
+import { DepartmentHeading } from '../components/team/DepartmentHeading';
+import { MemberBadge } from '../components/team/MemberBadge';
 import { Button } from '../components/ui/Button';
 import { ButtonLink } from '../components/ui/ButtonLink';
+import { ScrapbookWord } from '../components/ui/ScrapbookWord';
+import { StateBlock } from '../components/ui/StateBlock';
 import { useTeam } from '../hooks/useTeam';
 import { messageFor } from '../lib/errors';
 import { PATHS } from '../paths';
-import { groupByDepartment } from '../types/team';
+import { groupByDepartment, type TeamMember } from '../types/team';
 
 export function TeamPage() {
   return (
     <main className="mx-auto max-w-6xl px-4 py-10 sm:px-8">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <h1 className="text-hero font-extrabold">Team</h1>
-        <ButtonLink to={PATHS.newMember} variant="primary" size="small" icon={<Plus aria-hidden="true" className="size-4" />}>
-          Add member
-        </ButtonLink>
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <h1>
+            <ScrapbookWord word="Team" className="text-hero" />
+          </h1>
+          <img src={DOODLES.asterisk} alt="" className="hidden h-10 w-auto sm:block" />
+        </div>
+        <AddMemberLink />
       </div>
-      <div className="mt-8">
+      <div className="mt-6">
         <TeamResults />
       </div>
     </main>
   );
 }
 
-/** The team by department, or why it isn't shown: still loading, failed, or nobody yet. */
+/** The crew by department, or why it isn't shown: still loading, failed, or nobody yet. */
 function TeamResults() {
   const team = useTeam();
 
   switch (team.status) {
     case 'pending':
-      return (
-        <div role="status" aria-label="Loading the team" className="grid gap-3">
-          {[0, 1, 2].map((row) => (
-            <div key={row} className="h-24 animate-pulse rounded-card bg-card motion-reduce:animate-none" />
-          ))}
-        </div>
-      );
+      return <CrewBoardSkeleton />;
     case 'error':
       return (
-        <div role="alert">
-          <p className="text-text-2">{messageFor(team.error)}</p>
-          <Button variant="quiet" size="small" className="mt-4" onClick={() => void team.refetch()}>
-            Try again
-          </Button>
-        </div>
+        <StateBlock
+          tone="failed"
+          mascot="doug"
+          title={messageFor(team.error)}
+          body="Check your connection, then try again. Nothing was changed."
+          action={
+            <Button variant="primary" size="small" icon={<RotateCw aria-hidden="true" className="size-4" />} onClick={() => void team.refetch()}>
+              Try again
+            </Button>
+          }
+        />
       );
-    case 'success':
+    case 'success': {
       if (team.data.length === 0) {
-        return <p className="text-text-2">No team members yet. The first one you add will show up here.</p>;
+        return (
+          <StateBlock
+            tone="calm"
+            mascot="krill"
+            title="No team members yet."
+            body="The first one you add will show up here."
+            action={<AddMemberLink />}
+          />
+        );
       }
+      const groups = groupByDepartment(team.data);
       return (
-        <div className="grid gap-10">
-          {groupByDepartment(team.data).map(({ department, members }) => (
-            <section key={department ?? 'none'} aria-label={department ?? 'No department'}>
-              <h2 className="font-display text-2xl font-extrabold">{department ?? 'No department'}</h2>
-              <ul className="mt-3 grid gap-3">
-                {members.map((member) => (
-                  <MemberCard key={member.id} member={member} />
-                ))}
-              </ul>
-            </section>
-          ))}
-        </div>
+        <>
+          <p className="font-display text-xs font-bold tracking-widest text-text-2 uppercase">{countLine(team.data, groups.length)}</p>
+          <div className="mt-8 grid gap-10">
+            {groups.map(({ department, members }, index) => (
+              <section key={department ?? 'none'} aria-label={department ?? 'No department'}>
+                <DepartmentHeading
+                  name={department ?? 'No department'}
+                  index={index}
+                  crew={members.length}
+                  hidden={members.filter((member) => !member.isPublic).length}
+                />
+                <ul className="mt-4 grid gap-3 sm:grid-cols-[repeat(auto-fill,minmax(15rem,1fr))] sm:gap-5">
+                  {members.map((member, place) => (
+                    <MemberBadge key={member.id} member={member} index={place} />
+                  ))}
+                </ul>
+              </section>
+            ))}
+          </div>
+        </>
       );
+    }
   }
+}
+
+/** "15 crew · 7 departments · 2 hidden from the site". */
+function countLine(members: readonly TeamMember[], departments: number): string {
+  const hidden = members.filter((member) => !member.isPublic).length;
+  const parts = [`${members.length} crew`, `${departments} ${departments === 1 ? 'department' : 'departments'}`];
+  return [...parts, ...(hidden > 0 ? [`${hidden} hidden from the site`] : [])].join(' · ');
+}
+
+/** Grey badges in the shape of the real ones, shown while the team loads. */
+function CrewBoardSkeleton() {
+  return (
+    <div role="status" aria-label="Loading the team" aria-busy="true" className="grid gap-3 sm:grid-cols-[repeat(auto-fill,minmax(15rem,1fr))] sm:gap-5">
+      {[0, 1, 2, 3].map((badge) => (
+        <div key={badge} className="animate-pulse overflow-hidden rounded-card bg-card motion-reduce:animate-none">
+          <div className="hidden h-11 bg-slate sm:block" />
+          <div className="flex items-center gap-3 p-4 sm:flex-col sm:p-6">
+            <div className="size-14 shrink-0 rounded-full bg-slate sm:size-21" />
+            <div className="grid flex-1 gap-2 sm:w-full sm:justify-items-center">
+              <div className="h-4 w-2/3 rounded-full bg-slate" />
+              <div className="h-3 w-1/2 rounded-full bg-slate" />
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function AddMemberLink() {
+  return (
+    <ButtonLink to={PATHS.newMember} variant="primary" size="small" icon={<Plus aria-hidden="true" className="size-4" />}>
+      Add member
+    </ButtonLink>
+  );
 }
