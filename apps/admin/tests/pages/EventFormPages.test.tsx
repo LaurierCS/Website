@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react';
+import { fireEvent, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { UnavailableError } from '../../src/lib/errors';
 import { createEvent, getEvent, listEvents, updateEvent } from '../../src/lib/events';
@@ -18,6 +18,9 @@ const CP312_REVIEW: Event = {
   location: 'N2085',
   pictureUrl: null,
 };
+
+const PICTURE_URL = 'https://lcs.supabase.co/storage/v1/object/public/events-images/cp312.png';
+const POSTER = new File(['x'], 'poster.png', { type: 'image/png' });
 
 beforeEach(() => {
   mockAccess(SAM_ADMIN);
@@ -46,15 +49,52 @@ describe('NewEventPage', () => {
     await userEvent.type(screen.getByLabelText('Location'), 'BA110');
     await userEvent.click(screen.getByRole('button', { name: 'Create event' }));
 
-    expect(createEvent).toHaveBeenCalledWith({
-      title: 'Hack Night',
-      date: '2026-12-01',
-      time: '7:30PM',
-      location: 'BA110',
-      description: null,
-    });
+    expect(createEvent).toHaveBeenCalledWith(
+      { title: 'Hack Night', date: '2026-12-01', time: '7:30PM', location: 'BA110', description: null },
+      { kind: 'keep' },
+    );
     expect(await screen.findByText('Saved "Hack Night".')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Events', level: 1 })).toBeInTheDocument();
+  });
+
+  it('previews a chosen picture and saves it with the new event', async () => {
+    vi.mocked(createEvent).mockResolvedValue();
+    renderApp('/events/new');
+
+    await userEvent.type(await screen.findByLabelText('Title'), 'Hack Night');
+    await userEvent.type(screen.getByLabelText('Date'), '2026-12-01');
+    await userEvent.upload(screen.getByLabelText(/Choose a picture/), POSTER);
+
+    expect(screen.getByRole('img', { name: 'The new picture' })).toHaveAttribute('src', 'blob:poster.png');
+    await userEvent.click(screen.getByRole('button', { name: 'Create event' }));
+
+    expect(createEvent).toHaveBeenCalledWith(expect.objectContaining({ title: 'Hack Night' }), {
+      kind: 'replace',
+      image: { file: POSTER, extension: 'png' },
+    });
+  });
+
+  it('takes a picture dragged onto the field', async () => {
+    renderApp('/events/new');
+
+    fireEvent.drop(await screen.findByText(/Choose a picture/), { dataTransfer: { files: [POSTER] } });
+
+    expect(await screen.findByRole('img', { name: 'The new picture' })).toHaveAttribute('src', 'blob:poster.png');
+  });
+
+  it('turns away a file that is not a picture or is too big, and says why', async () => {
+    const user = userEvent.setup({ applyAccept: false });
+    renderApp('/events/new');
+    const picker = await screen.findByLabelText(/Choose a picture/);
+
+    await user.upload(picker, new File(['<svg/>'], 'logo.svg', { type: 'image/svg+xml' }));
+    expect(picker).toHaveAccessibleDescription(/That file isn't a picture we can use/);
+
+    const huge = new File(['x'], 'huge.png', { type: 'image/png' });
+    Object.defineProperty(huge, 'size', { value: 8 * 1024 * 1024 });
+    await user.upload(picker, huge);
+    expect(picker).toHaveAccessibleDescription(/That picture is 8.0 MB. Pictures can be up to 5 MB./);
+    expect(screen.queryByRole('img', { name: 'The new picture' })).not.toBeInTheDocument();
   });
 
   it('keeps what was typed and says so when saving fails', async () => {
@@ -108,8 +148,48 @@ describe('EditEventPage', () => {
     await userEvent.type(location, 'BA201');
     await userEvent.click(screen.getByRole('button', { name: 'Save changes' }));
 
-    expect(updateEvent).toHaveBeenCalledWith(CP312_REVIEW.id, { location: 'BA201' });
+    expect(updateEvent).toHaveBeenCalledWith(CP312_REVIEW, { location: 'BA201' }, { kind: 'keep' });
     expect(await screen.findByText('Saved "CP312 Midterm Review".')).toBeInTheDocument();
+  });
+
+  it('shows the current picture and replaces it with a new one', async () => {
+    const event = { ...CP312_REVIEW, pictureUrl: PICTURE_URL };
+    vi.mocked(getEvent).mockResolvedValue(event);
+    vi.mocked(updateEvent).mockResolvedValue();
+    renderApp(`/events/${CP312_REVIEW.id}`);
+
+    expect(await screen.findByRole('img', { name: 'The current picture' })).toHaveAttribute('src', PICTURE_URL);
+    await userEvent.upload(screen.getByLabelText(/Choose a different picture/), POSTER);
+    await userEvent.click(screen.getByRole('button', { name: 'Save changes' }));
+
+    expect(updateEvent).toHaveBeenCalledWith(event, {}, { kind: 'replace', image: { file: POSTER, extension: 'png' } });
+  });
+
+  it('removes the picture, and can be talked out of it', async () => {
+    const event = { ...CP312_REVIEW, pictureUrl: PICTURE_URL };
+    vi.mocked(getEvent).mockResolvedValue(event);
+    vi.mocked(updateEvent).mockResolvedValue();
+    renderApp(`/events/${CP312_REVIEW.id}`);
+    await screen.findByRole('img', { name: 'The current picture' });
+
+    await userEvent.click(screen.getByRole('button', { name: 'Remove picture' }));
+    expect(screen.getByText('The picture will be removed when you save.')).toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: 'Keep the current picture' }));
+    expect(screen.getByRole('img', { name: 'The current picture' })).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Remove picture' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Save changes' }));
+    expect(updateEvent).toHaveBeenCalledWith(event, {}, { kind: 'remove' });
+  });
+
+  it('asks before leaving when only the picture changed', async () => {
+    vi.mocked(getEvent).mockResolvedValue(CP312_REVIEW);
+    renderApp(`/events/${CP312_REVIEW.id}`);
+
+    await userEvent.upload(await screen.findByLabelText(/Choose a picture/), POSTER);
+    await userEvent.click(screen.getByRole('link', { name: 'Events' }));
+
+    expect(screen.getByRole('dialog', { name: 'Leave without saving?' })).toBeInTheDocument();
   });
 
   it('shows a time it cannot read as written, and keeps it', async () => {

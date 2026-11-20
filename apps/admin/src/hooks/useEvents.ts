@@ -1,6 +1,7 @@
 /** Events loaded and cached by TanStack Query, and the changes that refresh them: create, update, delete. */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createEvent, deleteEvent, getEvent, listEvents, updateEvent } from '../lib/events';
+import type { PictureChange } from '../lib/images';
 import type { Event, EventFields } from '../types/event';
 
 // Every events query starts with this key, so one invalidation refreshes the list and any open event.
@@ -23,12 +24,19 @@ function useRefreshEvents() {
 
 export function useCreateEvent() {
   const refresh = useRefreshEvents();
-  return useMutation({ mutationFn: (fields: EventFields) => createEvent(fields), onSuccess: refresh });
+  return useMutation({
+    mutationFn: ({ fields, picture }: { fields: EventFields; picture: PictureChange }) => createEvent(fields, picture),
+    onSuccess: refresh,
+  });
 }
 
-export function useUpdateEvent(id: string) {
+export function useUpdateEvent(event: Event) {
   const refresh = useRefreshEvents();
-  return useMutation({ mutationFn: (changes: Partial<EventFields>) => updateEvent(id, changes), onSuccess: refresh });
+  return useMutation({
+    mutationFn: ({ changes, picture }: { changes: Partial<EventFields>; picture: PictureChange }) =>
+      updateEvent(event, changes, picture),
+    onSuccess: refresh,
+  });
 }
 
 /** Deletes an event, then reloads the list so it disappears everywhere the events are shown. */

@@ -49,7 +49,7 @@ function EventToEdit({ id }: { id: string }) {
 
 function EditForm({ event }: { event: Event }) {
   const navigate = useNavigate();
-  const update = useUpdateEvent(event.id);
+  const update = useUpdateEvent(event);
 
   return (
     <EventForm
@@ -59,10 +59,11 @@ function EditForm({ event }: { event: Event }) {
       submitLabel="Save changes"
       saving={update.isPending}
       error={update.isError ? messageFor(update.error) : null}
-      onSave={(values, changed) =>
-        update.mutate(changedEventFields(values, changed), {
-          onSuccess: () => navigate(PATHS.events, { state: savedNotice(values.title) }),
-        })
+      onSave={(values, changed, picture) =>
+        update.mutate(
+          { changes: changedEventFields(values, changed), picture },
+          { onSuccess: () => navigate(PATHS.events, { state: savedNotice(values.title) }) },
+        )
       }
     />
   );

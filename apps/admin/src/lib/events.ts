@@ -1,19 +1,18 @@
 /**
- * Reading, adding, changing and deleting events in Supabase. Rows are checked and turned into `Event`s here,
- * once, so pages get typed data.
+ * Reading, adding, changing and deleting events in Supabase, with their pictures. Rows are checked and turned
+ * into `Event`s here, once, so pages get typed data.
  */
 import { z } from 'zod';
 import type { Database } from '../types/database.types';
 import { type Event, type EventFields, EventSchema } from '../types/event';
 import { UnavailableError } from './errors';
+import type { PictureChange } from './images';
+import { BUCKETS, removeImage, uploadImage } from './storage';
 import { getSupabase } from './supabase';
 
 type EventRow = Database['public']['Tables']['events']['Row'];
 
 const COLUMNS = 'id, title, description, date, time, location, picture_url';
-
-/** The storage bucket that holds event pictures uploaded through LCS tools. */
-const EVENTS_BUCKET = 'events-images';
 
 /**
  * Every event, newest first. Empty when there are none. A row that doesn't fit `Event` (say, a hand-edited
@@ -42,54 +41,53 @@ export async function getEvent(id: string): Promise<Event | null> {
 }
 
 /**
- * Adds an event with no picture yet.
- * @throws UnavailableError when it could not be saved (Supabase down, or the insert was refused).
+ * Adds an event, uploading its picture first when one was chosen. If the event can't be saved, the uploaded
+ * picture is deleted again so no unused file is left behind.
+ * @throws UnavailableError when the picture or the event could not be saved.
  */
-export async function createEvent(fields: EventFields): Promise<void> {
-  const failure = `"${fields.title}" couldn't be saved.`;
-  const { data, error } = await getSupabase().from('events').insert(fields).select('id');
-  if (error) throw new UnavailableError(failure, { cause: error });
-  if (data.length === 0) throw new UnavailableError(failure);
+export async function createEvent(fields: EventFields, picture: PictureChange): Promise<void> {
+  const newPictureUrl = picture.kind === 'replace' ? await uploadImage(BUCKETS.events, picture.image) : null;
+  const { data, error } = await getSupabase()
+    .from('events')
+    .insert({ ...fields, picture_url: newPictureUrl })
+    .select('id');
+  // Row-level security refuses an insert by saving nothing rather than by failing, so check a row came back.
+  if (error || data.length === 0) {
+    if (newPictureUrl) await removeImage(BUCKETS.events, newPictureUrl);
+    throw new UnavailableError(`"${fields.title}" couldn't be saved.`, { cause: error });
+  }
 }
 
 /**
- * Saves only the fields given, so anything the exec didn't touch stays exactly as it was.
+ * Saves only the fields given, so anything the exec didn't touch stays exactly as it was, and applies the
+ * picture change. A new picture is uploaded before the row changes and the old file is deleted only after, so
+ * a failure part-way never leaves the event pointing at a missing picture.
  * @throws UnavailableError when it could not be saved (Supabase down, the event is gone, or the update was refused).
  */
-export async function updateEvent(id: string, changes: Partial<EventFields>): Promise<void> {
-  const failure = "Your changes couldn't be saved.";
-  const { data, error } = await getSupabase().from('events').update(changes).eq('id', id).select('id');
-  if (error) throw new UnavailableError(failure, { cause: error });
+export async function updateEvent(event: Event, changes: Partial<EventFields>, picture: PictureChange): Promise<void> {
+  const newPictureUrl = picture.kind === 'replace' ? await uploadImage(BUCKETS.events, picture.image) : null;
+  const row = picture.kind === 'keep' ? changes : { ...changes, picture_url: newPictureUrl };
+  const { data, error } = await getSupabase().from('events').update(row).eq('id', event.id).select('id');
   // Row-level security refuses an update by changing nothing rather than by failing, so check a row came back.
-  if (data.length === 0) throw new UnavailableError(failure);
+  if (error || data.length === 0) {
+    if (newPictureUrl) await removeImage(BUCKETS.events, newPictureUrl);
+    throw new UnavailableError("Your changes couldn't be saved.", { cause: error });
+  }
+  if (picture.kind !== 'keep' && event.pictureUrl) await removeImage(BUCKETS.events, event.pictureUrl);
 }
 
 /**
- * Deletes an event, then its picture if the picture is a file in our `events-images` bucket. A picture linked
- * from anywhere else is left alone. The row goes first, so the site never shows an event whose picture is gone.
- * If the picture can't be removed after that, the event is still deleted; the leftover file is logged.
+ * Deletes an event, then its picture if the picture is a file in our events bucket; a picture linked from
+ * anywhere else is left alone. The row goes first, so the site never shows an event whose picture is gone.
  * @throws UnavailableError when the event could not be deleted (Supabase down, or the delete was refused).
  */
 export async function deleteEvent(event: Event): Promise<void> {
-  const supabase = getSupabase();
   const failure = `"${event.title}" couldn't be deleted.`;
-  const { data, error } = await supabase.from('events').delete().eq('id', event.id).select('id');
+  const { data, error } = await getSupabase().from('events').delete().eq('id', event.id).select('id');
   if (error) throw new UnavailableError(failure, { cause: error });
   // Row-level security refuses a delete by deleting nothing rather than by failing, so check a row came back.
   if (data.length === 0) throw new UnavailableError(failure);
-
-  const imagePath = event.pictureUrl && pathInEventsBucket(event.pictureUrl);
-  if (!imagePath) return;
-  const removed = await supabase.storage.from(EVENTS_BUCKET).remove([imagePath]);
-  if (removed.error) console.warn('events.image_not_removed', { id: event.id, path: imagePath });
-}
-
-/** The file's path inside our events bucket, or null when the URL points somewhere else. */
-function pathInEventsBucket(url: string): string | null {
-  const bucketUrl = getSupabase().storage.from(EVENTS_BUCKET).getPublicUrl('').data.publicUrl;
-  if (!url.startsWith(bucketUrl)) return null;
-  // Public URLs escape characters such as spaces in file names; storage wants the name as written.
-  return decodeURIComponent(url.slice(bucketUrl.length));
+  if (event.pictureUrl) await removeImage(BUCKETS.events, event.pictureUrl);
 }
 
 /**

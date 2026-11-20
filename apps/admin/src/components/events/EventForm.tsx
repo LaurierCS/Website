@@ -1,27 +1,32 @@
 /**
- * The form for a new event and for editing one. It checks the fields with `EventFormSchema`, shows problems
- * under each field, and asks before you leave with unsaved changes. Saving is the page's job (`onSave`).
+ * The form for a new event and for editing one, picture included. It checks the fields with `EventFormSchema`,
+ * shows problems under each field, and asks before you leave with unsaved changes. Saving is the page's job
+ * (`onSave`).
  */
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router';
 import { useUnsavedChangesWarning } from '../../hooks/useUnsavedChangesWarning';
 import { type ChangedFields, EventFormSchema, type EventFormValues } from '../../lib/event-form';
+import type { PictureChange } from '../../lib/images';
 import { PATHS } from '../../paths';
 import { Button } from '../ui/Button';
 import { ConfirmDialog } from '../ui/ConfirmDialog';
 import { FormField } from '../ui/FormField';
+import { PictureField } from '../ui/PictureField';
 
 type EventFormProps = {
   defaultValues: EventFormValues;
   /** The saved time when the picker can't show it (say, "TBD"); it is kept unless a new time is picked. */
   unreadableTime: string | null;
+  /** The picture saved now, if any. */
   pictureUrl: string | null;
   submitLabel: string;
   saving: boolean;
   /** Why the last save failed. */
   error: string | null;
-  onSave: (values: EventFormValues, changed: ChangedFields) => void;
+  onSave: (values: EventFormValues, changed: ChangedFields, picture: PictureChange) => void;
 };
 
 const INPUT =
@@ -30,10 +35,13 @@ const INPUT =
 export function EventForm({ defaultValues, unreadableTime, pictureUrl, submitLabel, saving, error, onSave }: EventFormProps) {
   const { register, handleSubmit, formState } = useForm({ resolver: zodResolver(EventFormSchema), defaultValues });
   const { errors, isDirty, dirtyFields } = formState;
-  const leave = useUnsavedChangesWarning(isDirty);
+  // The picture is a file, not text, so it lives beside the text fields rather than in React Hook Form.
+  const [picture, setPicture] = useState<PictureChange>({ kind: 'keep' });
+  const hasChanges = isDirty || picture.kind !== 'keep';
+  const leave = useUnsavedChangesWarning(hasChanges);
 
   return (
-    <form noValidate onSubmit={handleSubmit((values) => onSave(values, dirtyFields))} className="mt-8 grid gap-6">
+    <form noValidate onSubmit={handleSubmit((values) => onSave(values, dirtyFields, picture))} className="mt-8 grid gap-6">
       <FormField id="event-title" label="Title" error={errors.title?.message}>
         {(input) => <input {...input} {...register('title')} className={INPUT} placeholder="CP312 Midterm Review" />}
       </FormField>
@@ -59,15 +67,7 @@ export function EventForm({ defaultValues, unreadableTime, pictureUrl, submitLab
         {(input) => <textarea {...input} {...register('description')} rows={5} className={INPUT} />}
       </FormField>
 
-      <div>
-        <p className="font-display text-lg font-bold">Picture</p>
-        {pictureUrl ? (
-          <img src={pictureUrl} alt="The event's current picture" className="mt-2 h-32 w-auto rounded-xl object-cover" />
-        ) : (
-          <p className="mt-2 text-text-2">No picture yet.</p>
-        )}
-        <p className="mt-1 text-sm text-text-2">Adding and changing pictures comes in a later update.</p>
-      </div>
+      <PictureField id="event-picture" label="Picture" currentUrl={pictureUrl} value={picture} onChange={setPicture} />
 
       {error && (
         <p role="alert" className="font-medium text-orange">
@@ -76,7 +76,7 @@ export function EventForm({ defaultValues, unreadableTime, pictureUrl, submitLab
       )}
 
       <div className="flex flex-wrap gap-3">
-        <Button type="submit" variant="primary" disabled={saving || !isDirty}>
+        <Button type="submit" variant="primary" disabled={saving || !hasChanges}>
           {saving ? 'Saving…' : submitLabel}
         </Button>
         <Link
