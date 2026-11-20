@@ -1,20 +1,27 @@
 /**
  * The Events section, where the admin lands after sign-in: every event, newest first, with a title search, a
- * link to add one, and edit and delete on each.
+ * link to add one, and edit and delete on each. After a save it says which event was saved.
  */
 import { useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useLocation } from 'react-router';
 import { EventList } from '../components/events/EventList';
 import { Button } from '../components/ui/Button';
 import { useEvents } from '../hooks/useEvents';
 import { messageFor } from '../lib/errors';
+import { savedNameFrom } from '../lib/saved-notice';
 import { PATHS } from '../paths';
 
 export function EventsPage() {
   const [search, setSearch] = useState('');
+  const saved = savedNameFrom(useLocation().state);
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-10 sm:px-8">
+      {saved && (
+        <p role="status" className="mb-6 rounded-xl border-2 border-sky px-4 py-3 font-medium text-sky">
+          {`Saved "${saved}".`}
+        </p>
+      )}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <h1 className="text-hero font-extrabold">Events</h1>
         <Link
