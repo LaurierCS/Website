@@ -4,7 +4,7 @@
  * uploaded here: the field reports a `PictureChange` and saving applies it.
  */
 import { useState } from 'react';
-import { useObjectUrl } from '../../hooks/useObjectUrl';
+import { usePreviewUrl } from '../../hooks/usePreviewUrl';
 import { ACCEPTED_IMAGE_TYPES, checkImage, IMAGE_RULES, type PictureChange } from '../../lib/images';
 import { Button } from './Button';
 
@@ -20,7 +20,7 @@ type PictureFieldProps = {
 export function PictureField({ id, label, currentUrl, value, onChange }: PictureFieldProps) {
   const [problem, setProblem] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
-  const previewUrl = useObjectUrl(value.kind === 'replace' ? value.image.file : null);
+  const previewUrl = usePreviewUrl(value.kind === 'replace' ? value.image.file : null);
   const shownUrl = value.kind === 'replace' ? previewUrl : value.kind === 'keep' ? currentUrl : null;
 
   function choose(file: File | undefined) {

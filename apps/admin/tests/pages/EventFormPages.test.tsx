@@ -21,6 +21,8 @@ const CP312_REVIEW: Event = {
 
 const PICTURE_URL = 'https://lcs.supabase.co/storage/v1/object/public/events-images/cp312.png';
 const POSTER = new File(['x'], 'poster.png', { type: 'image/png' });
+// The poster's one byte, "x", read back as a data URL.
+const POSTER_PREVIEW = 'data:image/png;base64,eA==';
 
 beforeEach(() => {
   mockAccess(SAM_ADMIN);
@@ -65,7 +67,7 @@ describe('NewEventPage', () => {
     await userEvent.type(screen.getByLabelText('Date'), '2026-12-01');
     await userEvent.upload(screen.getByLabelText(/Choose a picture/), POSTER);
 
-    expect(screen.getByRole('img', { name: 'The new picture' })).toHaveAttribute('src', 'blob:poster.png');
+    expect(await screen.findByRole('img', { name: 'The new picture' })).toHaveAttribute('src', POSTER_PREVIEW);
     await userEvent.click(screen.getByRole('button', { name: 'Create event' }));
 
     expect(createEvent).toHaveBeenCalledWith(expect.objectContaining({ title: 'Hack Night' }), {
@@ -79,7 +81,7 @@ describe('NewEventPage', () => {
 
     fireEvent.drop(await screen.findByText(/Choose a picture/), { dataTransfer: { files: [POSTER] } });
 
-    expect(await screen.findByRole('img', { name: 'The new picture' })).toHaveAttribute('src', 'blob:poster.png');
+    expect(await screen.findByRole('img', { name: 'The new picture' })).toHaveAttribute('src', POSTER_PREVIEW);
   });
 
   it('turns away a file that is not a picture or is too big, and says why', async () => {

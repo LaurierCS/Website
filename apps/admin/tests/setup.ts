@@ -11,7 +11,3 @@ HTMLDialogElement.prototype.showModal = function showModal(this: HTMLDialogEleme
 HTMLDialogElement.prototype.close = function close(this: HTMLDialogElement) {
   this.removeAttribute('open');
 };
-
-// jsdom has no blob URLs; a readable stand-in lets tests check which file a preview shows.
-URL.createObjectURL = (file: Blob) => `blob:${file instanceof File ? file.name : 'file'}`;
-URL.revokeObjectURL = () => {};
