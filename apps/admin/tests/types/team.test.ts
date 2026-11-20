@@ -23,9 +23,9 @@ describe('groupByDepartment', () => {
     ]);
 
     expect(groups.map((group) => [group.department, group.members.map((m) => m.name)])).toEqual([
+      ['Marketing', ['Ana', 'Cy']],
       ['Academics', ['Ben']],
       ['Engineering', ['Di']],
-      ['Marketing', ['Ana', 'Cy']],
     ]);
   });
 
