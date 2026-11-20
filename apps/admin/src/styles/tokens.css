@@ -26,6 +26,11 @@
   --code-tag: #6b98c4;
   --grad: linear-gradient(90deg, #6cb3ff, #89f7fe);
 
+  /* Danger: anything that can't be undone, like deleting. Never used for decoration. */
+  --danger: #ff6170;
+  --danger-ink: #4a0a14; /* text on --danger, and the solid shadow under a danger button */
+  --danger-soft: #ffa0a8; /* outlines and text of a quieter danger action on the dark background */
+
   /* Partner brands, used only where people must recognise them (the Discord sign-in). */
   --discord: #5865f2;
   --discord-ink: #3b44a8;
@@ -46,6 +51,7 @@
   /* Shape */
   --radius: 20px;
   --radius-sm: 14px;
+  --radius-label: 8px; /* small labels, like the chip on a dialog */
   --max: 1280px;
   --nav-h: 76px;
 
@@ -53,6 +59,9 @@
   --shadow-float: 0 30px 60px -20px rgb(0 0 0 / 0.6); /* held up off the page, like the login pass */
   --shadow-cutout: 0 6px 0 rgb(0 0 0 / 0.25); /* a paper cut-out lying on the page */
   --shadow-sticker: 2px 3px 0 var(--yellow-ink); /* a sticker pressed on, like the "Admin" label */
+  /* How tall a button's solid edge is, like a keyboard key, at rest and when lifted on hover. */
+  --key-depth: 5px;
+  --key-depth-lifted: 7px;
 
   /* Motion: springy for things you touch, eased for things that appear. */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
