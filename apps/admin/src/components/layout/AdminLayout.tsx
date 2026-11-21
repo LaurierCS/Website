@@ -1,5 +1,6 @@
 /**
- * The frame around every admin page: the logo, the "admin" sticker, the section links and the account menu.
+ * The frame around every admin page: the logo, the "admin" sticker, the section links, the how-to guide and the
+ * account menu.
  * Below the `header` breakpoint the logo shrinks to the LCS icon and the section links drop to their own row, so
  * nothing overlaps on a phone or tablet.
  */
@@ -7,6 +8,7 @@ import { Link, Outlet } from 'react-router';
 import { ICON_WHITE, LOGO_LONG_WHITE } from '../../assets/brand';
 import { PATHS } from '../../paths';
 import { AccountMenu } from './AccountMenu';
+import { GuideLink } from './GuideLink';
 import { SectionNav } from './SectionNav';
 
 export function AdminLayout() {
@@ -24,7 +26,10 @@ export function AdminLayout() {
           <div className="order-last w-full header:order-none header:mr-auto header:w-auto">
             <SectionNav />
           </div>
-          <AccountMenu />
+          <div className="flex items-center gap-3">
+            <GuideLink />
+            <AccountMenu />
+          </div>
         </div>
       </header>
       <Outlet />
