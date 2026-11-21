@@ -21,8 +21,8 @@ import { ErrorBanner } from '../ui/ErrorBanner';
 import { FIELD_INPUT, FIELD_INPUT_WITH_ICON } from '../ui/field-styles';
 import { FormField } from '../ui/FormField';
 import { PictureField } from '../ui/PictureField';
+import { SignedSheet } from '../ui/SignedSheet';
 import { EVENT_SHEETS, type EventSheetKind } from './event-sheets';
-import { PrintShopSheet } from './PrintShopSheet';
 import { TicketPrinter } from './TicketPrinter';
 
 type EventFormProps = {
@@ -61,7 +61,7 @@ export function EventForm({ kind, defaultValues, unreadableTime, pictureUrl, sav
   return (
     <form noValidate onSubmit={handleSubmit((values) => onSave(values, dirtyFields, picture))}>
       <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_24rem]">
-        <PrintShopSheet intro={sheet.intro} status={sheet.status}>
+        <SignedSheet sign="LCS Print Shop" accent="yellow" intro={sheet.intro} status={sheet.status}>
           <div className="grid gap-6">
             {error && <ErrorBanner title={error} body="Your changes are still here, so you can try again." />}
 
@@ -108,7 +108,7 @@ export function EventForm({ kind, defaultValues, unreadableTime, pictureUrl, sav
               onChange={setPicture}
             />
           </div>
-        </PrintShopSheet>
+        </SignedSheet>
 
         {/* Stays in view beside a long form on a computer, so the ticket can be watched while typing. */}
         <div className="lg:sticky lg:top-6">
