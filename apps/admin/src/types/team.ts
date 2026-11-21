@@ -26,6 +26,9 @@ export type MemberFields = Readonly<
   Pick<TeamMember, 'name' | 'role' | 'githubUrl' | 'linkedinUrl' | 'isPublic'> & { department: Department }
 >;
 
+/** What a crew badge shows: a saved member on the Team board, or the team form as it is filled in. */
+export type BadgeFace = Readonly<Pick<TeamMember, 'name' | 'role' | 'pictureUrl' | 'githubUrl' | 'linkedinUrl' | 'isPublic'>>;
+
 /** One department's heading and its members. `department` is null for members with none. */
 export type DepartmentGroup = Readonly<{ department: string | null; members: readonly TeamMember[] }>;
 
