@@ -1,7 +1,6 @@
 /**
  * Reading, adding, changing, showing or hiding, and deleting team members in Supabase, with their photos. Rows
- * are checked and turned into
- * `TeamMember`s here, once, so pages get typed data.
+ * are checked and turned into `TeamMember`s here, once, so pages get typed data.
  */
 import { z } from 'zod';
 import type { Database } from '../types/database.types';

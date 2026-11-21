@@ -1,8 +1,7 @@
 /**
  * Cropping a chosen photo to a square before it is kept, for photos the site shows in a circle. The photo sits
- * under a round window: drag it to move, use the slider (or the arrow keys on the photo) to zoom. It is the
- * browser's own modal dialog, so focus stays inside and Escape cancels; on phones it sits at the bottom of the
- * screen. Render it only while cropping.
+ * under a round window: drag it to move, use the slider to zoom. It is the browser's own modal dialog, so focus
+ * stays inside and Escape cancels; on phones it sits at the bottom of the screen. Render it only while cropping.
  */
 import { useEffect, useId, useRef, useState } from 'react';
 import Cropper from 'react-easy-crop';
