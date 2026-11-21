@@ -2,13 +2,15 @@
  * Reading, showing or hiding, and deleting team members in Supabase. Rows are checked and turned into
  * `TeamMember`s here, once, so pages get typed data.
  */
+import { z } from 'zod';
 import type { Database } from '../types/database.types';
-import { type TeamMember, TeamMemberSchema } from '../types/team';
+import { type MemberFields, type TeamMember, TeamMemberSchema } from '../types/team';
 import { UnavailableError } from './errors';
 import { BUCKETS, removeImage } from './storage';
 import { getSupabase } from './supabase';
 
 type TeamRow = Database['public']['Tables']['team']['Row'];
+type TeamUpdate = Database['public']['Tables']['team']['Update'];
 
 const COLUMNS = 'id, name, role, department, is_public, picture_url, github_url, linkedin_url';
 
@@ -21,6 +23,49 @@ export async function listTeam(): Promise<readonly TeamMember[]> {
   const { data, error } = await getSupabase().from('team').select(COLUMNS).order('name');
   if (error) throw new UnavailableError('The team could not be loaded.', { cause: error });
   return data.flatMap((row) => toTeamMember(row) ?? []);
+}
+
+/**
+ * One member for the edit page, or null when there is no such member (or the id in the URL isn't one).
+ * @throws UnavailableError when Supabase cannot be reached, or the member's saved data can't be read.
+ */
+export async function getMember(id: string): Promise<TeamMember | null> {
+  // The id comes from the URL; anything that isn't a uuid can't be a member, so don't ask Supabase.
+  if (!z.uuid().safeParse(id).success) return null;
+  const { data, error } = await getSupabase().from('team').select(COLUMNS).eq('id', id).maybeSingle();
+  if (error) throw new UnavailableError('This team member could not be loaded.', { cause: error });
+  if (!data) return null;
+  const member = toTeamMember(data);
+  if (!member) throw new UnavailableError("This member has saved data the admin can't read. It needs fixing in Supabase.");
+  return member;
+}
+
+/**
+ * Adds a member.
+ * @throws UnavailableError when they could not be saved (Supabase down, or the insert was refused).
+ */
+export async function createMember(fields: MemberFields): Promise<void> {
+  // `name` is spelled out because it is the one column a new row must have; the types check it is there.
+  const { data, error } = await getSupabase()
+    .from('team')
+    .insert({ ...toColumns(fields), name: fields.name })
+    .select('id');
+  // Row-level security refuses an insert by saving nothing rather than by failing, so check a row came back.
+  if (error || data.length === 0) {
+    throw new UnavailableError(`${fields.name} couldn't be saved.`, { cause: error });
+  }
+}
+
+/**
+ * Saves the fields an exec changed on a member; the rest stay as they were.
+ * @throws UnavailableError when it could not be saved (Supabase down, the member is gone, or the update was refused).
+ */
+export async function updateMember(member: TeamMember, changes: Partial<MemberFields>): Promise<void> {
+  const { data, error } = await getSupabase().from('team').update(toColumns(changes)).eq('id', member.id).select('id');
+  // Row-level security refuses an update by changing nothing rather than by failing, so check a row came back.
+  if (error || data.length === 0) {
+    throw new UnavailableError("Your changes couldn't be saved.", { cause: error });
+  }
 }
 
 /**
@@ -47,6 +92,21 @@ export async function deleteMember(member: TeamMember): Promise<void> {
     throw new UnavailableError(`${member.name} couldn't be deleted.`, { cause: error });
   }
   if (member.pictureUrl) await removeImage(BUCKETS.team, member.pictureUrl);
+}
+
+/**
+ * A member's fields as table columns. A field left out (undefined) is left out of the request, so an update
+ * only touches what changed.
+ */
+function toColumns(fields: Partial<MemberFields>): TeamUpdate {
+  return {
+    name: fields.name,
+    role: fields.role,
+    department: fields.department,
+    github_url: fields.githubUrl,
+    linkedin_url: fields.linkedinUrl,
+    is_public: fields.isPublic,
+  };
 }
 
 /**
