@@ -33,6 +33,8 @@ export const routes: RouteObject[] = [
           { path: PATHS.newEvent, lazy: async () => ({ Component: (await import('./pages/NewEventPage')).NewEventPage }) },
           { path: PATHS.editEvent, lazy: async () => ({ Component: (await import('./pages/EditEventPage')).EditEventPage }) },
           { path: PATHS.team, lazy: async () => ({ Component: (await import('./pages/TeamPage')).TeamPage }) },
+          { path: PATHS.newMember, lazy: async () => ({ Component: (await import('./pages/NewMemberPage')).NewMemberPage }) },
+          { path: PATHS.editMember, lazy: async () => ({ Component: (await import('./pages/EditMemberPage')).EditMemberPage }) },
           { path: '*', lazy: async () => ({ Component: (await import('./pages/NotFoundPage')).NotFoundPage }) },
         ],
       },
