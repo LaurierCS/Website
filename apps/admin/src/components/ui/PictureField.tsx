@@ -1,20 +1,24 @@
 /**
- * Choosing a picture: pick a file (or drag one in on a computer), see it as a taped print before saving, or
- * remove the current one. Only files `checkImage` accepts get through; anything else shows why under the field.
- * Nothing is uploaded here: the field reports a `PictureChange` and saving applies it.
+ * Choosing a picture: pick a file (or drag one in on a computer), crop it to a square first when the field is
+ * `shape="square"`, see it as a taped print before saving, or remove the current one. Only files `checkImage`
+ * accepts get through; anything else shows why under the field. Nothing is uploaded here: the field reports a
+ * `PictureChange` and saving applies it.
  */
 import { RotateCw, Trash, Upload } from 'lucide-react';
 import { useState } from 'react';
-import { ACCEPTED_IMAGE_TYPES, checkImage, fileSize, IMAGE_RULES, type PictureChange } from '../../lib/images';
+import { ACCEPTED_IMAGE_TYPES, type CheckedImage, checkImage, fileSize, IMAGE_RULES, type PictureChange } from '../../lib/images';
 import { Button } from './Button';
 import { buttonClasses } from './button-styles';
 import { FieldError } from './FieldError';
 import { type DropTargetProps, PictureDropZone } from './PictureDropZone';
 import { PicturePrint } from './PicturePrint';
+import { SquareCropDialog } from './SquareCropDialog';
 
 type PictureFieldProps = {
   id: string;
   label: string;
+  /** "square" crops a chosen picture to a square before keeping it, for photos the site shows in a circle. */
+  shape?: 'free' | 'square';
   /** The picture saved now, if any. */
   currentUrl: string | null;
   /** The picture to show for `value`, from `useShownPicture`. */
@@ -23,9 +27,11 @@ type PictureFieldProps = {
   onChange: (change: PictureChange) => void;
 };
 
-export function PictureField({ id, label, currentUrl, shownUrl, value, onChange }: PictureFieldProps) {
+export function PictureField({ id, label, shape = 'free', currentUrl, shownUrl, value, onChange }: PictureFieldProps) {
   const [problem, setProblem] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
+  // A square picture waiting to be cropped, before it becomes the field's value.
+  const [toCrop, setToCrop] = useState<CheckedImage | null>(null);
   const newFile = value.kind === 'replace' ? value.image.file : null;
   const rulesId = `${id}-rules`;
   const problemId = `${id}-problem`;
@@ -38,7 +44,8 @@ export function PictureField({ id, label, currentUrl, shownUrl, value, onChange 
       return;
     }
     setProblem(null);
-    onChange({ kind: 'replace', image: check.image });
+    if (shape === 'square') setToCrop(check.image);
+    else onChange({ kind: 'replace', image: check.image });
   }
 
   // Files can be dropped on the empty zone, or on "Choose a different picture" when a picture is shown.
@@ -138,6 +145,21 @@ export function PictureField({ id, label, currentUrl, shownUrl, value, onChange 
       )}
 
       {problem && <FieldError id={problemId}>{problem}</FieldError>}
+
+      {toCrop && (
+        <SquareCropDialog
+          image={toCrop}
+          onCropped={(image) => {
+            setToCrop(null);
+            onChange({ kind: 'replace', image });
+          }}
+          onFailed={(reason) => {
+            setToCrop(null);
+            setProblem(reason);
+          }}
+          onCancel={() => setToCrop(null)}
+        />
+      )}
     </fieldset>
   );
 }
