@@ -5,6 +5,7 @@ import { z } from 'zod';
 
 /** The club's departments, in the order the site lists them. The team form offers exactly these. */
 export const DEPARTMENTS = ['Admin', 'Finance', 'Marketing', 'Outreach', 'Events', 'Academics', 'Engineering'] as const;
+export type Department = (typeof DEPARTMENTS)[number];
 
 export const TeamMemberSchema = z.object({
   id: z.uuid(),
@@ -19,6 +20,11 @@ export const TeamMemberSchema = z.object({
   linkedinUrl: z.url().nullable(),
 });
 export type TeamMember = Readonly<z.infer<typeof TeamMemberSchema>>;
+
+/** What an exec fills in for a member. The database only accepts the seven departments, so it is one of them. */
+export type MemberFields = Readonly<
+  Pick<TeamMember, 'name' | 'role' | 'githubUrl' | 'linkedinUrl' | 'isPublic'> & { department: Department }
+>;
 
 /** One department's heading and its members. `department` is null for members with none. */
 export type DepartmentGroup = Readonly<{ department: string | null; members: readonly TeamMember[] }>;
