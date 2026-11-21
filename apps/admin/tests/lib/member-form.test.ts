@@ -1,4 +1,5 @@
 import {
+  badgePreview,
   changedMemberFields,
   EMPTY_MEMBER_FORM,
   formValuesFor,
@@ -106,5 +107,39 @@ describe('the team form', () => {
 
     expect(changedMemberFields(checked, { role: true })).toEqual({ role: 'Software Engineer' });
     expect(changedMemberFields(checked, {})).toEqual({});
+  });
+});
+
+describe('the badge preview beside the team form', () => {
+  it('stands in "Their name" and no role until they are typed', () => {
+    expect(badgePreview(EMPTY_MEMBER_FORM, null)).toEqual({
+      name: 'Their name',
+      role: null,
+      pictureUrl: null,
+      githubUrl: null,
+      linkedinUrl: null,
+      isPublic: true,
+    });
+  });
+
+  it('shows what is typed, trimmed, with the chosen photo', () => {
+    const preview = badgePreview({ ...FILLED, name: ' Ava Lee ', role: ' VP of Events ' }, 'blob:photo');
+
+    expect(preview).toMatchObject({ name: 'Ava Lee', role: 'VP of Events', pictureUrl: 'blob:photo' });
+  });
+
+  it('shows a link only once it is a whole GitHub or LinkedIn link', () => {
+    const halfTyped = badgePreview({ ...FILLED, githubUrl: 'https://github', linkedinUrl: 'https://gitlab.com/ava' }, null);
+    const whole = badgePreview(
+      { ...FILLED, githubUrl: ' https://github.com/ava ', linkedinUrl: 'https://www.linkedin.com/in/ava' },
+      null,
+    );
+
+    expect(halfTyped).toMatchObject({ githubUrl: null, linkedinUrl: null });
+    expect(whole).toMatchObject({ githubUrl: 'https://github.com/ava', linkedinUrl: 'https://www.linkedin.com/in/ava' });
+  });
+
+  it('takes the hidden look when the switch is off', () => {
+    expect(badgePreview({ ...FILLED, isPublic: false }, null).isPublic).toBe(false);
   });
 });

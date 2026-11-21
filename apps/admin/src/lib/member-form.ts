@@ -3,7 +3,7 @@
  * the departments from `DEPARTMENTS`, so the form, the Team list and the database rule can't disagree.
  */
 import { z } from 'zod';
-import { DEPARTMENTS, type MemberFields, type TeamMember, TeamMemberSchema } from '../types/team';
+import { type BadgeFace, DEPARTMENTS, type MemberFields, type TeamMember, TeamMemberSchema } from '../types/team';
 
 const GITHUB = z.url({ protocol: /^https$/, hostname: /^(www\.)?github\.com$/ });
 // LinkedIn uses country subdomains too, like ca.linkedin.com.
@@ -72,6 +72,26 @@ export function toMemberFields(values: CheckedMemberForm): MemberFields {
     linkedinUrl: values.linkedinUrl || null,
     isPublic: values.isPublic,
   };
+}
+
+/**
+ * The crew badge for the form as it stands, so an exec sees how the member will look on the Team board while
+ * typing. "Their name" stands in until a name is typed, and a link shows only once it is a whole, real link.
+ */
+export function badgePreview(values: MemberFormValues, shownPhoto: string | null): BadgeFace {
+  return {
+    name: values.name.trim() || 'Their name',
+    role: values.role.trim() || null,
+    pictureUrl: shownPhoto,
+    githubUrl: linkOrNull(GITHUB, values.githubUrl),
+    linkedinUrl: linkOrNull(LINKEDIN, values.linkedinUrl),
+    isPublic: values.isPublic,
+  };
+}
+
+function linkOrNull(link: z.ZodURL, value: string): string | null {
+  const trimmed = value.trim();
+  return link.safeParse(trimmed).success ? trimmed : null;
 }
 
 /** Only the fields the exec changed, so saving an edit leaves everything else exactly as it was. */
