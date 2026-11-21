@@ -1,22 +1,28 @@
 /**
  * The Team section as a crew board: everyone on the team, hidden members included, as lanyard badges under
  * their department, in the site's order. It counts the crew, links to adding someone, and on each badge shows or
- * hides them on the site, edits or deletes them.
+ * hides them on the site, edits or deletes them. After a save it says who was saved.
  */
 import { Plus, RotateCw } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router';
 import { DOODLES } from '../assets/brand';
 import { DepartmentHeading } from '../components/team/DepartmentHeading';
 import { MemberBadge } from '../components/team/MemberBadge';
 import { Button } from '../components/ui/Button';
 import { ButtonLink } from '../components/ui/ButtonLink';
+import { SavedNotice } from '../components/ui/SavedNotice';
 import { ScrapbookWord } from '../components/ui/ScrapbookWord';
 import { StateBlock } from '../components/ui/StateBlock';
 import { useTeam } from '../hooks/useTeam';
 import { messageFor } from '../lib/errors';
+import { savedNameFrom } from '../lib/saved-notice';
 import { PATHS } from '../paths';
 import { groupByDepartment, type TeamMember } from '../types/team';
 
 export function TeamPage() {
+  const navigate = useNavigate();
+  const saved = savedNameFrom(useLocation().state);
+
   return (
     <main className="mx-auto max-w-6xl px-4 py-10 sm:px-8">
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -28,6 +34,12 @@ export function TeamPage() {
         </div>
         <AddMemberLink />
       </div>
+      {saved && (
+        <div className="mt-6">
+          {/* Dismissing also clears it from the history entry, so going back here doesn't show it again. */}
+          <SavedNotice message={`Saved "${saved}".`} onDismiss={() => navigate('.', { replace: true, state: null })} />
+        </div>
+      )}
       <div className="mt-6">
         <TeamResults />
       </div>
