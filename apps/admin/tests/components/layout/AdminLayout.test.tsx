@@ -48,6 +48,14 @@ describe('AdminLayout', () => {
     expect(sectionLink('Team')).toHaveAttribute('aria-current', 'page');
   });
 
+  it('links to the how-to guide for execs, in a new tab', async () => {
+    renderApp('/events');
+
+    const guide = await screen.findByRole('link', { name: 'Guide (opens in a new tab)' });
+    expect(guide).toHaveAttribute('href', 'https://github.com/LaurierCS/Website/blob/main/docs/admin-guide.md');
+    expect(guide).toHaveAttribute('target', '_blank');
+  });
+
   it('shows a not-found page at an unknown URL, with a way back to Events', async () => {
     renderApp('/sponsors');
 
