@@ -1,6 +1,6 @@
 /**
- * An on/off switch that saves as soon as it is flipped, like showing a member on the site. The knob springs
- * across and the words beside it say the new state; while saving they say "Saving…" and the switch waits.
+ * An on/off switch, like showing a member on the site. The knob springs across and the words beside it say the
+ * new state. Where flipping it saves straight away (a member's badge), `saving` makes it say "Saving…" and wait.
  */
 
 type SwitchProps = {
