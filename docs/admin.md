@@ -82,6 +82,7 @@ npx supabase functions deploy verify-member --no-verify-jwt
   | `20261119090000_admin_write_rules.sql` | 2026-11-19, recorded in the migration history |
   | `20261119100000_admin_image_uploads.sql` | 2026-11-19, recorded in the migration history |
   | `20261119150000_admin_revoke_truncate.sql` | 2026-11-19, recorded in the migration history |
+  | `20261121200000_site_data_versions.sql` | 2026-11-21, by hand in the SQL editor |
 
   Update this table when you apply one.
 - **`--no-verify-jwt` is required.** The gateway's JWT check rejects this project's sessions; the function
