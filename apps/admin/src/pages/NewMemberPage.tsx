@@ -19,11 +19,12 @@ export function NewMemberPage() {
         <MemberForm
           kind="new"
           defaultValues={EMPTY_MEMBER_FORM}
+          photoUrl={null}
           saving={create.isPending}
           error={create.isError ? messageFor(create.error) : null}
-          onSave={(values) => {
+          onSave={(values, _changed, photo) => {
             const fields = toMemberFields(values);
-            create.mutate(fields, { onSuccess: () => navigate(PATHS.team, { state: savedNotice(fields.name) }) });
+            create.mutate({ fields, photo }, { onSuccess: () => navigate(PATHS.team, { state: savedNotice(fields.name) }) });
           }}
         />
       </div>

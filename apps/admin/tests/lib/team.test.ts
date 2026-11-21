@@ -1,5 +1,5 @@
 import { UnavailableError } from '../../src/lib/errors';
-import { BUCKETS, removeImage } from '../../src/lib/storage';
+import { BUCKETS, removeImage, uploadImage } from '../../src/lib/storage';
 import { getSupabase } from '../../src/lib/supabase';
 import { createMember, deleteMember, getMember, listTeam, setMemberPublic, updateMember } from '../../src/lib/team';
 import type { MemberFields, TeamMember } from '../../src/types/team';
@@ -8,6 +8,7 @@ vi.mock('../../src/lib/supabase');
 vi.mock('../../src/lib/storage', async (importOriginal) => ({
   ...(await importOriginal<typeof import('../../src/lib/storage')>()),
   removeImage: vi.fn(),
+  uploadImage: vi.fn(),
 }));
 
 const ROW = {
@@ -113,11 +114,16 @@ describe('getMember', () => {
   });
 });
 
+const NEW_PHOTO_URL = 'https://lcs.supabase.co/storage/v1/object/public/team-images/new.jpg';
+const PHOTO = { file: new File(['x'], 'photo.jpg', { type: 'image/jpeg' }), extension: 'jpg' };
+const KEEP = { kind: 'keep' } as const;
+const REPLACE = { kind: 'replace', image: PHOTO } as const;
+
 describe('createMember', () => {
   it('saves the member with its columns named as the table names them', async () => {
     const insert = mockInsert(SAVED);
 
-    await createMember(NEW_MEMBER);
+    await createMember(NEW_MEMBER, KEEP);
 
     expect(insert).toHaveBeenCalledWith({
       name: 'Ava Lee',
@@ -126,37 +132,74 @@ describe('createMember', () => {
       github_url: null,
       linkedin_url: 'https://www.linkedin.com/in/avalee',
       is_public: true,
+      picture_url: null,
     });
+    expect(uploadImage).not.toHaveBeenCalled();
+  });
+
+  it('uploads a chosen photo to the team bucket and saves its address', async () => {
+    vi.mocked(uploadImage).mockResolvedValue(NEW_PHOTO_URL);
+    const insert = mockInsert(SAVED);
+
+    await createMember(NEW_MEMBER, REPLACE);
+
+    expect(uploadImage).toHaveBeenCalledWith(BUCKETS.team, PHOTO);
+    expect(insert).toHaveBeenCalledWith(expect.objectContaining({ picture_url: NEW_PHOTO_URL }));
   });
 
   it.each([
     ['Supabase errors', FAILED],
     ['nothing was saved, as when row-level security refuses it', NOTHING_SAVED],
-  ])('fails when %s', async (_, result) => {
+  ])('fails when %s, and deletes the photo it just uploaded', async (_, result) => {
+    vi.mocked(uploadImage).mockResolvedValue(NEW_PHOTO_URL);
     mockInsert(result);
 
-    await expect(createMember(NEW_MEMBER)).rejects.toThrow("Ava Lee couldn't be saved.");
+    await expect(createMember(NEW_MEMBER, REPLACE)).rejects.toThrow("Ava Lee couldn't be saved.");
+    expect(removeImage).toHaveBeenCalledWith(BUCKETS.team, NEW_PHOTO_URL);
   });
 });
 
 describe('updateMember', () => {
-  it('sends only the changed fields', async () => {
+  it('sends only the changed fields, and leaves the photo alone when it is kept', async () => {
     const { update, eq } = mockUpdate(SAVED);
 
-    await updateMember(SAM, { role: 'Software Engineer', githubUrl: null });
+    await updateMember(SAM, { role: 'Software Engineer', githubUrl: null }, KEEP);
 
     // Unchanged fields are undefined, which the request leaves out, so they stay as they were.
     expect(update).toHaveBeenCalledWith({ role: 'Software Engineer', github_url: null });
     expect(eq).toHaveBeenCalledWith('id', SAM.id);
+    expect(removeImage).not.toHaveBeenCalled();
+  });
+
+  it('replaces the photo, then deletes the old file', async () => {
+    vi.mocked(uploadImage).mockResolvedValue(NEW_PHOTO_URL);
+    const { update } = mockUpdate(SAVED);
+
+    await updateMember(SAM, {}, REPLACE);
+
+    expect(update).toHaveBeenCalledWith({ picture_url: NEW_PHOTO_URL });
+    expect(removeImage).toHaveBeenCalledWith(BUCKETS.team, SAM.pictureUrl);
+  });
+
+  it('removes the photo: the address is cleared, then the file is deleted', async () => {
+    const { update } = mockUpdate(SAVED);
+
+    await updateMember(SAM, {}, { kind: 'remove' });
+
+    expect(update).toHaveBeenCalledWith({ picture_url: null });
+    expect(removeImage).toHaveBeenCalledWith(BUCKETS.team, SAM.pictureUrl);
   });
 
   it.each([
     ['Supabase errors', FAILED],
     ['nothing was changed, as when row-level security refuses it', NOTHING_SAVED],
-  ])('fails when %s', async (_, result) => {
+  ])('fails when %s, keeping the old photo and deleting the new one', async (_, result) => {
+    vi.mocked(uploadImage).mockResolvedValue(NEW_PHOTO_URL);
     mockUpdate(result);
 
-    await expect(updateMember(SAM, { role: 'Software Engineer' })).rejects.toThrow("Your changes couldn't be saved.");
+    await expect(updateMember(SAM, { role: 'Software Engineer' }, REPLACE)).rejects.toThrow("Your changes couldn't be saved.");
+    expect(removeImage).toHaveBeenCalledWith(BUCKETS.team, NEW_PHOTO_URL);
+    expect(removeImage).not.toHaveBeenCalledWith(BUCKETS.team, SAM.pictureUrl);
   });
 });
 
