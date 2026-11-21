@@ -78,12 +78,14 @@ function EditForm({ member }: { member: TeamMember }) {
     <MemberForm
       kind="edit"
       defaultValues={formValuesFor(member)}
+      photoUrl={member.pictureUrl}
       saving={update.isPending}
       error={update.isError ? messageFor(update.error) : null}
-      onSave={(values, changed) =>
-        update.mutate(changedMemberFields(values, changed), {
-          onSuccess: () => navigate(PATHS.team, { state: savedNotice(values.name.trim()) }),
-        })
+      onSave={(values, changed, photo) =>
+        update.mutate(
+          { changes: changedMemberFields(values, changed), photo },
+          { onSuccess: () => navigate(PATHS.team, { state: savedNotice(values.name.trim()) }) },
+        )
       }
     />
   );

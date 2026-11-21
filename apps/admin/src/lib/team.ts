@@ -1,12 +1,14 @@
 /**
- * Reading, showing or hiding, and deleting team members in Supabase. Rows are checked and turned into
+ * Reading, adding, changing, showing or hiding, and deleting team members in Supabase, with their photos. Rows
+ * are checked and turned into
  * `TeamMember`s here, once, so pages get typed data.
  */
 import { z } from 'zod';
 import type { Database } from '../types/database.types';
 import { type MemberFields, type TeamMember, TeamMemberSchema } from '../types/team';
 import { UnavailableError } from './errors';
-import { BUCKETS, removeImage } from './storage';
+import type { PictureChange } from './images';
+import { BUCKETS, removeImage, uploadImage } from './storage';
 import { getSupabase } from './supabase';
 
 type TeamRow = Database['public']['Tables']['team']['Row'];
@@ -41,31 +43,40 @@ export async function getMember(id: string): Promise<TeamMember | null> {
 }
 
 /**
- * Adds a member.
- * @throws UnavailableError when they could not be saved (Supabase down, or the insert was refused).
+ * Adds a member, uploading their photo first when one was chosen. If the member can't be saved, the uploaded
+ * photo is deleted again so no unused file is left behind.
+ * @throws UnavailableError when the photo or the member could not be saved (Supabase down, or refused).
  */
-export async function createMember(fields: MemberFields): Promise<void> {
+export async function createMember(fields: MemberFields, photo: PictureChange): Promise<void> {
+  const newPhotoUrl = photo.kind === 'replace' ? await uploadImage(BUCKETS.team, photo.image) : null;
   // `name` is spelled out because it is the one column a new row must have; the types check it is there.
   const { data, error } = await getSupabase()
     .from('team')
-    .insert({ ...toColumns(fields), name: fields.name })
+    .insert({ ...toColumns(fields), name: fields.name, picture_url: newPhotoUrl })
     .select('id');
   // Row-level security refuses an insert by saving nothing rather than by failing, so check a row came back.
   if (error || data.length === 0) {
+    if (newPhotoUrl) await removeImage(BUCKETS.team, newPhotoUrl);
     throw new UnavailableError(`${fields.name} couldn't be saved.`, { cause: error });
   }
 }
 
 /**
- * Saves the fields an exec changed on a member; the rest stay as they were.
+ * Saves the fields an exec changed on a member, and their photo change; the rest stay as they were. A new photo
+ * is uploaded before the row changes and the old file is deleted only after, so a failure part-way never leaves
+ * the member pointing at a missing photo.
  * @throws UnavailableError when it could not be saved (Supabase down, the member is gone, or the update was refused).
  */
-export async function updateMember(member: TeamMember, changes: Partial<MemberFields>): Promise<void> {
-  const { data, error } = await getSupabase().from('team').update(toColumns(changes)).eq('id', member.id).select('id');
+export async function updateMember(member: TeamMember, changes: Partial<MemberFields>, photo: PictureChange): Promise<void> {
+  const newPhotoUrl = photo.kind === 'replace' ? await uploadImage(BUCKETS.team, photo.image) : null;
+  const row = photo.kind === 'keep' ? toColumns(changes) : { ...toColumns(changes), picture_url: newPhotoUrl };
+  const { data, error } = await getSupabase().from('team').update(row).eq('id', member.id).select('id');
   // Row-level security refuses an update by changing nothing rather than by failing, so check a row came back.
   if (error || data.length === 0) {
+    if (newPhotoUrl) await removeImage(BUCKETS.team, newPhotoUrl);
     throw new UnavailableError("Your changes couldn't be saved.", { cause: error });
   }
+  if (photo.kind !== 'keep' && member.pictureUrl) await removeImage(BUCKETS.team, member.pictureUrl);
 }
 
 /**
