@@ -1,4 +1,8 @@
-/** Adding a team member. After saving it goes back to Team, which says who was saved. */
+/**
+ * Adding a team member. Once they are saved their badge drops onto its lanyard, then it goes back to Team, which
+ * says who was saved.
+ */
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { MemberForm } from '../components/team/MemberForm';
 import { FormPageHeading } from '../components/ui/FormPageHeading';
@@ -11,9 +15,11 @@ import { PATHS } from '../paths';
 export function NewMemberPage() {
   const navigate = useNavigate();
   const create = useCreateMember();
+  // The saved name, once saving has worked, for Team's "Saved" notice.
+  const [savedName, setSavedName] = useState<string | null>(null);
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-10 sm:px-8">
+    <main className="mx-auto max-w-6xl px-4 py-10 sm:px-8">
       <FormPageHeading title="Add member" back={{ to: PATHS.team, section: 'Team' }} />
       <div className="mt-8">
         <MemberForm
@@ -24,8 +30,9 @@ export function NewMemberPage() {
           error={create.isError ? messageFor(create.error) : null}
           onSave={(values, _changed, photo) => {
             const fields = toMemberFields(values);
-            create.mutate({ fields, photo }, { onSuccess: () => navigate(PATHS.team, { state: savedNotice(fields.name) }) });
+            create.mutate({ fields, photo }, { onSuccess: () => setSavedName(fields.name) });
           }}
+          whenSaved={savedName === null ? null : () => navigate(PATHS.team, { state: savedNotice(savedName) })}
         />
       </div>
     </main>
