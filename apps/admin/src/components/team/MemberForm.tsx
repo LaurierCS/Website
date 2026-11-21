@@ -1,12 +1,14 @@
 /**
- * The form for adding a team member and for editing one: name, role, department, GitHub and LinkedIn links,
- * and whether they show on the site. It checks the fields with `MemberFormSchema`, shows problems under each
- * field, and asks before you leave with unsaved changes. Saving is the page's job (`onSave`). The photo comes
- * with its own upload later.
+ * The form for adding a team member and for editing one: name, role, department, a square photo, GitHub and
+ * LinkedIn links, and whether they show on the site. It checks the fields with `MemberFormSchema`, shows problems
+ * under each field, and asks before you leave with unsaved changes. Saving is the page's job (`onSave`).
  */
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { useShownPicture } from '../../hooks/useShownPicture';
 import { useUnsavedChangesWarning } from '../../hooks/useUnsavedChangesWarning';
+import type { PictureChange } from '../../lib/images';
 import {
   type ChangedMemberFields,
   type CheckedMemberForm,
@@ -21,6 +23,7 @@ import { ConfirmDialog } from '../ui/ConfirmDialog';
 import { ErrorBanner } from '../ui/ErrorBanner';
 import { FIELD_INPUT, FIELD_INPUT_WITH_ICON } from '../ui/field-styles';
 import { FormField } from '../ui/FormField';
+import { PictureField } from '../ui/PictureField';
 import { ProfileIcon } from '../ui/ProfileIcon';
 import { Switch } from '../ui/Switch';
 
@@ -33,20 +36,26 @@ const SUBMIT = {
 type MemberFormProps = {
   kind: keyof typeof SUBMIT;
   defaultValues: MemberFormValues;
+  /** Their photo saved now, if any. */
+  photoUrl: string | null;
   saving: boolean;
   /** Why the last save failed. */
   error: string | null;
-  onSave: (values: CheckedMemberForm, changed: ChangedMemberFields) => void;
+  onSave: (values: CheckedMemberForm, changed: ChangedMemberFields, photo: PictureChange) => void;
 };
 
-export function MemberForm({ kind, defaultValues, saving, error, onSave }: MemberFormProps) {
+export function MemberForm({ kind, defaultValues, photoUrl, saving, error, onSave }: MemberFormProps) {
   const { register, handleSubmit, control, formState } = useForm({ resolver: zodResolver(MemberFormSchema), defaultValues });
   const { errors, isDirty, dirtyFields } = formState;
-  const leave = useUnsavedChangesWarning(isDirty);
+  // The photo is a file, not text, so it lives beside the text fields rather than in React Hook Form.
+  const [photo, setPhoto] = useState<PictureChange>({ kind: 'keep' });
+  const shownPhoto = useShownPicture(photoUrl, photo);
+  const hasChanges = isDirty || photo.kind !== 'keep';
+  const leave = useUnsavedChangesWarning(hasChanges);
   const submit = SUBMIT[kind];
 
   return (
-    <form noValidate onSubmit={handleSubmit((values) => onSave(values, dirtyFields))}>
+    <form noValidate onSubmit={handleSubmit((values) => onSave(values, dirtyFields, photo))}>
       <div className="grid gap-6 rounded-card border border-line bg-slate px-5 py-6 sm:px-8 sm:py-8">
         {error && <ErrorBanner title={error} body="Your changes are still here, so you can try again." />}
 
@@ -73,6 +82,16 @@ export function MemberForm({ kind, defaultValues, saving, error, onSave }: Membe
             )}
           </FormField>
         </div>
+
+        <PictureField
+          id="member-photo"
+          label="Photo"
+          shape="square"
+          currentUrl={photoUrl}
+          shownUrl={shownPhoto}
+          value={photo}
+          onChange={setPhoto}
+        />
 
         <div className="grid gap-6 sm:grid-cols-2">
           <FormField id="member-github" label="GitHub" icon={<ProfileIcon site="github" />} error={errors.githubUrl?.message}>
@@ -120,7 +139,7 @@ export function MemberForm({ kind, defaultValues, saving, error, onSave }: Membe
         <ButtonLink to={PATHS.team} variant="quiet" size="small">
           Cancel
         </ButtonLink>
-        <Button type="submit" variant="primary" size="small" disabled={saving || !isDirty}>
+        <Button type="submit" variant="primary" size="small" disabled={saving || !hasChanges}>
           {saving ? submit.pending : submit.label}
         </Button>
       </div>
