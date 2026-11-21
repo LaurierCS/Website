@@ -1,13 +1,28 @@
 /** Team members loaded and cached by TanStack Query, and the changes that refresh them. */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { deleteMember, listTeam, setMemberPublic } from '../lib/team';
-import type { TeamMember } from '../types/team';
+import { createMember, deleteMember, getMember, listTeam, setMemberPublic, updateMember } from '../lib/team';
+import type { MemberFields, TeamMember } from '../types/team';
 
-// Every team query starts with this key, so one invalidation refreshes them all.
+// Every team query starts with this key, so one invalidation refreshes the list and any open member.
 const TEAM_KEY = ['team'] as const;
 
 export function useTeam() {
   return useQuery({ queryKey: TEAM_KEY, queryFn: listTeam });
+}
+
+/** One member for the edit page; `data` is null when there is no such member. */
+export function useMember(id: string) {
+  return useQuery({ queryKey: [...TEAM_KEY, id], queryFn: () => getMember(id) });
+}
+
+export function useCreateMember() {
+  const refresh = useRefreshTeam();
+  return useMutation({ mutationFn: (fields: MemberFields) => createMember(fields), onSuccess: refresh });
+}
+
+export function useUpdateMember(member: TeamMember) {
+  const refresh = useRefreshTeam();
+  return useMutation({ mutationFn: (changes: Partial<MemberFields>) => updateMember(member, changes), onSuccess: refresh });
 }
 
 /** Refreshes every team query once a change has been saved. */
