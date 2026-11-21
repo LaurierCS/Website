@@ -4,6 +4,8 @@ How sign-in to the admin dashboard (`apps/admin`, `admin.lauriercs.org`) is set 
 Everything here is done in the Supabase, Discord, Notion and Vercel dashboards or with the Supabase CLI; no
 secret goes in the repo.
 
+Using the dashboard (posting events, editing the team) is covered for execs in [admin-guide.md](admin-guide.md).
+
 ## How access works
 
 - People sign in with **Discord** or **Notion** through Supabase Auth. There are no passwords and no email sign-up.
