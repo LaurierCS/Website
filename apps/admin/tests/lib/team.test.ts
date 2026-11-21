@@ -1,8 +1,8 @@
 import { UnavailableError } from '../../src/lib/errors';
 import { BUCKETS, removeImage } from '../../src/lib/storage';
 import { getSupabase } from '../../src/lib/supabase';
-import { deleteMember, listTeam, setMemberPublic } from '../../src/lib/team';
-import type { TeamMember } from '../../src/types/team';
+import { createMember, deleteMember, getMember, listTeam, setMemberPublic, updateMember } from '../../src/lib/team';
+import type { MemberFields, TeamMember } from '../../src/types/team';
 
 vi.mock('../../src/lib/supabase');
 vi.mock('../../src/lib/storage', async (importOriginal) => ({
@@ -60,6 +60,105 @@ function mockDelete(result: { data: unknown; error: unknown }) {
   } as unknown as ReturnType<typeof getSupabase>);
   return eq;
 }
+
+/** Makes `from('team').select(...).eq(...).maybeSingle()` answer with `result`. Returns the `from` mock. */
+function mockGet(result: { data: unknown; error: unknown }) {
+  const from = vi.fn(() => ({ select: vi.fn(() => ({ eq: vi.fn(() => ({ maybeSingle: vi.fn().mockResolvedValue(result) })) })) }));
+  vi.mocked(getSupabase).mockReturnValue({ from } as unknown as ReturnType<typeof getSupabase>);
+  return from;
+}
+
+/** Makes `from('team').insert(...).select(...)` answer with `result`. Returns the `insert` mock. */
+function mockInsert(result: { data: unknown; error: unknown }) {
+  const insert = vi.fn(() => ({ select: vi.fn().mockResolvedValue(result) }));
+  vi.mocked(getSupabase).mockReturnValue({ from: vi.fn(() => ({ insert })) } as unknown as ReturnType<typeof getSupabase>);
+  return insert;
+}
+
+const NEW_MEMBER: MemberFields = {
+  name: 'Ava Lee',
+  role: null,
+  department: 'Events',
+  githubUrl: null,
+  linkedinUrl: 'https://www.linkedin.com/in/avalee',
+  isPublic: true,
+};
+
+describe('getMember', () => {
+  it('turns the row into a member', async () => {
+    mockGet({ data: ROW, error: null });
+
+    expect(await getMember(ROW.id)).toEqual(SAM);
+  });
+
+  it('is null when there is no such member', async () => {
+    mockGet({ data: null, error: null });
+
+    expect(await getMember(ROW.id)).toBeNull();
+  });
+
+  it("doesn't ask Supabase about an id that isn't a uuid", async () => {
+    const from = mockGet({ data: ROW, error: null });
+
+    expect(await getMember('not-an-id')).toBeNull();
+    expect(from).not.toHaveBeenCalled();
+  });
+
+  it('reports a failed read, and a row it cannot read, as unavailable rather than missing', async () => {
+    mockGet(FAILED);
+    await expect(getMember(ROW.id)).rejects.toBeInstanceOf(UnavailableError);
+
+    mockGet({ data: { ...ROW, github_url: 'not a link' }, error: null });
+    await expect(getMember(ROW.id)).rejects.toThrow("This member has saved data the admin can't read.");
+  });
+});
+
+describe('createMember', () => {
+  it('saves the member with its columns named as the table names them', async () => {
+    const insert = mockInsert(SAVED);
+
+    await createMember(NEW_MEMBER);
+
+    expect(insert).toHaveBeenCalledWith({
+      name: 'Ava Lee',
+      role: null,
+      department: 'Events',
+      github_url: null,
+      linkedin_url: 'https://www.linkedin.com/in/avalee',
+      is_public: true,
+    });
+  });
+
+  it.each([
+    ['Supabase errors', FAILED],
+    ['nothing was saved, as when row-level security refuses it', NOTHING_SAVED],
+  ])('fails when %s', async (_, result) => {
+    mockInsert(result);
+
+    await expect(createMember(NEW_MEMBER)).rejects.toThrow("Ava Lee couldn't be saved.");
+  });
+});
+
+describe('updateMember', () => {
+  it('sends only the changed fields', async () => {
+    const { update, eq } = mockUpdate(SAVED);
+
+    await updateMember(SAM, { role: 'Software Engineer', githubUrl: null });
+
+    // Unchanged fields are undefined, which the request leaves out, so they stay as they were.
+    expect(update).toHaveBeenCalledWith({ role: 'Software Engineer', github_url: null });
+    expect(eq).toHaveBeenCalledWith('id', SAM.id);
+  });
+
+  it.each([
+    ['Supabase errors', FAILED],
+    ['nothing was changed, as when row-level security refuses it', NOTHING_SAVED],
+  ])('fails when %s', async (_, result) => {
+    mockUpdate(result);
+
+    await expect(updateMember(SAM, { role: 'Software Engineer' })).rejects.toThrow("Your changes couldn't be saved.");
+  });
+});
 
 describe('listTeam', () => {
   it('turns rows into members, with empty links as none', async () => {
