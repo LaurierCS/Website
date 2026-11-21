@@ -1,6 +1,6 @@
--- Every team member belongs to one of the seven LCS departments. The public site groups people by this column
--- and the admin offers exactly these in a dropdown, so the database refuses anything else (a typo, a blank, a
--- department that doesn't exist) whoever writes it: the admin, the Supabase dashboard or a script.
+-- Every team member belongs to one of the seven LCS departments. The public site groups people by this column,
+-- so the database refuses anything else (a typo, a blank, a department that doesn't exist) whoever writes it:
+-- the admin, the Supabase dashboard or a script.
 --
 -- Before applying, this must return no rows (every existing member already fits):
 --   select id, name, department from public.team
