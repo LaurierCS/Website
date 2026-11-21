@@ -24,6 +24,17 @@ export function Switch({ checked, saving, label, stateText, onChange }: SwitchPr
       onClick={() => onChange(!checked)}
       className="inline-flex min-h-11 items-center gap-3 rounded-full pr-2 font-display font-bold disabled:cursor-wait"
     >
+      <SwitchFace checked={checked} saving={saving} stateText={stateText} />
+    </button>
+  );
+}
+
+type SwitchFaceProps = Pick<SwitchProps, 'checked' | 'saving' | 'stateText'>;
+
+/** How a switch looks, without the button: for a switch shown in a preview, where it can't be flipped. */
+export function SwitchFace({ checked, saving, stateText }: SwitchFaceProps) {
+  return (
+    <>
       <span
         aria-hidden="true"
         className={`flex h-8 w-14 shrink-0 items-center rounded-full border-2 p-0.5 transition-colors duration-150 ${
@@ -38,6 +49,6 @@ export function Switch({ checked, saving, label, stateText, onChange }: SwitchPr
       </span>
       {/* A fixed width, so switching between the words doesn't shift the buttons next to it. */}
       <span className={`w-24 text-left ${checked ? 'text-white' : 'text-text-2'}`}>{saving ? 'Saving…' : stateText}</span>
-    </button>
+    </>
   );
 }

@@ -1,8 +1,9 @@
 /**
- * Editing a team member. It loads them from the URL's id, then saves only the fields the exec changed and goes
- * back to Team, which says who was saved.
+ * Editing a team member. It loads them from the URL's id, then saves only the fields the exec changed. Once
+ * saved, their badge drops onto its lanyard and it goes back to Team, which says who was saved.
  */
 import { RotateCw } from 'lucide-react';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { MemberForm } from '../components/team/MemberForm';
 import { Button } from '../components/ui/Button';
@@ -21,7 +22,7 @@ export function EditMemberPage() {
   const { id = '' } = useParams();
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-10 sm:px-8">
+    <main className="mx-auto max-w-6xl px-4 py-10 sm:px-8">
       <FormPageHeading title="Edit member" back={{ to: PATHS.team, section: 'Team' }} />
       <div className="mt-8">
         <MemberToEdit id={id} />
@@ -73,6 +74,8 @@ function MemberToEdit({ id }: { id: string }) {
 function EditForm({ member }: { member: TeamMember }) {
   const navigate = useNavigate();
   const update = useUpdateMember(member);
+  // The saved name, once saving has worked, for Team's "Saved" notice.
+  const [savedName, setSavedName] = useState<string | null>(null);
 
   return (
     <MemberForm
@@ -84,9 +87,10 @@ function EditForm({ member }: { member: TeamMember }) {
       onSave={(values, changed, photo) =>
         update.mutate(
           { changes: changedMemberFields(values, changed), photo },
-          { onSuccess: () => navigate(PATHS.team, { state: savedNotice(values.name.trim()) }) },
+          { onSuccess: () => setSavedName(values.name.trim()) },
         )
       }
+      whenSaved={savedName === null ? null : () => navigate(PATHS.team, { state: savedNotice(savedName) })}
     />
   );
 }

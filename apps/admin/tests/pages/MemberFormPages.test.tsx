@@ -156,6 +156,18 @@ describe('NewMemberPage', () => {
     expect(createMember).toHaveBeenCalledWith(expect.objectContaining({ isPublic: false }), { kind: 'keep' });
   });
 
+  it('says under the badge preview when the member will be hidden from the site', async () => {
+    renderApp('/team/new');
+
+    // Wait for the form, so the page's own "Opening the admin…" status has gone.
+    const visible = await screen.findByRole('switch', { name: 'Show them on the site' });
+    const preview = screen.getByRole('status');
+    expect(preview).toHaveTextContent(/updates as you type/);
+    await userEvent.click(visible);
+
+    expect(preview).toHaveTextContent(/not on the site/);
+  });
+
   it('keeps what was typed and says so when saving fails', async () => {
     vi.mocked(createMember).mockRejectedValue(new UnavailableError("Ava Lee couldn't be saved."));
     renderApp('/team/new');
