@@ -5,6 +5,7 @@
 import { motion } from 'motion/react';
 import type { ReactNode } from 'react';
 import { MASCOTS, type MascotName } from '../../assets/brand';
+import { Lanyard } from '../ui/Lanyard';
 import { ScrapbookWord } from '../ui/ScrapbookWord';
 
 // Bar widths for the decorative barcode; fixed so the pass looks the same on every visit.
@@ -30,7 +31,7 @@ export function BackstagePass({ mascot, mascotUp, stamp, children }: BackstagePa
         // A slow, heavy swing, like a pass let go from above: it takes a bit over a second to settle.
         transition={{ type: 'spring', stiffness: 40, damping: 7, mass: 1.4 }}
       >
-        <Lanyard />
+        <Lanyard size="pass" />
 
         <motion.img
           key={mascot}
@@ -72,20 +73,6 @@ export function BackstagePass({ mascot, mascotUp, stamp, children }: BackstagePa
           </div>
         </div>
       </motion.div>
-    </div>
-  );
-}
-
-/** The strap the pass hangs from, running up off the top of the screen. */
-function Lanyard() {
-  return (
-    <div aria-hidden="true" className="absolute bottom-[calc(100%-1.6rem)] left-1/2 z-20 flex -translate-x-1/2 flex-col items-center">
-      <div className="flex h-[60vh] w-9 items-end justify-center overflow-hidden bg-blue">
-        <span className="mb-8 whitespace-nowrap font-display text-xs font-extrabold tracking-[0.5em] text-white/80 [writing-mode:vertical-rl]">
-          LCS · LCS · LCS · LCS · LCS · LCS · LCS · LCS · LCS · LCS
-        </span>
-      </div>
-      <div className="h-5 w-12 rounded-b-lg border-4 border-t-0 border-text-2 bg-muted" />
     </div>
   );
 }
