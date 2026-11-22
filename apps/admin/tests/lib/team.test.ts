@@ -1,7 +1,7 @@
 import { UnavailableError } from '../../src/lib/errors';
 import { BUCKETS, removeImage, uploadImage } from '../../src/lib/storage';
 import { getSupabase } from '../../src/lib/supabase';
-import { createMember, deleteMember, getMember, listTeam, setMemberPublic, updateMember } from '../../src/lib/team';
+import { createMember, deleteMember, getMember, importTeam, listTeam, setMemberPublic, updateMember } from '../../src/lib/team';
 import type { MemberFields, TeamMember } from '../../src/types/team';
 
 vi.mock('../../src/lib/supabase');
@@ -279,5 +279,42 @@ describe('deleteMember', () => {
 
     await expect(deleteMember(SAM)).rejects.toThrow("Sam Rivera couldn't be deleted.");
     expect(removeImage).not.toHaveBeenCalled();
+  });
+});
+
+describe('importTeam', () => {
+  const FIELDS: MemberFields = {
+    name: 'Alex Chen',
+    role: null,
+    department: 'Academics',
+    githubUrl: null,
+    linkedinUrl: 'https://www.linkedin.com/in/alexchen',
+    isPublic: false,
+  };
+
+  /** Makes `rpc(...)` answer with `result`. Returns the `rpc` mock. */
+  function mockRpc(result: { data: unknown; error: unknown }) {
+    const rpc = vi.fn().mockResolvedValue(result);
+    vi.mocked(getSupabase).mockReturnValue({ rpc } as unknown as ReturnType<typeof getSupabase>);
+    return rpc;
+  }
+
+  it('sends the new members and every field of the changed ones as table columns, in one call', async () => {
+    const rpc = mockRpc({ data: null, error: null });
+
+    await importTeam({ added: [FIELDS], changed: [{ id: SAM.id, fields: { ...FIELDS, name: 'Sam Rivera', isPublic: true } }] });
+
+    const columns = { name: 'Alex Chen', role: null, department: 'Academics', github_url: null, linkedin_url: FIELDS.linkedinUrl, is_public: false };
+    expect(rpc).toHaveBeenCalledTimes(1);
+    expect(rpc).toHaveBeenCalledWith('import_team', {
+      new_rows: [columns],
+      changed_rows: [{ id: SAM.id, ...columns, name: 'Sam Rivera', is_public: true }],
+    });
+  });
+
+  it('says nothing was changed when the database refuses or rolls back the import', async () => {
+    mockRpc({ data: null, error: { message: 'new row violates row-level security policy for table "team"' } });
+
+    await expect(importTeam({ added: [FIELDS], changed: [] })).rejects.toThrow(new UnavailableError("The import couldn't be saved, so nothing was changed."));
   });
 });

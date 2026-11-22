@@ -109,6 +109,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      import_events: {
+        Args: { changed_rows: Json; new_rows: Json }
+        Returns: undefined
+      }
+      import_team: {
+        Args: { changed_rows: Json; new_rows: Json }
+        Returns: undefined
+      }
       is_admin: { Args: never; Returns: boolean }
     }
     Enums: {

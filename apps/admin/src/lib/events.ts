@@ -1,10 +1,11 @@
 /**
- * Reading, adding, changing and deleting events in Supabase, with their pictures. Rows are checked and turned
- * into `Event`s here, once, so pages get typed data.
+ * Reading, adding, changing, importing and deleting events in Supabase, with their pictures. Rows are checked
+ * and turned into `Event`s here, once, so pages get typed data.
  */
 import { z } from 'zod';
 import type { Database } from '../types/database.types';
 import { type Event, type EventFields, EventSchema } from '../types/event';
+import type { ImportRows } from './csv-import';
 import { UnavailableError } from './errors';
 import type { PictureChange } from './images';
 import { BUCKETS, removeImage, uploadImage } from './storage';
@@ -88,6 +89,19 @@ export async function deleteEvent(event: Event): Promise<void> {
   // Row-level security refuses a delete by deleting nothing rather than by failing, so check a row came back.
   if (data.length === 0) throw new UnavailableError(failure);
   if (event.pictureUrl) await removeImage(BUCKETS.events, event.pictureUrl);
+}
+
+/**
+ * Saves a checked CSV import in one go: the new events first, then every field of the changed ones (by `id`).
+ * The database saves all of it or none of it, and never touches pictures or deletes anything.
+ * @throws UnavailableError when nothing could be saved (Supabase down, the import refused, or a changed event gone).
+ */
+export async function importEvents({ added, changed }: ImportRows<EventFields>): Promise<void> {
+  const { error } = await getSupabase().rpc('import_events', {
+    new_rows: [...added],
+    changed_rows: changed.map(({ id, fields }) => ({ id, ...fields })),
+  });
+  if (error) throw new UnavailableError("The import couldn't be saved, so nothing was changed.", { cause: error });
 }
 
 /**

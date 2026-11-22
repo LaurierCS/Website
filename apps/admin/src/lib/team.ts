@@ -1,10 +1,11 @@
 /**
- * Reading, adding, changing, showing or hiding, and deleting team members in Supabase, with their photos. Rows
- * are checked and turned into `TeamMember`s here, once, so pages get typed data.
+ * Reading, adding, changing, importing, showing or hiding, and deleting team members in Supabase, with their
+ * photos. Rows are checked and turned into `TeamMember`s here, once, so pages get typed data.
  */
 import { z } from 'zod';
 import type { Database } from '../types/database.types';
 import { type MemberFields, type TeamMember, TeamMemberSchema } from '../types/team';
+import type { ImportRows } from './csv-import';
 import { UnavailableError } from './errors';
 import type { PictureChange } from './images';
 import { BUCKETS, removeImage, uploadImage } from './storage';
@@ -102,6 +103,19 @@ export async function deleteMember(member: TeamMember): Promise<void> {
     throw new UnavailableError(`${member.name} couldn't be deleted.`, { cause: error });
   }
   if (member.pictureUrl) await removeImage(BUCKETS.team, member.pictureUrl);
+}
+
+/**
+ * Saves a checked CSV import in one go: the new members first, then every field of the changed ones (by `id`).
+ * The database saves all of it or none of it, and never touches photos or deletes anyone.
+ * @throws UnavailableError when nothing could be saved (Supabase down, the import refused, or a changed member gone).
+ */
+export async function importTeam({ added, changed }: ImportRows<MemberFields>): Promise<void> {
+  const { error } = await getSupabase().rpc('import_team', {
+    new_rows: added.map(toColumns),
+    changed_rows: changed.map(({ id, fields }) => ({ id, ...toColumns(fields) })),
+  });
+  if (error) throw new UnavailableError("The import couldn't be saved, so nothing was changed.", { cause: error });
 }
 
 /**
