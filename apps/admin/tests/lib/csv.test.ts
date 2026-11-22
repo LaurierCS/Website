@@ -1,4 +1,4 @@
-import { toCsv } from '../../src/lib/csv';
+import { readCsv, toCsv } from '../../src/lib/csv';
 
 const UTF8_MARK = '\uFEFF';
 
@@ -30,5 +30,57 @@ describe('writing a CSV file', () => {
     expect(toCsv(['id', 'time'], [['abc', '']]).slice(1)).toBe('id,time\r\nabc,');
     // With no rows, Papa Parse ends the header line with a line break; the file is still just the header.
     expect(toCsv(['id', 'time'], []).slice(1).trimEnd()).toBe('id,time');
+  });
+});
+
+describe('reading a CSV file', () => {
+  it('reads back exactly what was written, formulas, accents and line breaks included', () => {
+    const rows = [
+      ['=HYPERLINK("http://example.com")', 'Zoë Martín'],
+      ['-2', 'Bring a "laptop"\nand snacks, please'],
+    ];
+
+    expect(readCsv(toCsv(['title', 'description'], rows))).toEqual({
+      status: 'read',
+      header: ['title', 'description'],
+      rows: [
+        { number: 2, cells: rows[0] },
+        { number: 3, cells: rows[1] },
+      ],
+    });
+  });
+
+  it('numbers rows the way a spreadsheet does, skipping blank rows without renumbering', () => {
+    const text = 'id,title\r\n,Hack Night\r\n,,\r\n"","Multi\nline"\r\n,Social\r\n';
+
+    const read = readCsv(text);
+
+    expect(read).toEqual({
+      status: 'read',
+      header: ['id', 'title'],
+      rows: [
+        { number: 2, cells: ['', 'Hack Night'] },
+        { number: 4, cells: ['', 'Multi\nline'] },
+        { number: 5, cells: ['', 'Social'] },
+      ],
+    });
+  });
+
+  it('keeps an apostrophe someone typed in front of ordinary text', () => {
+    const read = readCsv("title\r\n'90s Night\r\n");
+
+    expect(read).toEqual({ status: 'read', header: ['title'], rows: [{ number: 2, cells: ["'90s Night"] }] });
+  });
+
+  it('trims spaces around column names, as spreadsheets sometimes add them', () => {
+    expect(readCsv(' id , title \r\n1,Hack Night')).toMatchObject({ header: ['id', 'title'] });
+  });
+
+  it('says which row has a quote that never closes, instead of guessing', () => {
+    expect(readCsv('id,title\r\n,Hack Night\r\n,"Social\r\n,Review\r\n')).toEqual({ status: 'unreadable', rowNumber: 3 });
+  });
+
+  it('reads an empty file as no columns and no rows', () => {
+    expect(readCsv('')).toEqual({ status: 'read', header: [], rows: [] });
   });
 });
