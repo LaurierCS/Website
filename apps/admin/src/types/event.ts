@@ -23,8 +23,11 @@ export type EventFields = Pick<Event, 'title' | 'date' | 'time' | 'location' | '
 /** What an event's ticket shows. A ticket for an event still being filled in may not have a day yet. */
 export type TicketFace = Readonly<Pick<Event, 'title' | 'time' | 'location' | 'pictureUrl'> & { date: string | null }>;
 
-/** Whether an event is today or later. `today` is `YYYY-MM-DD` in the club's zone (`clubToday()`). */
-export function isUpcoming(event: Event, today: string): boolean {
+/**
+ * Whether an event, saved or about to be, is today or later. `today` is `YYYY-MM-DD` in the club's zone
+ * (`clubToday()`).
+ */
+export function isUpcoming(event: Pick<Event, 'date'>, today: string): boolean {
   // Both are YYYY-MM-DD, so comparing the text compares the days.
   return event.date >= today;
 }

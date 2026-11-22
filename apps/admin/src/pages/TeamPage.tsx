@@ -1,7 +1,8 @@
 /**
  * The Team section as a crew board: everyone on the team, hidden members included, as lanyard badges under
- * their department, in the site's order. It counts the crew, links to adding someone, exports the team to CSV,
- * and on each badge shows or hides them on the site, edits or deletes them. After a save it says who was saved.
+ * their department, in the site's order. It counts the crew, links to adding someone, exports and imports the
+ * team as CSV, and on each badge shows or hides them on the site, edits or deletes them. After a save it says
+ * who was saved.
  */
 import { Plus, RotateCw } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router';
@@ -11,6 +12,7 @@ import { MemberBadge } from '../components/team/MemberBadge';
 import { Button } from '../components/ui/Button';
 import { ButtonLink } from '../components/ui/ButtonLink';
 import { ExportCsvButton } from '../components/ui/ExportCsvButton';
+import { ImportCsvLink } from '../components/ui/ImportCsvLink';
 import { SavedNotice } from '../components/ui/SavedNotice';
 import { ScrapbookWord } from '../components/ui/ScrapbookWord';
 import { StateBlock } from '../components/ui/StateBlock';
@@ -37,6 +39,7 @@ export function TeamPage() {
         </div>
         <div className="flex flex-wrap gap-3">
           <ExportTeamButton />
+          <ImportCsvLink to={PATHS.importTeam} />
           <AddMemberLink />
         </div>
       </div>

@@ -6,6 +6,7 @@ eng. Everything happens at **[admin.lauriercs.org](https://admin.lauriercs.org)*
 - [Getting in](#getting-in)
 - [Events](#events)
 - [Team](#team)
+- [Spreadsheets: export and import](#spreadsheets-export-and-import)
 - [What shows on the site, and when](#what-shows-on-the-site-and-when)
 - [When something goes wrong](#when-something-goes-wrong)
 
@@ -86,6 +87,27 @@ To remove someone for good, press **Delete** on their badge, then **Delete** aga
 ### Change someone's details
 
 On **Team**, press **Edit** on their badge, change what you need and press **Save changes**.
+
+## Spreadsheets: export and import
+
+Handy for adding a whole term of events or a new exec team at once.
+
+1. On **Events** or **Team**, press **Export CSV**. You get a spreadsheet of everything there, hidden team
+   members included. Pictures aren't in it.
+2. Open it in Google Sheets or Excel and edit it:
+   - **Change a row** to change that event or member. Leave its **id** as it is.
+   - **Add a row with the id left empty** to add a new one.
+   - Deleting a row does nothing: the event or member stays. Delete them in the admin instead.
+   - Write dates as year-month-day, like `2026-11-20`, times like `7:30PM`, and `is_public` as `true` or `false`.
+     Excel may change dates to `11/20/2026` when it saves. Use Google Sheets, or in Excel set the date column
+     to **Text** before you type in it.
+3. Save it as a CSV file. Back in the admin, press **Import CSV**, then **Choose a CSV file**.
+4. Check what it will do: new and changed rows show as the tickets or badges they'll be, with each change listed
+   under them. If something in the file is wrong, every problem is listed by its row number: fix them in the
+   spreadsheet and choose the file again.
+5. Press **Import**. Everything is saved at once, or, if anything goes wrong, nothing is.
+
+Pictures and photos are added in the admin afterwards, with **Edit**.
 
 ## What shows on the site, and when
 
