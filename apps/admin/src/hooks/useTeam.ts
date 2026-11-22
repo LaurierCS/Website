@@ -1,6 +1,7 @@
 /** Team members loaded and cached by TanStack Query, and the changes that refresh them. */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createMember, deleteMember, getMember, listTeam, setMemberPublic, updateMember } from '../lib/team';
+import { type ReadyImport, rowsToSave } from '../lib/csv-import';
+import { createMember, deleteMember, getMember, importTeam, listTeam, setMemberPublic, updateMember } from '../lib/team';
 import type { PictureChange } from '../lib/images';
 import type { MemberFields, TeamMember } from '../types/team';
 
@@ -48,4 +49,10 @@ export function useSetMemberPublic(member: TeamMember) {
 export function useDeleteMember() {
   const refresh = useRefreshTeam();
   return useMutation({ mutationFn: (member: TeamMember) => deleteMember(member), onSuccess: refresh });
+}
+
+/** Saves a checked CSV import, all of it or none, then reloads the team. */
+export function useImportTeam() {
+  const refresh = useRefreshTeam();
+  return useMutation({ mutationFn: (plan: ReadyImport<TeamMember, MemberFields>) => importTeam(rowsToSave(plan)), onSuccess: refresh });
 }

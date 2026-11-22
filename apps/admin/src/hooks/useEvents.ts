@@ -1,6 +1,7 @@
-/** Events loaded and cached by TanStack Query, and the changes that refresh them: create, update, delete. */
+/** Events loaded and cached by TanStack Query, and the changes that refresh them: create, update, delete, import. */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createEvent, deleteEvent, getEvent, listEvents, updateEvent } from '../lib/events';
+import { type ReadyImport, rowsToSave } from '../lib/csv-import';
+import { createEvent, deleteEvent, getEvent, importEvents, listEvents, updateEvent } from '../lib/events';
 import type { PictureChange } from '../lib/images';
 import type { Event, EventFields } from '../types/event';
 
@@ -43,4 +44,10 @@ export function useUpdateEvent(event: Event) {
 export function useDeleteEvent() {
   const refresh = useRefreshEvents();
   return useMutation({ mutationFn: (event: Event) => deleteEvent(event), onSuccess: refresh });
+}
+
+/** Saves a checked CSV import, all of it or none, then reloads the events. */
+export function useImportEvents() {
+  const refresh = useRefreshEvents();
+  return useMutation({ mutationFn: (plan: ReadyImport<Event, EventFields>) => importEvents(rowsToSave(plan)), onSuccess: refresh });
 }
