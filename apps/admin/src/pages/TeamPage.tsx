@@ -1,7 +1,7 @@
 /**
  * The Team section as a crew board: everyone on the team, hidden members included, as lanyard badges under
- * their department, in the site's order. It counts the crew, links to adding someone, and on each badge shows or
- * hides them on the site, edits or deletes them. After a save it says who was saved.
+ * their department, in the site's order. It counts the crew, links to adding someone, exports the team to CSV,
+ * and on each badge shows or hides them on the site, edits or deletes them. After a save it says who was saved.
  */
 import { Plus, RotateCw } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router';
@@ -10,10 +10,13 @@ import { DepartmentHeading } from '../components/team/DepartmentHeading';
 import { MemberBadge } from '../components/team/MemberBadge';
 import { Button } from '../components/ui/Button';
 import { ButtonLink } from '../components/ui/ButtonLink';
+import { ExportCsvButton } from '../components/ui/ExportCsvButton';
 import { SavedNotice } from '../components/ui/SavedNotice';
 import { ScrapbookWord } from '../components/ui/ScrapbookWord';
 import { StateBlock } from '../components/ui/StateBlock';
 import { useTeam } from '../hooks/useTeam';
+import { csvFile, TEAM_CSV } from '../lib/csv-formats';
+import { clubToday } from '../lib/dates';
 import { messageFor } from '../lib/errors';
 import { savedNameFrom } from '../lib/saved-notice';
 import { PATHS } from '../paths';
@@ -32,7 +35,10 @@ export function TeamPage() {
           </h1>
           <img src={DOODLES.asterisk} alt="" className="hidden h-10 w-auto sm:block" />
         </div>
-        <AddMemberLink />
+        <div className="flex flex-wrap gap-3">
+          <ExportTeamButton />
+          <AddMemberLink />
+        </div>
       </div>
       {saved && (
         <div className="mt-6">
@@ -132,6 +138,12 @@ function CrewBoardSkeleton() {
       ))}
     </div>
   );
+}
+
+/** Saves the whole team, hidden members included, as a CSV file. */
+function ExportTeamButton() {
+  const team = useTeam();
+  return <ExportCsvButton getFile={team.status === 'success' ? () => csvFile(TEAM_CSV, team.data, clubToday()) : null} />;
 }
 
 function AddMemberLink() {

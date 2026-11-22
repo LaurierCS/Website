@@ -1,6 +1,7 @@
 /**
  * The Events section, where the admin lands after sign-in: every event as a ticket, newest first, with a title
- * search, a link to add one, and edit and delete on each. After a save it says which event was saved.
+ * search, a link to add one, an export to CSV, and edit and delete on each. After a save it says which event was
+ * saved.
  */
 import { Plus, RotateCw } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router';
@@ -9,10 +10,13 @@ import { EventListSkeleton } from '../components/events/EventListSkeleton';
 import { SearchableEvents } from '../components/events/SearchableEvents';
 import { Button } from '../components/ui/Button';
 import { ButtonLink } from '../components/ui/ButtonLink';
+import { ExportCsvButton } from '../components/ui/ExportCsvButton';
 import { SavedNotice } from '../components/ui/SavedNotice';
 import { ScrapbookWord } from '../components/ui/ScrapbookWord';
 import { StateBlock } from '../components/ui/StateBlock';
 import { useEvents } from '../hooks/useEvents';
+import { csvFile, EVENTS_CSV } from '../lib/csv-formats';
+import { clubToday } from '../lib/dates';
 import { messageFor } from '../lib/errors';
 import { savedNameFrom } from '../lib/saved-notice';
 import { PATHS } from '../paths';
@@ -30,7 +34,10 @@ export function EventsPage() {
           </h1>
           <img src={DOODLES.asterisk} alt="" className="hidden h-10 w-auto sm:block" />
         </div>
-        <NewEventLink />
+        <div className="flex flex-wrap gap-3">
+          <ExportEventsButton />
+          <NewEventLink />
+        </div>
       </div>
 
       {saved && (
@@ -87,6 +94,12 @@ function EventResults() {
       }
       return <SearchableEvents events={events.data} />;
   }
+}
+
+/** Saves every loaded event as a CSV file. */
+function ExportEventsButton() {
+  const events = useEvents();
+  return <ExportCsvButton getFile={events.status === 'success' ? () => csvFile(EVENTS_CSV, events.data, clubToday()) : null} />;
 }
 
 function NewEventLink() {

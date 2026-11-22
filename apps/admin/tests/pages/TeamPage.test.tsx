@@ -1,5 +1,6 @@
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { downloadFile } from '../../src/lib/download';
 import { UnavailableError } from '../../src/lib/errors';
 import { deleteMember, listTeam, setMemberPublic } from '../../src/lib/team';
 import type { TeamMember } from '../../src/types/team';
@@ -8,6 +9,7 @@ import { renderApp } from '../renderApp';
 
 vi.mock('../../src/lib/auth');
 vi.mock('../../src/lib/team');
+vi.mock('../../src/lib/download');
 
 const SAM: TeamMember = {
   id: '6f1c2b8e-2d1a-4c5e-9b7f-0a1b2c3d4e5f',
@@ -201,5 +203,33 @@ describe('TeamPage', () => {
     vi.mocked(listTeam).mockResolvedValue([SAM]);
     await userEvent.click(screen.getByRole('button', { name: 'Try again' }));
     expect(await screen.findByRole('heading', { name: 'Sam Rivera' })).toBeInTheDocument();
+  });
+
+  it('exports the whole team as CSV, hidden members included', async () => {
+    vi.mocked(listTeam).mockResolvedValue([SAM, ALEX]);
+    renderApp('/team');
+    await screen.findByRole('heading', { name: 'Sam Rivera' });
+
+    await userEvent.click(screen.getByRole('button', { name: 'Export CSV' }));
+
+    expect(downloadFile).toHaveBeenCalledWith({
+      name: expect.stringMatching(/^lcs-team-\d{4}-\d{2}-\d{2}\.csv$/),
+      text: expect.stringContaining('id,name,role,department,is_public,github_url,linkedin_url'),
+    });
+    expect(downloadFile).toHaveBeenCalledWith(
+      expect.objectContaining({ text: expect.stringContaining(`${ALEX.id},Alex Chen,,Academics,false,,`) }),
+    );
+    expect(downloadFile).toHaveBeenCalledWith(
+      expect.objectContaining({ text: expect.stringContaining(`${SAM.id},Sam Rivera,VP Engineering,Engineering,true,`) }),
+    );
+  });
+
+  it("can't export while the team is loading or after it failed", async () => {
+    vi.mocked(listTeam).mockRejectedValue(new UnavailableError('The team could not be loaded.'));
+    renderApp('/team');
+
+    expect(await screen.findByRole('button', { name: 'Export CSV' })).toBeDisabled();
+    await screen.findByRole('alert');
+    expect(screen.getByRole('button', { name: 'Export CSV' })).toBeDisabled();
   });
 });

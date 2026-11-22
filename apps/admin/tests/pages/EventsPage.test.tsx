@@ -1,5 +1,6 @@
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { downloadFile } from '../../src/lib/download';
 import { UnavailableError } from '../../src/lib/errors';
 import { deleteEvent, listEvents } from '../../src/lib/events';
 import type { Event } from '../../src/types/event';
@@ -8,6 +9,7 @@ import { renderApp } from '../renderApp';
 
 vi.mock('../../src/lib/auth');
 vi.mock('../../src/lib/events');
+vi.mock('../../src/lib/download');
 
 const HACK_NIGHT: Event = {
   id: '1c7a0d3f-8b52-4e6c-9f4d-3a2b1c0d9e8f',
@@ -198,5 +200,31 @@ describe('EventsPage', () => {
 
     expect(await within(dialog).findByRole('alert')).toHaveTextContent('"CP312 Midterm Review" couldn\'t be deleted.');
     expect(screen.getByRole('heading', { name: 'CP312 Midterm Review' })).toBeInTheDocument();
+  });
+
+  it("exports the loaded events as a CSV file named for the club's day", async () => {
+    vi.mocked(listEvents).mockResolvedValue([HACK_NIGHT, CP312_REVIEW]);
+    renderApp('/events');
+    await screen.findByRole('heading', { name: 'Hack Night' });
+
+    await userEvent.click(screen.getByRole('button', { name: 'Export CSV' }));
+
+    expect(downloadFile).toHaveBeenCalledTimes(1);
+    expect(downloadFile).toHaveBeenCalledWith({
+      name: 'lcs-events-2026-11-15.csv',
+      text: expect.stringContaining('id,title,date,time,location,description'),
+    });
+    expect(downloadFile).toHaveBeenCalledWith(
+      expect.objectContaining({ text: expect.stringContaining(`${CP312_REVIEW.id},CP312 Midterm Review,2026-11-12,7:30PM,N2085,`) }),
+    );
+  });
+
+  it("can't export while the events are loading or after they failed", async () => {
+    vi.mocked(listEvents).mockRejectedValue(new UnavailableError('Events could not be loaded.'));
+    renderApp('/events');
+
+    expect(await screen.findByRole('button', { name: 'Export CSV' })).toBeDisabled();
+    await screen.findByRole('alert');
+    expect(screen.getByRole('button', { name: 'Export CSV' })).toBeDisabled();
   });
 });
