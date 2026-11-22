@@ -1,5 +1,5 @@
 import { UnavailableError } from '../../src/lib/errors';
-import { createEvent, deleteEvent, getEvent, listEvents, updateEvent } from '../../src/lib/events';
+import { createEvent, deleteEvent, getEvent, importEvents, listEvents, updateEvent } from '../../src/lib/events';
 import type { PictureChange } from '../../src/lib/images';
 import { BUCKETS, removeImage, uploadImage } from '../../src/lib/storage';
 import { getSupabase } from '../../src/lib/supabase';
@@ -254,5 +254,34 @@ describe('deleteEvent', () => {
 
     await expect(deleteEvent({ ...EVENT, pictureUrl: OLD_PICTURE })).rejects.toBeInstanceOf(UnavailableError);
     expect(removeImage).not.toHaveBeenCalled();
+  });
+});
+
+describe('importEvents', () => {
+  /** Makes `rpc(...)` answer with `result`. Returns the `rpc` mock. */
+  function mockRpc(result: { data: unknown; error: unknown }) {
+    const rpc = vi.fn().mockResolvedValue(result);
+    vi.mocked(getSupabase).mockReturnValue({ rpc } as unknown as ReturnType<typeof getSupabase>);
+    return rpc;
+  }
+
+  it('sends the new events and every field of the changed ones in one call', async () => {
+    const rpc = mockRpc({ data: null, error: null });
+
+    await importEvents({ added: [FIELDS], changed: [{ id: EVENT.id, fields: { ...FIELDS, title: 'Hack Night 2' } }] });
+
+    expect(rpc).toHaveBeenCalledTimes(1);
+    expect(rpc).toHaveBeenCalledWith('import_events', {
+      new_rows: [FIELDS],
+      changed_rows: [{ id: EVENT.id, ...FIELDS, title: 'Hack Night 2' }],
+    });
+  });
+
+  it('says nothing was changed when the database refuses or rolls back the import', async () => {
+    mockRpc({ data: null, error: { message: 'Only 0 of 1 changed events could be saved.' } });
+
+    await expect(importEvents({ added: [], changed: [{ id: EVENT.id, fields: FIELDS }] })).rejects.toThrow(
+      new UnavailableError("The import couldn't be saved, so nothing was changed."),
+    );
   });
 });
