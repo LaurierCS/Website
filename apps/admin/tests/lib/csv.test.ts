@@ -1,6 +1,6 @@
 import { toCsv } from '../../src/lib/csv';
 
-const UTF8_MARK = '﻿';
+const UTF8_MARK = '\uFEFF';
 
 describe('writing a CSV file', () => {
   it('starts with the mark Excel needs for accents, then a header row', () => {
