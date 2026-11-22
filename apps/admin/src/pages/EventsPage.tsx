@@ -1,7 +1,7 @@
 /**
  * The Events section, where the admin lands after sign-in: every event as a ticket, newest first, with a title
- * search, a link to add one, an export to CSV, and edit and delete on each. After a save it says which event was
- * saved.
+ * search, a link to add one, export to and import from CSV, and edit and delete on each. After a save it says
+ * which event was saved.
  */
 import { Plus, RotateCw } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router';
@@ -11,6 +11,7 @@ import { SearchableEvents } from '../components/events/SearchableEvents';
 import { Button } from '../components/ui/Button';
 import { ButtonLink } from '../components/ui/ButtonLink';
 import { ExportCsvButton } from '../components/ui/ExportCsvButton';
+import { ImportCsvLink } from '../components/ui/ImportCsvLink';
 import { SavedNotice } from '../components/ui/SavedNotice';
 import { ScrapbookWord } from '../components/ui/ScrapbookWord';
 import { StateBlock } from '../components/ui/StateBlock';
@@ -36,6 +37,7 @@ export function EventsPage() {
         </div>
         <div className="flex flex-wrap gap-3">
           <ExportEventsButton />
+          <ImportCsvLink to={PATHS.importEvents} />
           <NewEventLink />
         </div>
       </div>
