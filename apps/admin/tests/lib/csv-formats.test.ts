@@ -23,6 +23,11 @@ const SAM: TeamMember = {
   linkedinUrl: null,
 };
 
+/** A row's cells as the lookup `fromRow` reads them. */
+function cellsOf<Column extends string>(row: Readonly<Record<Column, string>>): (column: Column) => string {
+  return (column) => row[column];
+}
+
 /** The file's lines, without the UTF-8 mark at the start. */
 function lines(text: string): string[] {
   return text.slice(1).split('\r\n');
@@ -46,5 +51,69 @@ describe('CSV files for each table', () => {
       'id,name,role,department,is_public,github_url,linkedin_url',
       '6f1c2b8e-2d1a-4c5e-9b7f-0a1b2c3d4e5f,Sam Rivera,VP Engineering,Engineering,false,https://github.com/samrivera,',
     ]);
+  });
+});
+
+describe('reading an event row back', () => {
+  const row = { ...EVENTS_CSV.toRow(HACK_NIGHT), id: '' };
+
+  it('gives the fields to save, trimmed, with empty cells as no value', () => {
+    const result = EVENTS_CSV.fromRow(cellsOf({ ...row, title: '  Hack Night  ', time: '7:30 pm', location: 'BA201' }), null);
+
+    expect(result).toEqual({
+      ok: true,
+      fields: { title: 'Hack Night', date: '2026-11-20', time: '7:30PM', location: 'BA201', description: null },
+    });
+  });
+
+  it('refuses what the event form refuses, in words for a spreadsheet', () => {
+    const result = EVENTS_CSV.fromRow(cellsOf({ ...row, title: ' ', date: '11/20/2026', time: 'evening' }), null);
+
+    expect(result).toEqual({
+      ok: false,
+      problems: ['Give the event a title.', 'Write the date as year-month-day, like 2026-11-20.', 'Write the time like 7:30PM, or leave it empty.'],
+    });
+  });
+
+  it("keeps a saved time the form can't show, like TBD, while its cell is unchanged", () => {
+    const saved = { ...HACK_NIGHT, time: 'TBD' };
+
+    expect(EVENTS_CSV.fromRow(cellsOf({ ...EVENTS_CSV.toRow(saved), title: 'Hack Night 2' }), saved)).toMatchObject({
+      ok: true,
+      fields: { title: 'Hack Night 2', time: 'TBD' },
+    });
+    expect(EVENTS_CSV.fromRow(cellsOf({ ...row, time: 'TBD' }), null)).toEqual({ ok: false, problems: ['Write the time like 7:30PM, or leave it empty.'] });
+  });
+});
+
+describe('reading a team row back', () => {
+  const row = { ...TEAM_CSV.toRow(SAM), id: '' };
+
+  it('gives the fields to save, reading TRUE and FALSE the way Excel writes them', () => {
+    expect(TEAM_CSV.fromRow(cellsOf({ ...row, is_public: 'TRUE', role: ' ' }), null)).toEqual({
+      ok: true,
+      fields: {
+        name: 'Sam Rivera',
+        role: null,
+        department: 'Engineering',
+        githubUrl: 'https://github.com/samrivera',
+        linkedinUrl: null,
+        isPublic: true,
+      },
+    });
+  });
+
+  it('refuses what the team form refuses, listing the departments it accepts', () => {
+    const result = TEAM_CSV.fromRow(cellsOf({ ...row, name: '', department: 'Engineers', github_url: 'github.com/sam', is_public: 'yes' }), null);
+
+    expect(result).toEqual({
+      ok: false,
+      problems: [
+        'Give their name.',
+        'Use one of the departments: Admin, Finance, Marketing, Outreach, Events, Academics, Engineering.',
+        "That isn't a GitHub link. Paste the whole address, like https://github.com/their-name.",
+        'Write is_public as true or false.',
+      ],
+    });
   });
 });
