@@ -1,0 +1,112 @@
+---
+/**
+ * The home page's "Coming up": this month's calendar beside the LCS ticket booth (the owl peeking out from behind
+ * it) and the next three events as ticket stubs. When it comes into view the event days light up with their
+ * mascots' stickers, the booth prints the tickets onto the floor, and the next one gets stamped "Next up".
+ * Pointing at a ticket lifts its day, and pointing at a day lifts its ticket (`scripts/coming-up.ts`). With
+ * nothing coming up, the booth makes way for a note on where to hear about the next one.
+ */
+import { Image } from 'astro:assets';
+import { BOOTH_OWL, MASCOT_FACES } from '../../assets/brand';
+import type { ClubEvent } from '../../content/events';
+import type { IsoDate } from '../../lib/dates';
+import { calendarMonths } from '../../lib/events';
+import { socialLink } from '../../lib/site';
+import { dayMarks } from './day-marks';
+import { SHOWN_TICKETS, TICKET_ACCENTS } from './event-accents';
+import EventTicket from './EventTicket.astro';
+import MonthCalendar from './MonthCalendar.astro';
+
+type Props = { events: readonly ClubEvent[]; upcoming: readonly ClubEvent[]; today: IsoDate };
+
+const { events, upcoming, today } = Astro.props;
+const tickets = upcoming.slice(0, SHOWN_TICKETS);
+const instagram = socialLink('instagram');
+---
+
+<coming-up class="group block">
+  <section
+    id="events"
+    aria-labelledby="coming-up-title"
+    class="mx-auto flex max-w-(--max) scroll-mt-6 flex-col gap-7 px-4 py-16 nav:px-16 nav:py-24"
+  >
+    <header class="flex flex-col gap-2">
+      <p class="font-display text-sm font-bold tracking-label text-yellow uppercase">Coming up</p>
+      <h2 id="coming-up-title" class="text-4xl font-extrabold nav:text-5xl">What's on soon</h2>
+    </header>
+
+    {/*
+      The calendar takes its full width when there is room and never gets narrower than its minimum; the tickets
+      take whatever is left and fit themselves to it.
+    */}
+    <div
+      class="grid items-start gap-6 nav:grid-cols-[minmax(var(--calendar-min-width),var(--calendar-width))_minmax(0,1fr)] nav:gap-12"
+    >
+      <MonthCalendar months={calendarMonths(today, upcoming)} today={today} marks={dayMarks(events, tickets, today)} />
+
+      {
+        tickets.length > 0 ? (
+          <div class="flex flex-col">
+            <div class="relative z-10" aria-hidden="true">
+              {/* Drawn before the booth's front, so the front hides everything below her shoulders. */}
+              <Image
+                src={BOOTH_OWL}
+                alt=""
+                width={96}
+                densities={[1, 2]}
+                class="absolute right-8 bottom-6 h-auto w-18 -rotate-4 nav:right-12 nav:w-22"
+              />
+              <div data-booth class="relative rounded-2xl border-2 border-line-quiet bg-raised px-5 pt-3 pb-4">
+                <p class="font-display text-xs font-extrabold tracking-label text-yellow uppercase">
+                  LCS ticket booth · now printing
+                </p>
+                {/* The slot glows while a ticket is coming out of it. */}
+                <span
+                  class="mt-2.5 block h-2 rounded-full bg-ink transition-[background-color,box-shadow] duration-(--dur-fast) group-data-printing:bg-yellow group-data-printing:shadow-(--shadow-slot-glow)"
+                ></span>
+              </div>
+            </div>
+            {/*
+              Clipped along its top edge only, at the booth's slot, so a ticket printing out of the slot appears
+              from it; the sides and bottom stay open for the crooked tickets and their shadows.
+            */}
+            <ol
+              data-printed-tickets
+              class="relative @container -mt-3 flex flex-col gap-3 px-1.5 pt-6 [clip-path:inset(0_-3rem_-3rem_-3rem)] nav:gap-4"
+              aria-label="Next events"
+            >
+              {tickets.map((event, order) => (
+                <li>
+                  <EventTicket
+                    event={event}
+                    accent={TICKET_ACCENTS[order % TICKET_ACCENTS.length]}
+                    status={order === 0 ? 'next' : 'upcoming'}
+                    order={order}
+                  />
+                </li>
+              ))}
+            </ol>
+          </div>
+        ) : (
+          <div class="flex items-center gap-4 rounded-(--radius-ticket) border-2 border-dashed border-line p-6">
+            <Image src={MASCOT_FACES.krill} alt="" width={56} densities={[1, 2]} class="h-auto w-14 shrink-0" />
+            <div class="flex flex-col gap-1">
+              <p class="font-display text-xl font-extrabold">Nothing on the calendar yet.</p>
+              <p class="text-sm text-text-2">
+                The next event goes up here as soon as it's booked. Follow us on{' '}
+                <a href={instagram.href} class="font-semibold text-yellow underline underline-offset-2">
+                  Instagram
+                </a>{' '}
+                to hear first.
+              </p>
+            </div>
+          </div>
+        )
+      }
+    </div>
+  </section>
+</coming-up>
+
+<script>
+  import '../../scripts/coming-up';
+</script>

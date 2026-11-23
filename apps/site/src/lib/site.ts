@@ -52,3 +52,10 @@ export const SOCIAL_LINKS: readonly SocialLink[] = [
     href: 'https://www.youtube.com/@LaurierComputingSociety',
   },
 ];
+
+/** One of the club's accounts by name. */
+export function socialLink(name: SocialName): SocialLink {
+  const link = SOCIAL_LINKS.find((candidate) => candidate.name === name);
+  if (!link) throw new Error(`SOCIAL_LINKS has no ${name} entry.`);
+  return link;
+}
