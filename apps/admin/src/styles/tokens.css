@@ -10,6 +10,7 @@
   --bg-card: #344250;
   --bg-titlebar: #1e2429;
   --bg-light: #f3f7fc;
+  --bg-receipt: #fff8ec; /* the warm paper of a print order, like a till receipt */
   --page: #0e263d;
   --border: #475569;
 
@@ -59,6 +60,7 @@
   --shadow-float: 0 30px 60px -20px rgb(0 0 0 / 0.6); /* held up off the page, like the login pass */
   --shadow-cutout: 0 6px 0 rgb(0 0 0 / 0.25); /* a paper cut-out lying on the page */
   --shadow-sticker: 2px 3px 0 var(--yellow-ink); /* a sticker pressed on, like the "Admin" label */
+  --shadow-sticker-pink: 2px 3px 0 var(--pink-ink); /* the same sticker in pink, like "New" on a print order */
   --shadow-print: 0 8px 18px -6px rgb(0 0 0 / 0.55); /* a photo print lying on a surface */
   /* How tall a button's solid edge is, like a keyboard key, at rest and when lifted on hover. */
   --key-depth: 5px;
