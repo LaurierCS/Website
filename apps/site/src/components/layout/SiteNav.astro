@@ -3,7 +3,8 @@
  * The site header: the logo, then the page links and the club's accounts. Below the `nav` width there isn't room
  * for all of it, so the links move into the phone menu.
  */
-import Logo from '../../assets/logos/lcs-long-white.svg';
+// A plain image rather than inline SVG: the logo is big, and the header and the menu would each repeat it.
+import logo from '../../assets/logos/lcs-long-white.svg?url';
 import { PAGE_LINKS } from '../../lib/site';
 import MobileMenu from './MobileMenu.astro';
 import SocialLinks from './SocialLinks.astro';
@@ -11,7 +12,7 @@ import SocialLinks from './SocialLinks.astro';
 
 <header class="mx-auto flex max-w-(--max) items-center justify-between px-4 py-3 nav:px-16 nav:py-5">
   <a href="/" aria-label="Laurier Computing Society home" class="rounded-md">
-    <Logo class="h-12 w-auto" aria-hidden="true" />
+    <img src={logo} alt="" width="168" height="48" class="h-12 w-auto" />
   </a>
 
   <nav aria-label="Main" class="hidden items-center gap-7 nav:flex">
