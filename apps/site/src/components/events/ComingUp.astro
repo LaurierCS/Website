@@ -25,7 +25,11 @@ const tickets = upcoming.slice(0, SHOWN_TICKETS);
 const instagram = socialLink('instagram');
 ---
 
-<coming-up class="group block">
+{/*
+  Clipped at the sides: the "Next up" stamp waits big and unseen before it comes down, and on a phone it would
+  otherwise reach past the screen's edge and widen the page.
+*/}
+<coming-up class="group block overflow-x-clip">
   <section
     id="events"
     aria-labelledby="coming-up-title"
