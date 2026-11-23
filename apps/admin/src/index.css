@@ -15,6 +15,7 @@
   --color-slate: var(--slate);
   --color-card: var(--bg-card);
   --color-paper: var(--bg-light);
+  --color-receipt: var(--bg-receipt);
   --color-line: var(--border);
   --color-pink: var(--pink);
   --color-orange: var(--orange);

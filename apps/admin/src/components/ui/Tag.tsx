@@ -11,6 +11,8 @@ const TONES = {
   info: 'bg-sky text-blue-ink',
   /** Background detail, like an event that has happened. */
   muted: 'border border-line bg-slate text-text-2',
+  /** Just added, like a new row on a print order: a pink sticker. */
+  added: 'bg-pink text-ink shadow-(--shadow-sticker-pink)',
   /** Something to fill in, like a required field. */
   reminder: 'bg-pink text-ink',
   /** Not out yet, like a new event that isn't on the site. */
