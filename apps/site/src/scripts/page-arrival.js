@@ -18,13 +18,28 @@
     } catch {}
   });
 
-  const arrive = () => {
-    let saved = null;
+  const savedScroll = () => {
     try {
-      saved = sessionStorage.getItem(key);
-    } catch {}
-    if (reload && saved !== null) scrollTo(0, Number(saved));
-    else document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView();
+      return sessionStorage.getItem(key);
+    } catch {
+      return null;
+    }
+  };
+
+  // The section named in the address. A hand-typed address can hold a broken escape (`/#%`) that cannot be
+  // decoded; that names no section, rather than leaving the page hidden.
+  const sectionInAddress = () => {
+    try {
+      return document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    } catch {
+      return null;
+    }
+  };
+
+  const arrive = () => {
+    const saved = reload ? savedScroll() : null;
+    if (saved !== null) scrollTo(0, Number(saved));
+    else sectionInAddress()?.scrollIntoView();
     page.removeAttribute('data-arriving');
   };
 
