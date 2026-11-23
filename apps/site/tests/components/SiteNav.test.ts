@@ -44,7 +44,7 @@ describe('SiteNav', () => {
   it('puts every page and account in the phone menu', () => {
     const menu = document.getElementById('site-menu');
     if (!menu) throw new Error('The phone menu is missing.');
-    const names = getAllByRole(menu, 'link', { hidden: true }).map((link) => link.getAttribute('href'));
-    expect(names).toEqual(['/', ...PAGE_LINKS.map((page) => page.href), ...SOCIAL_LINKS.map((link) => link.href)]);
+    const hrefs = getAllByRole(menu, 'link', { hidden: true }).map((link) => link.getAttribute('href'));
+    expect(hrefs).toEqual(['/', ...PAGE_LINKS.map((page) => page.href), ...SOCIAL_LINKS.map((link) => link.href)]);
   });
 });

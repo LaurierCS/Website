@@ -1,0 +1,23 @@
+---
+/**
+ * A code editor window: a title bar with the three dots and a file name, then whatever goes inside. The hero's
+ * about chat and the phone menu's menu.html are both one of these. A control for the window, like a pause
+ * button, goes in the `actions` slot at the right of the title bar.
+ */
+type Props = { fileName: string; class?: string };
+
+const { fileName, class: className } = Astro.props;
+---
+
+<div class:list={['overflow-hidden rounded-(--radius-window) border border-line bg-window', className]}>
+  <div class="grid min-h-9 grid-cols-[1fr_auto_1fr] items-center bg-titlebar px-3.5 py-1">
+    <span class="flex gap-1.5" aria-hidden="true">
+      <span class="size-2.5 rounded-full bg-pink"></span>
+      <span class="size-2.5 rounded-full bg-yellow"></span>
+      <span class="size-2.5 rounded-full bg-blue"></span>
+    </span>
+    <span class="text-xs text-text-2" aria-hidden="true">{fileName}</span>
+    <span class="justify-self-end"><slot name="actions" /></span>
+  </div>
+  <slot />
+</div>
