@@ -18,6 +18,7 @@
   --color-chip: var(--bg-chip);
   --color-line: var(--border);
   --color-line-quiet: var(--border-quiet);
+  --color-print: var(--bg-print);
   --color-pink: var(--pink);
   --color-orange: var(--orange);
   --color-yellow: var(--yellow);

@@ -12,6 +12,7 @@
   --bg-chip: #344250; /* small things on a raised surface: chips, pressed rows */
   --border: #475569;
   --border-quiet: #344250;
+  --bg-print: #fff8ec; /* the cream border of an instant print, like the MTP event photo */
 
   /* The five accents. Text on an accent uses its -ink partner for contrast. */
   --pink: #ff9fc4;
@@ -57,6 +58,9 @@
   /* The coming-up calendar: its full width, and the narrowest it may get beside the tickets before they give way. */
   --calendar-width: 32.5rem;
   --calendar-min-width: 25rem;
+  /* The Meet the Professionals spotlight: the event photo's print, and the speaker card over its corner. */
+  --print-width: 38rem;
+  --speaker-card-width: 14.5rem;
   --max: 1280px;
 
   /* Depth */

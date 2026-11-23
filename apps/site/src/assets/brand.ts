@@ -5,6 +5,7 @@
 import type { ImageMetadata } from 'astro';
 import coco from './mascots/coco.png';
 import doug from './mascots/doug.png';
+import dougSuit from './mascots/doug-suit.png';
 import krill from './mascots/krill.png';
 import owl from './mascots/owl.png';
 import cocoFace from './mascots/faces/coco.png';
@@ -24,6 +25,9 @@ export type MascotName = keyof typeof MASCOTS;
 
 /** The owl who runs the LCS ticket booth in "Coming up", peeking out from behind it. */
 export const BOOTH_OWL = owl;
+
+/** Doug dressed up for Meet the Professionals, on the ask for its next speakers. */
+export const DOUG_IN_A_SUIT = dougSuit;
 
 /** Each mascot on their own, small: their avatar in the about window's group chat, and stickers on event days. */
 export const MASCOT_FACES = { doug: dougFace, coco: cocoFace, krill: krillFace } as const;
