@@ -1,0 +1,97 @@
+@import "tailwindcss";
+/* Self-hosted brand fonts: no request to a third party. */
+@import "@fontsource-variable/dosis";
+@import "@fontsource-variable/montserrat";
+@import "./tokens.css";
+
+/*
+ * Tailwind utilities map onto the brand tokens and nothing else: the default palette and fonts are switched
+ * off, so `bg-pink` works and `bg-purple-500` does not.
+ */
+@theme inline {
+  --color-*: initial;
+  --color-white: #fff;
+  --color-page: var(--bg-page);
+  --color-raised: var(--bg-raised);
+  --color-window: var(--bg-window);
+  --color-titlebar: var(--bg-titlebar);
+  --color-chip: var(--bg-chip);
+  --color-line: var(--border);
+  --color-line-quiet: var(--border-quiet);
+  --color-pink: var(--pink);
+  --color-orange: var(--orange);
+  --color-yellow: var(--yellow);
+  --color-blue: var(--blue);
+  --color-sky: var(--light-blue);
+  --color-pink-ink: var(--pink-ink);
+  --color-orange-ink: var(--orange-ink);
+  --color-yellow-ink: var(--yellow-ink);
+  --color-blue-ink: var(--blue-ink);
+  --color-instagram: var(--brand-instagram);
+  --color-discord: var(--brand-discord);
+  --color-linkedin: var(--brand-linkedin);
+  --color-youtube: var(--brand-youtube);
+  --color-text-2: var(--text-2);
+  --color-muted: var(--muted);
+  --color-ink: var(--ink);
+
+  --font-*: initial;
+  --font-display: var(--font-head);
+  --font-sans: var(--font-body);
+  --tracking-label: var(--label-spacing);
+
+  --ease-brand: var(--ease-out);
+
+  /*
+   * The width where the header has room for everything on one row: the logo, the page links and the five
+   * social links. Narrower screens get the Menu button (`nav:` variant). Media queries can't read CSS
+   * variables, so the value is written here rather than in tokens.css.
+   */
+  --breakpoint-nav: 64rem;
+}
+
+@layer base {
+  html {
+    background: var(--bg-page);
+    color: var(--text);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* The open menu is a modal, so the page behind it stays put. */
+  html:has(dialog[open]) {
+    overflow: hidden;
+  }
+
+  body {
+    min-height: 100dvh;
+  }
+
+  /* The tilted icon pattern, faint, behind everything. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: -50%;
+    z-index: -1;
+    background: var(--pattern-icons) center / 720px repeat;
+    opacity: 0.035;
+    transform: rotate(-15deg);
+    pointer-events: none;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-head);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+
+  ::selection {
+    background: var(--yellow);
+    color: var(--ink);
+  }
+
+  :focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+}
