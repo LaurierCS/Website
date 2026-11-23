@@ -49,6 +49,8 @@
    */
   --shadow-key: 0 var(--key-depth) 0 #000;
   --shadow-key-lifted: 0 var(--key-depth-lifted) 0 #000;
+  /* A label chip's thinner solid edge, swapped per chip the same way: `shadow-chip shadow-blue-ink`. */
+  --shadow-chip: 0 var(--chip-depth) 0 #000;
 
   /* A mascot typing at the laptop: a nod down to the keys and back, over and over. */
   --animate-tap: tap 420ms ease-in-out infinite;
