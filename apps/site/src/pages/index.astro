@@ -1,7 +1,9 @@
 ---
 import ComingUp from '../components/events/ComingUp.astro';
 import Hero from '../components/hero/Hero.astro';
+import MtpSpotlight from '../components/mtp/MtpSpotlight.astro';
 import { EVENTS } from '../content/events';
+import { MTP, SPEAKERS } from '../content/mtp';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { clubToday } from '../lib/dates';
 import { upcomingEvents } from '../lib/events';
@@ -17,4 +19,5 @@ const upcoming = upcomingEvents(EVENTS, today);
 >
   <Hero nextEvent={upcoming[0]} />
   <ComingUp events={EVENTS} upcoming={upcoming} today={today} />
+  <MtpSpotlight copy={MTP} speakers={SPEAKERS} />
 </BaseLayout>
