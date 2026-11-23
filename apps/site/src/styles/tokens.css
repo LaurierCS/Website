@@ -7,7 +7,7 @@
   /* Surfaces, from the page up. */
   --bg-page: #121a2b;
   --bg-raised: #1e2a3d; /* cards and buttons sitting on the page */
-  --bg-window: #2c3844; /* the body of a code window, like about-lcs.html */
+  --bg-window: #2c3844; /* the body of a code window, like the about chat */
   --bg-titlebar: #1e2429; /* a code window's title bar */
   --bg-chip: #344250; /* small things on a raised surface: chips, pressed rows */
   --border: #475569;
@@ -43,6 +43,10 @@
   --font-head: "Dosis Variable", "Dosis", system-ui, sans-serif;
   --font-body: "Montserrat Variable", "Montserrat", system-ui, sans-serif;
   --label-spacing: 0.12em; /* small upper-case labels, like "FIND US" */
+  /* How tall a line of scrapbook letters is: shrinks with the screen so "COMPUTING" fits a phone. */
+  --scrapbook-height: clamp(2.75rem, 14vw, 3.875rem);
+  /* Each letter tucks a little under the one before it, like cut-outs glued in a row. */
+  --scrapbook-overlap: calc(var(--scrapbook-height) * -0.12);
 
   /* Shape */
   --radius-window: 14px;
@@ -51,6 +55,10 @@
   /* Depth */
   --shadow-float: 0 20px 40px -8px rgb(0 0 0 / 0.6); /* held up off the page, like the open menu */
   --backdrop: rgb(11 15 25 / 0.7); /* the dimmed page behind an open menu */
+  --shadow-card: 0 12px 24px -8px rgb(0 0 0 / 0.5); /* a card resting on the clubhouse floor, like Next up */
+  /* How tall a button's solid edge is, like a keyboard key, at rest and when lifted on hover. */
+  --key-depth: 5px;
+  --key-depth-lifted: 7px;
 
   /* Motion: springy for things you touch, eased for things that appear. */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);

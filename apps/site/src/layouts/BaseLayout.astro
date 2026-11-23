@@ -2,8 +2,14 @@
 /**
  * The page shell every page shares: the document head, the brand styles and the header.
  */
+import dosis from '@fontsource-variable/dosis/files/dosis-latin-wght-normal.woff2?url';
+import montserrat from '@fontsource-variable/montserrat/files/montserrat-latin-wght-normal.woff2?url';
 import SiteNav from '../components/layout/SiteNav.astro';
 import '../styles/global.css';
+
+// The brand fonts, fetched alongside the page instead of after the CSS asks for them. Without this the page first
+// draws in a stand-in font and then jumps when Dosis and Montserrat arrive. Same files the CSS uses (Latin only).
+const PRELOADED_FONTS = [dosis, montserrat];
 
 type Props = { title: string; description: string };
 
@@ -17,6 +23,7 @@ const { title, description } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#121a2b" />
+    {PRELOADED_FONTS.map((font) => <link rel="preload" href={font} as="font" type="font/woff2" crossorigin />)}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <title>{title}</title>
