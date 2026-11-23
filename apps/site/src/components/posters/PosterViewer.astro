@@ -1,0 +1,35 @@
+---
+/**
+ * A poster, big enough to read, over a dimmed page. It is a modal <dialog>, so the browser handles Escape, keeps
+ * focus inside and gives focus back to the poster that opened it; clicking the dimmed page around it closes it
+ * too. It grows in from slightly smaller as it opens. `scripts/poster-rows.ts` puts the poster in when one is
+ * opened.
+ */
+---
+
+<dialog
+  data-poster-viewer
+  aria-labelledby="poster-viewer-title"
+  class="m-auto w-full max-w-(--viewer-width) scale-95 bg-transparent p-4 text-white opacity-0 transition-[opacity,scale,display,overlay] transition-discrete duration-(--dur-base) ease-(--ease-out) backdrop:bg-(--backdrop) open:scale-100 open:opacity-100 starting:open:scale-95 starting:open:opacity-0 motion-reduce:transition-none"
+>
+  <figure class="flex flex-col gap-4">
+    <img
+      data-viewer-image
+      alt=""
+      class="max-h-[80dvh] w-full rounded-2xl bg-window object-contain shadow-(--shadow-float)"
+    />
+    <figcaption class="flex items-center justify-between gap-4">
+      <p id="poster-viewer-title" data-viewer-title class="font-display text-xl font-extrabold"></p>
+      <button
+        type="button"
+        data-viewer-close
+        class="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full bg-yellow px-4 font-display text-base font-bold text-ink transition-[scale] duration-(--dur-fast) ease-(--ease-spring) active:scale-95"
+      >
+        Close
+        <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" />
+        </svg>
+      </button>
+    </figcaption>
+  </figure>
+</dialog>

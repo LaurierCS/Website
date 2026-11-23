@@ -61,6 +61,7 @@
   /* The Meet the Professionals spotlight: the event photo's print, and the speaker card over its corner. */
   --print-width: 38rem;
   --speaker-card-width: 14.5rem;
+  --viewer-width: 34rem; /* a poster opened big */
   --max: 1280px;
 
   /* Depth */
@@ -72,6 +73,7 @@
   /* How tall a button's solid edge is, like a keyboard key, at rest and when lifted on hover. */
   --key-depth: 5px;
   --key-depth-lifted: 7px;
+  --chip-depth: 3px; /* a label chip's solid edge, like the kinds on the poster rows */
 
   /* Motion: springy for things you touch, eased for things that appear. */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);

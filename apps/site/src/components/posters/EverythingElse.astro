@@ -1,0 +1,47 @@
+---
+/**
+ * The home page's "Everything else we do": one row of event posters per kind of night (review sessions, socials,
+ * career, workshops). The rows drift sideways, in turn one way then the other, and slow right down while you
+ * point at one; any poster opens big (`scripts/poster-rows.ts`). With reduced motion or without JavaScript the
+ * rows stand still and scroll sideways by hand.
+ */
+import type { EVERYTHING_ELSE, KIND_NAMES } from '../../content/everything-else';
+import type { PosterRow as Row } from '../../lib/posters';
+import PosterRow from './PosterRow.astro';
+import PosterViewer from './PosterViewer.astro';
+
+type Props = { copy: typeof EVERYTHING_ELSE; names: typeof KIND_NAMES; rows: readonly Row[] };
+
+const { copy, names, rows } = Astro.props;
+---
+
+{/* Clipped at the sides, so the drifting rows never widen the page. */}
+<poster-rows class="group block overflow-x-clip">
+  <section
+    id="everything-else"
+    aria-labelledby="everything-else-title"
+    class="mx-auto flex max-w-(--max) flex-col gap-8 py-16 nav:gap-12 nav:py-24"
+  >
+    <header class="flex flex-col gap-3 px-4 nav:px-16">
+      <p class="font-display text-sm font-bold tracking-label text-yellow uppercase">{copy.label}</p>
+      <h2 id="everything-else-title" class="text-4xl leading-none font-extrabold text-balance nav:text-6xl">
+        {copy.title}
+      </h2>
+      <p class="max-w-prose text-text-2 nav:text-lg">{copy.summary}</p>
+    </header>
+
+    <ol class="flex flex-col gap-7 nav:gap-6.5">
+      {
+        rows.map((row, index) => (
+          <PosterRow row={row} name={names[row.kind]} drift={index % 2 === 0 ? 'right' : 'left'} />
+        ))
+      }
+    </ol>
+  </section>
+
+  <PosterViewer />
+</poster-rows>
+
+<script>
+  import '../../scripts/poster-rows';
+</script>

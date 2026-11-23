@@ -1,0 +1,74 @@
+---
+/**
+ * One kind of night as a row of its posters, labelled with the kind. With motion, the row drifts sideways for
+ * ever (`scripts/poster-rows.ts`), so the posters repeat enough times to fill the screen and go round without a
+ * gap. Without motion, or without JavaScript, the row is the posters once, to scroll sideways by hand.
+ */
+import { getImage } from 'astro:assets';
+import type { PosterRow } from '../../lib/posters';
+import { KIND_CHIP } from './kind-looks';
+import PosterTile from './PosterTile.astro';
+
+type Props = { row: PosterRow; name: string; drift: 'left' | 'right' };
+
+const { row, name, drift } = Astro.props;
+
+// Each poster, with the big version it opens to.
+const tiles = await Promise.all(
+  row.posters.map(async (poster) => ({ poster, large: (await getImage({ src: poster.poster, width: 800 })).src })),
+);
+
+// One lap of the row has at least this many tiles, so a lap is wider than the widest screen.
+const TILES_PER_LAP = 8;
+const laps = Math.ceil(TILES_PER_LAP / tiles.length);
+const lap = Array.from({ length: laps }, () => tiles).flat();
+// The drifting track is two laps; the posters once are the real list, and the rest are the copies after them.
+const copies = [...lap.slice(tiles.length), ...lap];
+const gap = 'gap-2.5 nav:gap-4';
+---
+
+<li data-poster-row data-drift={drift} data-lap={lap.length} class="relative">
+  {/* On a phone the label sits above its row; wider, it holds the row's left end and the posters pass under it. */}
+  <div
+    class="mb-2.5 flex items-center gap-2.5 px-4 nav:absolute nav:inset-y-0 nav:left-0 nav:z-10 nav:mb-0 nav:w-50 nav:flex-col nav:items-start nav:justify-center nav:gap-1.5 nav:bg-page nav:ps-16"
+  >
+    <h3
+      class:list={[
+        'rounded-lg px-2.5 py-1 font-display text-xs font-extrabold tracking-label text-ink uppercase shadow-chip',
+        KIND_CHIP[row.kind],
+      ]}
+    >
+      {name}
+    </h3>
+    <p class="font-display text-xs font-bold text-muted">
+      <span aria-hidden="true">{drift === 'right' ? '→' : '←'}</span>
+      {row.posters.length}
+      {row.posters.length === 1 ? 'event' : 'events'}
+    </p>
+    <span
+      class="pointer-events-none absolute inset-y-0 left-full hidden w-30 bg-linear-to-r from-page nav:block"
+      aria-hidden="true"
+    ></span>
+  </div>
+
+  <div class="relative">
+    <div data-viewport class="overflow-x-auto [scrollbar-width:none] group-data-drifting:overflow-hidden">
+      <div data-track class:list={['flex w-max px-4 nav:ps-57.5 nav:pe-16', gap]}>
+        <ul class:list={['flex', gap]} aria-label={`${name} posters`}>
+          {tiles.map(({ poster, large }) => (
+            <li>
+              <PosterTile poster={poster} large={large} copy={false} />
+            </li>
+          ))}
+        </ul>
+        <div class:list={['hidden group-data-drifting:flex', gap]} aria-hidden="true">
+          {copies.map(({ poster, large }) => <PosterTile poster={poster} large={large} copy={true} />)}
+        </div>
+      </div>
+    </div>
+    <span
+      class="pointer-events-none absolute inset-y-0 right-0 w-16 bg-linear-to-l from-page nav:w-64"
+      aria-hidden="true"
+    ></span>
+  </div>
+</li>
