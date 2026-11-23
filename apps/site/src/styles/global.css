@@ -71,7 +71,6 @@
     30% { translate: 0 -40%; opacity: 1; }
   }
 
-
   /*
    * The width where the header has room for everything on one row: the logo, the page links and the five
    * social links. Narrower screens get the Menu button (`nav:` variant). Media queries can't read CSS

@@ -1,6 +1,6 @@
 /**
- * Each typing mascot's colour: on their "…" bubble in the clubhouse and on their name in the about window's
- * title bar while they type.
+ * Each typing mascot's colour: on their "…" bubble in the clubhouse, and on their avatar ring, name and
+ * "… is typing" line in the about window's chat.
  */
 import type { Typist } from '../../content/home';
 
