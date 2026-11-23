@@ -1,0 +1,141 @@
+---
+/**
+ * The home page's Meet the Professionals spotlight: what the event is, then one speaker at a time, their photo
+ * from the event as an instant print (with their card over its corner on a wider screen). The arrows, or a swipe
+ * on a phone, step through the speakers, and each new one is dealt onto the table
+ * (`scripts/speaker-spotlight.ts`). Under it, the ask for the next one's speakers. Without JavaScript the first
+ * speaker shows and the arrows stay invisible (they still take their space, so nothing moves).
+ */
+import type { MTP } from '../../content/mtp';
+import { speakerCompanies, type Speaker } from '../../lib/speakers';
+import SpeakerPitch from './SpeakerPitch.astro';
+import SpeakerSlide from './SpeakerSlide.astro';
+
+type Props = { copy: typeof MTP; speakers: readonly Speaker[] };
+
+const { copy, speakers } = Astro.props;
+
+// The chips sum the speakers up: how many, and a few of the companies they came from.
+const SHOWN_COMPANIES = 4;
+const companies = speakerCompanies(speakers);
+const moreCompanies = companies.length - SHOWN_COMPANIES;
+const chips =
+  speakers.length > 0
+    ? [
+        `${speakers.length} ${speakers.length === 1 ? 'speaker' : 'speakers'} in ${copy.edition}`,
+        `${companies.slice(0, SHOWN_COMPANIES).join(' · ')}${moreCompanies > 0 ? ` +${moreCompanies} more` : ''}`,
+      ]
+    : [];
+
+const round =
+  'grid size-11 place-items-center rounded-full transition-[translate,scale,box-shadow,background-color] duration-(--dur-fast) ease-(--ease-spring) active:scale-90 motion-reduce:transition-none';
+---
+
+{/*
+  Clipped at the sides: a speaker sliding in starts a little past the screen's edge on a phone, and without this
+  the page would widen for that moment (a sideways scrollbar, and the background shifting).
+*/}
+<speaker-spotlight class="group block overflow-x-clip">
+  <section
+    id="what-we-host"
+    aria-labelledby="mtp-title"
+    class="mx-auto flex max-w-(--max) flex-col px-4 py-16 nav:px-16 nav:py-24"
+  >
+    <div class="grid items-center gap-10 xl:grid-cols-[1fr_auto] xl:gap-20">
+      <header class="flex flex-col gap-4">
+        <p class="font-display text-sm font-bold tracking-label text-yellow uppercase">{copy.label}</p>
+        <h2 id="mtp-title" class="text-4xl leading-none font-extrabold text-balance nav:text-6xl">{copy.title}</h2>
+        <p class="max-w-prose text-text-2 nav:text-lg">{copy.summary}</p>
+        {
+          chips.length > 0 && (
+            <ul class="flex flex-wrap gap-2" aria-label="At a glance">
+              {chips.map((chip) => (
+                <li class="rounded-full bg-chip px-3.5 py-1.5 font-display text-sm font-bold">{chip}</li>
+              ))}
+            </ul>
+          )
+        }
+      </header>
+
+      {
+        speakers.length > 0 && (
+          <div
+            role="region"
+            aria-roledescription="carousel"
+            aria-label="Speakers"
+            data-stage
+            class="grid touch-pan-y pb-1 nav:w-(--print-width) nav:justify-self-center xl:justify-self-end"
+          >
+            {speakers.map((speaker, index) => (
+              <SpeakerSlide
+                speaker={speaker}
+                edition={copy.edition}
+                room={copy.room}
+                position={index + 1}
+                count={speakers.length}
+                shown={index === 0}
+              />
+            ))}
+
+            {/*
+              On a phone, a row of its own under the print, with a dot per speaker; on a wider screen, tucked into
+              the corner beside the card. With only one speaker there is nothing to step to.
+            */}
+            {speakers.length > 1 && (
+              <div class="invisible col-start-1 row-start-2 mt-6 flex items-center justify-between group-data-live:visible nav:row-start-1 nav:mt-0 nav:gap-3 nav:self-end nav:justify-self-end">
+                <button
+                  type="button"
+                  data-speaker-step="-1"
+                  aria-label="Previous speaker"
+                  class:list={[round, 'border-2 border-line text-white hover:bg-chip']}
+                >
+                  <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                    <path d="M19 12H5M11 6l-6 6 6 6" />
+                  </svg>
+                </button>
+                <div class="flex flex-col items-center gap-2">
+                  <span class="flex items-center gap-1.5 nav:hidden" aria-hidden="true">
+                    {speakers.map((_, index) => (
+                      <span
+                        data-dot
+                        data-current={index === 0 ? '' : undefined}
+                        class="h-2 w-2 rounded-full bg-line transition-[width,background-color] duration-(--dur-base) ease-(--ease-out) data-current:w-5.5 data-current:bg-yellow motion-reduce:transition-none"
+                      />
+                    ))}
+                  </span>
+                  <p class="font-display text-sm font-bold whitespace-nowrap">
+                    {/* A fixed minimum width, so the arrows hold still as the count changes ("9 of 12", "10 of 12"). */}
+                    <span data-count class="inline-block min-w-16 text-center tabular-nums">1 of {speakers.length}</span>
+                    <span class="text-text-2 nav:hidden"> · swipe the print</span>
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  data-speaker-step="1"
+                  aria-label="Next speaker"
+                  class:list={[
+                    round,
+                    'bg-yellow text-ink shadow-key shadow-yellow-ink hover:-translate-y-0.5 hover:shadow-key-lifted active:translate-y-1 active:shadow-none motion-reduce:hover:translate-y-0',
+                  ]}
+                >
+                  <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                    <path d="M5 12h14M13 6l6 6-6 6" />
+                  </svg>
+                </button>
+              </div>
+            )}
+          </div>
+        )
+      }
+    </div>
+
+    {/* Says who is showing after a step, for screen readers; empty at first, so nothing is read out on load. */}
+    <p data-announce class="sr-only" aria-live="polite"></p>
+
+    <SpeakerPitch {...copy.pitch} />
+  </section>
+</speaker-spotlight>
+
+<script>
+  import '../../scripts/speaker-spotlight';
+</script>
