@@ -1,11 +1,12 @@
 ---
 /**
- * The phone menu: a Menu button that opens `menu.html`, a code window like the hero's about-lcs.html, holding
+ * The phone menu: a Menu button that opens `menu.html`, a code window like the hero's about chat, holding
  * the page links and the club's accounts. It is a modal <dialog>, so the browser handles Escape, keeping focus
  * inside and putting it on top of everything.
  */
 import Logo from '../../assets/logos/lcs-long-white.svg';
 import { PAGE_LINKS } from '../../lib/site';
+import CodeWindow from '../ui/CodeWindow.astro';
 import SocialLinks from './SocialLinks.astro';
 
 const pill =
@@ -43,17 +44,10 @@ const pill =
       </button>
     </div>
 
-    <div
-      class="mt-3 overflow-hidden rounded-(--radius-window) border border-line bg-window shadow-(--shadow-float) transition-[opacity,translate] duration-(--dur-base) ease-brand starting:-translate-y-2 starting:opacity-0 motion-reduce:starting:translate-y-0"
+    <CodeWindow
+      fileName="menu.html"
+      class="mt-3 shadow-(--shadow-float) transition-[opacity,translate] duration-(--dur-base) ease-brand starting:-translate-y-2 starting:opacity-0 motion-reduce:starting:translate-y-0"
     >
-      <div class="grid grid-cols-[1fr_auto_1fr] items-center bg-titlebar px-3.5 py-2.5" aria-hidden="true">
-        <span class="flex gap-1.5">
-          <span class="size-2.5 rounded-full bg-pink"></span>
-          <span class="size-2.5 rounded-full bg-yellow"></span>
-          <span class="size-2.5 rounded-full bg-blue"></span>
-        </span>
-        <span class="text-xs text-text-2">menu.html</span>
-      </div>
 
       <nav class="py-1.5">
         <ul>
@@ -88,7 +82,7 @@ const pill =
         <h2 id="find-us" class="font-display text-xs font-bold tracking-label text-muted uppercase">Find us</h2>
         <SocialLinks variant="menu" />
       </section>
-    </div>
+    </CodeWindow>
   </dialog>
 </site-menu>
 
