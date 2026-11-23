@@ -1,0 +1,111 @@
+---
+/**
+ * The hero's about window, as a group chat called # about-lcs: Doug, Coco and Krill take turns posting what LCS
+ * is. "Doug is typing…" shows at the bottom, then his message lands and older ones scroll up out of sight
+ * (`scripts/about-chat.ts`). The page is sent with the first three messages already posted. People without
+ * JavaScript or with reduced motion see every message at once. Screen readers always get the whole description
+ * in one go.
+ */
+import { Image } from 'astro:assets';
+import { MASCOT_FACES } from '../../assets/brand';
+import { HERO, TYPISTS } from '../../content/home';
+import { POSTED_AT_START } from '../../lib/chat';
+import CodeWindow from '../ui/CodeWindow.astro';
+import { TYPIST_STYLES } from './typist-styles';
+
+const NAMES = new Map(TYPISTS.map(({ id, name }) => [id, name]));
+---
+
+{/*
+  Nothing in the chat may hold the page's scroll position: browsers keep a visible element still while the page
+  changes, and the messages here move every few seconds, which would jump the whole page with them.
+*/}
+<about-chat class="group block [overflow-anchor:none]">
+  <CodeWindow fileName="# about-lcs">
+    <button
+      slot="actions"
+      type="button"
+      data-chat-toggle
+      aria-label="Pause the chat"
+      aria-pressed="false"
+      class="hidden size-7 place-items-center rounded-full text-muted transition-[scale,background-color,color] duration-(--dur-fast) ease-(--ease-spring) group-data-live:grid hover:bg-chip hover:text-white active:scale-90"
+    >
+      <svg class="size-3.5 group-data-paused:hidden" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <rect x="3" y="2" width="3.5" height="12" rx="1"></rect>
+        <rect x="9.5" y="2" width="3.5" height="12" rx="1"></rect>
+      </svg>
+      <svg
+        class="hidden size-3.5 group-data-paused:block"
+        viewBox="0 0 16 16"
+        fill="currentColor"
+        aria-hidden="true"
+      >
+        <path d="M4 2.5v11a1 1 0 0 0 1.5.86l9-5.5a1 1 0 0 0 0-1.72l-9-5.5A1 1 0 0 0 4 2.5Z"></path>
+      </svg>
+    </button>
+
+    <p class="sr-only">{HERO.about.summary}</p>
+
+    <div class="relative" aria-hidden="true">
+      {/*
+        While the chat runs, it is a fixed-height view with the newest message at the bottom, so nothing below it
+        moves as messages arrive. It fits three messages (taller on a phone, where they wrap more); the script takes
+        down any older message that would not fully fit. Without motion or script, it grows to show every message.
+      */}
+      <ol
+        data-chat-messages
+        class="flex h-72 flex-col justify-end gap-3.5 overflow-hidden px-4 pt-4 pb-2 sm:h-56 motion-reduce:h-auto noscript:h-auto"
+      >
+        {
+          HERO.about.lines.map((line, index) => (
+            <li
+              data-by={line.by}
+              data-posted={index < POSTED_AT_START ? '' : undefined}
+              class="hidden gap-3 transition-[opacity,translate] duration-(--dur-base) ease-brand starting:translate-y-3 starting:opacity-0 data-posted:flex motion-reduce:flex noscript:flex"
+            >
+              <span
+                class:list={[
+                  'grid size-9 shrink-0 place-items-center overflow-hidden rounded-full border-2 bg-raised',
+                  TYPIST_STYLES[line.by].bubble,
+                ]}
+              >
+                <Image src={MASCOT_FACES[line.by]} alt="" width={28} densities={[1, 2]} class="h-auto w-7" />
+              </span>
+              <span class="flex flex-col gap-0.5">
+                <span class:list={['font-display font-extrabold', TYPIST_STYLES[line.by].text]}>
+                  {NAMES.get(line.by)}
+                </span>
+                <span data-text class="text-sm leading-relaxed text-text-2">{line.text}</span>
+              </span>
+            </li>
+          ))
+        }
+      </ol>
+
+      <p class="flex h-7 items-center px-4 pb-3 text-xs font-medium motion-reduce:hidden noscript:hidden">
+        {
+          TYPISTS.map(({ id, name }) => (
+            <span
+              data-typing-line={id}
+              class:list={['hidden items-center gap-2 data-active:flex', TYPIST_STYLES[id].text]}
+            >
+              <span class="flex gap-0.5">
+                {[0, 150, 300].map((delay) => (
+                  <span
+                    class:list={['size-1.5 animate-typing-dot rounded-full', TYPIST_STYLES[id].dot]}
+                    style={{ animationDelay: `${delay}ms` }}
+                  />
+                ))}
+              </span>
+              {name} is typing…
+            </span>
+          ))
+        }
+      </p>
+    </div>
+  </CodeWindow>
+</about-chat>
+
+<script>
+  import '../../scripts/about-chat';
+</script>

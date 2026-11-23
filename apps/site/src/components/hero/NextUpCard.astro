@@ -1,0 +1,42 @@
+---
+/**
+ * The "Next up" card resting on the clubhouse floor: a little calendar page for the date, then the event, then an
+ * arrow that nudges forward when you point at the card.
+ */
+import { HERO } from '../../content/home';
+
+type Props = { class?: string };
+
+const { class: className } = Astro.props;
+const event = HERO.nextEvent;
+---
+
+<a
+  href={event.href}
+  class:list={[
+    'group flex items-center gap-3 rounded-(--radius-window) bg-chip py-2.5 pr-4 pl-3.5 shadow-(--shadow-card) transition-[translate] duration-(--dur-fast) ease-(--ease-spring) hover:-translate-y-1 active:translate-y-0 motion-reduce:hover:translate-y-0',
+    className,
+  ]}
+>
+  <span class="flex flex-col items-center rounded-xl bg-pink px-2.5 py-1.5 font-display text-ink">
+    <span class="text-xs font-bold uppercase">{event.month}</span>
+    <span class="text-2xl leading-none font-extrabold">{event.day}</span>
+  </span>
+  <span class="flex flex-col">
+    <span class="font-display text-xs font-bold tracking-label text-yellow uppercase">Next up</span>
+    <span class="font-display text-lg font-extrabold">{event.title}</span>
+    <span class="text-xs text-text-2">{event.details}</span>
+  </span>
+  <svg
+    class="ms-auto size-5 shrink-0 text-yellow transition-[translate] duration-(--dur-fast) ease-(--ease-spring) group-hover:translate-x-1"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M5 12h14M13 6l6 6-6 6" />
+  </svg>
+</a>

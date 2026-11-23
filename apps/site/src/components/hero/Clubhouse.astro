@@ -1,0 +1,95 @@
+---
+/**
+ * The hero's isometric clubhouse: Doug, Coco and Krill sharing the laptop on the floor, taking turns posting in
+ * the about window's chat. Whoever is typing nods at the keys with a "…" bubble over their head, and the laptop
+ * looks busy. The paper plane grows when you point at it and flies a lap when you click it. The room keeps the
+ * Figma room's 600 × 640 shape and scales to its column.
+ */
+import { Image } from 'astro:assets';
+import { OBJECTS, ROOM_FLOOR as Floor } from '../../assets/brand';
+import { TYPISTS } from '../../content/home';
+import {
+  FLOOR_SPOT,
+  PLANE_PHONE_SPOT,
+  PLANE_SPOT,
+  pointStyle,
+  ROOM_PIECES,
+  SPOT_CLASSES,
+  spotStyle,
+  TYPING_BUBBLE_POINTS,
+} from './clubhouse-layout';
+import { TYPIST_STYLES } from './typist-styles';
+---
+
+<div class="relative aspect-15/16 w-full">
+  <div
+    role="img"
+    aria-label="The LCS clubhouse: Doug the duck, Coco the parrot and Krill the penguin crowded around a laptop"
+    class="absolute inset-0"
+  >
+    <Floor class:list={['absolute h-auto', SPOT_CLASSES]} style={spotStyle(FLOOR_SPOT)} aria-hidden="true" />
+    {
+      ROOM_PIECES.map((piece) => (
+        <Image
+          src={piece.image}
+          alt=""
+          widths={[300, 600]}
+          sizes="(min-width: 64rem) 280px, 45vw"
+          class:list={[
+            'absolute h-auto motion-reduce:animate-none',
+            SPOT_CLASSES,
+            piece.typist === 'anyone'
+              ? 'origin-center data-typing:animate-busy'
+              : 'origin-bottom data-typing:animate-tap',
+          ]}
+          style={spotStyle(piece.spot, piece.phoneSpot)}
+          data-typist={piece.typist}
+        />
+      ))
+    }
+    {
+      TYPISTS.map(({ id }) => (
+        <span
+          data-typing-bubble={id}
+          class:list={[
+            'absolute flex -translate-x-1/2 -translate-y-full scale-75 gap-1 rounded-full border-2 bg-white px-2.5 py-2 opacity-0 transition-[opacity,scale] duration-(--dur-fast) ease-(--ease-spring) data-active:scale-100 data-active:opacity-100',
+            TYPIST_STYLES[id].bubble,
+          ]}
+          style={pointStyle(TYPING_BUBBLE_POINTS[id])}
+        >
+          {[0, 150, 300].map((delay) => (
+            <span
+              class:list={['size-1.5 animate-typing-dot rounded-full motion-reduce:animate-none', TYPIST_STYLES[id].dot]}
+              style={{ animationDelay: `${delay}ms` }}
+            />
+          ))}
+        </span>
+      ))
+    }
+  </div>
+
+  <paper-plane>
+    <button
+      type="button"
+      aria-label="Throw the paper plane"
+      class:list={[
+        'absolute z-20 cursor-pointer rounded-md transition-[scale] duration-(--dur-base) ease-(--ease-spring) hover:scale-120 focus-visible:scale-120 active:scale-110',
+        SPOT_CLASSES,
+      ]}
+      style={spotStyle(PLANE_SPOT, PLANE_PHONE_SPOT)}
+    >
+      <Image
+        src={OBJECTS.paperPlane}
+        alt=""
+        widths={[200, 400]}
+        sizes="(min-width: 64rem) 110px, 20vw"
+        class="h-auto w-full"
+      />
+    </button>
+  </paper-plane>
+</div>
+
+<script>
+  import '../../scripts/typing-bubbles';
+  import '../../scripts/paper-plane';
+</script>

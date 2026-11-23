@@ -1,0 +1,49 @@
+---
+/**
+ * The top of the home page: "Welcome to" and the club's name in scrapbook letters, the mascots' # about-lcs chat,
+ * the club's numbers and the two ways in, beside the clubhouse where the mascots do the typing, with the next
+ * event resting on its floor. On a phone it is one column, with the clubhouse right under the chat so you can
+ * watch who is typing.
+ */
+import { HERO } from '../../content/home';
+import ButtonLink from '../ui/ButtonLink.astro';
+import ScrapbookWord from '../ui/ScrapbookWord.astro';
+import AboutWindow from './AboutWindow.astro';
+import Clubhouse from './Clubhouse.astro';
+import HeroStats from './HeroStats.astro';
+import NextUpCard from './NextUpCard.astro';
+---
+
+<section
+  aria-labelledby="hero-title"
+  class="mx-auto grid max-w-(--max) gap-7 px-4 pt-4 pb-16 nav:grid-cols-[minmax(0,35rem)_1fr] nav:grid-rows-[repeat(4,auto)_1fr] nav:gap-x-12 nav:px-16 nav:pt-7"
+>
+  <h1 id="hero-title" class="flex flex-col gap-2.5 nav:col-start-1">
+    {/* The whole heading as one sentence for screen readers; what you see is the label and the letters. */}
+    <span class="sr-only">{`${HERO.label} ${HERO.nameLines.join(' ')}`}</span>
+    <span class="font-display text-lg font-bold tracking-label text-yellow uppercase" aria-hidden="true">
+      {HERO.label}
+    </span>
+    <span class="flex flex-col gap-1.5">
+      {HERO.nameLines.map((word) => <ScrapbookWord word={word} />)}
+    </span>
+  </h1>
+
+  <AboutWindow />
+
+  {/*
+    Spans every row of the left column on wide screens. On a phone it follows the about window, pulled up so its
+    empty sky slides under the chat and the mascots sit just below the messages they are typing.
+  */}
+  <div class="relative -mt-24 nav:col-start-2 nav:row-span-5 nav:row-start-1 nav:mt-0 nav:self-center">
+    <Clubhouse />
+    <NextUpCard class="-mt-4 w-full nav:absolute nav:top-7/8 nav:left-1/4 nav:mt-0 nav:w-fit" />
+  </div>
+
+  <div class="nav:col-start-1"><HeroStats /></div>
+
+  <div class="flex flex-col gap-3 sm:flex-row nav:col-start-1">
+    <ButtonLink href={HERO.actions.primary.href} variant="primary">{HERO.actions.primary.label}</ButtonLink>
+    <ButtonLink href={HERO.actions.secondary.href} variant="quiet">{HERO.actions.secondary.label}</ButtonLink>
+  </div>
+</section>
