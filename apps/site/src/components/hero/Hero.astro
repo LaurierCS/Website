@@ -5,6 +5,7 @@
  * event resting on its floor. On a phone it is one column, with the clubhouse right under the chat so you can
  * watch who is typing.
  */
+import type { ClubEvent } from '../../content/events';
 import { HERO } from '../../content/home';
 import ButtonLink from '../ui/ButtonLink.astro';
 import ScrapbookWord from '../ui/ScrapbookWord.astro';
@@ -12,6 +13,11 @@ import AboutWindow from './AboutWindow.astro';
 import Clubhouse from './Clubhouse.astro';
 import HeroStats from './HeroStats.astro';
 import NextUpCard from './NextUpCard.astro';
+
+/** The soonest event, for the "Next up" card; with nothing coming up the card is left out. */
+type Props = { nextEvent: ClubEvent | undefined };
+
+const { nextEvent } = Astro.props;
 ---
 
 <section
@@ -37,7 +43,14 @@ import NextUpCard from './NextUpCard.astro';
   */}
   <div class="relative -mt-24 nav:col-start-2 nav:row-span-5 nav:row-start-1 nav:mt-0 nav:self-center">
     <Clubhouse />
-    <NextUpCard class="-mt-4 w-full nav:absolute nav:top-7/8 nav:left-1/4 nav:mt-0 nav:w-fit" />
+    {
+      nextEvent && (
+        <NextUpCard
+          event={nextEvent}
+          class="-mt-4 w-full nav:absolute nav:top-7/8 nav:left-1/4 nav:mt-0 nav:w-fit"
+        />
+      )
+    }
   </div>
 
   <div class="nav:col-start-1"><HeroStats /></div>
