@@ -12,7 +12,7 @@ type SheetProps = {
   kicker: ReactNode;
   title: string;
   children: ReactNode;
-  /** The button at the bottom that closes it, e.g. "Back to the tickets". */
+  /** The button at the bottom that closes it, e.g. "Back to the events". */
   closeLabel: string;
   onClose: () => void;
 };
