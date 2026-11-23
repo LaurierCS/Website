@@ -4,7 +4,8 @@
  * the page links and the club's accounts. It is a modal <dialog>, so the browser handles Escape, keeping focus
  * inside and putting it on top of everything.
  */
-import Logo from '../../assets/logos/lcs-long-white.svg';
+// A plain image rather than inline SVG: the logo is big, and the header and the menu would each repeat it.
+import logo from '../../assets/logos/lcs-long-white.svg?url';
 import { PAGE_LINKS } from '../../lib/site';
 import CodeWindow from '../ui/CodeWindow.astro';
 import SocialLinks from './SocialLinks.astro';
@@ -34,7 +35,7 @@ const pill =
   >
     <div class="flex items-center justify-between">
       <a href="/" aria-label="Laurier Computing Society home">
-        <Logo class="h-12 w-auto" aria-hidden="true" />
+        <img src={logo} alt="" width="168" height="48" class="h-12 w-auto" />
       </a>
       <button type="button" data-menu-close class:list={[pill, 'bg-yellow text-ink']}>
         Close
