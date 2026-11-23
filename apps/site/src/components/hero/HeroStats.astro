@@ -1,0 +1,45 @@
+---
+/**
+ * The hero's three numbers, each printed in its own accent. They all start counting up from 0 when they come
+ * into view and land one after another (`scripts/count-up.ts`). The page is sent with the final numbers, so
+ * they are right without JavaScript and for screen readers. A description list, so each label is read with its
+ * number.
+ */
+import { HERO, type HeroStat } from '../../content/home';
+import { formatCount } from '../../lib/count';
+
+const ACCENT_TEXT: Readonly<Record<HeroStat['accent'], string>> = {
+  pink: 'text-pink',
+  orange: 'text-orange',
+  yellow: 'text-yellow',
+};
+---
+
+<dl class="flex flex-wrap gap-x-6 gap-y-4 sm:gap-x-10" data-count-up>
+  {
+    HERO.stats.map((stat) => (
+      <div class="flex flex-col-reverse gap-0.5">
+        <dt class="font-display font-bold text-text-2">{stat.label}</dt>
+        <dd class:list={['grid font-display text-4xl leading-none font-extrabold sm:text-5xl', ACCENT_TEXT[stat.accent]]}>
+          {/*
+            The final number sits underneath, see-through: it holds the width so the row doesn't shift while the
+            numbers grow, and it is what screen readers read. The counting number on top is only for the eyes.
+          */}
+          <span class="col-start-1 row-start-1 opacity-0">{formatCount(stat.count, stat.suffix)}</span>
+          <span
+            class="col-start-1 row-start-1 origin-bottom-left"
+            data-count-to={stat.count}
+            data-suffix={stat.suffix}
+            aria-hidden="true"
+          >
+            {formatCount(stat.count, stat.suffix)}
+          </span>
+        </dd>
+      </div>
+    ))
+  }
+</dl>
+
+<script>
+  import '../../scripts/count-up';
+</script>
