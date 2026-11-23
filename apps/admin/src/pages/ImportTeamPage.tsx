@@ -1,23 +1,32 @@
 /**
- * Importing team members from a CSV file. The file is checked against the saved team, the new and changed
- * members show as the crew badges they will be, and Import saves all of them or none.
+ * Importing team members from a CSV file, as a print order: the file is checked against the saved team, the new
+ * and updated members come out of the press as the crew badges they will be, and Import saves all of them or
+ * none.
  */
 import { RotateCw } from 'lucide-react';
-import { CrewBadge } from '../components/team/CrewBadge';
+import { ImportBadge } from '../components/team/ImportBadge';
+import { MEMBER_IMPORT } from '../components/team/member-import';
 import { Button } from '../components/ui/Button';
 import { CsvImport } from '../components/ui/CsvImport';
 import { FormPageHeading } from '../components/ui/FormPageHeading';
+import type { ImportView } from '../components/ui/import-view';
 import { StateBlock } from '../components/ui/StateBlock';
 import { useImportTeam, useTeam } from '../hooks/useTeam';
 import { TEAM_CSV } from '../lib/csv-formats';
 import { messageFor } from '../lib/errors';
 import { PATHS } from '../paths';
+import type { MemberFields, TeamMember } from '../types/team';
 
 const BACK = { to: PATHS.team, section: 'Team' };
 
+const VIEW: ImportView<TeamMember, MemberFields> = { ...MEMBER_IMPORT, front: (entry) => <ImportBadge entry={entry} /> };
+
 export function ImportTeamPage() {
   return (
-    <main className="mx-auto max-w-6xl px-4 py-10 sm:px-8">
+    <main
+      // Wider than the other pages, so there is room for the print order beside the badges.
+      className="mx-auto max-w-7xl px-4 py-10 sm:px-8"
+    >
       <FormPageHeading title="Import team" back={BACK} />
       <div className="mt-8">
         <TeamImport />
@@ -53,20 +62,9 @@ function TeamImport() {
         <CsvImport
           format={TEAM_CSV}
           saved={team.data}
-          noun={{ one: 'member', many: 'members' }}
+          view={VIEW}
           saver={saver}
           back={BACK}
-          // A CSV has no photos, so a new member shows their initial until one is added in the team form.
-          renderNew={({ fields }) => (
-            <div className="max-w-xs">
-              <CrewBadge face={{ ...fields, pictureUrl: null }} layout="badge" />
-            </div>
-          )}
-          renderChanged={({ after }) => (
-            <div className="max-w-xs">
-              <CrewBadge face={after} layout="badge" />
-            </div>
-          )}
         />
       );
   }

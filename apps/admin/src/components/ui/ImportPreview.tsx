@@ -1,48 +1,74 @@
 /**
- * What a CSV import will do, drawn the way the list draws its items: the new ones, then the changed ones with
- * each changed cell under them. Rows that stay the same aren't shown.
+ * What a CSV import will print, coming out of the press: every new and updated item drawn the way its list draws
+ * it. Pressing one opens all its fields in a sheet, showing what the import changes. Once imported, every item
+ * gets the "Issued" stamp.
  */
-import type { ReactNode } from 'react';
-import type { ChangedItem, NewItem, ReadyImport } from '../../lib/csv-import';
-import { CellChanges } from './CellChanges';
+import { useState } from 'react';
+import { FieldChanges } from './FieldChanges';
+import { IMPORT_LABELS } from './import-labels';
+import { type ImportEntry, type ImportView, rowAnchor } from './import-view';
+import { Sheet } from './Sheet';
+import { Stamp } from './Stamp';
+import { Tag } from './Tag';
+
+const ARRANGEMENTS = {
+  rows: { list: 'grid gap-5', stamp: 'top-1/2 right-6 -translate-y-1/2' },
+  cards: { list: 'grid gap-5 sm:grid-cols-[repeat(auto-fill,minmax(15rem,1fr))]', stamp: 'top-14 right-3' },
+} as const;
 
 type ImportPreviewProps<Item, Fields> = {
-  plan: ReadyImport<Item, Fields>;
-  /** What the list holds, plural, e.g. "events", for naming the two groups. */
-  many: string;
-  renderNew: (item: NewItem<Fields>) => ReactNode;
-  renderChanged: (item: ChangedItem<Item, Fields>) => ReactNode;
+  entries: readonly ImportEntry<Item, Fields>[];
+  view: ImportView<Item, Fields>;
+  /** Once the import is saved: just the items with their stamp, nothing to open. */
+  issued: boolean;
 };
 
-const GROUP_HEADING = 'font-display text-xs font-bold tracking-widest text-text-2 uppercase';
+export function ImportPreview<Item, Fields>({ entries, view, issued }: ImportPreviewProps<Item, Fields>) {
+  const [open, setOpen] = useState<ImportEntry<Item, Fields> | null>(null);
+  const arrangement = ARRANGEMENTS[view.arrangement];
 
-export function ImportPreview<Item, Fields>({ plan, many, renderNew, renderChanged }: ImportPreviewProps<Item, Fields>) {
   return (
     <>
-      {plan.added.length > 0 && (
-        <section aria-label={`New ${many}`}>
-          <h2 className={GROUP_HEADING}>New · {plan.added.length}</h2>
-          <ul className="mt-4 grid gap-4">
-            {plan.added.map((item) => (
-              <li key={item.rowNumber}>{renderNew(item)}</li>
-            ))}
-          </ul>
-        </section>
+      <ul className={arrangement.list}>
+        {entries.map((entry) => (
+          <li key={entry.rowNumber} id={rowAnchor(entry.rowNumber)} className="relative scroll-mt-6">
+            {view.front(entry)}
+            {issued ? (
+              <div className={`absolute ${arrangement.stamp}`}>
+                <Stamp text="Issued" tone="issued" />
+              </div>
+            ) : (
+              // Covers the whole item, so anywhere on it works, while its own headings stay headings.
+              <button
+                type="button"
+                aria-label={`${view.nameOf(entry)}: show the details`}
+                onClick={() => setOpen(entry)}
+                className="absolute inset-0 cursor-pointer rounded-card transition-colors duration-150 hover:bg-white/5"
+              />
+            )}
+          </li>
+        ))}
+      </ul>
+      {open && (
+        <Sheet
+          kicker={<Kicker entry={open} />}
+          title={view.nameOf(open)}
+          closeLabel={`Back to the ${view.noun.many}`}
+          onClose={() => setOpen(null)}
+        >
+          <FieldChanges {...view.fields(open)} />
+        </Sheet>
       )}
+    </>
+  );
+}
 
-      {plan.changed.length > 0 && (
-        <section aria-label={`Changed ${many}`}>
-          <h2 className={GROUP_HEADING}>Changed · {plan.changed.length}</h2>
-          <ul className="mt-4 grid gap-6">
-            {plan.changed.map((item) => (
-              <li key={item.rowNumber}>
-                {renderChanged(item)}
-                <CellChanges cells={item.cells} />
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+/** "UPDATED · Row 3" above the details. */
+function Kicker<Item, Fields>({ entry }: { entry: ImportEntry<Item, Fields> }) {
+  const label = IMPORT_LABELS[entry.kind];
+  return (
+    <>
+      <Tag tone={label.tag}>{label.text}</Tag> Row {entry.rowNumber}
     </>
   );
 }

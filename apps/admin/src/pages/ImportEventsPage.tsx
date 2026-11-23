@@ -1,25 +1,31 @@
 /**
- * Importing events from a CSV file. The file is checked against the saved events, the new and changed ones show
- * as the tickets they will be, and Import saves all of them or none.
+ * Importing events from a CSV file, as a print order: the file is checked against the saved events, the new and
+ * updated ones come out of the press as the tickets they will be, and Import saves all of them or none.
  */
 import { RotateCw } from 'lucide-react';
-import { Ticket } from '../components/events/Ticket';
+import { EVENT_IMPORT } from '../components/events/event-import';
+import { ImportTicket } from '../components/events/ImportTicket';
 import { Button } from '../components/ui/Button';
 import { CsvImport } from '../components/ui/CsvImport';
 import { FormPageHeading } from '../components/ui/FormPageHeading';
+import type { ImportView } from '../components/ui/import-view';
 import { StateBlock } from '../components/ui/StateBlock';
 import { useEvents, useImportEvents } from '../hooks/useEvents';
 import { EVENTS_CSV } from '../lib/csv-formats';
-import { clubToday } from '../lib/dates';
 import { messageFor } from '../lib/errors';
 import { PATHS } from '../paths';
-import { isUpcoming } from '../types/event';
+import type { Event, EventFields } from '../types/event';
 
 const BACK = { to: PATHS.events, section: 'Events' };
 
+const VIEW: ImportView<Event, EventFields> = { ...EVENT_IMPORT, front: (entry) => <ImportTicket entry={entry} /> };
+
 export function ImportEventsPage() {
   return (
-    <main className="mx-auto max-w-6xl px-4 py-10 sm:px-8">
+    <main
+      // Wider than the other pages, so there is room for the print order beside the tickets.
+      className="mx-auto max-w-7xl px-4 py-10 sm:px-8"
+    >
       <FormPageHeading title="Import events" back={BACK} />
       <div className="mt-8">
         <EventsImport />
@@ -32,7 +38,6 @@ export function ImportEventsPage() {
 function EventsImport() {
   const events = useEvents();
   const saver = useImportEvents();
-  const today = clubToday();
 
   switch (events.status) {
     case 'pending':
@@ -56,12 +61,9 @@ function EventsImport() {
         <CsvImport
           format={EVENTS_CSV}
           saved={events.data}
-          noun={{ one: 'event', many: 'events' }}
+          view={VIEW}
           saver={saver}
           back={BACK}
-          // "Next up" depends on every other event, so a preview is upcoming or past, like the form's.
-          renderNew={({ fields }) => <Ticket face={{ ...fields, pictureUrl: null }} status={isUpcoming(fields, today) ? 'upcoming' : 'past'} />}
-          renderChanged={({ after }) => <Ticket face={after} status={isUpcoming(after, today) ? 'upcoming' : 'past'} />}
         />
       );
   }

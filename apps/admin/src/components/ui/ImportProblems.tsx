@@ -1,26 +1,20 @@
 /**
- * Why a CSV file can't be imported: every problem, by the row a spreadsheet shows, so it can be fixed in one go.
+ * Why a CSV file can't be imported, printed on the order that was sent back: every problem by the row a
+ * spreadsheet shows, so they can all be fixed in one go.
  */
 import type { ImportProblem } from '../../lib/csv-import';
 
-type ImportProblemsProps = {
-  fileName: string;
-  problems: readonly ImportProblem[];
-};
-
-export function ImportProblems({ fileName, problems }: ImportProblemsProps) {
+export function ImportProblems({ problems }: { problems: readonly ImportProblem[] }) {
   return (
-    <div role="alert" className="rounded-card border-2 border-dashed border-danger-soft bg-slate p-6">
-      <h2 className="text-2xl font-extrabold">{fileName} can't be imported yet.</h2>
-      <p className="mt-1 text-text-2">Fix these in the file, then choose it again. Nothing was saved.</p>
-      <ul className="mt-4 grid gap-2">
-        {problems.map(({ rowNumber, message }, index) => (
-          // Problems have no id of their own, and one row can have several.
-          <li key={index}>
-            {rowNumber !== null && <span className="font-display font-bold text-danger-soft">Row {rowNumber}</span>} {message}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <ul className="grid gap-2.5 text-sm">
+      {problems.map(({ rowNumber, message }, index) => (
+        // Problems have no id of their own, and one row can have several.
+        <li key={index} className="grid grid-cols-[3.5rem_minmax(0,1fr)] gap-2">
+          <span className="font-display font-bold text-danger-ink">{rowNumber === null ? 'File' : `Row ${rowNumber}`}</span>
+          {/* A space between the two, so a screen reader says "Row 4, Give the event a title." */}{' '}
+          <span>{message}</span>
+        </li>
+      ))}
+    </ul>
   );
 }
