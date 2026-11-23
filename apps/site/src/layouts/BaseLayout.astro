@@ -5,6 +5,7 @@
 import dosis from '@fontsource-variable/dosis/files/dosis-latin-wght-normal.woff2?url';
 import montserrat from '@fontsource-variable/montserrat/files/montserrat-latin-wght-normal.woff2?url';
 import SiteNav from '../components/layout/SiteNav.astro';
+import pageArrival from '../scripts/page-arrival.js?raw';
 import '../styles/global.css';
 
 // The brand fonts, fetched alongside the page instead of after the CSS asks for them. Without this the page first
@@ -20,6 +21,14 @@ const { title, description } = Astro.props;
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    {/*
+      Hide the page until `page-arrival` (at the end of the page) has it ready to show in its final place, and
+      let that script, not the browser, put the scroll back on a refresh, so it happens before the page shows.
+    */}
+    <script is:inline>
+      document.documentElement.toggleAttribute('data-arriving', true);
+      history.scrollRestoration = 'manual';
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#121a2b" />
@@ -33,5 +42,7 @@ const { title, description } = Astro.props;
     <main id="main">
       <slot />
     </main>
+    {/* Inline, so it runs as soon as the page has been read, rather than after everything has loaded. */}
+    <script is:inline set:html={pageArrival} />
   </body>
 </html>
