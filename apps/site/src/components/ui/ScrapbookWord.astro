@@ -1,0 +1,23 @@
+---
+/**
+ * A word spelled in scrapbook letters, cut out and overlapping a little, the way they sit on LCS posters. The
+ * letters are pictures, so the word is hidden from screen readers; the heading that uses it says the words.
+ */
+import { Image } from 'astro:assets';
+import { SCRAPBOOK_LETTERS } from '../../assets/brand';
+
+type Props = { word: string };
+
+const { word } = Astro.props;
+
+const letters = [...word.toUpperCase()].map((character) => {
+  const image = SCRAPBOOK_LETTERS.get(character);
+  if (!image) throw new Error(`There is no scrapbook letter for "${character}" in assets/letters.`);
+  return image;
+});
+---
+
+<span class="flex h-(--scrapbook-height) items-end" aria-hidden="true">
+  {letters.map((image) => <Image src={image} alt="" class="h-full w-auto not-first:ms-(--scrapbook-overlap)" loading="eager" />)}
+</span>
+

@@ -1,0 +1,28 @@
+---
+/**
+ * A link that looks and presses like a button. `primary` is the one main action in a section; `quiet` sits beside
+ * it. A new look is one more entry in `VARIANTS`.
+ */
+type Props = { href: string; variant: keyof typeof VARIANTS; class?: string };
+
+const VARIANTS = {
+  /** A key with a solid edge that lifts on hover and presses flat on click, like the admin's buttons. */
+  primary:
+    'bg-yellow text-ink shadow-key shadow-yellow-ink hover:-translate-y-0.5 hover:shadow-key-lifted active:translate-y-1 active:shadow-none',
+  /** An outline that fills in on hover. */
+  quiet: 'border-2 border-line text-white hover:bg-raised active:scale-97',
+} as const;
+
+const { href, variant, class: className } = Astro.props;
+---
+
+<a
+  href={href}
+  class:list={[
+    'inline-flex min-h-13 items-center justify-center rounded-full px-6.5 font-display text-lg font-extrabold whitespace-nowrap transition-[translate,scale,box-shadow,background-color] duration-(--dur-fast) ease-(--ease-spring) motion-reduce:transition-colors motion-reduce:hover:translate-y-0 motion-reduce:active:translate-y-0',
+    VARIANTS[variant],
+    className,
+  ]}
+>
+  <slot />
+</a>
