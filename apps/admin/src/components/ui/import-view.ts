@@ -1,7 +1,7 @@
 /**
  * What a list hands the CSV import so it can show the list's own items: their names, how each one looks, the
- * fields in its details and the lines on the print order. Events give tickets and the team gives crew badges; a new
- * list to import into gives one more of these.
+ * fields in its details and the lines on the print order. Events give tickets and the team gives crew badges;
+ * a new list to import into gives one more of these.
  */
 import type { ReactNode } from 'react';
 import type { ChangedItem, NewItem, ReadyImport } from '../../lib/csv-import';

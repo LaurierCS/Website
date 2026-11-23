@@ -8,7 +8,7 @@ import type { ImportEntry } from '../ui/import-view';
 import { importedEvent } from './event-import';
 import { Ticket } from './Ticket';
 
-// The values on a ticket's face that a CSV can change; a description is only on the back.
+// The values on a ticket's face that a CSV can change; a description is only in the details.
 const FACE_FIELDS: readonly (keyof TicketFace)[] = ['title', 'date', 'time', 'location'];
 
 export function ImportTicket({ entry }: { entry: ImportEntry<Event, EventFields> }) {
