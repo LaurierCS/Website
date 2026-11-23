@@ -11,6 +11,7 @@ import { BOOTH_OWL, MASCOT_FACES } from '../../assets/brand';
 import type { ClubEvent } from '../../content/events';
 import type { IsoDate } from '../../lib/dates';
 import { calendarMonths } from '../../lib/events';
+import { linkTarget } from '../../lib/links';
 import { socialLink } from '../../lib/site';
 import { dayMarks } from './day-marks';
 import { SHOWN_TICKETS, TICKET_ACCENTS } from './event-accents';
@@ -94,7 +95,7 @@ const instagram = socialLink('instagram');
               <p class="font-display text-xl font-extrabold">Nothing on the calendar yet.</p>
               <p class="text-sm text-text-2">
                 The next event goes up here as soon as it's booked. Follow us on{' '}
-                <a href={instagram.href} class="font-semibold text-yellow underline underline-offset-2">
+                <a href={instagram.href} {...linkTarget(instagram.href)} class="font-semibold text-yellow underline underline-offset-2">
                   Instagram
                 </a>{' '}
                 to hear first.

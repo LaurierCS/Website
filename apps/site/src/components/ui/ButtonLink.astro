@@ -1,8 +1,10 @@
 ---
 /**
  * A link that looks and presses like a button. `primary` is the one main action in a section; `quiet` sits beside
- * it. A new look is one more entry in `VARIANTS`.
+ * it. A new look is one more entry in `VARIANTS`. A link off the site opens in a new tab.
  */
+import { linkTarget } from '../../lib/links';
+
 type Props = { href: string; variant: keyof typeof VARIANTS; class?: string };
 
 const VARIANTS = {
@@ -18,6 +20,7 @@ const { href, variant, class: className } = Astro.props;
 
 <a
   href={href}
+  {...linkTarget(href)}
   class:list={[
     'inline-flex min-h-13 items-center justify-center rounded-full px-6.5 font-display text-lg font-extrabold whitespace-nowrap transition-[translate,scale,box-shadow,background-color] duration-(--dur-fast) ease-(--ease-spring) motion-reduce:transition-colors motion-reduce:hover:translate-y-0 motion-reduce:active:translate-y-0',
     VARIANTS[variant],
