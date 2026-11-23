@@ -2,13 +2,15 @@
  * A crew badge: a band with the lanyard slot in the middle, their photo (or initial), name, role and profile
  * links, and whatever goes under them as `children` (the Team board's switch and buttons). A member on the site
  * gets a pink band; a hidden one gets a slate band with "Hidden" and an eye-off icon and a dimmed face, so it
- * never relies on colour alone.
+ * never relies on colour alone. In a CSV import a colour tab for its `importKind` (new or updated) hangs from the
+ * top of the band, over the word on the left.
  */
 import { EyeOff } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { accentFor } from '../../lib/accents';
 import type { BadgeFace } from '../../types/team';
 import { ACCENT_FILLS } from '../ui/accent-styles';
+import { IMPORT_LABELS, type ImportKind } from '../ui/import-labels';
 import { ProfileIcon, type ProfileSite } from '../ui/ProfileIcon';
 
 const SITE_NAMES: Readonly<Record<ProfileSite, string>> = { github: 'GitHub', linkedin: 'LinkedIn' };
@@ -44,9 +46,11 @@ type CrewBadgeProps = {
   face: BadgeFace;
   layout: keyof typeof LAYOUTS;
   children?: ReactNode;
+  /** Whether a CSV import adds this member or updates them; none outside an import. */
+  importKind?: ImportKind;
 };
 
-export function CrewBadge({ face, layout, children }: CrewBadgeProps) {
+export function CrewBadge({ face, layout, children, importKind }: CrewBadgeProps) {
   const look = LAYOUTS[layout];
   const shown = face.isPublic;
   const profiles = (
@@ -59,16 +63,21 @@ export function CrewBadge({ face, layout, children }: CrewBadgeProps) {
   return (
     <div className="relative overflow-hidden rounded-card bg-card shadow-(--shadow-cutout)">
       <span aria-hidden="true" className={`absolute inset-y-0 left-0 w-1.5 ${shown ? 'bg-pink' : 'bg-slate'} ${look.stripe}`} />
-      {/* Equal-width ends keep the slot in the exact middle, under the lanyard, whatever the words either side. */}
+      {/* Equal-width ends keep the slot in the exact middle, under the lanyard, whatever the words either side. Each
+          word is centred in a pill-wide space, so the import tab lines up over "Crew" and "LCS" mirrors it. */}
       <div
         aria-hidden="true"
         className={`h-11 grid-cols-[1fr_auto_1fr] items-center px-4 font-display text-xs font-bold tracking-widest uppercase ${
           shown ? 'bg-pink text-ink' : 'bg-slate text-text-2'
         } ${look.band}`}
       >
-        <span>{shown ? 'Crew' : 'Hidden'}</span>
+        <span className="relative grid min-w-11 place-items-center self-stretch justify-self-start">
+          {shown ? 'Crew' : 'Hidden'}
+          {/* Colour only; the word is on the print order and in the details. */}
+          {importKind && <span className={`absolute top-0 left-1/2 h-2.5 w-11 -translate-x-1/2 rounded-b-md ${IMPORT_LABELS[importKind].fill}`} />}
+        </span>
         <span className="h-2.5 w-11 rounded-full bg-deep" />
-        <span className="justify-self-end">{shown ? 'LCS' : <EyeOff className="size-4" />}</span>
+        <span className="grid min-w-11 place-items-center self-stretch justify-self-end">{shown ? 'LCS' : <EyeOff className="size-4" />}</span>
       </div>
 
       <div className={`grid ${look.body}`}>

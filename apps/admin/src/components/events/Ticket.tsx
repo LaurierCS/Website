@@ -2,12 +2,14 @@
  * An event drawn as a ticket: a date stub coloured by its status, a perforated tear line, the picture, title,
  * when and where, and a barcode end. It lays itself out by its own width, not the screen's: a band across the
  * top when narrow (a phone, or the ticket printer), a stub on the left when wide. `actions` go at the end of
- * the body, like Edit and Delete on the Events list.
+ * the body, like Edit and Delete on the Events list. In a CSV import a ticket also shows its `importKind` (new
+ * or updated) and puts a highlighter over the `marked` values that will change.
  */
 import { Calendar, Clock, ImageIcon, MapPin } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { formatEventDay } from '../../lib/dates';
 import type { EventStatus, TicketFace } from '../../types/event';
+import type { ImportKind } from '../ui/import-labels';
 import { Tag, type TagTone } from '../ui/Tag';
 import { TicketStub } from './TicketStub';
 
@@ -32,15 +34,20 @@ type TicketProps = {
   face: TicketFace;
   status: EventStatus;
   actions?: ReactNode;
+  importKind?: ImportKind;
+  /** Values a CSV import changes, marked so they stand out. */
+  marked?: ReadonlySet<keyof TicketFace>;
 };
 
-export function Ticket({ face, status, actions }: TicketProps) {
+const NOTHING_MARKED: ReadonlySet<keyof TicketFace> = new Set();
+
+export function Ticket({ face, status, actions, importKind, marked = NOTHING_MARKED }: TicketProps) {
   const look = LOOKS[status];
 
   return (
     <div className="@container">
       <div className="grid overflow-hidden rounded-card bg-card shadow-(--shadow-cutout) @3xl:grid-cols-[8rem_minmax(0,1fr)_3.5rem]">
-        <TicketStub date={face.date} colours={look.stub} punched={look.faded} />
+        <TicketStub date={face.date} colours={look.stub} punched={look.faded} importKind={importKind} />
 
         {/* The tear line is this border; the two notches are bites out of the ticket at each end of it. */}
         <div className="relative grid grid-cols-[auto_minmax(0,1fr)] gap-4 border-t-3 border-dashed border-deep p-4 @3xl:grid-cols-[auto_minmax(0,1fr)_auto] @3xl:items-center @3xl:gap-5 @3xl:border-t-0 @3xl:border-l-3 @3xl:px-6 @3xl:py-5">
@@ -59,16 +66,20 @@ export function Ticket({ face, status, actions }: TicketProps) {
                 title={face.title}
                 className={`min-w-0 font-display text-xl font-bold line-clamp-2 @3xl:flex-1 @3xl:text-2xl @3xl:line-clamp-1 ${look.faded ? 'text-text-2' : 'text-white'}`}
               >
-                {face.title}
+                <Marked on={marked.has('title')}>{face.title}</Marked>
               </h2>
               <Tag tone={look.tag}>{look.label}</Tag>
             </div>
             <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-sm text-text-2">
-              <Detail icon={<Calendar aria-hidden="true" className="size-4" />}>
+              <Detail icon={<Calendar aria-hidden="true" className="size-4" />} marked={marked.has('date')}>
                 {face.date ? formatEventDay(face.date) : 'Day not set'}
               </Detail>
-              <Detail icon={<Clock aria-hidden="true" className="size-4" />}>{face.time ?? 'Time TBA'}</Detail>
-              <Detail icon={<MapPin aria-hidden="true" className="size-4" />}>{face.location ?? 'Location TBA'}</Detail>
+              <Detail icon={<Clock aria-hidden="true" className="size-4" />} marked={marked.has('time')}>
+                {face.time ?? 'Time TBA'}
+              </Detail>
+              <Detail icon={<MapPin aria-hidden="true" className="size-4" />} marked={marked.has('location')}>
+                {face.location ?? 'Location TBA'}
+              </Detail>
             </div>
           </div>
 
@@ -86,13 +97,18 @@ export function Ticket({ face, status, actions }: TicketProps) {
 }
 
 /** One fact about the event with its icon, like the time. */
-function Detail({ icon, children }: { icon: ReactNode; children: string }) {
+function Detail({ icon, marked, children }: { icon: ReactNode; marked: boolean; children: string }) {
   return (
     <span className="inline-flex items-center gap-1.5">
       {icon}
-      {children}
+      <Marked on={marked}>{children}</Marked>
     </span>
   );
+}
+
+/** A highlighter stroke over a value that will change. */
+function Marked({ on, children }: { on: boolean; children: string }) {
+  return on ? <mark className="rounded-sm bg-yellow/35 px-1 text-inherit">{children}</mark> : children;
 }
 
 /** The event's picture, or a labelled empty frame when it has none. */
