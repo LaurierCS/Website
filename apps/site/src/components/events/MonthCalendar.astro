@@ -8,9 +8,9 @@
  */
 import { Image } from 'astro:assets';
 import { MASCOT_FACES } from '../../assets/brand';
-import { monthGrid, monthTitle, type IsoDate, type YearMonth } from '../../lib/dates';
+import { dayOfMonth, monthGrid, monthTitle, type IsoDate, type YearMonth } from '../../lib/dates';
 import type { DayMark } from './day-marks';
-import { ACCENT_FILL, STICKER_TILTS } from './event-accents';
+import { ACCENT_FILL, STICKER_TILTS, TICKET_ACCENTS } from './event-accents';
 import { DAY_STAGGER_MS } from './print-timing';
 
 type Props = { months: readonly YearMonth[]; today: IsoDate; marks: ReadonlyMap<IsoDate, DayMark> };
@@ -70,7 +70,7 @@ const cell = 'relative grid h-9 place-items-center rounded-xl font-display text-
                 {week.map((date) => {
                   if (!date) return <td />;
                   const mark = marks.get(date);
-                  const day = Number(date.slice(8));
+                  const day = dayOfMonth(date);
                   const ring = date === today && 'ring-2 ring-white ring-inset';
                   if (mark?.kind === 'ticket') {
                     return (
@@ -132,7 +132,13 @@ const cell = 'relative grid h-9 place-items-center rounded-xl font-display text-
 
   <ul class="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-xs text-text-2" aria-label="Key">
     <li class="flex items-center gap-1.5"><span class="size-2.5 rounded-full ring-2 ring-white ring-inset" />Today</li>
-    <li class="flex items-center gap-1.5"><span class="size-2.5 rounded-full bg-pink" />Event</li>
+    <li class="flex items-center gap-1.5">
+      {/* One dot per ticket colour, since an event day takes its ticket's colour. */}
+      <span class="flex -space-x-1" aria-hidden="true">
+        {TICKET_ACCENTS.map((accent) => <span class:list={['size-2.5 rounded-full', ACCENT_FILL[accent]]} />)}
+      </span>
+      Event
+    </li>
     <li class="flex items-center gap-1.5"><span class="size-2.5 rounded-full bg-window" />Past event</li>
   </ul>
 </month-calendar>
