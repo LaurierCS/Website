@@ -56,12 +56,13 @@ class ComingUp extends HTMLElement {
     }
   }
 
-  /** Lights the days and prints the tickets the first time the section is seen. */
+  /** Lights the days and prints the tickets the first time the tickets' spot comes into view. */
   private playEntrance(): void {
-    const tickets = [...this.querySelectorAll<HTMLElement>('[data-printed-tickets] [data-event]')];
+    const list = this.querySelector<HTMLElement>('[data-printed-tickets]');
+    const tickets = list ? [...list.querySelectorAll<HTMLElement>('[data-event]')] : [];
 
     // Without motion there is nothing to play: start in the finished state.
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || tickets.length === 0) {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !list || tickets.length === 0) {
       for (const flag of ['data-ready', 'data-shown', 'data-settled']) this.toggleAttribute(flag, true);
       return;
     }
@@ -73,6 +74,8 @@ class ComingUp extends HTMLElement {
     if (stamp) gsap.set(stamp, { opacity: 0 });
     this.toggleAttribute('data-ready', true);
 
+    // Watches the ticket pile rather than the whole section: on a short screen (a phone held sideways) the section
+    // is taller than the screen can ever show a good share of, and the tickets would never print.
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry?.isIntersecting) return;
@@ -80,9 +83,9 @@ class ComingUp extends HTMLElement {
         this.toggleAttribute('data-shown', true);
         this.print(tickets, stamp);
       },
-      { threshold: 0.3 },
+      { threshold: 0.25 },
     );
-    observer.observe(this);
+    observer.observe(list);
   }
 
   /** The booth prints each ticket in turn, then stamps the first. */
