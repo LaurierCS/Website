@@ -43,6 +43,36 @@
   --ease-brand: var(--ease-out);
 
   /*
+   * A button's solid edge. The colour is written out so Tailwind can swap it per button with a colour utility:
+   * `shadow-key shadow-yellow-ink`.
+   */
+  --shadow-key: 0 var(--key-depth) 0 #000;
+  --shadow-key-lifted: 0 var(--key-depth-lifted) 0 #000;
+
+  /* A mascot typing at the laptop: a nod down to the keys and back, over and over. */
+  --animate-tap: tap 420ms ease-in-out infinite;
+  /* The shared laptop while anyone types: a gentle swell and settle, like it is busy. */
+  --animate-busy: busy 900ms ease-in-out infinite;
+  /* The three dots in a "…" typing bubble, rising one after another, like a chat app's. */
+  --animate-typing-dot: typing-dot 900ms ease-in-out infinite;
+
+  @keyframes tap {
+    0%, 100% { translate: 0 0; rotate: 0deg; }
+    50% { translate: 0 1.5%; rotate: 2deg; }
+  }
+
+  @keyframes busy {
+    0%, 100% { scale: 1; }
+    50% { scale: 1.025; }
+  }
+
+  @keyframes typing-dot {
+    0%, 60%, 100% { translate: 0 0; opacity: 0.5; }
+    30% { translate: 0 -40%; opacity: 1; }
+  }
+
+
+  /*
    * The width where the header has room for everything on one row: the logo, the page links and the five
    * social links. Narrower screens get the Menu button (`nav:` variant). Media queries can't read CSS
    * variables, so the value is written here rather than in tokens.css.
@@ -65,6 +95,8 @@
 
   body {
     min-height: 100dvh;
+    /* The paper plane flies in and out past the screen's edges; that must never add a sideways scroll. */
+    overflow-x: clip;
   }
 
   /* The tilted icon pattern, faint, behind everything. */
