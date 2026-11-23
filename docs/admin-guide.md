@@ -102,9 +102,11 @@ Handy for adding a whole term of events or a new exec team at once.
      Excel may change dates to `11/20/2026` when it saves. Use Google Sheets, or in Excel set the date column
      to **Text** before you type in it.
 3. Save it as a CSV file. Back in the admin, press **Import CSV**, then **Choose a CSV file**.
-4. Check what it will do: new and changed rows show as the tickets or badges they'll be, with each change listed
-   under them. If something in the file is wrong, every problem is listed by its row number: fix them in the
-   spreadsheet and choose the file again.
+4. Check what it will do. The print order lists every new and updated row, with what changes under each one,
+   and the tickets or badges they'll be come out beside it. Click or tap one to see all its fields: what stays
+   is grey, the old value is crossed out and the new one is highlighted. If something in the file is wrong, the
+   order comes back "Sent back" with every problem by its row number: fix them in the spreadsheet and choose the
+   file again.
 5. Press **Import**. Everything is saved at once, or, if anything goes wrong, nothing is.
 
 Pictures and photos are added in the admin afterwards, with **Edit**.

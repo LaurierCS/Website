@@ -62,43 +62,84 @@ describe('ImportEventsPage', () => {
     expect(await screen.findByRole('link', { name: 'Import CSV' })).toHaveAttribute('href', '/events/import');
   });
 
-  it('shows new and changed events as tickets before saving, then imports them all at once', async () => {
+  it('lists every new and updated event on the print order, with what changes, before saving', async () => {
     vi.mocked(listEvents).mockResolvedValue([HACK_NIGHT]);
-    vi.mocked(importEvents).mockResolvedValue();
     renderApp('/events/import');
 
     await chooseFile('Choose a CSV file', FILE);
 
-    const added = await screen.findByRole('region', { name: 'New events' });
-    expect(within(added).getByRole('heading', { name: 'CP312 Review' })).toBeInTheDocument();
-    const changed = screen.getByRole('region', { name: 'Changed events' });
-    expect(within(changed).getByRole('heading', { name: 'Hack Night' })).toBeInTheDocument();
-    expect(within(changed).getByText('date')).toBeInTheDocument();
-    expect(within(changed).getByText('2026-11-20')).toBeInTheDocument();
-    expect(within(changed).getByText('2026-11-21')).toBeInTheDocument();
+    const order = await screen.findByRole('region', { name: 'Print order' });
+    expect(order).toHaveTextContent('events.csv');
+    expect(within(order).getByRole('link', { name: 'Row 2 Hack Night Updated' })).toHaveAttribute('href', '#import-row-2');
+    expect(order).toHaveTextContent('date → Sat, Nov 21');
+    expect(within(order).getByRole('link', { name: 'Row 3 CP312 Review New' })).toBeInTheDocument();
+    expect(order).toHaveTextContent('Tue, Dec 1 · N2085');
+    expect(order).toHaveTextContent('To print1 new event and 1 updated event');
+    const press = screen.getByRole('region', { name: 'What the import will print' });
+    expect(within(press).getByRole('heading', { name: 'Hack Night' })).toBeInTheDocument();
+    expect(within(press).getByRole('heading', { name: 'CP312 Review' })).toBeInTheDocument();
     expect(importEvents).not.toHaveBeenCalled();
+  });
 
-    await userEvent.click(screen.getByRole('button', { name: 'Import 2 events' }));
+  it('opens an event to show every field, the old value struck out next to the new', async () => {
+    vi.mocked(listEvents).mockResolvedValue([HACK_NIGHT]);
+    renderApp('/events/import');
+    await chooseFile('Choose a CSV file', FILE);
+
+    await userEvent.click(await screen.findByRole('button', { name: 'Hack Night: show the details' }));
+
+    const details = screen.getByRole('dialog', { name: 'Hack Night' });
+    expect(details).toHaveTextContent('Updated Row 2');
+    expect(within(details).getByRole('deletion')).toHaveTextContent('Fri, Nov 20');
+    expect(within(details).getByRole('insertion')).toHaveTextContent('Sat, Nov 21');
+    expect(details).toHaveTextContent('Room' + 'BA201');
+
+    await userEvent.click(within(details).getByRole('button', { name: 'Back to the events' }));
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('shows a new event in full, its whole description included', async () => {
+    vi.mocked(listEvents).mockResolvedValue([HACK_NIGHT]);
+    renderApp('/events/import');
+    await chooseFile('Choose a CSV file', [EVENTS_HEADER, ',CP312 Review,2026-12-01,,N2085,Bring your notes and every question you have.']);
+
+    await userEvent.click(await screen.findByRole('button', { name: 'CP312 Review: show the details' }));
+
+    const details = screen.getByRole('dialog', { name: 'CP312 Review' });
+    expect(details).toHaveTextContent('New Row 2');
+    expect(details).toHaveTextContent('Bring your notes and every question you have.');
+    expect(within(details).queryByRole('deletion')).not.toBeInTheDocument();
+  });
+
+  it('imports them all at once, then stamps them issued', async () => {
+    vi.mocked(listEvents).mockResolvedValue([HACK_NIGHT]);
+    vi.mocked(importEvents).mockResolvedValue();
+    renderApp('/events/import');
+    await chooseFile('Choose a CSV file', FILE);
+
+    await userEvent.click(await screen.findByRole('button', { name: 'Import 2 events' }));
 
     expect(importEvents).toHaveBeenCalledWith({
       added: [{ title: 'CP312 Review', date: '2026-12-01', time: null, location: 'N2085', description: null }],
       changed: [{ id: HACK_NIGHT.id, fields: { title: 'Hack Night', date: '2026-11-21', time: '7:30PM', location: 'BA201', description: null } }],
     });
     const done = await screen.findByRole('status');
-    expect(done).toHaveTextContent('Imported 1 new event and 1 changed event.');
+    expect(done).toHaveTextContent('Imported 1 new event and 1 updated event.');
     expect(within(done).getByRole('link', { name: 'Back to Events' })).toHaveAttribute('href', '/events');
+    expect(screen.queryByRole('button', { name: /show the details/ })).not.toBeInTheDocument();
   });
 
-  it('lists every problem by row and offers no way to import', async () => {
+  it('sends the order back with every problem by row, and offers no way to import', async () => {
     vi.mocked(listEvents).mockResolvedValue([HACK_NIGHT]);
     renderApp('/events/import');
 
     await chooseFile('Choose a CSV file', [EVENTS_HEADER, ',,2026-12-01,,,', '00000000-0000-0000-0000-000000000000,Gone,2026-12-01,,,']);
 
-    const problems = await screen.findByRole('alert');
-    expect(problems).toHaveTextContent("events.csv can't be imported yet.");
-    expect(problems).toHaveTextContent('Row 2 Give the event a title.');
-    expect(problems).toHaveTextContent('Row 3 Nothing saved has this id.');
+    expect(await screen.findByRole('alert')).toHaveTextContent("The press won't run this one.");
+    const order = screen.getByRole('region', { name: 'Print order' });
+    expect(order).toHaveTextContent('Row 2 Give the event a title.');
+    expect(order).toHaveTextContent('Row 3 Nothing saved has this id.');
+    expect(order).toHaveTextContent("Can't print yet2 problems");
     expect(screen.queryByRole('button', { name: /^Import/ })).not.toBeInTheDocument();
     expect(screen.getByLabelText('Choose the file again')).toBeInTheDocument();
   });
@@ -109,11 +150,11 @@ describe('ImportEventsPage', () => {
 
     await chooseFile('Choose a CSV file', [EVENTS_HEADER, `${HACK_NIGHT.id},Hack Night,2026-11-20,7:30PM,BA201,`]);
 
-    expect(await screen.findByText("Nothing to import. Every row in events.csv matches what's saved.")).toBeInTheDocument();
+    expect(await screen.findByText("Every row matches what's saved, so there is nothing to print.")).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /^Import/ })).not.toBeInTheDocument();
   });
 
-  it('keeps the preview and says nothing was changed when the import fails', async () => {
+  it('keeps the order and says nothing was changed when the import fails', async () => {
     vi.mocked(listEvents).mockResolvedValue([HACK_NIGHT]);
     vi.mocked(importEvents).mockRejectedValue(new UnavailableError("The import couldn't be saved, so nothing was changed."));
     renderApp('/events/import');
@@ -123,7 +164,7 @@ describe('ImportEventsPage', () => {
 
     expect(await screen.findByRole('alert')).toHaveTextContent("The import couldn't be saved, so nothing was changed.");
     expect(screen.getByRole('button', { name: 'Import 2 events' })).toBeEnabled();
-    expect(screen.getByRole('region', { name: 'New events' })).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'What the import will print' })).toBeInTheDocument();
   });
 
   it("can't check a file until the saved events have loaded", async () => {
@@ -143,7 +184,7 @@ describe('ImportTeamPage', () => {
     expect(await screen.findByRole('link', { name: 'Import CSV' })).toHaveAttribute('href', '/team/import');
   });
 
-  it('shows new and changed members as crew badges, then imports them', async () => {
+  it('shows new and updated members as crew badges on the order, then imports them', async () => {
     vi.mocked(listTeam).mockResolvedValue([SAM]);
     vi.mocked(importTeam).mockResolvedValue();
     renderApp('/team/import');
@@ -154,11 +195,12 @@ describe('ImportTeamPage', () => {
       ',Alex Chen,,Academics,TRUE,,',
     ]);
 
-    const added = await screen.findByRole('region', { name: 'New members' });
-    expect(within(added).getByRole('heading', { name: 'Alex Chen' })).toBeInTheDocument();
-    const changed = screen.getByRole('region', { name: 'Changed members' });
-    expect(within(changed).getByRole('heading', { name: 'Sam Rivera' })).toBeInTheDocument();
-    expect(within(changed).getByText('is_public')).toBeInTheDocument();
+    const order = await screen.findByRole('region', { name: 'Print order' });
+    expect(within(order).getByRole('link', { name: 'Row 2 Sam Rivera Updated' })).toBeInTheDocument();
+    expect(order).toHaveTextContent('on the site → hidden');
+    const press = screen.getByRole('region', { name: 'What the import will print' });
+    expect(within(press).getByRole('heading', { name: 'Alex Chen' })).toBeInTheDocument();
+    expect(within(press).getByRole('heading', { name: 'Sam Rivera' })).toBeInTheDocument();
 
     await userEvent.click(screen.getByRole('button', { name: 'Import 2 members' }));
 
@@ -168,7 +210,7 @@ describe('ImportTeamPage', () => {
         { id: SAM.id, fields: { name: 'Sam Rivera', role: 'VP Engineering', department: 'Engineering', githubUrl: null, linkedinUrl: null, isPublic: false } },
       ],
     });
-    expect(await screen.findByRole('status')).toHaveTextContent('Imported 1 new member and 1 changed member.');
+    expect(await screen.findByRole('status')).toHaveTextContent('Imported 1 new member and 1 updated member.');
   });
 
   it('refuses a department the team form refuses', async () => {
@@ -177,6 +219,6 @@ describe('ImportTeamPage', () => {
 
     await chooseFile('Choose a CSV file', ['id,name,role,department,is_public,github_url,linkedin_url', ',Alex Chen,,Science,true,,']);
 
-    expect(await screen.findByRole('alert')).toHaveTextContent('Row 2 Use one of the departments:');
+    expect(await screen.findByRole('region', { name: 'Print order' })).toHaveTextContent('Row 2 Use one of the departments:');
   });
 });
