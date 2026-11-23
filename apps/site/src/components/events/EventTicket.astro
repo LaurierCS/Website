@@ -1,0 +1,149 @@
+---
+/**
+ * One coming-up event as a ticket stub, the same two shapes as the admin's, and like the admin it never hides a
+ * part of the ticket to make it fit:
+ * - side by side, when the ticket has room for all of it (`@ticket` and up): a date stub, a perforated seam, the
+ *   photo, the event and a barcode;
+ * - top-down otherwise (a phone, or beside the calendar on a smaller laptop): a coloured date band with the tag,
+ *   then the photo and the event.
+ * The tag is the stub's colour. When the section comes into view, the ticket booth prints it: it feeds out of the
+ * slot and drops onto the pile, turning slightly crooked as it lands. The next event gets a "Next up" stamp
+ * instead of a tag: ink only and see-through, like the admin's stamps, pressed on over whatever is under it.
+ */
+import type { ClubEvent } from '../../content/events';
+import { monthName, posterTime, weekdayName } from '../../lib/dates';
+import { ACCENT_FILL, ACCENT_STAMP, TICKET_TILTS, type TicketAccent } from './event-accents';
+
+type Props = {
+  event: ClubEvent;
+  accent: TicketAccent;
+  status: 'next' | 'upcoming';
+  order: number;
+};
+
+const { event, accent, status, order } = Astro.props;
+
+const tilt = TICKET_TILTS[order % TICKET_TILTS.length];
+const day = Number(event.date.slice(8));
+const monthYear = `${monthName(event.date)} ${event.date.slice(0, 4)}`;
+const tag = [
+  'shrink-0 rounded-md px-2 py-0.5 font-display text-xs font-extrabold tracking-label text-ink uppercase @ticket:px-2.5 @ticket:py-1',
+  ACCENT_FILL[accent],
+];
+
+// Uneven bar widths, so the barcode reads as a barcode rather than stripes.
+const BARS = [2, 1, 3, 1, 1, 2, 4, 1, 2, 1, 3, 2, 1, 1, 2, 3];
+---
+
+{/*
+  The wrapper is what the booth prints (`scripts/coming-up.ts` feeds it out of the slot, drops it here and turns
+  it to its resting angle), so the stamp rides along with the ticket; the ticket inside keeps its notched shape.
+  Until the printing is set up it is hidden, so it never shows in its final place first. Without JavaScript, or
+  with reduced motion, it is simply there, already at its angle.
+*/}
+<div
+  id={`event-${event.id}`}
+  data-event={event.id}
+  data-tilt={tilt}
+  style={{ '--tilt': `${tilt}deg` }}
+  class="relative scroll-mt-24 opacity-0 group-data-ready:opacity-100 data-linked:z-10 motion-reduce:rotate-(--tilt) noscript:rotate-(--tilt) noscript:opacity-100"
+>
+  {/*
+    Grows a little when the ticket or its calendar day is pointed at. A layer of its own, since the printing
+    animation owns the outer wrapper's transform.
+  */}
+  <div
+    class="relative drop-shadow-(--drop-ticket) transition-[scale] duration-(--dur-base) ease-(--ease-spring) in-data-linked:scale-103"
+  >
+    {/* `ticket-notches` cuts the two notches out where the seam meets the edges (see global.css). */}
+    <article
+      class="ticket-notches flex flex-col overflow-hidden rounded-(--radius-ticket) bg-chip @ticket:min-h-31 @ticket:flex-row"
+    >
+      {/*
+        The date: a band across the top when top-down (the "Next up" stamp lands on its right end), a stub down the
+        left side when side by side.
+      */}
+      <div
+        class:list={[
+          'flex h-(--ticket-band) shrink-0 items-center gap-3 px-4 font-display text-ink @ticket:h-auto @ticket:w-(--ticket-stub) @ticket:flex-col @ticket:justify-center @ticket:gap-0 @ticket:px-0',
+          ACCENT_FILL[accent],
+        ]}
+      >
+        <span class="text-3xl leading-none font-extrabold @ticket:text-5xl">{day}</span>
+        <span class="flex flex-col text-xs font-bold uppercase @ticket:contents">
+          <span class="@ticket:order-first">{weekdayName(event.date)}</span>
+          <span>{monthYear}</span>
+        </span>
+        {status === 'upcoming' && <span class:list={[tag, 'ms-auto @ticket:hidden']}>Upcoming</span>}
+      </div>
+
+      {/* The perforated seam. */}
+      <span class="border-t-2 border-dashed border-page @ticket:border-t-0 @ticket:border-l-2" aria-hidden="true"></span>
+
+      <div class="flex min-w-0 flex-1 items-center gap-4 px-4 py-3.5 @ticket:gap-5 @ticket:px-6">
+        <span
+          class="flex size-18 shrink-0 flex-col items-center justify-center gap-1 overflow-hidden rounded-xl border-2 border-line bg-window text-text-2 @ticket:size-21"
+        >
+          {
+            event.photoUrl ? (
+              <img src={event.photoUrl} alt="" class="size-full object-cover" loading="lazy" />
+            ) : (
+              <>
+                <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                  <circle cx="9" cy="9" r="2" />
+                  <path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21" />
+                </svg>
+                <span class="font-display text-xs font-bold uppercase">No photo</span>
+              </>
+            )
+          }
+        </span>
+
+        <div class="flex min-w-0 flex-1 flex-col gap-1.5 @ticket:gap-2">
+          <div class="flex min-w-0 items-center gap-3">
+            <h3 class="w-full font-display text-lg leading-tight font-bold text-balance @ticket:text-2xl">{event.title}</h3>
+            {status === 'upcoming' && <span class:list={[tag, 'hidden @ticket:inline-block']}>Upcoming</span>}
+            {status === 'next' && <span class="sr-only">Next up</span>}
+          </div>
+          <p class="flex flex-wrap items-center gap-x-5 gap-y-1 text-xs text-text-2 @ticket:text-sm">
+            <span class="flex items-center gap-1.5">
+              <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" />
+              </svg>
+              {event.time ? posterTime(event.time) : 'Time TBA'}
+            </span>
+            <span class="flex items-center gap-1.5">
+              <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12Z" /><circle cx="12" cy="9" r="2.5" />
+              </svg>
+              {event.location ?? 'Location TBA'}
+            </span>
+          </p>
+        </div>
+      </div>
+
+      <span
+        class="hidden w-13 shrink-0 flex-col items-center justify-center gap-0.5 border-l border-line @ticket:flex"
+        aria-hidden="true"
+      >
+        {BARS.map((height) => <span class="w-5.5 bg-muted" style={{ height: `${height}px` }} />)}
+      </span>
+    </article>
+
+    {
+      status === 'next' && (
+        <span
+          data-stamp
+          aria-hidden="true"
+          class:list={[
+            'pointer-events-none absolute top-2 right-4 z-10 rotate-11 rounded-lg border-4 border-double border-current px-2.5 py-0.5 font-display text-xs font-extrabold tracking-widest uppercase opacity-65 @ticket:top-7 @ticket:right-12 @ticket:text-lg',
+            ACCENT_STAMP[accent],
+          ]}
+        >
+          Next up
+        </span>
+      )
+    }
+  </div>
+</div>

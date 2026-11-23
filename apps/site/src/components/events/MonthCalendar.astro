@@ -1,0 +1,138 @@
+---
+/**
+ * The coming-up calendar: one month at a time, with arrows to step through the months that have events. Today is
+ * outlined, days gone by are faded, and when the section comes into view each event day lights up in its ticket's
+ * colour and gets its mascot's sticker slapped on; clicking one jumps to its ticket. Past events keep a small
+ * dot. Without JavaScript only the first month shows, and the arrows stay invisible (they still take their space,
+ * so the header never changes height).
+ */
+import { Image } from 'astro:assets';
+import { MASCOT_FACES } from '../../assets/brand';
+import { monthGrid, monthTitle, type IsoDate, type YearMonth } from '../../lib/dates';
+import type { DayMark } from './day-marks';
+import { ACCENT_FILL, STICKER_TILTS } from './event-accents';
+import { DAY_STAGGER_MS } from './print-timing';
+
+type Props = { months: readonly YearMonth[]; today: IsoDate; marks: ReadonlyMap<IsoDate, DayMark> };
+
+const { months, today, marks } = Astro.props;
+const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const cell = 'relative grid h-9 place-items-center rounded-xl font-display text-sm font-bold nav:h-13 nav:text-base';
+---
+
+<month-calendar class="block rounded-(--radius-ticket) border-2 border-line-quiet bg-raised p-4 nav:p-7">
+  {
+    months.map((month, index) => (
+      <div data-month={index} class:list={['flex flex-col gap-3 nav:gap-4', index > 0 && 'hidden']}>
+        <div class="flex items-center justify-between">
+          <h3 class="font-display text-xl font-extrabold nav:text-2xl">{monthTitle(month)}</h3>
+          <div class="invisible flex gap-2 group-data-live:visible">
+            <button
+              type="button"
+              data-month-step="-1"
+              aria-label="Previous month"
+              disabled={index === 0}
+              class="grid size-9 place-items-center rounded-full border-2 border-line transition-[scale,background-color] duration-(--dur-fast) ease-(--ease-spring) hover:bg-chip active:scale-90 disabled:opacity-35 disabled:hover:bg-transparent nav:size-10"
+            >
+              <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                <path d="m15 18-6-6 6-6" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              data-month-step="1"
+              aria-label="Next month"
+              disabled={index === months.length - 1}
+              class="grid size-9 place-items-center rounded-full border-2 border-line transition-[scale,background-color] duration-(--dur-fast) ease-(--ease-spring) hover:bg-chip active:scale-90 disabled:opacity-35 disabled:hover:bg-transparent nav:size-10"
+            >
+              <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                <path d="m9 18 6-6-6-6" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <table class="w-full table-fixed border-separate border-spacing-1 nav:border-spacing-2">
+          <caption class="sr-only">{monthTitle(month)}</caption>
+          <thead>
+            <tr>
+              {WEEKDAYS.map((weekday) => (
+                <th scope="col" abbr={weekday} class="font-display text-xs font-bold text-muted uppercase">
+                  {weekday.slice(0, 1)}
+                  <span class="hidden nav:inline">{weekday.slice(1)}</span>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {monthGrid(month).map((week) => (
+              <tr>
+                {week.map((date) => {
+                  if (!date) return <td />;
+                  const mark = marks.get(date);
+                  const day = Number(date.slice(8));
+                  const ring = date === today && 'ring-2 ring-white ring-inset';
+                  if (mark?.kind === 'ticket') {
+                    return (
+                      <td>
+                        <a
+                          href={`#event-${mark.eventId}`}
+                          data-event-day={mark.eventId}
+                          aria-label={`${day}: ${mark.title}`}
+                          style={{ '--entrance-delay': `${mark.order * DAY_STAGGER_MS}ms` }}
+                          class:list={[
+                            cell,
+                            ring,
+                            'isolate text-white transition-[color,translate,scale] delay-(--entrance-delay) duration-(--dur-base) ease-(--ease-spring) group-data-settled:delay-0 group-data-shown:text-ink hover:-translate-y-0.5 data-linked:-translate-y-1 data-linked:scale-110 motion-reduce:text-ink motion-reduce:transition-none noscript:text-ink',
+                          ]}
+                        >
+                          <span
+                            class:list={[
+                              'absolute inset-0 -z-10 scale-50 rounded-xl opacity-0 transition-[opacity,scale] delay-(--entrance-delay) duration-(--dur-base) ease-(--ease-spring) group-data-settled:delay-0 group-data-shown:scale-100 group-data-shown:opacity-100 motion-reduce:scale-100 motion-reduce:opacity-100 motion-reduce:transition-none noscript:scale-100 noscript:opacity-100',
+                              ACCENT_FILL[mark.accent],
+                            ]}
+                            aria-hidden="true"
+                          />
+                          {day}
+                          <Image
+                            src={MASCOT_FACES[mark.mascot]}
+                            alt=""
+                            width={28}
+                            densities={[1, 2]}
+                            class:list={[
+                              'absolute -top-3 -right-2.5 h-auto w-6 scale-150 opacity-0 drop-shadow-md transition-[opacity,scale] delay-(--entrance-delay) duration-(--dur-base) ease-(--ease-spring) group-data-settled:delay-0 group-data-shown:scale-100 group-data-shown:opacity-100 nav:w-7 motion-reduce:scale-100 motion-reduce:opacity-100 motion-reduce:transition-none noscript:scale-100 noscript:opacity-100',
+                              STICKER_TILTS[mark.order % STICKER_TILTS.length],
+                            ]}
+                          />
+                        </a>
+                      </td>
+                    );
+                  }
+                  return (
+                    <td>
+                      <span class:list={[cell, ring, date < today ? 'text-muted' : 'text-white', mark && 'bg-window']}>
+                        {day}
+                        {mark && (
+                          <>
+                            <span class="absolute bottom-1 size-1 rounded-full bg-muted nav:bottom-1.5" aria-hidden="true" />
+                            <span class="sr-only">{`: ${mark.title} (past event)`}</span>
+                          </>
+                        )}
+                      </span>
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    ))
+  }
+
+  <ul class="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-xs text-text-2" aria-label="Key">
+    <li class="flex items-center gap-1.5"><span class="size-2.5 rounded-full ring-2 ring-white ring-inset" />Today</li>
+    <li class="flex items-center gap-1.5"><span class="size-2.5 rounded-full bg-pink" />Event</li>
+    <li class="flex items-center gap-1.5"><span class="size-2.5 rounded-full bg-window" />Past event</li>
+  </ul>
+</month-calendar>
