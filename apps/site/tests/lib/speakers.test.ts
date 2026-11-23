@@ -48,7 +48,7 @@ describe('readSpeakers', () => {
     [
       'a photo that is not in the folder',
       'Sam,Engineer,Google,,,missing.jpg,stage.png',
-      /row 2: there is no photo called missing\.jpg/,
+      /row 2: there is no picture called missing\.jpg in src\/assets\/speakers/,
     ],
     [
       'a headshot that is not square',

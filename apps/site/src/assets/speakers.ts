@@ -3,12 +3,8 @@
  * the file into `speakers/` and writing its name in the sheet.
  */
 import type { ImageMetadata } from 'astro';
+import { byFileName } from '../lib/sheet';
 
-const files = import.meta.glob<ImageMetadata>('./speakers/*.{jpg,jpeg,png,webp}', {
-  eager: true,
-  import: 'default',
-});
-
-export const SPEAKER_IMAGES: ReadonlyMap<string, ImageMetadata> = new Map(
-  Object.entries(files).map(([path, image]) => [path.slice(path.lastIndexOf('/') + 1), image]),
+export const SPEAKER_IMAGES = byFileName(
+  import.meta.glob<ImageMetadata>('./speakers/*.{jpg,jpeg,png,webp}', { eager: true, import: 'default' }),
 );
