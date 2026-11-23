@@ -15,6 +15,13 @@ export function formatEventDay(isoDate: string): string {
   return DAY.format(new Date(`${isoDate}T00:00:00Z`));
 }
 
+const SHORT_DAY = new Intl.DateTimeFormat('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' });
+
+/** An event's `YYYY-MM-DD` day where space is short, e.g. "Sat, Nov 21". Formatted in UTC, like `formatEventDay`. */
+export function shortEventDay(isoDate: string): string {
+  return SHORT_DAY.format(new Date(`${isoDate}T00:00:00Z`));
+}
+
 const STUB_WEEKDAY = new Intl.DateTimeFormat('en-US', { weekday: 'short', timeZone: 'UTC' });
 const STUB_DAY = new Intl.DateTimeFormat('en-US', { day: 'numeric', timeZone: 'UTC' });
 const STUB_MONTH = new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' });

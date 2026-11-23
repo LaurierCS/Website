@@ -1,4 +1,4 @@
-import { clubToday, stubDay, toPickerTime, toStoredTime } from '../../src/lib/dates';
+import { clubToday, shortEventDay, stubDay, toPickerTime, toStoredTime } from '../../src/lib/dates';
 
 describe('stubDay', () => {
   it('splits a day into the weekday, the day of the month and the month with its year', () => {
@@ -7,6 +7,13 @@ describe('stubDay', () => {
 
   it('writes the first of the month without a leading zero', () => {
     expect(stubDay('2026-12-01')).toEqual({ weekday: 'Tue', day: '1', month: 'Dec 2026' });
+  });
+});
+
+describe('shortEventDay', () => {
+  it('writes a day short, with no year and no leading zero', () => {
+    expect(shortEventDay('2026-11-21')).toBe('Sat, Nov 21');
+    expect(shortEventDay('2026-12-01')).toBe('Tue, Dec 1');
   });
 });
 
