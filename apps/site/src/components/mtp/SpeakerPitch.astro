@@ -1,0 +1,38 @@
+---
+/**
+ * The ask under the spotlight, for people who work in tech: come and speak at the next Meet the Professionals.
+ * Doug, in a suit for the occasion, sits at the top on a phone; on a wider screen Doug has the box's left end.
+ */
+import { Image } from 'astro:assets';
+import { DOUG_IN_A_SUIT } from '../../assets/brand';
+import ButtonLink from '../ui/ButtonLink.astro';
+
+type Props = { title: string; text: string; action: Readonly<{ label: string; href: string }> };
+
+const { title, text, action } = Astro.props;
+---
+
+<aside
+  aria-labelledby="speaker-pitch-title"
+  class="relative mt-6 flex flex-col gap-3 rounded-(--radius-ticket) border-2 border-yellow bg-raised px-5 py-6 nav:flex-row nav:items-center nav:gap-8 nav:py-7 nav:ps-56 nav:pe-10"
+>
+  <Image
+    src={DOUG_IN_A_SUIT}
+    alt=""
+    width={156}
+    densities={[1, 2]}
+    class="h-auto w-29 nav:absolute nav:top-2 nav:left-9 nav:w-39"
+  />
+  <div class="flex flex-col gap-1.5 nav:flex-1">
+    <h3 id="speaker-pitch-title" class="font-display text-2xl leading-tight font-extrabold text-balance nav:text-3xl">
+      {title}
+    </h3>
+    <p class="text-sm text-text-2 nav:text-base">{text}</p>
+  </div>
+  <ButtonLink href={action.href} variant="primary" class="mt-1 gap-2 self-start nav:mt-0 nav:self-center">
+    {action.label}
+    <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+      <path d="M7 17 17 7M8 7h9v9" />
+    </svg>
+  </ButtonLink>
+</aside>

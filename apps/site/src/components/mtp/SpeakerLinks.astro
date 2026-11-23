@@ -1,0 +1,50 @@
+---
+/**
+ * A speaker's buttons: Connect (their LinkedIn) and a round one for their website. A link that isn't in the
+ * speakers sheet is left out, and with neither there is nothing to show.
+ */
+import { linkTarget } from '../../lib/links';
+import type { Speaker } from '../../lib/speakers';
+import { SOCIAL_ICONS } from '../ui/social-icons';
+
+type Props = { speaker: Speaker };
+
+const { speaker } = Astro.props;
+const LinkedIn = SOCIAL_ICONS.linkedin;
+const press =
+  'transition-[translate,scale] duration-(--dur-fast) ease-(--ease-spring) hover:-translate-y-0.5 active:scale-95 motion-reduce:transition-none motion-reduce:hover:translate-y-0';
+---
+
+{
+  (speaker.linkedin || speaker.website) && (
+    <div class="flex items-center gap-2">
+      {speaker.linkedin && (
+        <a
+          href={speaker.linkedin}
+          {...linkTarget(speaker.linkedin)}
+          aria-label={`Connect with ${speaker.name} on LinkedIn`}
+          class:list={[
+            'inline-flex h-10 items-center gap-2 rounded-full bg-linkedin px-4 font-display text-sm font-extrabold text-white',
+            press,
+          ]}
+        >
+          <LinkedIn class="size-4" aria-hidden="true" />
+          Connect
+        </a>
+      )}
+      {speaker.website && (
+        <a
+          href={speaker.website}
+          {...linkTarget(speaker.website)}
+          aria-label={`${speaker.name}'s website`}
+          class:list={['grid size-10 place-items-center rounded-full border-2 border-current', press]}
+        >
+          <svg class="size-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" />
+          </svg>
+        </a>
+      )}
+    </div>
+  )
+}
