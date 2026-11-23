@@ -6,6 +6,7 @@ import type { ImageMetadata } from 'astro';
 import coco from './mascots/coco.png';
 import doug from './mascots/doug.png';
 import krill from './mascots/krill.png';
+import owl from './mascots/owl.png';
 import cocoFace from './mascots/faces/coco.png';
 import dougFace from './mascots/faces/doug.png';
 import krillFace from './mascots/faces/krill.png';
@@ -21,7 +22,10 @@ import roomFloor from './objects/room-floor.svg';
 export const MASCOTS = { coco, doug, krill } as const;
 export type MascotName = keyof typeof MASCOTS;
 
-/** Each mascot on their own, small: their avatar in the about window's group chat. */
+/** The owl who runs the LCS ticket booth in "Coming up", peeking out from behind it. */
+export const BOOTH_OWL = owl;
+
+/** Each mascot on their own, small: their avatar in the about window's group chat, and stickers on event days. */
 export const MASCOT_FACES = { doug: dougFace, coco: cocoFace, krill: krillFace } as const;
 
 export const OBJECTS = { paperPlane, plusBlock, sharedLaptop } as const;

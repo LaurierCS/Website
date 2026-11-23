@@ -77,6 +77,13 @@
    * variables, so the value is written here rather than in tokens.css.
    */
   --breakpoint-nav: 64rem;
+
+  /*
+   * The narrowest an event ticket can be and still sit side by side with every part showing (date stub, photo,
+   * event, barcode); narrower, like on a phone, it turns top-down (`@ticket:` variant). A container size, so it
+   * follows the ticket's own width.
+   */
+  --container-ticket: 34rem;
 }
 
 @layer base {
@@ -85,6 +92,11 @@
     color: var(--text);
     font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
+  }
+
+  /* Kept out of sight for the moment it takes to show the page in its final place (scripts/page-arrival.js). */
+  html[data-arriving] {
+    visibility: hidden;
   }
 
   /* The open menu is a modal, so the page behind it stays put. */
@@ -124,5 +136,30 @@
   :focus-visible {
     outline: none;
     box-shadow: var(--focus-ring);
+  }
+}
+
+@layer components {
+  /*
+   * The two notches of an event ticket, cut right through it (not painted on) so whatever lies behind shows: the
+   * page pattern, or another ticket. They sit where the perforated seam meets the edges: left and right of the
+   * date band when the ticket is top-down, top and bottom of the date stub when it is side by side.
+   */
+  .ticket-notches {
+    /* Clear inside the notch, solid from half a pixel past it, so the cut edge stays smooth. */
+    --notch: #0000 var(--ticket-notch), #000 calc(var(--ticket-notch) + 0.5px);
+    mask-image:
+      radial-gradient(circle at 0 var(--ticket-band), var(--notch)),
+      radial-gradient(circle at 100% var(--ticket-band), var(--notch));
+    mask-composite: intersect;
+  }
+
+  /* The same width as the `@ticket:` variant (--container-ticket); a container query can't read a variable. */
+  @container (width >= 34rem) {
+    .ticket-notches {
+      mask-image:
+        radial-gradient(circle at var(--ticket-stub) 0, var(--notch)),
+        radial-gradient(circle at var(--ticket-stub) 100%, var(--notch));
+    }
   }
 }
