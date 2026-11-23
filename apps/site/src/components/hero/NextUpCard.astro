@@ -4,7 +4,11 @@
  * arrow that nudges forward when you point at the card. It jumps to that event's ticket in "Coming up".
  */
 import type { ClubEvent } from '../../content/events';
-import { monthName, posterTime, weekdayName } from '../../lib/dates';
+import { dayOfMonth, monthName, posterTime, weekdayName } from '../../lib/dates';
+import { ACCENT_FILL, TICKET_ACCENTS } from '../events/event-accents';
+
+// The same colour as the soonest event's ticket in "Coming up", so the card and the ticket it jumps to match.
+const fill = ACCENT_FILL[TICKET_ACCENTS[0]];
 
 type Props = { event: ClubEvent; class?: string };
 
@@ -22,9 +26,9 @@ const details = [
     className,
   ]}
 >
-  <span class="flex flex-col items-center rounded-xl bg-pink px-2.5 py-1.5 font-display text-ink">
+  <span class:list={['flex flex-col items-center rounded-xl px-2.5 py-1.5 font-display text-ink', fill]}>
     <span class="text-xs font-bold uppercase">{monthName(event.date)}</span>
-    <span class="text-2xl leading-none font-extrabold">{Number(event.date.slice(8))}</span>
+    <span class="text-2xl leading-none font-extrabold">{dayOfMonth(event.date)}</span>
   </span>
   <span class="flex flex-col">
     <span class="font-display text-xs font-bold tracking-label text-yellow uppercase">Next up</span>

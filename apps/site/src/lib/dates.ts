@@ -75,6 +75,11 @@ export function weekdayName(date: IsoDate): string {
   return WEEKDAY.format(asUtc(date)).replace('.', '');
 }
 
+/** 26 for 2026-11-26. */
+export function dayOfMonth(date: IsoDate): number {
+  return Number(date.slice(8));
+}
+
 /** "Nov" for 2026-11-26. */
 export function monthName(date: IsoDate): string {
   return MONTH.format(asUtc(date)).replace('.', '');

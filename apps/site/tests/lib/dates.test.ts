@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   addMonths,
   clubToday,
+  dayOfMonth,
   monthGrid,
   monthName,
   monthTitle,
@@ -39,6 +40,7 @@ describe('formatting', () => {
   it('names the weekday and month of a date as written, whatever the time zone', () => {
     expect(weekdayName('2026-11-26')).toBe('Thu');
     expect(monthName('2026-11-26')).toBe('Nov');
+    expect(dayOfMonth('2026-12-03')).toBe(3);
     expect(monthTitle({ year: 2026, month: 11 })).toBe('November 2026');
   });
 
