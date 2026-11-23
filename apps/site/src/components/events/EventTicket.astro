@@ -11,7 +11,7 @@
  * instead of a tag: ink only and see-through, like the admin's stamps, pressed on over whatever is under it.
  */
 import type { ClubEvent } from '../../content/events';
-import { monthName, posterTime, weekdayName } from '../../lib/dates';
+import { dayOfMonth, monthName, posterTime, weekdayName } from '../../lib/dates';
 import { ACCENT_FILL, ACCENT_STAMP, TICKET_TILTS, type TicketAccent } from './event-accents';
 
 type Props = {
@@ -24,7 +24,7 @@ type Props = {
 const { event, accent, status, order } = Astro.props;
 
 const tilt = TICKET_TILTS[order % TICKET_TILTS.length];
-const day = Number(event.date.slice(8));
+const day = dayOfMonth(event.date);
 const monthYear = `${monthName(event.date)} ${event.date.slice(0, 4)}`;
 const tag = [
   'shrink-0 rounded-md px-2 py-0.5 font-display text-xs font-extrabold tracking-label text-ink uppercase @ticket:px-2.5 @ticket:py-1',
