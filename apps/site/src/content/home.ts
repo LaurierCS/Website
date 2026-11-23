@@ -1,6 +1,6 @@
 /**
  * The words and numbers on the home page's hero. Marketing changes these often, so they live here rather than in
- * the markup. The next event is written in by hand until the events table feeds the page.
+ * the markup. The "Next up" card reads the events (`content/events.ts`) instead.
  */
 
 /** One of the hero's numbers: what it counts up to, what follows it ("+"), and the accent it is printed in. */
@@ -21,16 +21,6 @@ export type Typist = (typeof TYPISTS)[number]['id'];
 
 /** One message in the about window's group chat: what it says, and who posts it. Up to about 90 characters. */
 export type AboutLine = Readonly<{ by: Typist; text: string }>;
-
-/** The event the hero's "Next up" card points to. */
-export type NextEvent = Readonly<{
-  title: string;
-  month: string;
-  day: string;
-  /** Weekday, time and room, as people read them on a poster. */
-  details: string;
-  href: string;
-}>;
 
 export const HERO = {
   label: 'Welcome to',
@@ -61,18 +51,10 @@ export const HERO = {
     primary: { label: "See what's on", href: '#events' },
     secondary: { label: 'Meet the team', href: '#team' },
   },
-  nextEvent: {
-    title: 'Meet the Professionals',
-    month: 'Nov',
-    day: '12',
-    details: 'Thu 7:00PM · N1001',
-    href: '#events',
-  },
 } as const satisfies {
   label: string;
   nameLines: readonly string[];
   about: Readonly<{ summary: string; lines: readonly AboutLine[] }>;
   stats: readonly HeroStat[];
   actions: Readonly<Record<'primary' | 'secondary', Readonly<{ label: string; href: string }>>>;
-  nextEvent: NextEvent;
 };
