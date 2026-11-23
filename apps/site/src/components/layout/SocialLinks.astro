@@ -1,8 +1,10 @@
 ---
 /**
  * The club's five accounts as icon links. In the header they are bare icons; in the phone menu each sits on a
- * round chip with its name under it, since there is room and a thumb needs the bigger target.
+ * round chip with its name under it, since there is room and a thumb needs the bigger target. Each opens in a
+ * new tab.
  */
+import { linkTarget } from '../../lib/links';
 import { SOCIAL_LINKS } from '../../lib/site';
 import { SOCIAL_HOVER_TEXT, SOCIAL_ICONS } from '../ui/social-icons';
 
@@ -24,6 +26,7 @@ const linkMotion =
           <li>
             <a
               href={link.href}
+              {...linkTarget(link.href)}
               aria-label={link.description}
               class:list={['grid size-11 place-items-center rounded-full text-white', linkMotion, SOCIAL_HOVER_TEXT[link.name]]}
             >
@@ -41,6 +44,7 @@ const linkMotion =
           <li>
             <a
               href={link.href}
+              {...linkTarget(link.href)}
               aria-label={link.description}
               class:list={['group flex w-15 flex-col items-center gap-1.5 text-white', linkMotion, SOCIAL_HOVER_TEXT[link.name]]}
             >
