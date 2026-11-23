@@ -50,12 +50,21 @@
 
   /* Shape */
   --radius-window: 14px;
+  --radius-ticket: 20px; /* an event ticket stub, the same as the admin's */
+  --ticket-stub: 8.25rem; /* the date stub's width when a ticket is side by side */
+  --ticket-band: 3.5rem; /* the date band's height when a ticket is top-down */
+  --ticket-notch: 10px; /* the radius of the notches cut out where the seam meets the edges */
+  /* The coming-up calendar: its full width, and the narrowest it may get beside the tickets before they give way. */
+  --calendar-width: 32.5rem;
+  --calendar-min-width: 25rem;
   --max: 1280px;
 
   /* Depth */
   --shadow-float: 0 20px 40px -8px rgb(0 0 0 / 0.6); /* held up off the page, like the open menu */
   --backdrop: rgb(11 15 25 / 0.7); /* the dimmed page behind an open menu */
   --shadow-card: 0 12px 24px -8px rgb(0 0 0 / 0.5); /* a card resting on the clubhouse floor, like Next up */
+  --drop-ticket: 0 10px 12px rgb(0 0 0 / 0.45); /* a ticket on the floor; follows its notched shape */
+  --shadow-slot-glow: 0 0 12px var(--yellow); /* the ticket booth's slot lit up while it prints */
   /* How tall a button's solid edge is, like a keyboard key, at rest and when lifted on hover. */
   --key-depth: 5px;
   --key-depth-lifted: 7px;
