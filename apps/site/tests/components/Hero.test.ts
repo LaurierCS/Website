@@ -1,18 +1,33 @@
-import { getByRole, getByText, within } from '@testing-library/dom';
+import { getByRole, getByText, queryByText, within } from '@testing-library/dom';
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { JSDOM } from 'jsdom';
 import { beforeAll, describe, expect, it } from 'vitest';
 import Hero from '../../src/components/hero/Hero.astro';
+import type { ClubEvent } from '../../src/content/events';
 import { HERO } from '../../src/content/home';
 import { POSTED_AT_START } from '../../src/lib/chat';
 import { formatCount } from '../../src/lib/count';
+
+const NEXT: ClubEvent = {
+  id: 'study-chill',
+  title: 'Study n Chill',
+  date: '2026-11-26',
+  time: '17:00',
+  location: 'Library 3rd floor',
+  photoUrl: null,
+};
+
+/** The hero as a visitor's browser gets it, with `nextEvent` as the soonest event. */
+async function renderHero(nextEvent: ClubEvent | undefined): Promise<HTMLElement> {
+  const container = await AstroContainer.create();
+  return new JSDOM(await container.renderToString(Hero, { props: { nextEvent } })).window.document.body;
+}
 
 describe('Hero', () => {
   let page: HTMLElement;
 
   beforeAll(async () => {
-    const container = await AstroContainer.create();
-    page = new JSDOM(await container.renderToString(Hero)).window.document.body;
+    page = await renderHero(NEXT);
   });
 
   it('says the club name in the heading, even though it is drawn in scrapbook letters', () => {
@@ -29,10 +44,14 @@ describe('Hero', () => {
     expect(getByRole(page, 'link', { name: label }).getAttribute('href')).toBe(href);
   });
 
-  it('links the next event from its card', () => {
-    const card = getByRole(page, 'link', { name: new RegExp(HERO.nextEvent.title) });
-    expect(card.getAttribute('href')).toBe(HERO.nextEvent.href);
-    expect(within(card).getByText(HERO.nextEvent.details)).toBeDefined();
+  it("shows the soonest event's day, time and room, and jumps to its ticket", () => {
+    const card = getByRole(page, 'link', { name: /Study n Chill/ });
+    expect(card.getAttribute('href')).toBe('#event-study-chill');
+    expect(within(card).getByText('Thu 5:00PM · Library 3rd floor')).toBeDefined();
+  });
+
+  it('leaves the "Next up" card out when nothing is coming up', async () => {
+    expect(queryByText(await renderHero(undefined), 'Next up')).toBeNull();
   });
 
   it('gives screen readers the whole description at once, not the chat messages', () => {

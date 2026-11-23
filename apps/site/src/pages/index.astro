@@ -1,11 +1,20 @@
 ---
+import ComingUp from '../components/events/ComingUp.astro';
 import Hero from '../components/hero/Hero.astro';
+import { EVENTS } from '../content/events';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { clubToday } from '../lib/dates';
+import { upcomingEvents } from '../lib/events';
+
+// Worked out when the page is built. Once the events table feeds the page it is rendered per visit instead.
+const today = clubToday();
+const upcoming = upcomingEvents(EVENTS, today);
 ---
 
 <BaseLayout
   title="Laurier Computing Society"
   description="Wilfrid Laurier's computer science club: midterm reviews, Meet the Professionals, hackathons and a community that codes together."
 >
-  <Hero />
+  <Hero nextEvent={upcoming[0]} />
+  <ComingUp events={EVENTS} upcoming={upcoming} today={today} />
 </BaseLayout>
