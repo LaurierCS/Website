@@ -1,6 +1,6 @@
 ---
 /**
- * One poster on a drifting row: a square tile that lifts when you point at it and opens the poster big when
+ * One poster on a drifting row: a square tile that grows a little when you point at it and opens the poster big when
  * clicked (`scripts/poster-rows.ts` fills the viewer from `data-large` and `data-event`). A `copy` is one of the
  * repeats that keep the row going round: it still opens on a click, but screen readers and the Tab key skip it,
  * since they already met the original.
@@ -20,7 +20,17 @@ const { poster, large, copy } = Astro.props;
   data-event={poster.event}
   aria-label={copy ? undefined : `${poster.event} poster`}
   tabindex={copy ? -1 : undefined}
-  class="block size-30 shrink-0 overflow-hidden rounded-xl bg-window shadow-(--shadow-card) transition-[translate,scale] duration-(--dur-fast) ease-(--ease-spring) hover:-translate-y-1 active:scale-97 motion-reduce:transition-none motion-reduce:hover:translate-y-0 nav:size-42.5"
+  class="block size-30 shrink-0 overflow-hidden rounded-xl bg-window shadow-(--shadow-card) transition-[scale] duration-(--dur-fast) ease-(--ease-spring) hover:scale-105 active:scale-97 motion-reduce:transition-none nav:size-42.5"
 >
-  <Image src={poster.poster} alt="" width={170} densities={[1, 2]} class="size-full object-cover object-top" />
+  {/* Cropped square from the top, where a poster's title is, when the site is built. */}
+  <Image
+    src={poster.poster}
+    alt=""
+    width={170}
+    height={170}
+    fit="cover"
+    position="top"
+    densities={[1, 2]}
+    class="size-full object-cover object-top"
+  />
 </button>

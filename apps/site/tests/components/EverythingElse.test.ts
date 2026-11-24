@@ -2,23 +2,21 @@ import { getAllByRole, getByRole, within } from '@testing-library/dom';
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { JSDOM } from 'jsdom';
 import { describe, expect, it } from 'vitest';
-import { POSTER_IMAGES } from '../../src/assets/posters';
 import EverythingElse from '../../src/components/posters/EverythingElse.astro';
 import { EVERYTHING_ELSE, KIND_NAMES } from '../../src/content/everything-else';
-import { postersByKind, readPosters } from '../../src/lib/posters';
+import { postersByKind, type EventPoster } from '../../src/lib/posters';
 
-// Real posters from the posters folder, so the page renders them the way the site does.
-const ROWS = postersByKind(
-  readPosters(
-    [
-      'kind,event,poster',
-      'review,CP216 Final Review,cp216-final-review.jpg',
-      'review,CP312 Midterm Review,cp312-midterm-review.jpg',
-      'social,AI Bingo,ai-bingo.jpg',
-    ].join('\n'),
-    POSTER_IMAGES,
-  ),
-);
+const poster = (kind: EventPoster['kind'], event: string, file: string): EventPoster => ({
+  kind,
+  event,
+  poster: `https://example.supabase.co/storage/v1/object/public/events-images/${file}`,
+});
+
+const ROWS = postersByKind([
+  poster('review', 'CP216 Final Review', 'cp216.png'),
+  poster('review', 'CP312 Midterm Review', 'cp312.png'),
+  poster('social', 'AI Bingo', 'ai-bingo.png'),
+]);
 
 /** The section as a visitor's browser gets it. */
 async function renderSection(): Promise<HTMLElement> {

@@ -1,40 +1,30 @@
 /**
- * Reads the event posters out of the posters sheet (`content/event-posters.csv`): one row per event, with the
- * kind of night it was and its poster. Once event photos live in the database, only this reader changes.
+ * The event posters on the home page's "Everything else we do": every event in the events table that has a kind
+ * of night and a poster. Rows from the table are checked here, once, then grouped into one row per kind.
  */
-import type { ImageMetadata } from 'astro';
 import { z } from 'zod';
-import { readSheet, requiredText, sheetImage } from './sheet';
 
-/** The kinds of night the club runs, in the order the home page shows them. */
+/** The kinds of night the club runs, as the events table spells them, in the order the home page shows them. */
 export const EVENT_KINDS = ['review', 'social', 'career', 'workshop'] as const;
 export type EventKind = (typeof EVENT_KINDS)[number];
 
-/** One past event and its poster. */
-export type EventPoster = Readonly<{ kind: EventKind; event: string; poster: ImageMetadata }>;
+/** One event and its poster. `poster` is the picture's address in the events bucket. */
+export type EventPoster = Readonly<{ kind: EventKind; event: string; poster: string }>;
 
-/** One kind of night and its posters, in the sheet's order. */
+/** One kind of night and its posters, in the order they came in. */
 export type PosterRow = Readonly<{ kind: EventKind; posters: readonly EventPoster[] }>;
 
-const PosterRowSchema = z
-  .object({
-    kind: z.enum(EVENT_KINDS, { error: `kind must be one of ${EVENT_KINDS.join(', ')}.` }),
-    event: requiredText('event'),
-    poster: requiredText('poster'),
-  })
-  .strict();
+const PosterRowSchema = z.object({
+  title: z.string().trim().min(1),
+  kind: z.enum(EVENT_KINDS),
+  picture_url: z.url({ protocol: /^https$/ }),
+});
 
-/**
- * The posters in the sheet's order, with their pictures looked up by file name in `images`.
- * @throws Error naming the row and the problem when a row is incomplete, has an unknown kind, or names a poster
- * that isn't there.
- */
-export function readPosters(csv: string, images: ReadonlyMap<string, ImageMetadata>): readonly EventPoster[] {
-  return readSheet(csv, 'event-posters.csv', PosterRowSchema).map(({ cells, where }) => ({
-    kind: cells.kind,
-    event: cells.event,
-    poster: sheetImage(images, cells.poster, where, 'src/assets/posters'),
-  }));
+/** An events table row as an `EventPoster`, or null when it can't be one (no title, no kind, no usable poster). */
+export function toEventPoster(row: unknown): EventPoster | null {
+  const parsed = PosterRowSchema.safeParse(row);
+  if (!parsed.success) return null;
+  return { kind: parsed.data.kind, event: parsed.data.title, poster: parsed.data.picture_url };
 }
 
 /** The posters grouped by kind, kinds in their set order; a kind with no posters yet is left out. */

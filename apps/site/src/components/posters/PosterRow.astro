@@ -13,9 +13,12 @@ type Props = { row: PosterRow; name: string; drift: 'left' | 'right' };
 
 const { row, name, drift } = Astro.props;
 
-// Each poster, with the big version it opens to.
+// Each poster, with the big version it opens to: at most 800 wide and 1000 tall, keeping its own shape.
 const tiles = await Promise.all(
-  row.posters.map(async (poster) => ({ poster, large: (await getImage({ src: poster.poster, width: 800 })).src })),
+  row.posters.map(async (poster) => ({
+    poster,
+    large: (await getImage({ src: poster.poster, width: 800, height: 1000, fit: 'contain' })).src,
+  })),
 );
 
 // One lap of the row has at least this many tiles, so a lap is wider than the widest screen.
@@ -42,8 +45,7 @@ const gap = 'gap-2.5 nav:gap-4';
     </h3>
     <p class="font-display text-xs font-bold text-muted">
       <span aria-hidden="true">{drift === 'right' ? '→' : '←'}</span>
-      {row.posters.length}
-      {row.posters.length === 1 ? 'event' : 'events'}
+      {` ${row.posters.length} ${row.posters.length === 1 ? 'event' : 'events'}`}
     </p>
     <span
       class="pointer-events-none absolute inset-y-0 left-full hidden w-30 bg-linear-to-r from-page nav:block"
@@ -52,8 +54,12 @@ const gap = 'gap-2.5 nav:gap-4';
   </div>
 
   <div class="relative">
-    <div data-viewport class="overflow-x-auto [scrollbar-width:none] group-data-drifting:overflow-hidden">
-      <div data-track class:list={['flex w-max px-4 nav:ps-57.5 nav:pe-16', gap]}>
+    {/*
+      Room above and below the posters (taken back with the negative margin) so one growing under the pointer
+      isn't cut off: a sideways scroller clips top and bottom too.
+    */}
+    <div data-viewport class="-my-3 overflow-x-auto [scrollbar-width:none] group-data-drifting:overflow-hidden">
+      <div data-track class:list={['flex w-max px-4 py-3 nav:ps-57.5 nav:pe-16', gap]}>
         <ul class:list={['flex', gap]} aria-label={`${name} posters`}>
           {tiles.map(({ poster, large }) => (
             <li>
