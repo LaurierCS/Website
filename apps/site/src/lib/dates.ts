@@ -67,6 +67,7 @@ const parts = (options: Intl.DateTimeFormatOptions) =>
 const WEEKDAY = parts({ weekday: 'short' });
 const MONTH = parts({ month: 'short' });
 const MONTH_YEAR = parts({ month: 'long', year: 'numeric' });
+const FULL = parts({ month: 'short', day: 'numeric', year: 'numeric' });
 
 const asUtc = (date: IsoDate): Date => new Date(`${date}T00:00:00Z`);
 
@@ -83,6 +84,11 @@ export function dayOfMonth(date: IsoDate): number {
 /** "Nov" for 2026-11-26. */
 export function monthName(date: IsoDate): string {
   return MONTH.format(asUtc(date)).replace('.', '');
+}
+
+/** "Nov 19, 2026": a date in full, short, the way a video's upload date reads. */
+export function fullDate(date: IsoDate): string {
+  return FULL.format(asUtc(date)).replace('.', '');
 }
 
 /** "November 2026". */
