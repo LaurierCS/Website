@@ -1,0 +1,75 @@
+---
+/**
+ * The laptop's practice tab, as a page of review notes in a dark notes app: a pink margin line, the course on a
+ * coloured tab, one question, its code in a little editor with line numbers, and the solution behind "Show
+ * solution", which comes up highlighted like a marker (`scripts/clubroom-laptop.ts` hides it and opens it
+ * again). Coco sits in the corner, checking your work. Without JavaScript the solution is simply shown.
+ */
+import { Image } from 'astro:assets';
+import { MASCOT_FACES } from '../../assets/brand';
+import type { PracticeQuestion } from '../../content/resources';
+import { linkTarget } from '../../lib/links';
+
+type Props = { practice: PracticeQuestion };
+
+const { practice } = Astro.props;
+const lines = practice.code.split('\n');
+---
+
+<div class="relative flex h-full flex-col gap-2.5 overflow-hidden bg-raised py-3.5 ps-8 pe-4 text-white nav:gap-3 nav:py-5 nav:ps-12 nav:pe-6">
+  {/* The page's margin line. */}
+  <span class="absolute inset-y-0 left-5 w-0.5 bg-pink/50 nav:left-8" aria-hidden="true"></span>
+  <Image
+    src={MASCOT_FACES.coco}
+    alt=""
+    width={48}
+    densities={[1, 2]}
+    class="absolute right-2 bottom-2 h-auto w-9 rotate-8 nav:right-4 nav:bottom-3 nav:w-12"
+  />
+
+  <p class="flex items-center gap-2">
+    <span class="rounded-md bg-sky px-2 py-0.5 font-display text-xs font-extrabold tracking-label text-blue-ink uppercase">
+      {practice.course}
+    </span>
+    <span class="font-display text-base font-extrabold nav:text-xl">{practice.title}</span>
+  </p>
+  <p class="text-xs font-semibold text-text-2 nav:text-sm">{practice.question}</p>
+
+  <pre
+    class="overflow-x-auto rounded-lg border border-line-quiet bg-screen py-2 pe-3 font-mono text-xs leading-relaxed text-sky"><code>{lines.map((line, index) => (
+      <span class="block"><span class="inline-block w-7 pe-2 text-end text-muted select-none" aria-hidden="true">{index + 1}</span>{line}</span>
+    ))}</code></pre>
+
+  <div class="flex flex-col items-start gap-2 pe-10 nav:pe-14">
+    <button
+      type="button"
+      data-solution-toggle
+      aria-expanded="false"
+      aria-controls="practice-solution"
+      class="hidden items-center gap-1.5 rounded-full bg-yellow px-3 py-1 font-display text-sm font-bold text-ink transition-[scale] duration-(--dur-fast) ease-(--ease-spring) active:scale-95 group-data-live:inline-flex motion-reduce:transition-none"
+    >
+      <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.4 1 1.1 1 1.8V16h5v-.3c0-.7.4-1.4 1-1.8A6 6 0 0 0 12 3Z" />
+      </svg>
+      <span data-solution-label>Show solution</span>
+    </button>
+    <p
+      id="practice-solution"
+      data-solution
+      class="rounded-sm bg-linear-to-b from-transparent from-55% to-yellow/35 to-55% text-xs font-semibold nav:text-sm"
+    >
+      {practice.solution}
+    </p>
+  </div>
+
+  <a
+    href={practice.href}
+    {...linkTarget(practice.href)}
+    class="mt-auto inline-flex items-center gap-1.5 self-start font-display text-sm font-bold text-sky"
+  >
+    All the review material
+    <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+      <path d="M5 12h14M13 6l6 6-6 6" />
+    </svg>
+  </a>
+</div>

@@ -1,0 +1,66 @@
+---
+/**
+ * The laptop's GitHub tab, laid out like a repo page in GitHub's own dark look: the repo's name with a "Public
+ * template" pill, what it is, its language, buttons to use it or see a finished one, and its files, the one you
+ * fill in marked with a sticky note.
+ */
+import type { StarterRepo } from '../../content/resources';
+import { linkTarget } from '../../lib/links';
+
+type Props = { starter: StarterRepo };
+
+const { starter } = Astro.props;
+const button =
+  'inline-flex h-8 items-center gap-1.5 rounded-md px-3 font-display text-sm font-bold transition-[scale] duration-(--dur-fast) ease-(--ease-spring) active:scale-95 motion-reduce:transition-none';
+---
+
+<div class="flex h-full flex-col gap-2.5 bg-repo px-4 py-3.5 nav:gap-3 nav:px-6 nav:py-5">
+  <p class="flex flex-wrap items-center gap-2">
+    <svg class="size-4 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path d="M4 19.5V5a2 2 0 0 1 2-2h13v15H6.5A2.5 2.5 0 0 0 4 20.5 2.5 2.5 0 0 0 6.5 23H19v-5" />
+    </svg>
+    <a href={starter.href} {...linkTarget(starter.href)} class="font-display text-base hover:underline nav:text-xl">
+      <span class="text-text-2">{starter.owner} /</span>
+      <span class="font-extrabold text-sky">{starter.name}</span>
+    </a>
+    <span class="rounded-full border border-line px-2 text-xs text-text-2">Public template</span>
+  </p>
+  <p class="text-xs text-text-2 nav:text-sm">{starter.description}</p>
+  <p class="flex items-center gap-1.5 text-xs text-text-2">
+    <span class="size-2.5 rounded-full bg-blue" aria-hidden="true"></span>
+    {starter.language}
+  </p>
+
+  <div class="flex flex-wrap gap-2">
+    <a href={starter.href} {...linkTarget(starter.href)} class:list={[button, 'bg-github-action text-white']}>
+      <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <rect x="8" y="8" width="13" height="13" rx="2" /><path d="M4 16V5a2 2 0 0 1 2-2h11" />
+      </svg>
+      Use the template
+    </a>
+    <a href={starter.exampleHref} {...linkTarget(starter.exampleHref)} class:list={[button, 'border border-line text-white']}>
+      See one finished
+    </a>
+  </div>
+
+  <ul class="relative rounded-md border border-line-quiet font-mono text-xs" aria-label="Files in the starter">
+    {
+      starter.files.map((file) => {
+        const yours = file === starter.fillIn.file;
+        return (
+          <li class="flex items-center gap-2 border-b border-line-quiet px-3 py-1.5 last:border-b-0">
+            <svg class="size-3.5 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" /><path d="M14 3v5h5" />
+            </svg>
+            <span class:list={[yours ? 'text-white' : 'text-text-2']}>{file}</span>
+            {yours && (
+              <span class="ms-auto rotate-3 bg-yellow px-1.5 py-0.5 font-display text-xs font-bold text-ink shadow-(--shadow-card)">
+                {starter.fillIn.note}
+              </span>
+            )}
+          </li>
+        );
+      })
+    }
+  </ul>
+</div>
