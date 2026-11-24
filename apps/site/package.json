@@ -16,6 +16,7 @@
   "dependencies": {
     "@fontsource-variable/dosis": "^5.3.0",
     "@fontsource-variable/montserrat": "^5.3.0",
+    "@supabase/supabase-js": "^2.119.1",
     "@tailwindcss/vite": "^4.3.5",
     "astro": "^7.4.13",
     "gsap": "^3.15.1",
