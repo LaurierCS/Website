@@ -1,0 +1,121 @@
+---
+/**
+ * The home page's team section, as a film's end credits (Figma concept T1, with T1 v2's groups of five).
+ *
+ * Wherever there's room for them and motion is allowed (`data-rolling`, set by `scripts/team-credits.ts`), the
+ * credits roll up by themselves, lighting the five people passing the middle, whose prints drop in either side
+ * of the credits and fade away as the next five come. Pointing at a name lifts their print, and the other way
+ * round. Two layouts:
+ * - from `xl`, T1's: the heading, counts and "Want your name up here?" on the left, the credits, and the prints
+ *   under the heading and to the right of the credits;
+ * - in between: the heading on top, then the prints, the credits and the prints, then the card.
+ *
+ * Where the credits can't roll (a phone, reduced motion, no JavaScript): T1 v2's contact sheet, each department
+ * under its credit title with everyone's prints, and a bar at the bottom of the screen to jump between them.
+ */
+import { creditFor, type TEAM } from '../../content/team';
+import { creditGroups, type Crew } from '../../lib/team';
+import CrewSheet from './CrewSheet.astro';
+import JoinCard from './JoinCard.astro';
+import PrintZone from './PrintZone.astro';
+import RollingCredits from './RollingCredits.astro';
+
+type Props = { copy: typeof TEAM; crews: readonly Crew[] };
+
+const { copy, crews } = Astro.props;
+
+/** The most people the credits light at once; a department is shared out evenly into groups no bigger. */
+const MOST_PER_GROUP = 5;
+const credits = crews.map((crew) => creditFor(crew.department));
+const groups = creditGroups(crews, MOST_PER_GROUP);
+// Someone in two departments is one person.
+const people = new Set(crews.flatMap((crew) => crew.members.map((member) => member.id))).size;
+---
+
+{/* Clipped at the sides, so a tilted print at the edge of its column never widens the page. */}
+<team-credits class="group block overflow-x-clip">
+  <section id="team" aria-labelledby="team-title" class="mx-auto max-w-(--max) px-4 py-16 nav:px-16 nav:py-24">
+    <div
+      class="grid grid-cols-1 gap-12 group-data-rolling:grid-cols-[minmax(0,1fr)_var(--credits-width-stacked)_minmax(0,1fr)] group-data-rolling:grid-rows-[auto_var(--credits-height)_auto] group-data-rolling:gap-x-6 group-data-rolling:gap-y-10 xl:group-data-rolling:h-(--credits-height) xl:group-data-rolling:grid-cols-[var(--credits-aside)_var(--credits-width)_minmax(0,1fr)] xl:group-data-rolling:grid-rows-[auto_minmax(0,1fr)_auto] xl:group-data-rolling:gap-x-10 xl:group-data-rolling:gap-y-6"
+    >
+      <header
+        class="flex flex-col items-start gap-3.5 group-data-rolling:col-span-full group-data-rolling:items-center group-data-rolling:text-center xl:group-data-rolling:col-span-1 xl:group-data-rolling:items-start xl:group-data-rolling:pt-24 xl:group-data-rolling:text-start"
+      >
+        <p class="font-display text-sm font-bold tracking-label text-yellow uppercase">{copy.label}</p>
+        <h2 id="team-title" class="text-4xl leading-none font-extrabold nav:text-6xl">{copy.title}</h2>
+        <p class="max-w-prose text-text-2 nav:text-lg">{copy.summary}</p>
+        <ul class="flex flex-wrap gap-2" aria-label="The team in numbers">
+          <li class="rounded-full bg-raised px-3 py-1.5 font-display text-sm font-bold">{copy.people(people)}</li>
+          <li class="rounded-full bg-raised px-3 py-1.5 font-display text-sm font-bold">
+            {copy.departments(crews.length)}
+          </li>
+        </ul>
+        <button
+          type="button"
+          data-pause
+          data-pause-text={copy.pause}
+          data-play-text={copy.play}
+          class="hidden items-center gap-2 font-display text-sm font-bold text-muted transition-colors duration-(--dur-fast) group-data-rolling:inline-flex hover:text-white"
+        >
+          {/* Two bars while it plays; a triangle once it's paused. */}
+          <svg class="size-3.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path data-playing-icon d="M7 5h4v14H7zM13 5h4v14h-4z" />
+            <path data-paused-icon d="M8 5v14l11-7z" class="hidden" />
+          </svg>
+          <span data-pause-label>{copy.pause}</span>
+        </button>
+      </header>
+
+      {/* Rolling: the credits, and the lit group's prints on either side of them. */}
+      <PrintZone
+        groups={groups}
+        side="left"
+        wide="across"
+        class="hidden group-data-rolling:col-start-1 group-data-rolling:row-start-2 group-data-rolling:grid xl:group-data-rolling:items-start"
+      />
+      <div class="hidden group-data-rolling:col-start-2 group-data-rolling:row-start-2 group-data-rolling:block xl:group-data-rolling:row-span-3 xl:group-data-rolling:row-start-1">
+        <RollingCredits crews={crews} credits={credits} groups={groups} />
+      </div>
+      <PrintZone
+        groups={groups}
+        side="right"
+        wide="down"
+        class="hidden group-data-rolling:col-start-3 group-data-rolling:row-start-2 group-data-rolling:grid xl:group-data-rolling:row-span-3 xl:group-data-rolling:row-start-1"
+      />
+
+      {/* Not rolling: the contact sheet, with a jump bar on a phone. */}
+      <div class="flex flex-col gap-12 group-data-rolling:hidden nav:gap-14">
+        {crews.map((crew, index) => <CrewSheet crew={crew} credit={credits[index]} index={index} />)}
+        <nav
+          aria-label={copy.jumpLabel}
+          class="sticky bottom-4 z-10 mx-auto max-w-full overflow-x-auto rounded-full border border-line-quiet bg-raised p-1.5 shadow-(--shadow-float) [scrollbar-width:none] nav:hidden"
+        >
+          <ul class="flex gap-1">
+            {
+              crews.map((_, index) => (
+                <li>
+                  <a
+                    href={`#crew-${index}`}
+                    data-jump={index}
+                    class="block rounded-full px-3 py-1.5 font-display text-sm font-bold whitespace-nowrap text-text-2 transition-colors duration-(--dur-fast) hover:text-white data-current:bg-yellow data-current:text-ink"
+                  >
+                    {credits[index].department}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+
+      <JoinCard
+        join={copy.join}
+        class="group-data-rolling:col-span-full group-data-rolling:mx-auto group-data-rolling:w-full group-data-rolling:max-w-md xl:group-data-rolling:col-span-1 xl:group-data-rolling:row-start-3 xl:group-data-rolling:mx-0"
+      />
+    </div>
+  </section>
+</team-credits>
+
+<script>
+  import '../../scripts/team-credits';
+</script>
