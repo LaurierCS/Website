@@ -1,9 +1,10 @@
 ---
 /**
- * The page shell every page shares: the document head, the brand styles and the header.
+ * The page shell every page shares: the document head, the brand styles, the header and the footer.
  */
 import dosis from '@fontsource-variable/dosis/files/dosis-latin-wght-normal.woff2?url';
 import montserrat from '@fontsource-variable/montserrat/files/montserrat-latin-wght-normal.woff2?url';
+import SiteFooter from '../components/layout/SiteFooter.astro';
 import SiteNav from '../components/layout/SiteNav.astro';
 import pageArrival from '../scripts/page-arrival.js?raw';
 import '../styles/global.css';
@@ -42,6 +43,7 @@ const { title, description } = Astro.props;
     <main id="main">
       <slot />
     </main>
+    <SiteFooter />
     {/* Inline, so it runs as soon as the page has been read, rather than after everything has loaded. */}
     <script is:inline set:html={pageArrival} />
   </body>
