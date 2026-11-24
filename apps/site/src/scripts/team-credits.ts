@@ -1,6 +1,6 @@
 /**
  * Runs the team credits. Wherever there's room and motion is allowed, the credits roll up slowly and without
- * stopping, like a film's end credits; whichever group of five is passing the middle is lit, and its prints drop
+ * stopping, like a film's end credits; whichever group is passing the middle is lit, and its prints drop
  * in either side of the credits, fading away as the next group reaches the middle. Once the last group has
  * passed, they rewind quickly to the first and roll again.
  *
