@@ -3,9 +3,11 @@ import ComingUp from '../components/events/ComingUp.astro';
 import Hero from '../components/hero/Hero.astro';
 import MtpSpotlight from '../components/mtp/MtpSpotlight.astro';
 import EverythingElse from '../components/posters/EverythingElse.astro';
+import Resources from '../components/resources/Resources.astro';
 import { EVENTS } from '../content/events';
 import { EVERYTHING_ELSE, KIND_NAMES, POSTER_ROWS } from '../content/everything-else';
 import { MTP, SPEAKERS } from '../content/mtp';
+import { RESOURCES } from '../content/resources';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { clubToday } from '../lib/dates';
 import { upcomingEvents } from '../lib/events';
@@ -24,4 +26,5 @@ const upcoming = upcomingEvents(EVENTS, today);
   <MtpSpotlight copy={MTP} speakers={SPEAKERS} />
   {/* Until the posters sheet has a row, there is nothing to show here. */}
   {POSTER_ROWS.length > 0 && <EverythingElse copy={EVERYTHING_ELSE} names={KIND_NAMES} rows={POSTER_ROWS} />}
+  <Resources content={RESOURCES} />
 </BaseLayout>
