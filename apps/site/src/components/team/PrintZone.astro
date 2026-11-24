@@ -1,0 +1,97 @@
+---
+/**
+ * One side of the rolling credits, where the lit group's prints land (`CREDIT_SPREADS` says which side each
+ * person's print goes to). Every group's prints for this side are drawn here, stacked in the same place; only the
+ * lit group's show, dropping in one after another and fading away when the next group comes (CSS, on
+ * `data-current`, which `scripts/team-credits.ts` sets). The others are `inert`, so their links can't be reached
+ * while out of sight. The prints are spread down the side, or, where the side is wide and short (under the
+ * heading on a wide screen), across it.
+ */
+import type { CreditGroup } from '../../lib/team';
+import { linkTarget } from '../../lib/links';
+import { SOCIAL_ICONS } from '../ui/social-icons';
+import { CREDIT_SPREADS } from './credit-spreads';
+import Headshot from './Headshot.astro';
+
+type Props = {
+  groups: readonly CreditGroup[];
+  side: 'left' | 'right';
+  /** How the prints sit on the widest layout: down the side, or across it. */
+  wide: 'down' | 'across';
+  class?: string;
+};
+
+const { groups, side, wide, class: className } = Astro.props;
+// Gap between one print of a group dropping in and the next, in milliseconds.
+const DROP_STAGGER_MS = 110;
+const LinkedIn = SOCIAL_ICONS.linkedin;
+const GitHub = SOCIAL_ICONS.github;
+---
+
+<div class:list={['grid', className]}>
+  {
+    groups.map((group, index) => {
+      const spread = CREDIT_SPREADS[index % CREDIT_SPREADS.length];
+      const prints = group.members
+        .map((member, slot) => ({ member, slot, ...spread[slot % spread.length] }))
+        .filter((print) => print.side === side);
+      return (
+        <div
+          data-group={index}
+          inert
+          class:list={[
+            'group/spread pointer-events-none col-start-1 row-start-1 flex flex-col items-center justify-around gap-6',
+            wide === 'across' && 'xl:flex-row xl:items-start',
+          ]}
+        >
+          {prints.map(({ member, slot, tilt, nudge }) => (
+            <div
+              data-person={member.id}
+              style={{
+                '--tilt': `${tilt}deg`,
+                '--drop-delay': `${slot * DROP_STAGGER_MS}ms`,
+                '--nudge': `${nudge}rem`,
+              }}
+              class="relative w-full max-w-44 -translate-y-6 xl:left-(--nudge) rotate-(--tilt) opacity-0 transition-[opacity,translate] duration-(--dur-roll) ease-(--ease-out) group-data-current/spread:pointer-events-auto group-data-current/spread:translate-y-0 group-data-current/spread:opacity-100 group-data-current/spread:delay-(--drop-delay)"
+            >
+              {/*
+                The print itself, a layer of its own so it can grow the moment it's pointed at (or its name is),
+                with a quick spring, while the layer around it does the slower drop in and fade.
+              */}
+              <div class="rounded-sm bg-print p-2.5 pb-3.5 text-ink shadow-(--shadow-float) ring-yellow transition-[scale,box-shadow] duration-(--dur-base) ease-(--ease-spring) in-data-linked:scale-110 in-data-linked:ring-4 motion-reduce:transition-none">
+                <Headshot member={member} place={group.start + slot} class="text-5xl" />
+                <p class="mt-2 font-display text-lg leading-tight font-extrabold">{member.name}</p>
+                {member.role && <p class="text-xs text-ink/70">{member.role}</p>}
+                {(member.linkedinUrl || member.githubUrl) && (
+                  <p class="mt-2 flex items-center gap-2">
+                    {member.linkedinUrl && (
+                      <a
+                        href={member.linkedinUrl}
+                        {...linkTarget(member.linkedinUrl)}
+                        aria-label={`Connect with ${member.name} on LinkedIn`}
+                        class="inline-flex h-7 items-center gap-1.5 rounded-full bg-linkedin px-2.5 font-display text-xs font-bold text-white"
+                      >
+                        <LinkedIn class="size-3.5" aria-hidden="true" />
+                        Connect
+                      </a>
+                    )}
+                    {member.githubUrl && (
+                      <a
+                        href={member.githubUrl}
+                        {...linkTarget(member.githubUrl)}
+                        aria-label={`${member.name} on GitHub`}
+                        class="grid size-7 place-items-center rounded-full bg-ink text-white"
+                      >
+                        <GitHub class="size-3.5" aria-hidden="true" />
+                      </a>
+                    )}
+                  </p>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    })
+  }
+</div>

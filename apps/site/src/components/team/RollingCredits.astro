@@ -1,0 +1,78 @@
+---
+/**
+ * T1's end credits: every department in turn under its credit title ("SPECIAL EFFECTS"), each person's role
+ * beside their name, fading out at the top and bottom. `scripts/team-credits.ts` rolls the list up and lights the
+ * group passing the middle (`data-lit`); each line knows its group (`data-in-group`). Pointing at a name, or at
+ * that person's print, links the two (`data-linked`). A name opens that person's LinkedIn, or their GitHub when
+ * they have no LinkedIn; with neither, it's plain text.
+ */
+import type { Credit } from '../../content/team';
+import { linkTarget } from '../../lib/links';
+import { mainLink, type CreditGroup, type Crew } from '../../lib/team';
+
+type Props = { crews: readonly Crew[]; credits: readonly Credit[]; groups: readonly CreditGroup[] };
+
+const { crews, credits, groups } = Astro.props;
+// Which group each line is in, by department and place in it.
+const groupAt = crews.map((crew) => crew.members.map(() => 0));
+groups.forEach((group, index) => {
+  group.members.forEach((_, offset) => {
+    groupAt[group.crew][group.start + offset] = index;
+  });
+});
+// A name in the credits: dim until its group is lit, yellow and underlined while it or its print is pointed at.
+const name =
+  'font-display text-xl font-bold text-white/35 underline decoration-transparent underline-offset-4 transition-[color,text-decoration-color] duration-(--dur-base) group-data-lit/line:text-white group-data-linked/line:text-yellow group-data-linked/line:decoration-current xl:text-2xl';
+---
+
+{/*
+  `credits-fade` fades the credits out toward the top and bottom, like they're rolling past (see global.css).
+  `touch-none`: a finger dragging on the credits moves the credits, not the page.
+*/}
+<div data-credits class="credits-fade relative h-full touch-none overflow-hidden">
+  {/* Positioned, so each line's place on the credits is measured from the top of the list. */}
+  <div data-credits-track class="relative flex flex-col gap-11">
+    {
+      crews.map((crew, index) => (
+        <section aria-label={credits[index].title} class="flex flex-col items-center gap-1.5">
+          <p class="text-center font-display text-xs font-extrabold tracking-credit text-text-2 uppercase">
+            {credits[index].title}
+          </p>
+          <p class="text-xs text-muted">{credits[index].department}</p>
+          <ul class="mt-1 w-full">
+            {crew.members.map((member, row) => {
+              const link = mainLink(member);
+              return (
+                <li
+                  data-line
+                  data-in-group={groupAt[index][row]}
+                  data-person={member.id}
+                  class="group/line grid grid-cols-2 items-baseline gap-4 py-1.5 xl:gap-7"
+                >
+                  <span class="text-end text-sm text-muted transition-colors duration-(--dur-base) group-data-lit/line:text-yellow">
+                    {member.role}
+                  </span>
+                  {link ? (
+                    <a
+                      href={link.href}
+                      {...linkTarget(link.href)}
+                      data-name
+                      aria-label={`${member.name} on ${link.site}`}
+                      class:list={[name, 'justify-self-start']}
+                    >
+                      {member.name}
+                    </a>
+                  ) : (
+                    <span data-name class={name}>
+                      {member.name}
+                    </span>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      ))
+    }
+  </div>
+</div>
