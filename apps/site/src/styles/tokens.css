@@ -49,6 +49,7 @@
   --font-body: "Montserrat Variable", "Montserrat", system-ui, sans-serif;
   --font-code: ui-monospace, "Cascadia Code", Consolas, monospace; /* code shown on the clubroom laptop */
   --label-spacing: 0.12em; /* small upper-case labels, like "FIND US" */
+  --credit-spacing: 0.2em; /* a film credit's title, like "SPECIAL EFFECTS" on the team credits */
   /* How tall a line of scrapbook letters is: shrinks with the screen so "COMPUTING" fits a phone. */
   --scrapbook-height: clamp(2.75rem, 14vw, 3.875rem);
   /* Each letter tucks a little under the one before it, like cut-outs glued in a row. */
@@ -69,6 +70,15 @@
   --viewer-width: 34rem; /* a poster opened big */
   /* The clubroom laptop on a wide screen: the open lid's width and its rounded corners. */
   --laptop-width: 42.5rem;
+  /*
+   * The rolling team credits: how tall they are, the heading column beside them on a wide screen, and the
+   * credits column itself, wide and in between (with the prints' columns either side taking the rest).
+   */
+  --credits-height: 58rem;
+  --credits-aside: 25rem;
+  --credits-width: 30rem;
+  --credits-width-stacked: 26rem;
+  --credits-fade: 11rem; /* how far in from the top and bottom the credits fade */
   --radius-lid: 1.625rem;
   --max: 1280px;
 
@@ -88,6 +98,7 @@
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --dur-fast: 150ms;
   --dur-base: 280ms;
+  --dur-roll: 600ms; /* the team credits rolling on to the next department */
 
   /* Focus ring: on-brand and always visible. */
   --focus-ring: 0 0 0 3px var(--bg-page), 0 0 0 6px var(--yellow);
