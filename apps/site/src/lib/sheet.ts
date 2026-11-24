@@ -1,7 +1,7 @@
 /**
- * Reading a content sheet: a CSV file in `src/content/` that the site is built from, like the speakers or the
- * event posters. A mistake in a sheet stops the build with the sheet's name, the row (numbered the way a
- * spreadsheet numbers it) and what to fix, instead of going live as a broken page.
+ * Reading a content sheet: a CSV file in `src/content/` that the site is built from, like the speakers. A mistake
+ * in a sheet stops the build with the sheet's name, the row (numbered the way a spreadsheet numbers it) and what
+ * to fix, instead of going live as a broken page.
  */
 import type { ImageMetadata } from 'astro';
 import Papa from 'papaparse';

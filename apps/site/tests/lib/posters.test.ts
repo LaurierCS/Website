@@ -1,47 +1,37 @@
-import type { ImageMetadata } from 'astro';
 import { describe, expect, it } from 'vitest';
-import { postersByKind, readPosters } from '../../src/lib/posters';
+import { postersByKind, toEventPoster, type EventPoster } from '../../src/lib/posters';
 
-const image = (src: string): ImageMetadata => ({ src, width: 800, height: 800, format: 'jpg' });
-const IMAGES: ReadonlyMap<string, ImageMetadata> = new Map([
-  ['review.jpg', image('/review.jpg')],
-  ['bingo.jpg', image('/bingo.jpg')],
-]);
+const POSTER = 'https://example.supabase.co/storage/v1/object/public/events-images/ai-bingo.png';
+const row = (fields: Record<string, unknown> = {}) => ({
+  title: 'AI Bingo',
+  kind: 'social',
+  picture_url: POSTER,
+  ...fields,
+});
 
-const sheet = (...rows: string[]): string => ['kind,event,poster', ...rows].join('\n');
-
-describe('readPosters', () => {
-  it('reads each row into an event and its poster, found by file name', () => {
-    expect(readPosters(sheet('review,CP216 Final Review,review.jpg'), IMAGES)).toEqual([
-      { kind: 'review', event: 'CP216 Final Review', poster: IMAGES.get('review.jpg') },
-    ]);
+describe('toEventPoster', () => {
+  it('reads an events table row into the event and its poster', () => {
+    expect(toEventPoster(row())).toEqual({ kind: 'social', event: 'AI Bingo', poster: POSTER });
   });
 
   it.each([
-    [
-      'a kind we do not run',
-      'party,Game Night,bingo.jpg',
-      /row 2: kind must be one of review, social, career, workshop/,
-    ],
-    ['an empty event name', 'social,,bingo.jpg', /row 2: event is empty/],
-    [
-      'a poster that is not in the folder',
-      'social,AI Bingo,missing.jpg',
-      /row 2: there is no picture called missing\.jpg in src\/assets\/posters/,
-    ],
-  ])('stops with the row and the fix for %s', (_case, row, message) => {
-    expect(() => readPosters(sheet(row), IMAGES)).toThrow(message);
+    ['no title', { title: '  ' }],
+    ['no kind', { kind: null }],
+    ['a kind we do not run', { kind: 'party' }],
+    ['no poster', { picture_url: null }],
+    ['a poster that is not a link', { picture_url: 'ai-bingo.png' }],
+  ])('is null for a row with %s', (_case, fields) => {
+    expect(toEventPoster(row(fields))).toBeNull();
   });
 });
 
 describe('postersByKind', () => {
-  it('groups the posters by kind, kinds in their set order, leaving out kinds with none', () => {
-    const posters = readPosters(
-      sheet('social,AI Bingo,bingo.jpg', 'review,CP216,review.jpg', 'social,Spill the Tea,bingo.jpg'),
-      IMAGES,
-    );
+  const poster = (kind: EventPoster['kind'], event: string): EventPoster => ({ kind, event, poster: POSTER });
+
+  it('groups the posters by kind in their set order, keeping their order and leaving out kinds with none', () => {
+    const posters = [poster('social', 'AI Bingo'), poster('review', 'CP216'), poster('social', 'Spill')];
     const rows = postersByKind(posters);
-    expect(rows.map((row) => row.kind)).toEqual(['review', 'social']);
-    expect(rows[1]?.posters.map((poster) => poster.event)).toEqual(['AI Bingo', 'Spill the Tea']);
+    expect(rows.map((kindRow) => kindRow.kind)).toEqual(['review', 'social']);
+    expect(rows[1]?.posters.map((each) => each.event)).toEqual(['AI Bingo', 'Spill']);
   });
 });
