@@ -1,0 +1,85 @@
+---
+/**
+ * The clubroom laptop: an open lid with a webcam dot, a screen with a tab per kind of resource, and the base
+ * under it. The tabs are a real tab list (click or arrow keys); while the laptop is on screen,
+ * `scripts/clubroom-laptop.ts` also has a cursor go round them, switching every few seconds. On a phone the lid fills the width and the base is a thin
+ * strip, so the screen is as big as it can be. All the screens sit in the same spot, so switching never changes
+ * the laptop's size.
+ */
+import { RESOURCE_KINDS, type RESOURCES } from '../../content/resources';
+import PracticeScreen from './PracticeScreen.astro';
+import RecordingScreen from './RecordingScreen.astro';
+import { RESOURCE_ICONS } from './resource-icons';
+import StarterScreen from './StarterScreen.astro';
+
+type Props = { content: typeof RESOURCES };
+
+const { content } = Astro.props;
+---
+
+<div class="relative nav:w-(--laptop-width)">
+  {/* The lid. */}
+  <div
+    class="relative rounded-2xl border-6 border-muted bg-window px-2.5 pt-4 pb-2.5 shadow-(--shadow-float) nav:rounded-(--radius-lid) nav:border-8 nav:p-7"
+  >
+    <span class="absolute top-1.5 left-1/2 size-1.5 -translate-x-1/2 rounded-full bg-line nav:top-2.5 nav:size-2" aria-hidden="true"
+    ></span>
+
+    <div data-screen class="relative overflow-hidden rounded-md bg-screen">
+      <div role="tablist" aria-label="On the clubroom laptop" class="flex gap-1 bg-titlebar px-2 pt-2 nav:px-2.5">
+        {
+          RESOURCE_KINDS.map((kind, index) => {
+            const Icon = RESOURCE_ICONS[kind];
+            return (
+              <button
+                type="button"
+                role="tab"
+                id={`laptop-tab-${kind}`}
+                data-tab={kind}
+                aria-controls={`laptop-panel-${kind}`}
+                aria-selected={index === 0 ? 'true' : 'false'}
+                tabindex={index === 0 ? 0 : -1}
+                class="flex items-center gap-1.5 rounded-t-md px-2.5 py-1.5 text-xs text-muted transition-colors duration-(--dur-fast) hover:text-white aria-selected:bg-screen aria-selected:text-white nav:px-3 nav:text-sm"
+              >
+                <Icon class="size-3.5 nav:size-4" aria-hidden="true" />
+                {content.kinds[kind].tab}
+              </button>
+            );
+          })
+        }
+      </div>
+
+      <div class="grid">
+        {
+          RESOURCE_KINDS.map((kind, index) => (
+            <div
+              role="tabpanel"
+              id={`laptop-panel-${kind}`}
+              aria-labelledby={`laptop-tab-${kind}`}
+              data-panel={kind}
+              inert={index !== 0}
+              class="col-start-1 row-start-1 inert:invisible"
+            >
+              {kind === 'recording' && <RecordingScreen recording={content.recording} />}
+              {kind === 'practice' && <PracticeScreen practice={content.practice} />}
+              {kind === 'starter' && <StarterScreen starter={content.starter} />}
+            </div>
+          ))
+        }
+      </div>
+
+      {/* The cursor that clicks through the tabs on its own: an arrow, and a ring that flashes as it clicks. */}
+      <span data-cursor class="pointer-events-none absolute top-0 left-0 opacity-0" aria-hidden="true">
+        <span data-click-ring class="absolute -top-3 -left-3 size-6 rounded-full border-3 border-yellow opacity-0"></span>
+        <svg class="size-6 drop-shadow-md" viewBox="0 0 24 24">
+          <path d="M5 3l14 8-6.5 1.5L10 19z" class="fill-white stroke-ink" stroke-width="1.5" stroke-linejoin="round" />
+        </svg>
+      </span>
+    </div>
+  </div>
+
+  {/* The base, a little wider than the lid, with the notch you open it by. */}
+  <div class="-mx-2 h-3.5 rounded-t-xs rounded-b-xl bg-muted nav:-mx-10 nav:h-8 nav:rounded-b-3xl" aria-hidden="true">
+    <span class="mx-auto block h-1.5 w-20 rounded-b-md bg-line nav:h-2.5 nav:w-35"></span>
+  </div>
+</div>
