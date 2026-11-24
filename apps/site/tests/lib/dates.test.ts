@@ -3,6 +3,7 @@ import {
   addMonths,
   clubToday,
   dayOfMonth,
+  fullDate,
   monthGrid,
   monthName,
   monthTitle,
@@ -41,6 +42,7 @@ describe('formatting', () => {
     expect(weekdayName('2026-11-26')).toBe('Thu');
     expect(monthName('2026-11-26')).toBe('Nov');
     expect(dayOfMonth('2026-12-03')).toBe(3);
+    expect(fullDate('2026-11-19')).toBe('Nov 19, 2026');
     expect(monthTitle({ year: 2026, month: 11 })).toBe('November 2026');
   });
 
