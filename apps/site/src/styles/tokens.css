@@ -13,6 +13,9 @@
   --border: #475569;
   --border-quiet: #344250;
   --bg-print: #fff8ec; /* the cream border of an instant print, like the MTP event photo */
+  /* The clubroom laptop: its screen, and GitHub's own dark page open on it. */
+  --bg-screen: #0b1220;
+  --bg-repo: #0d1117;
 
   /* The five accents. Text on an accent uses its -ink partner for contrast. */
   --pink: #ff9fc4;
@@ -33,6 +36,7 @@
   --brand-discord: #5865f2;
   --brand-linkedin: #0a66c2;
   --brand-youtube: #ff0000;
+  --brand-github-action: #238636; /* GitHub's green button, on the laptop's GitHub tab */
 
   /* Text */
   --text: #fff;
@@ -43,6 +47,7 @@
   /* Type: Dosis for display, numbers, names and buttons; Montserrat for body. */
   --font-head: "Dosis Variable", "Dosis", system-ui, sans-serif;
   --font-body: "Montserrat Variable", "Montserrat", system-ui, sans-serif;
+  --font-code: ui-monospace, "Cascadia Code", Consolas, monospace; /* code shown on the clubroom laptop */
   --label-spacing: 0.12em; /* small upper-case labels, like "FIND US" */
   /* How tall a line of scrapbook letters is: shrinks with the screen so "COMPUTING" fits a phone. */
   --scrapbook-height: clamp(2.75rem, 14vw, 3.875rem);
@@ -62,6 +67,9 @@
   --print-width: 38rem;
   --speaker-card-width: 14.5rem;
   --viewer-width: 34rem; /* a poster opened big */
+  /* The clubroom laptop on a wide screen: the open lid's width and its rounded corners. */
+  --laptop-width: 42.5rem;
+  --radius-lid: 1.625rem;
   --max: 1280px;
 
   /* Depth */

@@ -19,6 +19,9 @@
   --color-line: var(--border);
   --color-line-quiet: var(--border-quiet);
   --color-print: var(--bg-print);
+  --color-screen: var(--bg-screen);
+  --color-repo: var(--bg-repo);
+  --color-github-action: var(--brand-github-action);
   --color-pink: var(--pink);
   --color-orange: var(--orange);
   --color-yellow: var(--yellow);
@@ -39,6 +42,7 @@
   --font-*: initial;
   --font-display: var(--font-head);
   --font-sans: var(--font-body);
+  --font-mono: var(--font-code);
   --tracking-label: var(--label-spacing);
 
   --ease-brand: var(--ease-out);
