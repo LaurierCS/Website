@@ -1,0 +1,70 @@
+---
+/**
+ * The home page's "Missed it? It's all here.": what the club keeps for anyone who missed a night (recordings,
+ * practice questions, starter code), each a link to where it all lives, beside the clubroom laptop showing the
+ * newest of each, with Krill standing by it. `scripts/clubroom-laptop.ts` runs the laptop's tabs.
+ */
+import { Image } from 'astro:assets';
+import { MASCOTS } from '../../assets/brand';
+import { RESOURCE_KINDS, type RESOURCES } from '../../content/resources';
+import { linkTarget } from '../../lib/links';
+import ClubroomLaptop from './ClubroomLaptop.astro';
+import { RESOURCE_ICONS, RESOURCE_TINT } from './resource-icons';
+
+type Props = { content: typeof RESOURCES };
+
+const { content } = Astro.props;
+---
+
+<clubroom-laptop class="group block overflow-x-clip">
+  <section
+    id="resources"
+    aria-labelledby="resources-title"
+    class="mx-auto grid max-w-(--max) items-center gap-10 px-4 py-16 nav:px-16 nav:py-24 xl:grid-cols-[1fr_auto] xl:gap-16"
+  >
+    <header class="flex flex-col gap-4">
+      <p class="font-display text-sm font-bold tracking-label text-sky uppercase">{content.label}</p>
+      <h2 id="resources-title" class="text-4xl leading-none font-extrabold text-balance nav:text-6xl">
+        {content.title}
+      </h2>
+      <p class="max-w-prose text-text-2 nav:text-lg">{content.summary}</p>
+      <ul class="mt-1 flex flex-col gap-2.5">
+        {
+          RESOURCE_KINDS.map((kind) => {
+            const Icon = RESOURCE_ICONS[kind];
+            const { href, label } = content.kinds[kind];
+            return (
+              <li>
+                <a
+                  href={href}
+                  {...linkTarget(href)}
+                  class="group/kind inline-flex items-center gap-2.5 font-display text-lg font-bold"
+                >
+                  <Icon class:list={['size-5', RESOURCE_TINT[kind]]} aria-hidden="true" />
+                  <span class="underline decoration-transparent underline-offset-4 transition-[text-decoration-color] duration-(--dur-fast) group-hover/kind:decoration-current">
+                    {label}
+                  </span>
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </header>
+
+    <div class="relative nav:justify-self-center xl:justify-self-end">
+      <ClubroomLaptop content={content} />
+      <Image
+        src={MASCOTS.krill}
+        alt=""
+        width={104}
+        densities={[1, 2]}
+        class="absolute -top-14 right-1 h-auto w-14 nav:top-auto nav:-right-8 nav:-bottom-6 nav:w-26"
+      />
+    </div>
+  </section>
+</clubroom-laptop>
+
+<script>
+  import '../../scripts/clubroom-laptop';
+</script>
