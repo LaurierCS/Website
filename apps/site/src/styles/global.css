@@ -107,7 +107,14 @@
     visibility: hidden;
   }
 
-  /* The open menu is a modal, so the page behind it stays put. */
+  /*
+   * An open menu or poster is a modal, so the page behind it stays put. The scrollbar's space stays reserved, so
+   * hiding the scrollbar doesn't widen the page and nudge everything sideways as one opens.
+   */
+  html {
+    scrollbar-gutter: stable;
+  }
+
   html:has(dialog[open]) {
     overflow: hidden;
   }

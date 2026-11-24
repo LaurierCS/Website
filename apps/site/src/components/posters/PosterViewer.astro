@@ -2,7 +2,7 @@
 /**
  * A poster, big enough to read, over a dimmed page. It is a modal <dialog>, so the browser handles Escape, keeps
  * focus inside and gives focus back to the poster that opened it; clicking the dimmed page around it closes it
- * too. It grows in from slightly smaller as it opens. `scripts/poster-rows.ts` puts the poster in when one is
+ * too. It fades in where it will stay, so nothing in it moves while it opens. `scripts/poster-rows.ts` puts the poster in when one is
  * opened.
  */
 ---
@@ -10,7 +10,7 @@
 <dialog
   data-poster-viewer
   aria-labelledby="poster-viewer-title"
-  class="m-auto w-full max-w-(--viewer-width) scale-95 bg-transparent p-4 text-white opacity-0 transition-[opacity,scale,display,overlay] transition-discrete duration-(--dur-base) ease-(--ease-out) backdrop:bg-(--backdrop) open:scale-100 open:opacity-100 starting:open:scale-95 starting:open:opacity-0 motion-reduce:transition-none"
+  class="m-auto w-full max-w-(--viewer-width) bg-transparent p-4 text-white opacity-0 transition-[opacity,display,overlay] transition-discrete duration-(--dur-base) ease-(--ease-out) backdrop:bg-(--backdrop) open:opacity-100 starting:open:opacity-0 motion-reduce:transition-none"
 >
   <figure class="flex flex-col gap-4">
     <img
