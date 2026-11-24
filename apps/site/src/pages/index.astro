@@ -4,17 +4,24 @@ import Hero from '../components/hero/Hero.astro';
 import MtpSpotlight from '../components/mtp/MtpSpotlight.astro';
 import EverythingElse from '../components/posters/EverythingElse.astro';
 import Resources from '../components/resources/Resources.astro';
+import TeamCredits from '../components/team/TeamCredits.astro';
 import { EVENTS } from '../content/events';
 import { EVERYTHING_ELSE, KIND_NAMES, POSTER_ROWS } from '../content/everything-else';
 import { MTP, SPEAKERS } from '../content/mtp';
 import { RESOURCES } from '../content/resources';
+import { TEAM } from '../content/team';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { clubToday } from '../lib/dates';
 import { upcomingEvents } from '../lib/events';
+import { listPublicTeam } from '../lib/queries/team';
+import { crews } from '../lib/team';
 
 // Worked out when the page is built. Once the events table feeds the page it is rendered per visit instead.
 const today = clubToday();
 const upcoming = upcomingEvents(EVENTS, today);
+// The public team, from the team table, read when the page is built. If Supabase can't be reached the build
+// stops, rather than going live with an empty team.
+const teamCrews = crews(await listPublicTeam());
 ---
 
 <BaseLayout
@@ -27,4 +34,6 @@ const upcoming = upcomingEvents(EVENTS, today);
   {/* Until the posters sheet has a row, there is nothing to show here. */}
   {POSTER_ROWS.length > 0 && <EverythingElse copy={EVERYTHING_ELSE} names={KIND_NAMES} rows={POSTER_ROWS} />}
   <Resources content={RESOURCES} />
+  {/* Until an exec makes someone public in the admin, there is nobody to credit. */}
+  {teamCrews.length > 0 && <TeamCredits copy={TEAM} crews={teamCrews} />}
 </BaseLayout>
