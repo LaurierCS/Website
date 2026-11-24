@@ -1,0 +1,36 @@
+---
+/**
+ * A team member's square headshot on a print: their photo from the team bucket, or, when they have none, their
+ * initials on one of the accents (`place` picks which, so neighbours differ).
+ */
+import { initials, type TeamMember } from '../../lib/team';
+import { INITIALS_FILLS } from './credit-looks';
+
+type Props = { member: TeamMember; place: number; class?: string };
+
+const { member, place, class: className } = Astro.props;
+---
+
+{
+  member.pictureUrl ? (
+    <img
+      src={member.pictureUrl}
+      alt=""
+      width="320"
+      height="320"
+      loading="lazy"
+      class:list={['aspect-square w-full rounded-xs bg-window object-cover', className]}
+    />
+  ) : (
+    <span
+      class:list={[
+        'grid aspect-square w-full place-items-center rounded-xs bg-linear-to-br to-window font-display font-extrabold text-white',
+        INITIALS_FILLS[place % INITIALS_FILLS.length],
+        className,
+      ]}
+      aria-hidden="true"
+    >
+      {initials(member.name)}
+    </span>
+  )
+}

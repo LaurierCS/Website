@@ -1,0 +1,30 @@
+---
+/**
+ * One department on the contact sheet (phones, reduced motion, and "See everyone"): its credit title the way a
+ * film's end credits set one ("SPECIAL EFFECTS"), the department and how many people under it, then everyone's
+ * prints.
+ */
+import type { Credit } from '../../content/team';
+import type { Crew } from '../../lib/team';
+import CrewPrint from './CrewPrint.astro';
+
+type Props = { crew: Crew; credit: Credit; index: number };
+
+const { crew, credit, index } = Astro.props;
+const id = `crew-${index}`;
+---
+
+<section id={id} data-crew={index} aria-labelledby={`${id}-title`} class="flex scroll-mt-8 flex-col gap-5">
+  <header class="flex flex-col items-center gap-1 text-center">
+    <h3 id={`${id}-title`} class="font-display text-sm font-extrabold tracking-credit text-text-2 uppercase nav:text-base">
+      {credit.title}
+    </h3>
+    <p class="text-xs text-muted nav:text-sm">{credit.department} · {crew.members.length}</p>
+  </header>
+  <ul
+    class="grid grid-cols-3 gap-x-3 gap-y-4 nav:grid-cols-6 nav:gap-x-5 nav:gap-y-6"
+    aria-label={`${credit.department} team`}
+  >
+    {crew.members.map((member, place) => <CrewPrint member={member} place={place} />)}
+  </ul>
+</section>

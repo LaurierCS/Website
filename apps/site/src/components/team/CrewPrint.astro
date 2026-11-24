@@ -1,0 +1,47 @@
+---
+/**
+ * One person on the team as a small instant print on the contact sheet: their headshot in a cream frame, their
+ * name and role written in the margin under it, hanging a little crooked. Their LinkedIn and GitHub, when the
+ * team table has them, sit under the role.
+ */
+import type { TeamMember } from '../../lib/team';
+import { linkTarget } from '../../lib/links';
+import { PRINT_TILTS } from './credit-looks';
+import Headshot from './Headshot.astro';
+
+type Props = { member: TeamMember; place: number };
+
+const { member, place } = Astro.props;
+// Only the profiles this person has.
+const links = [
+  ...(member.linkedinUrl ? [{ href: member.linkedinUrl, label: 'LinkedIn' }] : []),
+  ...(member.githubUrl ? [{ href: member.githubUrl, label: 'GitHub' }] : []),
+];
+---
+
+<li
+  class:list={[
+    'rounded-sm bg-print p-1.5 pb-2 text-ink shadow-(--shadow-card) transition-[translate,rotate] duration-(--dur-base) ease-(--ease-spring) hover:-translate-y-1 hover:rotate-0 motion-reduce:transition-none nav:p-2 nav:pb-2.5',
+    PRINT_TILTS[place % PRINT_TILTS.length],
+  ]}
+>
+  <Headshot member={member} place={place} class="text-2xl" />
+  <p class="mt-1.5 font-display text-sm leading-tight font-extrabold nav:text-base">{member.name}</p>
+  {member.role && <p class="text-xs leading-snug text-ink/70">{member.role}</p>}
+  {
+    links.length > 0 && (
+      <p class="mt-1 flex gap-2 font-display text-xs font-bold">
+        {links.map(({ href, label }) => (
+          <a
+            href={href}
+            {...linkTarget(href)}
+            aria-label={`${member.name} on ${label}`}
+            class="text-blue-ink underline underline-offset-2"
+          >
+            {label}
+          </a>
+        ))}
+      </p>
+    )
+  }
+</li>
