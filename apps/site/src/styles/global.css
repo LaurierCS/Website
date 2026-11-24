@@ -44,6 +44,7 @@
   --font-sans: var(--font-body);
   --font-mono: var(--font-code);
   --tracking-label: var(--label-spacing);
+  --tracking-credit: var(--credit-spacing);
 
   --ease-brand: var(--ease-out);
 
@@ -168,5 +169,20 @@
         radial-gradient(circle at var(--ticket-stub) 0, var(--notch)),
         radial-gradient(circle at var(--ticket-stub) 100%, var(--notch));
     }
+  }
+
+  /*
+   * The team credits fading out toward the top and bottom, like they're rolling past. The names themselves turn
+   * see-through, rather than a band of page colour being laid over them, so the page's pattern shows through and
+   * there's no edge to spot.
+   */
+  .credits-fade {
+    mask-image: linear-gradient(
+      to bottom,
+      #0000,
+      #000 var(--credits-fade),
+      #000 calc(100% - var(--credits-fade)),
+      #0000
+    );
   }
 }

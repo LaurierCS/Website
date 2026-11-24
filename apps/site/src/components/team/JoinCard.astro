@@ -1,0 +1,36 @@
+---
+/**
+ * The card at the end of the credits: "Want your name up here?", when new members join, and a link to join.
+ */
+import type { TEAM } from '../../content/team';
+import { linkTarget } from '../../lib/links';
+
+type Props = { join: (typeof TEAM)['join']; class?: string };
+
+const { join, class: className } = Astro.props;
+---
+
+<aside
+  aria-labelledby="join-the-team-title"
+  class:list={['flex flex-col gap-1.5 rounded-(--radius-ticket) border-2 border-yellow bg-raised px-7 py-5', className]}
+>
+  <p id="join-the-team-title" class="font-display text-xl font-extrabold">{join.title}</p>
+  <p class="text-sm text-text-2">{join.text}</p>
+  <a
+    href={join.action.href}
+    {...linkTarget(join.action.href)}
+    class="group/join mt-1 inline-flex items-center gap-1.5 self-start font-display text-base font-bold text-yellow"
+  >
+    {join.action.label}
+    <svg
+      class="size-4 transition-[translate] duration-(--dur-fast) ease-(--ease-spring) group-hover/join:translate-x-1 motion-reduce:transition-none"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2.5"
+      aria-hidden="true"
+    >
+      <path d="M5 12h14M13 6l6 6-6 6" />
+    </svg>
+  </a>
+</aside>
