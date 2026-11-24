@@ -1,19 +1,19 @@
 /**
  * Brings "Everything else we do" to life. Each row of posters drifts sideways for ever, every other row the other
- * way, and eases almost to a stop while you point at it or tab into it, so you can see what each one was. The
- * rows only move while the section is on screen. Clicking any poster opens it big. With reduced motion the rows
- * stay still and scroll by hand (the page shows them that way until this script says otherwise).
+ * way. A row slows to a stop while you point at it or tab through it, and while one of its posters is open big,
+ * and gets going again once you're done. The rows only move while the section is on screen. Clicking any poster
+ * opens it big. With reduced motion the rows stay still and scroll by hand (the page shows them that way until
+ * this script says otherwise).
  */
 import { gsap } from 'gsap';
 import { requiredData, requiredElement } from '../lib/dom';
 
-/** How fast a row drifts, in pixels a second, how much it slows while pointed at, and how quickly it eases. */
+/** How fast a row drifts, in pixels a second, and how long it takes to slow to a stop or get going again. */
 const DRIFT_PX_PER_S = 28;
-const SLOWED = 0.12;
-const EASE_S = 0.5;
+const EASE_S = 0.8;
 
-/** A row and the tween drifting it (replaced when the row is measured again). */
-type Drifting = { row: HTMLElement; drift: gsap.core.Tween };
+/** A row, the tween drifting it (replaced when the row is measured again) and whether the pointer is on it. */
+type Drifting = { row: HTMLElement; drift: gsap.core.Tween; pointedAt: boolean };
 
 class PosterRows extends HTMLElement {
   connectedCallback(): void {
@@ -21,26 +21,52 @@ class PosterRows extends HTMLElement {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     this.toggleAttribute('data-drifting', true);
+    const viewer = requiredElement<HTMLDialogElement>(this, '[data-poster-viewer]');
     let onScreen = false;
+    // The row whose poster is open big, if one is.
+    let viewing: HTMLElement | null = null;
     const rows: Drifting[] = [...this.querySelectorAll<HTMLElement>('[data-poster-row]')].map((row) => ({
       row,
       drift: this.drift(row).pause(),
+      pointedAt: false,
     }));
 
+    /**
+     * Stops a row, smoothly, while someone is looking at it: pointing at it, tabbing through it with the keyboard,
+     * or viewing one of its posters. Otherwise it drifts at full speed. A click leaves focus on the poster, so only
+     * keyboard focus counts, or a row would stay stopped after its poster was closed.
+     */
+    const settle = (entry: Drifting): void => {
+      const looking = entry.pointedAt || entry.row === viewing || entry.row.matches(':has(:focus-visible)');
+      gsap.to(entry.drift, { timeScale: looking ? 0 : 1, duration: EASE_S, ease: 'power2.out', overwrite: true });
+    };
+
     for (const entry of rows) {
-      const slowTo = (timeScale: number) => () =>
-        gsap.to(entry.drift, { timeScale, duration: EASE_S, overwrite: true });
-      entry.row.addEventListener('pointerenter', slowTo(SLOWED));
-      entry.row.addEventListener('pointerleave', slowTo(1));
-      entry.row.addEventListener('focusin', slowTo(SLOWED));
-      entry.row.addEventListener('focusout', slowTo(1));
+      const pointing = (on: boolean) => () => {
+        entry.pointedAt = on;
+        settle(entry);
+      };
+      entry.row.addEventListener('pointerenter', pointing(true));
+      entry.row.addEventListener('pointerleave', pointing(false));
+      entry.row.addEventListener('focusin', () => settle(entry));
+      entry.row.addEventListener('focusout', () => settle(entry));
+      entry.row.addEventListener('click', (event) => {
+        if (!(event.target instanceof Element) || !event.target.closest('[data-tile]')) return;
+        viewing = entry.row;
+        settle(entry);
+      });
     }
+    viewer.addEventListener('close', () => {
+      viewing = null;
+      for (const entry of rows) settle(entry);
+    });
 
     // A lap is measured in pixels, and the tiles change size at the wide-screen width; measure again then.
     window.matchMedia('(min-width: 64rem)').addEventListener('change', () => {
       for (const entry of rows) {
         entry.drift.kill();
         entry.drift = this.drift(entry.row).paused(!onScreen);
+        settle(entry);
       }
     });
 
@@ -69,13 +95,19 @@ class PosterRows extends HTMLElement {
     const image = requiredElement<HTMLImageElement>(viewer, '[data-viewer-image]');
     const title = requiredElement<HTMLElement>(viewer, '[data-viewer-title]');
 
-    this.addEventListener('click', (event) => {
+    this.addEventListener('click', async (event) => {
       const tile = event.target instanceof Element ? event.target.closest<HTMLElement>('[data-tile]') : null;
       if (!tile) return;
       const name = requiredData(tile, 'event');
-      image.src = requiredData(tile, 'large');
+      const src = requiredData(tile, 'large');
+      image.src = src;
       image.alt = `${name} poster`;
       title.textContent = name;
+      // Open once the new poster is ready, so the last one opened never flashes up first. A poster that fails to
+      // load still opens, showing its name.
+      await image.decode().catch(() => undefined);
+      // Another poster was clicked while this one loaded: that one opens instead.
+      if (image.getAttribute('src') !== src) return;
       viewer.showModal();
     });
     requiredElement(viewer, '[data-viewer-close]').addEventListener('click', () => viewer.close());
