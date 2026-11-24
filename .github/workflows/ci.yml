@@ -38,6 +38,10 @@ jobs:
       - name: Build
         run: pnpm build
         working-directory: apps/site
+        # The home page reads the public team from Supabase when it's built. The anon key only.
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_KEY: ${{ secrets.DATABASE_KEY }}
 
   admin:
     name: Admin (Vite + React)
