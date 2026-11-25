@@ -15,11 +15,14 @@ const row = (fields: Record<string, unknown> = {}) => ({
   name: 'Sam Lee',
   role: 'Software Engineer',
   department: 'Engineering',
-  picture_url: 'https://example.supabase.co/storage/v1/object/public/team-images/sam.jpg',
+  picture_path: 'sam.jpg',
   linkedin_url: null,
   github_url: 'https://github.com/samlee',
   ...fields,
 });
+
+/** Stands in for the team bucket: a photo's path becomes an address under it. */
+const inBucket = (path: string) => `https://example.supabase.co/storage/v1/object/public/team-images/${path}`;
 
 const member = (name: string, department: string | null): TeamMember => ({
   id: name,
@@ -33,7 +36,7 @@ const member = (name: string, department: string | null): TeamMember => ({
 
 describe('toTeamMember', () => {
   it('reads a team table row', () => {
-    expect(toTeamMember(row())).toEqual({
+    expect(toTeamMember(row(), inBucket)).toEqual({
       id: ID,
       name: 'Sam Lee',
       role: 'Software Engineer',
@@ -44,18 +47,16 @@ describe('toTeamMember', () => {
     });
   });
 
-  it('drops a broken link and blank text, but keeps the person', () => {
-    expect(toTeamMember(row({ linkedin_url: 'not a link', role: '  ' }))).toMatchObject({
-      linkedinUrl: null,
-      role: null,
-    });
+  it('drops a broken link and blank text, and has no photo without a path, but keeps the person', () => {
+    const fields = { linkedin_url: 'not a link', role: '  ', picture_path: null };
+    expect(toTeamMember(row(fields), inBucket)).toMatchObject({ pictureUrl: null, linkedinUrl: null, role: null });
   });
 
   it.each([
     ['no name', { name: '' }],
     ['a bad id', { id: 'nope' }],
   ])('is null for a row with %s', (_case, fields) => {
-    expect(toTeamMember(row(fields))).toBeNull();
+    expect(toTeamMember(row(fields), inBucket)).toBeNull();
   });
 });
 
@@ -81,8 +82,8 @@ describe('seniority', () => {
   it.each([
     ['Co-President', 0],
     ['EVP External', 1],
-    ['VP of Engineering', 2],
-    ['Director of Marketing', 3],
+    ['VP', 2],
+    ['Director', 3],
     ['Software Engineer', 4],
     [null, 4],
   ])('ranks %s as %i', (role, rank) => {
@@ -94,11 +95,11 @@ describe('crews, within a department', () => {
   it('puts the most senior first, keeping name order among equals', () => {
     const withRole = (name: string, role: string): TeamMember => ({ ...member(name, 'Events'), role });
     const team = [
-      withRole('Ana', 'Director of Events'),
-      withRole('Bo', 'VP of Events'),
+      withRole('Ana', 'Director'),
+      withRole('Bo', 'VP'),
       withRole('Cy', 'Coordinator'),
-      withRole('Di', 'Director of Events'),
-      withRole('Ed', 'VP of Events'),
+      withRole('Di', 'Director'),
+      withRole('Ed', 'VP'),
     ];
     expect(crews(team)[0]?.members.map((person) => person.name)).toEqual(['Bo', 'Ed', 'Ana', 'Di', 'Cy']);
   });

@@ -1,27 +1,37 @@
 import { describe, expect, it } from 'vitest';
 import { postersByKind, toEventPoster, type EventPoster } from '../../src/lib/posters';
 
-const POSTER = 'https://example.supabase.co/storage/v1/object/public/events-images/ai-bingo.png';
+/** Stands in for the events bucket: a photo's path becomes an address under it. */
+const inBucket = (path: string) => `https://example.supabase.co/storage/v1/object/public/event-media/${path}`;
+const POSTER = inBucket('ai-bingo/photos/poster.png');
+
 const row = (fields: Record<string, unknown> = {}) => ({
   title: 'AI Bingo',
-  kind: 'social',
-  picture_url: POSTER,
+  category: 'social',
+  event_photos: [{ path: 'ai-bingo/photos/poster.png' }],
   ...fields,
 });
 
 describe('toEventPoster', () => {
-  it('reads an events table row into the event and its poster', () => {
-    expect(toEventPoster(row())).toEqual({ kind: 'social', event: 'AI Bingo', poster: POSTER });
+  it('reads an events table row and its cover photo into the event and its poster', () => {
+    expect(toEventPoster(row(), inBucket)).toEqual({ kind: 'social', event: 'AI Bingo', poster: POSTER });
+  });
+
+  it.each([
+    ['Meet the Professionals in the career row', 'meet_the_pros', 'career'],
+    ['a hackathon in the workshops row', 'hackathon', 'workshop'],
+  ])('puts %s', (_case, category, kind) => {
+    expect(toEventPoster(row({ category }), inBucket)?.kind).toBe(kind);
   });
 
   it.each([
     ['no title', { title: '  ' }],
-    ['no kind', { kind: null }],
-    ['a kind we do not run', { kind: 'party' }],
-    ['no poster', { picture_url: null }],
-    ['a poster that is not a link', { picture_url: 'ai-bingo.png' }],
+    ['no category', { category: null }],
+    ['a category we do not know', { category: 'party' }],
+    ['no cover photo', { event_photos: [] }],
+    ['a cover photo without a path', { event_photos: [{ path: '' }] }],
   ])('is null for a row with %s', (_case, fields) => {
-    expect(toEventPoster(row(fields))).toBeNull();
+    expect(toEventPoster(row(fields), inBucket)).toBeNull();
   });
 });
 
