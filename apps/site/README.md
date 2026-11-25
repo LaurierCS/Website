@@ -38,18 +38,6 @@ All commands are run from the root of the project, from a terminal:
 | `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `pnpm astro -- --help` | Get help using the Astro CLI                     |
 
-## Database types
-
-`src/types/database.types.ts` is generated from Supabase and covers both `public` (today's site) and `v2` (the
-redesign). Never edit it by hand. Regenerate it after any schema change, from the repository root (after
-`npx supabase login` once):
-
-```sh
-npx supabase gen types typescript --project-id vsyqonrmowxrkbqlofvb --schema public,v2 > apps/site/src/types/database.types.ts
-```
-
-Use it with `createClient<Database>(...)` and read v2 with `supabase.schema('v2').from('events')`.
-
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
