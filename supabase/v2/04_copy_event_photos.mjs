@@ -2,15 +2,21 @@
 //
 // Run after 03_populate.sql, from your own computer (never in the browser or CI):
 //
-//   SUPABASE_URL=https://<project>.supabase.co SUPABASE_SERVICE_ROLE_KEY=... node supabase/v2/04_copy_event_photos.mjs
+//   SUPABASE_URL=https://<project>.supabase.co SUPABASE_ANON_KEY=... SUPABASE_SERVICE_ROLE_KEY=... \
+//     node supabase/v2/04_copy_event_photos.mjs
+//
+// The event list is read with the anon key (events are public, and service_role has no grant on public.events);
+// the files are copied with the service role key. Without SUPABASE_ANON_KEY it tries the service role key.
 //
 // Add --dry-run to only print what it would copy. Needs Node 18+ and no packages.
 //
 // Copies, never moves: `events-images` stays exactly as it is for the live site. Safe to run again; files that
-// are already in event-media are skipped. The paths match the ones 03_populate.sql wrote to v2.event_photos.
+// are already in event-media are skipped. The paths match the ones 03_populate.sql wrote to v2.event_photos:
+// spaces in a file name become dashes ("meet%20the%20pros.png" is copied as "meet-the-pros.png").
 
 const url = process.env.SUPABASE_URL?.replace(/\/$/, '');
 const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const readKey = process.env.SUPABASE_ANON_KEY || key;
 const dryRun = process.argv.includes('--dry-run');
 
 if (!url || !key) {
@@ -20,7 +26,9 @@ if (!url || !key) {
 
 const auth = { apikey: key, Authorization: `Bearer ${key}` };
 
-const res = await fetch(`${url}/rest/v1/events?select=id,title,picture_url&picture_url=not.is.null`, { headers: auth });
+const res = await fetch(`${url}/rest/v1/events?select=id,title,picture_url&picture_url=not.is.null`, {
+  headers: { apikey: readKey, Authorization: `Bearer ${readKey}` },
+});
 if (!res.ok) throw new Error(`Reading events failed: ${res.status} ${await res.text()}`);
 const events = await res.json();
 
@@ -36,7 +44,7 @@ for (const event of events) {
     continue;
   }
 
-  const target = `${event.id}/photos/${decodeURIComponent(file)}`;
+  const target = `${event.id}/photos/${decodeURIComponent(file).replace(/\s+/g, '-')}`;
 
   const exists = await fetch(`${url}/storage/v1/object/info/event-media/${target}`, { headers: auth });
   if (exists.ok) {
