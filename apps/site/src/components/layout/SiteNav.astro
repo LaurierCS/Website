@@ -1,7 +1,8 @@
 ---
 /**
- * The site header: the logo, then the page links and the club's accounts. Below the `nav` width there isn't room
- * for all of it, so the links move into the phone menu.
+ * The site header: the logo, then the page links and the club's accounts. It stays at the top of the screen as
+ * the page scrolls, so the links are always a click away. Below the `nav` width there isn't room for all of it,
+ * so the links move into the phone menu.
  */
 // A plain image rather than inline SVG: the logo is big, and the header and the menu would each repeat it.
 import logo from '../../assets/logos/lcs-long-white.svg?url';
@@ -10,29 +11,32 @@ import MobileMenu from './MobileMenu.astro';
 import SocialLinks from './SocialLinks.astro';
 ---
 
-<header class="mx-auto flex max-w-(--max) items-center justify-between px-4 py-3 nav:px-16 nav:py-5">
-  <a href="/" aria-label="Laurier Computing Society home" class="rounded-md">
-    <img src={logo} alt="" width="168" height="48" class="h-12 w-auto" />
-  </a>
+{/* The bar spans the screen in the page colour, so what scrolls underneath is hidden behind it. */}
+<header class="sticky top-0 z-40 border-b border-line-quiet bg-page">
+  <div class="mx-auto flex max-w-(--max) items-center justify-between px-4 py-3 nav:px-16 nav:py-5">
+    <a href="/" aria-label="Laurier Computing Society home" class="rounded-md">
+      <img src={logo} alt="" width="168" height="48" class="h-12 w-auto" />
+    </a>
 
-  <nav aria-label="Main" class="hidden items-center gap-7 nav:flex">
-    <ul class="flex items-center gap-7">
-      {
-        PAGE_LINKS.map((page) => (
-          <li>
-            <a
-              href={page.href}
-              class="inline-block rounded-md font-display text-lg font-bold transition-[translate,color] duration-(--dur-fast) ease-(--ease-spring) hover:-translate-y-0.5 hover:text-yellow motion-reduce:hover:translate-y-0"
-            >
-              {page.label}
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-    <span class="h-7 w-0.5 rounded-full bg-line-quiet" aria-hidden="true"></span>
-    <SocialLinks variant="header" />
-  </nav>
+    <nav aria-label="Main" class="hidden items-center gap-7 nav:flex">
+      <ul class="flex items-center gap-7">
+        {
+          PAGE_LINKS.map((page) => (
+            <li>
+              <a
+                href={page.href}
+                class="inline-block rounded-md font-display text-lg font-bold transition-[translate,color] duration-(--dur-fast) ease-(--ease-spring) hover:-translate-y-0.5 hover:text-yellow motion-reduce:hover:translate-y-0"
+              >
+                {page.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <span class="h-7 w-0.5 rounded-full bg-line-quiet" aria-hidden="true"></span>
+      <SocialLinks variant="header" />
+    </nav>
 
-  <MobileMenu />
+    <MobileMenu />
+  </div>
 </header>

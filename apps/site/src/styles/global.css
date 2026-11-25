@@ -79,6 +79,21 @@
     30% { translate: 0 -40%; opacity: 1; }
   }
 
+  /* A doodle in a section's edge, turning round slowly, one way or the other. */
+  --animate-turn: turn var(--doodle-turn) linear infinite;
+  --animate-turn-back: turn var(--doodle-turn-slow) linear infinite reverse;
+  /* The ticket booth's owl ducking down now and then to check the paper, then popping back up. */
+  --animate-owl-check: owl-check var(--owl-check) var(--ease-out) infinite;
+
+  @keyframes turn {
+    to { rotate: 1turn; }
+  }
+
+  @keyframes owl-check {
+    0%, 84%, 100% { translate: 0 0; }
+    88%, 94% { translate: 0 45%; }
+  }
+
   /*
    * The width where the header has room for everything on one row: the logo, the page links and the five
    * social links. Narrower screens get the Menu button (`nav:` variant). Media queries can't read CSS
@@ -100,6 +115,8 @@
     color: var(--text);
     font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
+    /* The header stays at the top of the screen, so a jump to a section stops short of it by the header's height. */
+    scroll-padding-top: var(--header-clearance);
   }
 
   /* Kept out of sight for the moment it takes to show the page in its final place (scripts/page-arrival.js). */
@@ -191,5 +208,22 @@
       #000 calc(100% - var(--credits-fade)),
       #0000
     );
+  }
+
+  /*
+   * A doodle drifting against the scroll: it rises a little slower than the page as its section passes, so the
+   * doodles feel like they sit further back. Tied to the scroll by the browser, with no script; browsers that
+   * can't do that leave it still.
+   */
+  @media (prefers-reduced-motion: no-preference) {
+    .doodle-drift {
+      animation: doodle-drift linear both;
+      animation-timeline: view();
+    }
+  }
+
+  @keyframes doodle-drift {
+    from { translate: 0 var(--doodle-drift); }
+    to { translate: 0 calc(-1 * var(--doodle-drift)); }
   }
 }

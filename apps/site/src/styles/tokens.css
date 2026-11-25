@@ -81,6 +81,8 @@
   --credits-fade: 11rem; /* how far in from the top and bottom the credits fade */
   --radius-lid: 1.625rem;
   --max: 1280px;
+  /* How far a jump to a section stops short of it, so the header that stays at the top doesn't cover its title. */
+  --header-clearance: 6rem;
 
   /* Depth */
   --shadow-float: 0 20px 40px -8px rgb(0 0 0 / 0.6); /* held up off the page, like the open menu */
@@ -99,6 +101,11 @@
   --dur-fast: 150ms;
   --dur-base: 280ms;
   --dur-roll: 600ms; /* the team credits' prints dropping in and fading away */
+  /* The doodles in each section's edges: how long one turn takes, both speeds, and how far they drift. */
+  --doodle-turn: 60s;
+  --doodle-turn-slow: 90s;
+  --doodle-drift: 2.5rem;
+  --owl-check: 11s; /* how often the booth's owl ducks down to check the paper */
 
   /* Focus ring: on-brand and always visible. */
   --focus-ring: 0 0 0 3px var(--bg-page), 0 0 0 6px var(--yellow);
