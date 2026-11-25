@@ -9,6 +9,8 @@ import type { EVERYTHING_ELSE, KIND_NAMES } from '../../content/everything-else'
 import type { PosterRow as Row } from '../../lib/posters';
 import PosterRow from './PosterRow.astro';
 import PosterViewer from './PosterViewer.astro';
+import { DOODLE_SPOTS } from '../ui/doodle-spots';
+import Doodles from '../ui/Doodles.astro';
 
 type Props = { copy: typeof EVERYTHING_ELSE; names: typeof KIND_NAMES; rows: readonly Row[] };
 
@@ -16,7 +18,8 @@ const { copy, names, rows } = Astro.props;
 ---
 
 {/* Clipped at the sides, so the drifting rows never widen the page. */}
-<poster-rows class="group block overflow-x-clip">
+<poster-rows class="group relative isolate block overflow-x-clip">
+  <Doodles spots={DOODLE_SPOTS.everythingElse} />
   <section
     id="everything-else"
     aria-labelledby="everything-else-title"

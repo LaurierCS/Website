@@ -10,6 +10,8 @@ import type { MTP } from '../../content/mtp';
 import { speakerCompanies, type Speaker } from '../../lib/speakers';
 import SpeakerPitch from './SpeakerPitch.astro';
 import SpeakerSlide from './SpeakerSlide.astro';
+import { DOODLE_SPOTS } from '../ui/doodle-spots';
+import Doodles from '../ui/Doodles.astro';
 
 type Props = { copy: typeof MTP; speakers: readonly Speaker[] };
 
@@ -35,7 +37,8 @@ const round =
   Clipped at the sides: a speaker sliding in starts a little past the screen's edge on a phone, and without this
   the page would widen for that moment (a sideways scrollbar, and the background shifting).
 */}
-<speaker-spotlight class="group block overflow-x-clip">
+<speaker-spotlight class="group relative isolate block overflow-x-clip">
+  <Doodles spots={DOODLE_SPOTS.mtp} />
   <section
     id="what-we-host"
     aria-labelledby="mtp-title"

@@ -10,13 +10,16 @@ import { RESOURCE_KINDS, type RESOURCES } from '../../content/resources';
 import { linkTarget } from '../../lib/links';
 import ClubroomLaptop from './ClubroomLaptop.astro';
 import { RESOURCE_ICONS, RESOURCE_TINT } from './resource-icons';
+import { DOODLE_SPOTS } from '../ui/doodle-spots';
+import Doodles from '../ui/Doodles.astro';
 
 type Props = { content: typeof RESOURCES };
 
 const { content } = Astro.props;
 ---
 
-<clubroom-laptop class="group block overflow-x-clip">
+<clubroom-laptop class="group relative isolate block overflow-x-clip">
+  <Doodles spots={DOODLE_SPOTS.resources} />
   <section
     id="resources"
     aria-labelledby="resources-title"
