@@ -7,8 +7,8 @@ import { socialLink } from '../lib/site';
 import { DEPARTMENTS, type Department } from '../lib/team';
 
 export const TEAM = {
-  label: 'The team',
-  title: 'Roll the credits.',
+  label: 'Behind the scenes',
+  title: 'The Team',
   summary:
     'Every review, social and late-night hack session was run by these students. Hover a name to see who they are.',
   /** The two chips under the summary, with the counts from the team table. */

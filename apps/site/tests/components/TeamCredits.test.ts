@@ -32,7 +32,7 @@ async function renderSection(): Promise<HTMLElement> {
 }
 
 describe('TeamCredits', () => {
-  it('keeps "Roll the credits." and counts people once even when they are in two departments', async () => {
+  it('keeps "The Team" and counts people once even when they are in two departments', async () => {
     const page = await renderSection();
     expect(getByRole(page, 'heading', { level: 2, name: TEAM.title })).toBeDefined();
     expect(getByText(page, TEAM.people(2))).toBeDefined();
