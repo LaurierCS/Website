@@ -3,6 +3,7 @@
  * order. The ticket itself is `ImportTicket`.
  */
 import { shortEventDay } from '../../lib/dates';
+import { eventTimeLabel } from '../../lib/event-form';
 import type { Event, EventFields } from '../../types/event';
 import type { FieldChange } from '../ui/FieldChanges';
 import type { ImportEntry, ImportView, OrderItem } from '../ui/import-view';
@@ -47,7 +48,7 @@ export const EVENT_IMPORT = {
       short: [
         field('Title', was?.title, will.title),
         field('Date', was && shortEventDay(was.date), shortEventDay(will.date)),
-        field('Time', was && (was.time ?? 'None'), will.time ?? 'None'),
+        field('Time', was && (eventTimeLabel(was) ?? 'None'), eventTimeLabel(will) ?? 'None'),
         field('Room', was && (was.location ?? 'None'), will.location ?? 'None'),
       ],
       // Only an event with a description, before or after, has one to show.
@@ -60,6 +61,6 @@ export const EVENT_IMPORT = {
   orderItems: (entry) => {
     if (entry.kind === 'updated') return changeLines(entry);
     const event = entry.item.fields;
-    return [{ label: [shortEventDay(event.date), event.time, event.location].filter(Boolean).join(' · '), value: '' }];
+    return [{ label: [shortEventDay(event.date), eventTimeLabel(event), event.location].filter(Boolean).join(' · '), value: '' }];
   },
 } satisfies Omit<ImportView<Event, EventFields>, 'front'>;

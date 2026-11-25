@@ -1,7 +1,21 @@
 import { type Event, withStatuses } from '../../src/types/event';
 
 function event(title: string, date: string): Event {
-  return { id: crypto.randomUUID(), title, description: null, date, time: null, location: null, pictureUrl: null };
+  return {
+    id: crypto.randomUUID(),
+    title,
+    description: null,
+    date,
+    category: 'social',
+    startTime: null,
+    endTime: null,
+    location: null,
+    willStream: false,
+    streamUrl: null,
+    coverPath: null,
+    coverPhotoId: null,
+    pictureUrl: null,
+  };
 }
 
 /** Titles with their statuses, for readable expectations. */

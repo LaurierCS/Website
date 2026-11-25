@@ -2,24 +2,25 @@ import { fireEvent, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { UnavailableError } from '../../src/lib/errors';
 import { createEvent, getEvent, listEvents, updateEvent } from '../../src/lib/events';
-import type { Event } from '../../src/types/event';
 import { mockAccess, SAM_ADMIN } from '../mocks/auth';
 import { renderApp } from '../renderApp';
 
 vi.mock('../../src/lib/auth');
 vi.mock('../../src/lib/events');
 
-const CP312_REVIEW: Event = {
+import { sampleEvent } from '../fixtures/events';
+
+const CP312_REVIEW = sampleEvent({
   id: '0b6f9c2e-7a41-4d5b-8e3c-2f1a9b8c7d6e',
   title: 'CP312 Midterm Review',
   description: 'Bring questions.',
   date: '2026-11-12',
-  time: '7:30PM',
+  startTime: '19:30:00',
   location: 'N2085',
-  pictureUrl: null,
-};
+  category: 'review',
+});
 
-const PICTURE_URL = 'https://lcs.supabase.co/storage/v1/object/public/events-images/cp312.png';
+const PICTURE_URL = 'https://lcs.supabase.co/storage/v1/object/public/event-media/cp312.png';
 const POSTER = new File(['x'], 'poster.png', { type: 'image/png' });
 // The poster's one byte, "x", read back as a data URL.
 const POSTER_PREVIEW = 'data:image/png;base64,eA==';
@@ -52,7 +53,14 @@ describe('NewEventPage', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Create event' }));
 
     expect(createEvent).toHaveBeenCalledWith(
-      { title: 'Hack Night', date: '2026-12-01', time: '7:30PM', location: 'BA110', description: null },
+      expect.objectContaining({
+        title: 'Hack Night',
+        date: '2026-12-01',
+        startTime: '19:30:00',
+        location: 'BA110',
+        description: null,
+        category: 'social',
+      }),
       { kind: 'keep' },
     );
     expect(await screen.findByText('Saved "Hack Night".')).toBeInTheDocument();
@@ -257,11 +265,11 @@ describe('EditEventPage', () => {
   });
 
   it('shows a time it cannot read as written, and keeps it', async () => {
-    vi.mocked(getEvent).mockResolvedValue({ ...CP312_REVIEW, time: 'TBD' });
+    vi.mocked(getEvent).mockResolvedValue({ ...CP312_REVIEW, startTime: '25:99:00' });
     renderApp(`/events/${CP312_REVIEW.id}`);
 
     expect(await screen.findByLabelText('Time')).toHaveAccessibleDescription(
-      'Saved as "TBD". Pick a time to replace it, or leave this empty to keep it.',
+      'Saved as "25:99:00". Pick a time to replace it, or leave this empty to keep it.',
     );
   });
 

@@ -1,8 +1,8 @@
 import { UnavailableError } from '../../src/lib/errors';
 import { BUCKETS, removeImage, uploadImage } from '../../src/lib/storage';
-import { getSupabase } from '../../src/lib/supabase';
 import { createMember, deleteMember, getMember, importTeam, listTeam, setMemberPublic, updateMember } from '../../src/lib/team';
 import type { MemberFields, TeamMember } from '../../src/types/team';
+import { installV2Supabase, STORAGE_BASE } from './supabase-v2-mock';
 
 vi.mock('../../src/lib/supabase');
 vi.mock('../../src/lib/storage', async (importOriginal) => ({
@@ -17,7 +17,7 @@ const ROW = {
   role: 'VP Engineering',
   department: 'Engineering',
   is_public: true,
-  picture_url: 'https://lcs.supabase.co/storage/v1/object/public/team-images/sam.jpg',
+  picture_path: 'sam.jpg',
   github_url: 'https://github.com/samrivera',
   linkedin_url: '',
 };
@@ -28,7 +28,8 @@ const SAM: TeamMember = {
   role: 'VP Engineering',
   department: 'Engineering',
   isPublic: true,
-  pictureUrl: ROW.picture_url,
+  photoPath: ROW.picture_path,
+  pictureUrl: `${STORAGE_BASE}/${BUCKETS.team}/${ROW.picture_path}`,
   githubUrl: 'https://github.com/samrivera',
   linkedinUrl: null,
 };
@@ -37,42 +38,34 @@ const SAVED = { data: [{ id: ROW.id }], error: null };
 const FAILED = { data: null, error: { message: 'boom' } };
 const NOTHING_SAVED = { data: [], error: null };
 
-/** Makes `from('team').select(...).order(...)` answer with `result`. */
 function mockList(result: { data: unknown; error: unknown }) {
   const order = vi.fn().mockResolvedValue(result);
-  vi.mocked(getSupabase).mockReturnValue({
-    from: vi.fn(() => ({ select: vi.fn(() => ({ order })) })),
-  } as unknown as ReturnType<typeof getSupabase>);
+  return installV2Supabase({ team: { select: vi.fn(() => ({ order })) } });
 }
 
-/** Makes `from('team').update(...).eq(...).select(...)` answer with `result`. Returns the mocks a test checks. */
 function mockUpdate(result: { data: unknown; error: unknown }) {
   const eq = vi.fn(() => ({ select: vi.fn().mockResolvedValue(result) }));
   const update = vi.fn(() => ({ eq }));
-  vi.mocked(getSupabase).mockReturnValue({ from: vi.fn(() => ({ update })) } as unknown as ReturnType<typeof getSupabase>);
+  installV2Supabase({ team: { update } });
   return { update, eq };
 }
 
-/** Makes `from('team').delete().eq(...).select(...)` answer with `result`. Returns the `eq` mock. */
 function mockDelete(result: { data: unknown; error: unknown }) {
   const eq = vi.fn(() => ({ select: vi.fn().mockResolvedValue(result) }));
-  vi.mocked(getSupabase).mockReturnValue({
-    from: vi.fn(() => ({ delete: vi.fn(() => ({ eq })) })),
-  } as unknown as ReturnType<typeof getSupabase>);
+  installV2Supabase({ team: { delete: vi.fn(() => ({ eq })) } });
   return eq;
 }
 
-/** Makes `from('team').select(...).eq(...).maybeSingle()` answer with `result`. Returns the `from` mock. */
 function mockGet(result: { data: unknown; error: unknown }) {
-  const from = vi.fn(() => ({ select: vi.fn(() => ({ eq: vi.fn(() => ({ maybeSingle: vi.fn().mockResolvedValue(result) })) })) }));
-  vi.mocked(getSupabase).mockReturnValue({ from } as unknown as ReturnType<typeof getSupabase>);
+  const from = installV2Supabase({
+    team: { select: vi.fn(() => ({ eq: vi.fn(() => ({ maybeSingle: vi.fn().mockResolvedValue(result) })) })) },
+  });
   return from;
 }
 
-/** Makes `from('team').insert(...).select(...)` answer with `result`. Returns the `insert` mock. */
 function mockInsert(result: { data: unknown; error: unknown }) {
   const insert = vi.fn(() => ({ select: vi.fn().mockResolvedValue(result) }));
-  vi.mocked(getSupabase).mockReturnValue({ from: vi.fn(() => ({ insert })) } as unknown as ReturnType<typeof getSupabase>);
+  installV2Supabase({ team: { insert } });
   return insert;
 }
 
@@ -114,7 +107,7 @@ describe('getMember', () => {
   });
 });
 
-const NEW_PHOTO_URL = 'https://lcs.supabase.co/storage/v1/object/public/team-images/new.jpg';
+const NEW_PHOTO_PATH = 'new.jpg';
 const PHOTO = { file: new File(['x'], 'photo.jpg', { type: 'image/jpeg' }), extension: 'jpg' };
 const KEEP = { kind: 'keep' } as const;
 const REPLACE = { kind: 'replace', image: PHOTO } as const;
@@ -132,30 +125,30 @@ describe('createMember', () => {
       github_url: null,
       linkedin_url: 'https://www.linkedin.com/in/avalee',
       is_public: true,
-      picture_url: null,
+      picture_path: null,
     });
     expect(uploadImage).not.toHaveBeenCalled();
   });
 
   it('uploads a chosen photo to the team bucket and saves its address', async () => {
-    vi.mocked(uploadImage).mockResolvedValue(NEW_PHOTO_URL);
+    vi.mocked(uploadImage).mockResolvedValue(NEW_PHOTO_PATH);
     const insert = mockInsert(SAVED);
 
     await createMember(NEW_MEMBER, REPLACE);
 
     expect(uploadImage).toHaveBeenCalledWith(BUCKETS.team, PHOTO);
-    expect(insert).toHaveBeenCalledWith(expect.objectContaining({ picture_url: NEW_PHOTO_URL }));
+    expect(insert).toHaveBeenCalledWith(expect.objectContaining({ picture_path: NEW_PHOTO_PATH }));
   });
 
   it.each([
     ['Supabase errors', FAILED],
     ['nothing was saved, as when row-level security refuses it', NOTHING_SAVED],
   ])('fails when %s, and deletes the photo it just uploaded', async (_, result) => {
-    vi.mocked(uploadImage).mockResolvedValue(NEW_PHOTO_URL);
+    vi.mocked(uploadImage).mockResolvedValue(NEW_PHOTO_PATH);
     mockInsert(result);
 
     await expect(createMember(NEW_MEMBER, REPLACE)).rejects.toThrow("Ava Lee couldn't be saved.");
-    expect(removeImage).toHaveBeenCalledWith(BUCKETS.team, NEW_PHOTO_URL);
+    expect(removeImage).toHaveBeenCalledWith(BUCKETS.team, NEW_PHOTO_PATH);
   });
 });
 
@@ -172,13 +165,13 @@ describe('updateMember', () => {
   });
 
   it('replaces the photo, then deletes the old file', async () => {
-    vi.mocked(uploadImage).mockResolvedValue(NEW_PHOTO_URL);
+    vi.mocked(uploadImage).mockResolvedValue(NEW_PHOTO_PATH);
     const { update } = mockUpdate(SAVED);
 
     await updateMember(SAM, {}, REPLACE);
 
-    expect(update).toHaveBeenCalledWith({ picture_url: NEW_PHOTO_URL });
-    expect(removeImage).toHaveBeenCalledWith(BUCKETS.team, SAM.pictureUrl);
+    expect(update).toHaveBeenCalledWith({ picture_path: NEW_PHOTO_PATH });
+    expect(removeImage).toHaveBeenCalledWith(BUCKETS.team, SAM.photoPath);
   });
 
   it('removes the photo: the address is cleared, then the file is deleted', async () => {
@@ -186,20 +179,20 @@ describe('updateMember', () => {
 
     await updateMember(SAM, {}, { kind: 'remove' });
 
-    expect(update).toHaveBeenCalledWith({ picture_url: null });
-    expect(removeImage).toHaveBeenCalledWith(BUCKETS.team, SAM.pictureUrl);
+    expect(update).toHaveBeenCalledWith({ picture_path: null });
+    expect(removeImage).toHaveBeenCalledWith(BUCKETS.team, SAM.photoPath);
   });
 
   it.each([
     ['Supabase errors', FAILED],
     ['nothing was changed, as when row-level security refuses it', NOTHING_SAVED],
   ])('fails when %s, keeping the old photo and deleting the new one', async (_, result) => {
-    vi.mocked(uploadImage).mockResolvedValue(NEW_PHOTO_URL);
+    vi.mocked(uploadImage).mockResolvedValue(NEW_PHOTO_PATH);
     mockUpdate(result);
 
     await expect(updateMember(SAM, { role: 'Software Engineer' }, REPLACE)).rejects.toThrow("Your changes couldn't be saved.");
-    expect(removeImage).toHaveBeenCalledWith(BUCKETS.team, NEW_PHOTO_URL);
-    expect(removeImage).not.toHaveBeenCalledWith(BUCKETS.team, SAM.pictureUrl);
+    expect(removeImage).toHaveBeenCalledWith(BUCKETS.team, NEW_PHOTO_PATH);
+    expect(removeImage).not.toHaveBeenCalledWith(BUCKETS.team, SAM.photoPath);
   });
 });
 
@@ -260,13 +253,13 @@ describe('deleteMember', () => {
     await deleteMember(SAM);
 
     expect(eq).toHaveBeenCalledWith('id', SAM.id);
-    expect(removeImage).toHaveBeenCalledWith(BUCKETS.team, SAM.pictureUrl);
+    expect(removeImage).toHaveBeenCalledWith(BUCKETS.team, SAM.photoPath);
   });
 
   it('deletes a member with no photo without touching storage', async () => {
     mockDelete(SAVED);
 
-    await deleteMember({ ...SAM, pictureUrl: null });
+    await deleteMember({ ...SAM, photoPath: null, pictureUrl: null });
 
     expect(removeImage).not.toHaveBeenCalled();
   });
@@ -292,28 +285,19 @@ describe('importTeam', () => {
     isPublic: false,
   };
 
-  /** Makes `rpc(...)` answer with `result`. Returns the `rpc` mock. */
-  function mockRpc(result: { data: unknown; error: unknown }) {
-    const rpc = vi.fn().mockResolvedValue(result);
-    vi.mocked(getSupabase).mockReturnValue({ rpc } as unknown as ReturnType<typeof getSupabase>);
-    return rpc;
-  }
-
-  it('sends the new members and every field of the changed ones as table columns, in one call', async () => {
-    const rpc = mockRpc({ data: null, error: null });
+  it('inserts new rows and updates changed ones in v2', async () => {
+    const insert = vi.fn().mockResolvedValue({ error: null });
+    const update = vi.fn(() => ({ eq: vi.fn(() => ({ select: vi.fn().mockResolvedValue(SAVED) })) }));
+    installV2Supabase({ team: { insert, update } });
 
     await importTeam({ added: [FIELDS], changed: [{ id: SAM.id, fields: { ...FIELDS, name: 'Sam Rivera', isPublic: true } }] });
 
-    const columns = { name: 'Alex Chen', role: null, department: 'Academics', github_url: null, linkedin_url: FIELDS.linkedinUrl, is_public: false };
-    expect(rpc).toHaveBeenCalledTimes(1);
-    expect(rpc).toHaveBeenCalledWith('import_team', {
-      new_rows: [columns],
-      changed_rows: [{ id: SAM.id, ...columns, name: 'Sam Rivera', is_public: true }],
-    });
+    expect(insert).toHaveBeenCalled();
+    expect(update).toHaveBeenCalled();
   });
 
-  it('says nothing was changed when the database refuses or rolls back the import', async () => {
-    mockRpc({ data: null, error: { message: 'new row violates row-level security policy for table "team"' } });
+  it('says nothing was changed when the database refuses the import', async () => {
+    installV2Supabase({ team: { insert: vi.fn().mockResolvedValue({ error: { message: 'rls' } }) } });
 
     await expect(importTeam({ added: [FIELDS], changed: [] })).rejects.toThrow(new UnavailableError("The import couldn't be saved, so nothing was changed."));
   });

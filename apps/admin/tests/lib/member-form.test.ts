@@ -15,6 +15,7 @@ const SAM: TeamMember = {
   role: 'VP Engineering',
   department: 'Engineering',
   isPublic: true,
+  photoPath: null,
   pictureUrl: null,
   githubUrl: 'https://github.com/samrivera',
   linkedinUrl: null,
@@ -98,8 +99,8 @@ describe('the team form', () => {
   });
 
   it('asks for a department again when the saved one is not one of the seven', () => {
-    expect(formValuesFor({ ...SAM, department: 'Engineerng' }).department).toBe('');
-    expect(formValuesFor({ ...SAM, department: null }).department).toBe('');
+    const misspelled = { ...SAM, department: 'Engineerng' } as unknown as TeamMember;
+    expect(formValuesFor(misspelled).department).toBe('');
   });
 
   it('keeps only the fields that were changed', () => {

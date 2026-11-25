@@ -65,3 +65,34 @@ export function toPickerTime(stored: string): string | null {
   const hours24 = (hours % 12) + (half.toLowerCase() === 'p' ? 12 : 0);
   return `${String(hours24).padStart(2, '0')}:${minuteText}`;
 }
+
+/** A PostgreSQL `time` (`17:30:00`) as a time picker's `17:30`. */
+export function dbTimeToPicker(dbTime: string): string | null {
+  const match = /^(\d{1,2}):(\d{2})/.exec(dbTime.trim());
+  if (!match) return null;
+  const hours = Number(match[1]);
+  const minutes = Number(match[2]);
+  if (hours > 23 || minutes > 59) return null;
+  return `${String(hours).padStart(2, '0')}:${match[2]}`;
+}
+
+/** A time picker's `19:30` as PostgreSQL `time`, `19:30:00`. */
+export function pickerTimeToDbTime(pickerTime: string): string {
+  const [hours = 0, minutes = 0] = pickerTime.split(':').map(Number);
+  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`;
+}
+
+/** A PostgreSQL `time` written the way tickets and CSV files show it, e.g. `7:30PM`. */
+export function dbTimeToStored(dbTime: string): string {
+  const picker = dbTimeToPicker(dbTime);
+  if (!picker) return dbTime;
+  return toStoredTime(picker);
+}
+
+/** Start and end times for a ticket line; null when the start isn't set. */
+export function formatEventWhen(startTime: string | null, endTime: string | null): string | null {
+  if (!startTime) return null;
+  const start = dbTimeToStored(startTime);
+  if (!endTime) return start;
+  return `${start} - ${dbTimeToStored(endTime)}`;
+}

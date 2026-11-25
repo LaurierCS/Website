@@ -55,7 +55,7 @@ export function formValuesFor(member: TeamMember): MemberFormValues {
   return {
     name: member.name,
     role: member.role ?? '',
-    department: member.department !== null && known.includes(member.department) ? member.department : '',
+    department: known.includes(member.department) ? member.department : '',
     githubUrl: member.githubUrl ?? '',
     linkedinUrl: member.linkedinUrl ?? '',
     isPublic: member.isPublic,

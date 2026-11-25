@@ -8,7 +8,7 @@ import type { z } from 'zod';
 import type { Event, EventFields } from '../types/event';
 import { DEPARTMENTS, type MemberFields, type TeamMember } from '../types/team';
 import { toCsv } from './csv';
-import { toPickerTime } from './dates';
+import { formatEventWhen, toPickerTime } from './dates';
 import { EventFormSchema, toEventFields } from './event-form';
 import { MemberFormSchema, toMemberFields } from './member-form';
 
@@ -46,14 +46,15 @@ export const EVENTS_CSV = csvFormat({
     id: event.id,
     title: event.title,
     date: event.date,
-    time: event.time ?? '',
+    time: formatEventWhen(event.startTime, event.endTime) ?? '',
     location: event.location ?? '',
     description: event.description ?? '',
   }),
   fromRow: (cell, saved): RowResult<EventFields> => {
     // A saved time is kept while its cell is unchanged, even one the form's picker can't show (say, "TBD"), the
     // same as the edit form keeps it.
-    const keptTime = saved !== null && cell('time') === (saved.time ?? '');
+    const savedTime = saved ? formatEventWhen(saved.startTime, saved.endTime) : null;
+    const keptTime = saved !== null && cell('time') === (savedTime ?? '');
     const time = cell('time').trim();
     const pickerTime = keptTime || time === '' ? '' : toPickerTime(time);
     const parsed = EventFormSchema.safeParse({
@@ -69,7 +70,7 @@ export const EVENTS_CSV = csvFormat({
     ];
     if (!parsed.success || problems.length > 0) return { ok: false, problems };
     const fields = toEventFields(parsed.data);
-    return { ok: true, fields: keptTime ? { ...fields, time: saved.time } : fields };
+    return { ok: true, fields: keptTime ? { ...fields, startTime: saved!.startTime, endTime: saved!.endTime } : fields };
   },
 });
 
@@ -80,7 +81,7 @@ export const TEAM_CSV = csvFormat({
     id: member.id,
     name: member.name,
     role: member.role ?? '',
-    department: member.department ?? '',
+    department: member.department,
     is_public: member.isPublic ? 'true' : 'false',
     github_url: member.githubUrl ?? '',
     linkedin_url: member.linkedinUrl ?? '',
