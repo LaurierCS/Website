@@ -1,6 +1,6 @@
 /** Event relationships loaded and cached by TanStack Query, and the changes that refresh them. */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { addRelated, deleteRelated, listRelated, reorderRelated } from '../lib/event-related';
+import { addRelated, deleteRelated, listRelated, reorderRelated } from '../lib/data/event-related';
 import type { EventRelated } from '../types/event-related';
 
 // Every related events query for an event starts with this key.

@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { listEvents } from '../../../src/lib/events';
-import { listTeam } from '../../../src/lib/team';
+import { listEvents } from '../../../src/lib/data/events';
+import { listTeam } from '../../../src/lib/data/team';
 import { mockAccess, SAM_ADMIN } from '../../mocks/auth';
 import { renderApp } from '../../renderApp';
 

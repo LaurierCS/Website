@@ -1,8 +1,8 @@
 /** Team members loaded and cached by TanStack Query, and the changes that refresh them. */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { type ReadyImport, rowsToSave } from '../lib/csv-import';
-import { createMember, deleteMember, getMember, importTeam, listTeam, setMemberPublic, updateMember } from '../lib/team';
-import type { PictureChange } from '../lib/images';
+import { type ReadyImport, rowsToSave } from '../lib/csv/csv-import';
+import { createMember, deleteMember, getMember, importTeam, listTeam, setMemberPublic, updateMember } from '../lib/data/team';
+import type { PictureChange } from '../lib/ui/images';
 import type { MemberFields, TeamMember } from '../types/team';
 
 // Every team query starts with this key, so one invalidation refreshes the list and any open member.

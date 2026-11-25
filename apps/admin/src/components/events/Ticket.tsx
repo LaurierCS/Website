@@ -7,7 +7,7 @@
  */
 import { Calendar, Clock, ImageIcon, MapPin } from 'lucide-react';
 import type { ReactNode } from 'react';
-import { formatEventDay } from '../../lib/dates';
+import { formatEventDay } from '../../lib/time/dates';
 import type { EventStatus, TicketFace } from '../../types/event';
 import type { ImportKind } from '../ui/import-labels';
 import { Tag, type TagTone } from '../ui/Tag';

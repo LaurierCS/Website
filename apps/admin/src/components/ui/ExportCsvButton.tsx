@@ -3,8 +3,8 @@
  * list failed or hadn't arrived yet.
  */
 import { Download } from 'lucide-react';
-import type { CsvFile } from '../../lib/csv-formats';
-import { downloadFile } from '../../lib/download';
+import type { CsvFile } from '../../lib/csv/csv-formats';
+import { downloadFile } from '../../lib/other/download';
 import { Button } from './Button';
 
 type ExportCsvButtonProps = {

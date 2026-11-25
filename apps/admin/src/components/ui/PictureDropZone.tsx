@@ -5,7 +5,7 @@
 import { ImageIcon, Upload } from 'lucide-react';
 import type { DragEventHandler, ReactNode } from 'react';
 import { MASCOTS } from '../../assets/brand';
-import { IMAGE_RULES } from '../../lib/images';
+import { IMAGE_RULES } from '../../lib/ui/images';
 
 /** The drag handlers that make an element accept a dropped file. */
 export type DropTargetProps = {

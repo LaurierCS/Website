@@ -12,7 +12,7 @@ import { CheckingPanel, ExpiredPanel, GrantedPanel, JammedPanel, NotMemberPanel,
 import { Stamp } from '../components/ui/Stamp';
 import { useAccess, useSignIn, useSignOut } from '../hooks/useAuth';
 import { useMinimumWait } from '../hooks/useMinimumWait';
-import { messageFor } from '../lib/errors';
+import { messageFor } from '../lib/server/errors';
 import { PATHS } from '../paths';
 
 // A signed-in visitor's check often finishes in a blink; holding it briefly lets them see the pass being

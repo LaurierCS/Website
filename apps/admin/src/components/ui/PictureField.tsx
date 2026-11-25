@@ -6,7 +6,7 @@
  */
 import { RotateCw, Trash, Upload } from 'lucide-react';
 import { useState } from 'react';
-import { ACCEPTED_IMAGE_TYPES, type CheckedImage, checkImage, fileSize, IMAGE_RULES, type PictureChange } from '../../lib/images';
+import { ACCEPTED_IMAGE_TYPES, type CheckedImage, checkImage, fileSize, IMAGE_RULES, type PictureChange } from '../../lib/ui/images';
 import { Button } from './Button';
 import { buttonClasses } from './button-styles';
 import { FieldError } from './FieldError';

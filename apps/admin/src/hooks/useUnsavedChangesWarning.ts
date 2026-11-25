@@ -4,7 +4,7 @@
  */
 import { useEffect } from 'react';
 import { type Blocker, useBlocker } from 'react-router';
-import { savedNameFrom } from '../lib/saved-notice';
+import { savedNameFrom } from '../lib/ui/saved-notice';
 
 export function useUnsavedChangesWarning(hasChanges: boolean): Blocker {
   // Leaving right after a save carries the "saved" notice; that exit is never blocked.

@@ -2,8 +2,8 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import { App } from './App';
-import { loadConfig } from './lib/config';
-import { reloadForUpdate } from './lib/update-reload';
+import { loadConfig } from './lib/config/config';
+import { reloadForUpdate } from './lib/other/update-reload';
 import { SetupPage } from './pages/SetupPage';
 
 const root = document.getElementById('root');

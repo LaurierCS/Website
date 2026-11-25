@@ -1,15 +1,15 @@
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { UnavailableError } from '../../src/lib/errors';
-import { importEvents, listEvents } from '../../src/lib/events';
-import { importTeam, listTeam } from '../../src/lib/team';
+import { UnavailableError } from '../../src/lib/server/errors';
+import { importEvents, listEvents } from '../../src/lib/data/events';
+import { importTeam, listTeam } from '../../src/lib/data/team';
 import type { TeamMember } from '../../src/types/team';
 import { mockAccess, SAM_ADMIN } from '../mocks/auth';
 import { renderApp } from '../renderApp';
 
-vi.mock('../../src/lib/auth');
-vi.mock('../../src/lib/events');
-vi.mock('../../src/lib/team');
+vi.mock('../../src/lib/auth/auth');
+vi.mock('../../src/lib/data/events');
+vi.mock('../../src/lib/data/team');
 
 import { sampleEvent } from '../fixtures/events';
 

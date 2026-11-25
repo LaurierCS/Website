@@ -10,14 +10,14 @@ import { useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { useShownPicture } from '../../hooks/useShownPicture';
 import { useUnsavedChangesWarning } from '../../hooks/useUnsavedChangesWarning';
-import type { PictureChange } from '../../lib/images';
+import type { PictureChange } from '../../lib/ui/images';
 import {
   badgePreview,
   type ChangedMemberFields,
   type CheckedMemberForm,
   MemberFormSchema,
   type MemberFormValues,
-} from '../../lib/member-form';
+} from '../../lib/form/member-form';
 import { PATHS } from '../../paths';
 import { DEPARTMENTS } from '../../types/team';
 import { Button } from '../ui/Button';

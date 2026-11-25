@@ -1,14 +1,14 @@
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { cropToSquare } from '../../src/lib/crop-image';
-import { UnavailableError } from '../../src/lib/errors';
-import { createMember, getMember, listTeam, updateMember } from '../../src/lib/team';
+import { cropToSquare } from '../../src/lib/ui/crop-image';
+import { UnavailableError } from '../../src/lib/server/errors';
+import { createMember, getMember, listTeam, updateMember } from '../../src/lib/data/team';
 import type { TeamMember } from '../../src/types/team';
 import { mockAccess, SAM_ADMIN } from '../mocks/auth';
 import { renderApp } from '../renderApp';
 
-vi.mock('../../src/lib/auth');
-vi.mock('../../src/lib/team');
+vi.mock('../../src/lib/auth/auth');
+vi.mock('../../src/lib/data/team');
 // The test browser can't draw on a canvas, so the crop's export is faked here.
 vi.mock('../../src/lib/crop-image');
 // Nor can it load and measure a real image, which is how the cropper works out the square. This stand-in

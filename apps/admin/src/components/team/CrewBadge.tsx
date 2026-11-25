@@ -7,7 +7,7 @@
  */
 import { EyeOff } from 'lucide-react';
 import type { ReactNode } from 'react';
-import { accentFor } from '../../lib/accents';
+import { accentFor } from '../../lib/ui/accents';
 import type { BadgeFace } from '../../types/team';
 import { ACCENT_FILLS } from '../ui/accent-styles';
 import { IMPORT_LABELS, type ImportKind } from '../ui/import-labels';

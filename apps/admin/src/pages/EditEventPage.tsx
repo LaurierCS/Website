@@ -8,9 +8,9 @@ import { EventForm } from '../components/events/EventForm';
 import { Button } from '../components/ui/Button';
 import { FormPageHeading } from '../components/ui/FormPageHeading';
 import { useEvent, useUpdateEvent } from '../hooks/useEvents';
-import { messageFor } from '../lib/errors';
-import { changedEventFields, formValuesFor, unreadableTime } from '../lib/event-form';
-import { savedNotice } from '../lib/saved-notice';
+import { messageFor } from '../lib/server/errors';
+import { changedEventFields, formValuesFor, unreadableTime } from '../lib/form/event-form';
+import { savedNotice } from '../lib/ui/saved-notice';
 import { PATHS } from '../paths';
 import type { Event } from '../types/event';
 

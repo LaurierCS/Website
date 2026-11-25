@@ -1,12 +1,12 @@
 import { fireEvent, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { UnavailableError } from '../../src/lib/errors';
-import { createEvent, getEvent, listEvents, updateEvent } from '../../src/lib/events';
+import { UnavailableError } from '../../src/lib/server/errors';
+import { createEvent, getEvent, listEvents, updateEvent } from '../../src/lib/data/events';
 import { mockAccess, SAM_ADMIN } from '../mocks/auth';
 import { renderApp } from '../renderApp';
 
-vi.mock('../../src/lib/auth');
-vi.mock('../../src/lib/events');
+vi.mock('../../src/lib/auth/auth');
+vi.mock('../../src/lib/data/events');
 
 import { sampleEvent } from '../fixtures/events';
 

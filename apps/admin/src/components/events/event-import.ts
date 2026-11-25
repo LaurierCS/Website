@@ -2,8 +2,8 @@
  * How events read in a CSV import: an event's name, every field in its details, and its lines on the print
  * order. The ticket itself is `ImportTicket`.
  */
-import { shortEventDay } from '../../lib/dates';
-import { eventTimeLabel } from '../../lib/event-form';
+import { shortEventDay } from '../../lib/time/dates';
+import { eventTimeLabel } from '../../lib/form/event-form';
 import type { Event, EventFields } from '../../types/event';
 import type { FieldChange } from '../ui/FieldChanges';
 import type { ImportEntry, ImportView, OrderItem } from '../ui/import-view';

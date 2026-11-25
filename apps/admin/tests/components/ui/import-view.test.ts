@@ -1,5 +1,5 @@
 import { countOf, entriesOf, importSummary } from '../../../src/components/ui/import-view';
-import type { ReadyImport } from '../../../src/lib/csv-import';
+import type { ReadyImport } from '../../../src/lib/csv/csv-import';
 
 const EVENTS = { one: 'event', many: 'events' };
 

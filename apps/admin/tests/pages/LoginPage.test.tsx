@@ -1,13 +1,13 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { checkAccess, signIn, signOut } from '../../src/lib/auth';
-import { UnavailableError } from '../../src/lib/errors';
-import { listEvents } from '../../src/lib/events';
+import { checkAccess, signIn, signOut } from '../../src/lib/auth/auth';
+import { UnavailableError } from '../../src/lib/server/errors';
+import { listEvents } from '../../src/lib/data/events';
 import { mockAccess, SAM, SAM_ADMIN } from '../mocks/auth';
 import { renderApp } from '../renderApp';
 
-vi.mock('../../src/lib/auth');
-vi.mock('../../src/lib/events');
+vi.mock('../../src/lib/auth/auth');
+vi.mock('../../src/lib/data/events');
 
 describe('LoginPage', () => {
   it.each([
