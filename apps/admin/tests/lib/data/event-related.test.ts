@@ -61,12 +61,13 @@ describe('addRelated', () => {
 
 describe('deleteRelated', () => {
   it('deletes a related event link', async () => {
-    const eq = vi.fn(() => ({ eq: vi.fn(() => ({ select: vi.fn().mockResolvedValue(SAVED) })) }));
-    installV2Supabase({ event_related: { delete: vi.fn(() => eq) } });
+    const secondEq = vi.fn(() => ({ select: vi.fn().mockResolvedValue(SAVED) }));
+    const firstEq = vi.fn(() => ({ eq: secondEq }));
+    installV2Supabase({ event_related: { delete: vi.fn(() => ({ eq: firstEq })) } });
 
     await deleteRelated(EVENT_ID, RELATED_ID);
 
-    expect(eq).toHaveBeenCalledWith('event_id', EVENT_ID);
+    expect(firstEq).toHaveBeenCalledWith('event_id', EVENT_ID);
   });
 
   it('fails when delete fails', async () => {
@@ -82,7 +83,9 @@ describe('reorderRelated', () => {
       { ...RELATED, sortOrder: 0 },
       { ...RELATED, relatedId: '2d8b1e4f-9c6a-4f7d-8e5b-0c1d2e3f4g5h', sortOrder: 1 },
     ];
-    const update = vi.fn(() => ({ eq: vi.fn(() => ({}) ) }));
+    const secondEq = vi.fn().mockResolvedValue({ error: null });
+    const firstEq = vi.fn(() => ({ eq: secondEq }));
+    const update = vi.fn(() => ({ eq: firstEq }));
     installV2Supabase({ event_related: { update } });
 
     await reorderRelated(related);

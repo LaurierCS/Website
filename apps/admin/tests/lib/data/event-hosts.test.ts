@@ -7,8 +7,8 @@ vi.mock('../../../src/lib/server/supabase');
 
 const EVENT_ID = '0b6f9c2e-7a41-4d5b-8e3c-2f1a9b8c7d6e';
 const HOST_ID = '1c7a0d3f-8b52-4e6c-9f4d-3a2b1c0d9e8f';
-const TEAM_ID = '2d8b1e4f-9c6a-4f7d-8e5b-0c1d2e3f4g5h';
-const GUEST_ID = '3e9c2f5g-0d7b-4e8c-9f6d-1a2b3c4d5e6f';
+const TEAM_ID = '2d8b1e4f-9c6a-4f7d-8e5b-0c1d2e3f4e5f';
+const GUEST_ID = '3e9c2f5d-0d7b-4e8c-9f6d-1a2b3c4d5e6f';
 
 const TEAM_HOST_ROW = { id: HOST_ID, event_id: EVENT_ID, team_id: TEAM_ID, guest_id: null, sort_order: 0 };
 const GUEST_HOST_ROW = { id: HOST_ID, event_id: EVENT_ID, team_id: null, guest_id: GUEST_ID, sort_order: 0 };

@@ -6,8 +6,8 @@ import { listEvents } from '../../../src/lib/data/events';
 import { mockAccess, SAM, SAM_ADMIN } from '../../mocks/auth';
 import { renderApp } from '../../renderApp';
 
-vi.mock('../../../src/lib/auth');
-vi.mock('../../../src/lib/events');
+vi.mock('../../../src/lib/auth/auth');
+vi.mock('../../../src/lib/data/events');
 
 describe('RequireAdmin', () => {
   it('sends a signed-out visitor to the login page', async () => {
