@@ -23,12 +23,13 @@ Production and Preview).
 
 ## Database types
 
-`src/types/database.types.ts` is generated from the database, so queries on `events`, `team` and `admins` are
-typed. Never edit it by hand. Regenerate it after any schema change, from the repository root:
+`src/types/database.types.ts` is generated from the database, so queries on `events`, `team` and `admins` (in
+`public`) and on the redesign's `v2` tables are typed. Read v2 with `supabase.schema('v2').from('events')`.
+Never edit it by hand. Regenerate it after any schema change, from the repository root:
 
 ```powershell
 # Writes UTF-8 without a byte order mark (Out-File -Encoding utf8 would add one in Windows PowerShell).
-$types = npx supabase gen types typescript --project-id <project-ref> --schema public | Out-String
+$types = npx supabase gen types typescript --project-id <project-ref> --schema public,v2 | Out-String
 [IO.File]::WriteAllText("$PWD/apps/admin/src/types/database.types.ts", $types)
 ```
 
