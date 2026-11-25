@@ -14,6 +14,7 @@ the hosted project (`docs/redesign.md`).
 | `migrations/20261121090000_team_department_required.sql` | Every team member must have one of the seven departments |
 | `migrations/20261121200000_site_data_versions.sql` | A version number per area (`events`, `team`) that goes up on every change, read by the public site to keep its cache current and pushed to open tabs through Realtime |
 | `migrations/20261122120000_csv_import_functions.sql` | `import_events` and `import_team`: the admin's CSV import saves every new and changed row, or none of them, under the same row-level security as any other write |
+| `v2/` | The planned schema for the redesigned site, with its data move and storage. Not applied yet; see `v2/README.md` |
 | `functions/verify-member/` | Checks a signed-in person is in the LCS Discord server or LCS Notion workspace, and records it. A missing secret answers 503 and logs `verify-member.misconfigured` |
 
 Setting up auth, deploying the function (always with `--no-verify-jwt`) and the secrets it needs:
