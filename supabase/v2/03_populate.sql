@@ -71,11 +71,11 @@ on conflict (id) do update set
   location = excluded.location;
 
 -- Cover photos: each event's picture_url becomes its cover, at <event_id>/photos/<original file name> in the
--- event-media bucket. Only for events that don't have a cover in v2 yet, so a re-run never adds a second one.
+-- event-media bucket ("%20" in a name becomes "-", as 04 does). Only for events that don't have a cover in v2 yet, so a re-run never adds a second one.
 insert into v2.event_photos (event_id, path, is_cover, sort_order)
 select
   e.id,
-  e.id || '/photos/' || substring(e.picture_url from '/events-images/(.+)$'),
+  e.id || '/photos/' || replace(substring(e.picture_url from '/events-images/(.+)$'), '%20', '-'),
   true,
   0
 from public.events as e
