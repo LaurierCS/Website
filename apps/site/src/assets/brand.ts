@@ -3,6 +3,13 @@
  * is a file in this folder plus, at most, one entry here.
  */
 import type { ImageMetadata } from 'astro';
+import asterisk from './doodles/asterisk.svg';
+import brackets from './doodles/brackets.svg';
+import jumps from './doodles/jumps.svg';
+import loops from './doodles/loops.svg';
+import spark from './doodles/spark.svg';
+import star13 from './doodles/star-13.svg';
+import star4 from './doodles/star-4.svg';
 import coco from './mascots/coco.png';
 import doug from './mascots/doug.png';
 import dougSuit from './mascots/doug-suit.png';
@@ -31,6 +38,13 @@ export const DOUG_IN_A_SUIT = dougSuit;
 
 /** Each mascot on their own, small: their avatar in the about window's group chat, and stickers on event days. */
 export const MASCOT_FACES = { doug: dougFace, coco: cocoFace, krill: krillFace } as const;
+
+/**
+ * The brand doodles, from the Figma asset library, for the edges of each section (`components/ui/Doodles`).
+ * Drawn as inline SVGs, so they stay sharp at any size.
+ */
+export const DOODLES = { asterisk, brackets, jumps, loops, spark, star13, star4 } as const;
+export type DoodleName = keyof typeof DOODLES;
 
 export const OBJECTS = { paperPlane, plusBlock, sharedLaptop } as const;
 export type ObjectName = keyof typeof OBJECTS;
