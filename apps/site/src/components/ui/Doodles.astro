@@ -1,0 +1,33 @@
+---
+/**
+ * A section's doodles, behind its content in the empty edges of the screen: each turns slowly (or not) and drifts
+ * a little against the scroll. Where they go is data (`doodle-spots.ts`). The section around them must be
+ * `relative isolate`, so they sit behind its content but in front of the page's pattern. Only where the header
+ * has room for everything (`nav:`); a phone has no empty edges to put them in. They stop for reduced motion.
+ */
+import { DOODLES } from '../../assets/brand';
+import type { DoodleMotion, DoodleSpot } from './doodle-spots';
+
+type Props = { spots: readonly DoodleSpot[] };
+
+const { spots } = Astro.props;
+
+const TURNS: Readonly<Record<DoodleMotion, string>> = {
+  turn: 'animate-turn',
+  'turn-back': 'animate-turn-back',
+  still: '',
+};
+---
+
+<div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 hidden nav:block">
+  {
+    spots.map(({ doodle, place, size, motion }) => {
+      const Doodle = DOODLES[doodle];
+      return (
+        <div class="doodle-drift absolute" style={{ ...place, width: size }}>
+          <Doodle class:list={['h-auto w-full motion-reduce:animate-none', TURNS[motion]]} />
+        </div>
+      );
+    })
+  }
+</div>

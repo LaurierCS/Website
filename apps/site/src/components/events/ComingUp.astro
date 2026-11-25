@@ -1,8 +1,9 @@
 ---
 /**
  * The home page's "Coming up": this month's calendar beside the LCS ticket booth (the owl peeking out from behind
- * it) and the next three events as ticket stubs. When it comes into view the event days light up with their
- * mascots' stickers, the booth prints the tickets onto the floor, and the next one gets stamped "Next up".
+ * it, popping up when you point at the booth) and the next three events as ticket stubs. When it comes into view
+ * the event days light up with their mascots' stickers, the booth prints the tickets onto the floor, and the next
+ * one gets stamped "Next up".
  * Pointing at a ticket lifts its day, and pointing at a day lifts its ticket (`scripts/coming-up.ts`). With
  * nothing coming up, the booth makes way for a note on where to hear about the next one.
  */
@@ -17,6 +18,8 @@ import { dayMarks } from './day-marks';
 import { SHOWN_TICKETS, TICKET_ACCENTS } from './event-accents';
 import EventTicket from './EventTicket.astro';
 import MonthCalendar from './MonthCalendar.astro';
+import { DOODLE_SPOTS } from '../ui/doodle-spots';
+import Doodles from '../ui/Doodles.astro';
 
 type Props = { events: readonly ClubEvent[]; upcoming: readonly ClubEvent[]; today: IsoDate };
 
@@ -29,7 +32,8 @@ const instagram = socialLink('instagram');
   Clipped at the sides: the "Next up" stamp waits big and unseen before it comes down, and on a phone it would
   otherwise reach past the screen's edge and widen the page.
 */}
-<coming-up class="group block overflow-x-clip">
+<coming-up class="group relative isolate block overflow-x-clip">
+  <Doodles spots={DOODLE_SPOTS.events} />
   <section
     id="events"
     aria-labelledby="coming-up-title"
@@ -52,15 +56,21 @@ const instagram = socialLink('instagram');
       {
         tickets.length > 0 ? (
           <div class="flex flex-col">
-            <div class="relative z-10" aria-hidden="true">
-              {/* Drawn before the booth's front, so the front hides everything below her shoulders. */}
-              <Image
-                src={BOOTH_OWL}
-                alt=""
-                width={96}
-                densities={[1, 2]}
-                class="absolute right-8 bottom-6 h-auto w-18 -rotate-4 nav:right-12 nav:w-22"
-              />
+            <div class="group/booth relative z-10" aria-hidden="true">
+              {/*
+                Drawn before the booth's front, so the front hides everything below her shoulders. Now and then
+                she ducks down behind it to check the paper; point at the booth and she pops up to look at you,
+                and jumps while you press.
+              */}
+              <div class="absolute right-8 bottom-6 w-18 animate-owl-check group-hover/booth:animate-none motion-reduce:animate-none nav:right-12 nav:w-22">
+                <Image
+                  src={BOOTH_OWL}
+                  alt=""
+                  width={96}
+                  densities={[1, 2]}
+                  class="h-auto w-full -rotate-4 transition-[translate,rotate] duration-(--dur-base) ease-(--ease-spring) group-hover/booth:-translate-y-6 group-hover/booth:rotate-3 group-active/booth:-translate-y-10 motion-reduce:transition-none"
+                />
+              </div>
               <div data-booth class="relative rounded-2xl border-2 border-line-quiet bg-raised px-5 pt-3 pb-4">
                 <p class="font-display text-xs font-extrabold tracking-label text-yellow uppercase">
                   LCS ticket booth · now printing

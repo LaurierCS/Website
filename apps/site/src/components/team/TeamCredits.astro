@@ -19,6 +19,8 @@ import CrewSheet from './CrewSheet.astro';
 import JoinCard from './JoinCard.astro';
 import PrintZone from './PrintZone.astro';
 import RollingCredits from './RollingCredits.astro';
+import { DOODLE_SPOTS } from '../ui/doodle-spots';
+import Doodles from '../ui/Doodles.astro';
 
 type Props = { copy: typeof TEAM; crews: readonly Crew[] };
 
@@ -33,7 +35,8 @@ const people = new Set(crews.flatMap((crew) => crew.members.map((member) => memb
 ---
 
 {/* Clipped at the sides, so a tilted print at the edge of its column never widens the page. */}
-<team-credits class="group block overflow-x-clip">
+<team-credits class="group relative isolate block overflow-x-clip">
+  <Doodles spots={DOODLE_SPOTS.team} />
   <section id="team" aria-labelledby="team-title" class="mx-auto max-w-(--max) px-4 py-16 nav:px-16 nav:py-24">
     <div
       class="grid grid-cols-1 gap-12 group-data-rolling:grid-cols-[minmax(0,1fr)_var(--credits-width-stacked)_minmax(0,1fr)] group-data-rolling:grid-rows-[auto_var(--credits-height)_auto] group-data-rolling:gap-x-6 group-data-rolling:gap-y-10 xl:group-data-rolling:h-(--credits-height) xl:group-data-rolling:grid-cols-[var(--credits-aside)_var(--credits-width)_minmax(0,1fr)] xl:group-data-rolling:grid-rows-[auto_minmax(0,1fr)_auto] xl:group-data-rolling:gap-x-10 xl:group-data-rolling:gap-y-6"
