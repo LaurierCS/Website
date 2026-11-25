@@ -5,9 +5,9 @@ import { listTeam } from '../../../src/lib/data/team';
 import { mockAccess, SAM_ADMIN } from '../../mocks/auth';
 import { renderApp } from '../../renderApp';
 
-vi.mock('../../../src/lib/auth');
-vi.mock('../../../src/lib/events');
-vi.mock('../../../src/lib/team');
+vi.mock('../../../src/lib/auth/auth');
+vi.mock('../../../src/lib/data/events');
+vi.mock('../../../src/lib/data/team');
 
 function sectionLink(name: 'Events' | 'Team') {
   return screen.getByRole('link', { name });

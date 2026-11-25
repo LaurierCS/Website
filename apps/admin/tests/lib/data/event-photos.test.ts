@@ -125,12 +125,16 @@ describe('deletePhoto', () => {
 
 describe('setCover', () => {
   it('marks a photo as cover and unmarks the previous one', async () => {
-    const update = vi.fn(() => ({ eq: vi.fn(() => ({ eq: vi.fn(() => ({}) ) })) }));
+    const secondEq = vi.fn(() => ({ select: vi.fn().mockResolvedValue(SAVED) }));
+    const firstEq = vi.fn(() => ({ eq: vi.fn().mockResolvedValue({ error: null }) }));
+    const update = vi.fn()
+      .mockReturnValueOnce({ eq: firstEq })
+      .mockReturnValueOnce({ eq: secondEq });
     installV2Supabase({ event_photos: { update } });
 
     await setCover(EVENT_ID, PHOTO_ID);
 
-    expect(update).toHaveBeenCalled();
+    expect(update).toHaveBeenCalledTimes(2);
   });
 });
 

@@ -9,7 +9,7 @@ import { renderApp } from '../renderApp';
 
 vi.mock('../../src/lib/auth/auth');
 vi.mock('../../src/lib/data/team');
-vi.mock('../../src/lib/download');
+vi.mock('../../src/lib/other/download');
 
 const SAM: TeamMember = {
   id: '6f1c2b8e-2d1a-4c5e-9b7f-0a1b2c3d4e5f',

@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { getSupabase } from '../../../src/lib/server/supabase';
 
 const STORAGE_BASE = 'https://lcs.supabase.co/storage/v1/object/public';

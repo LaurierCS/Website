@@ -13,7 +13,7 @@ vi.mock('../../../src/lib/server/storage', async (importOriginal) => ({
 }));
 
 const GOOD_ROW = {
-  id: '1b7a2c3d-4e5f-6789-0abc-def012345678',
+  id: '1c7a0d3f-8b52-4e6c-9f4d-3a2b1c0d9e8f',
   name: 'Jordan Smith',
   title: 'Guest Speaker',
   picture_path: 'jordan.jpg',
@@ -146,7 +146,7 @@ describe('updateGuest', () => {
 
     await updateGuest(GUEST, { title: 'New Title' }, KEEP);
 
-    expect(update).toHaveBeenCalledWith({ name: undefined, title: 'New Title', link_url: undefined });
+    expect(update).toHaveBeenCalledWith({ name: undefined, title: 'New Title', link_url: null });
     expect(uploadImage).not.toHaveBeenCalled();
   });
 

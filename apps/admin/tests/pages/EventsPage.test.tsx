@@ -8,7 +8,7 @@ import { renderApp } from '../renderApp';
 
 vi.mock('../../src/lib/auth/auth');
 vi.mock('../../src/lib/data/events');
-vi.mock('../../src/lib/download');
+vi.mock('../../src/lib/other/download');
 
 import { sampleEvent } from '../fixtures/events';
 

@@ -1,5 +1,5 @@
 /**
- * Test answers for `lib/auth`. A test file calls `vi.mock('…/lib/auth')` first, then `mockAccess(...)` to set what
+ * Test answers for `lib/auth`. A test file calls `vi.mock('…/lib/auth/auth')` first, then `mockAccess(...)` to set what
  * the access check returns (or throws).
  */
 import { checkAccess, onSignInChange, signIn, signOut } from '../../src/lib/auth/auth';

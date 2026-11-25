@@ -10,7 +10,7 @@ import { renderApp } from '../renderApp';
 vi.mock('../../src/lib/auth/auth');
 vi.mock('../../src/lib/data/team');
 // The test browser can't draw on a canvas, so the crop's export is faked here.
-vi.mock('../../src/lib/crop-image');
+vi.mock('../../src/lib/ui/crop-image');
 // Nor can it load and measure a real image, which is how the cropper works out the square. This stand-in
 // reports a fixed square when its button is pressed, the way the real one does once the photo has loaded.
 // The square is written out here because a mock can't use the test file's constants; it matches `SQUARE`.
