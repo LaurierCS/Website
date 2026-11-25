@@ -37,7 +37,6 @@ const REMOVE: PictureChange = { kind: 'remove' };
 
 const SAVED = { data: [{ id: GUEST.id }], error: null };
 const FAILED = { data: null, error: { message: 'boom' } };
-const NOTHING_SAVED = { data: [], error: null };
 
 beforeEach(() => {
   vi.mocked(uploadImage).mockResolvedValue(NEW_PATH);

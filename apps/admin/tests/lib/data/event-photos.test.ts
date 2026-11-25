@@ -1,6 +1,5 @@
 import { UnavailableError } from '../../../src/lib/server/errors';
 import { addPhoto, deletePhoto, getPhoto, listPhotos, reorderPhotos, setCover, updatePhoto } from '../../../src/lib/data/event-photos';
-import type { PictureChange } from '../../../src/lib/ui/images';
 import { BUCKETS, removeImage, uploadImage } from '../../../src/lib/server/storage';
 import type { EventPhoto } from '../../../src/types/event-photo';
 import { installV2Supabase, STORAGE_BASE } from '../server/supabase-v2-mock';
