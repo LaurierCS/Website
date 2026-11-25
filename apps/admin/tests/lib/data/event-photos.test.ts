@@ -1,0 +1,151 @@
+import { UnavailableError } from '../../../src/lib/server/errors';
+import { addPhoto, deletePhoto, getPhoto, listPhotos, reorderPhotos, setCover, updatePhoto } from '../../../src/lib/data/event-photos';
+import type { PictureChange } from '../../../src/lib/ui/images';
+import { BUCKETS, removeImage, uploadImage } from '../../../src/lib/server/storage';
+import type { EventPhoto } from '../../../src/types/event-photo';
+import { installV2Supabase, STORAGE_BASE } from '../server/supabase-v2-mock';
+
+vi.mock('../../../src/lib/server/supabase');
+vi.mock('../../../src/lib/server/storage', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('../../../src/lib/server/storage')>()),
+  uploadImage: vi.fn(),
+  removeImage: vi.fn(),
+}));
+
+const EVENT_ID = '0b6f9c2e-7a41-4d5b-8e3c-2f1a9b8c7d6e';
+const PHOTO_ID = '1c7a0d3f-8b52-4e6c-9f4d-3a2b1c0d9e8f';
+const PHOTO_PATH = `${EVENT_ID}/photos/photo1.jpg`;
+
+const GOOD_ROW = {
+  id: PHOTO_ID,
+  event_id: EVENT_ID,
+  path: PHOTO_PATH,
+  alt: 'Event photo',
+  is_cover: true,
+  sort_order: 0,
+};
+
+const PHOTO: EventPhoto = {
+  id: PHOTO_ID,
+  eventId: EVENT_ID,
+  path: PHOTO_PATH,
+  pictureUrl: `${STORAGE_BASE}/${BUCKETS.events}/${PHOTO_PATH}`,
+  alt: 'Event photo',
+  isCover: true,
+  sortOrder: 0,
+};
+
+const NEW_IMAGE = { file: new File(['x'], 'photo.jpg', { type: 'image/jpeg' }), extension: 'jpg' };
+const SAVED = { data: [{ id: PHOTO_ID }], error: null };
+const FAILED = { data: null, error: { message: 'boom' } };
+
+beforeEach(() => {
+  vi.mocked(uploadImage).mockResolvedValue(PHOTO_PATH);
+});
+
+describe('listPhotos', () => {
+  it('returns all photos for an event in sort order', async () => {
+    const order = vi.fn().mockResolvedValue({ data: [GOOD_ROW], error: null });
+    installV2Supabase({ event_photos: { select: vi.fn(() => ({ eq: vi.fn(() => ({ order })) })) } });
+
+    expect(await listPhotos(EVENT_ID)).toEqual([PHOTO]);
+  });
+
+  it('returns empty list for invalid event id', async () => {
+    expect(await listPhotos('not-a-uuid')).toEqual([]);
+  });
+
+  it('reports a failed read as unavailable', async () => {
+    const order = vi.fn().mockResolvedValue(FAILED);
+    installV2Supabase({ event_photos: { select: vi.fn(() => ({ eq: vi.fn(() => ({ order })) })) } });
+
+    await expect(listPhotos(EVENT_ID)).rejects.toBeInstanceOf(UnavailableError);
+  });
+});
+
+describe('getPhoto', () => {
+  it('returns a photo by id', async () => {
+    installV2Supabase({
+      event_photos: {
+        select: vi.fn(() => ({
+          eq: vi.fn(() => ({ maybeSingle: vi.fn().mockResolvedValue({ data: GOOD_ROW, error: null }) })),
+        })),
+      },
+    });
+
+    expect(await getPhoto(PHOTO_ID)).toEqual(PHOTO);
+  });
+
+  it('returns null when photo does not exist', async () => {
+    installV2Supabase({
+      event_photos: { select: vi.fn(() => ({ eq: vi.fn(() => ({ maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }) })) })) },
+    });
+
+    expect(await getPhoto(PHOTO_ID)).toBeNull();
+  });
+});
+
+describe('addPhoto', () => {
+  it('uploads photo and saves it', async () => {
+    const insert = vi.fn().mockResolvedValue({ error: null });
+    const select = vi.fn(() => ({ eq: vi.fn(() => ({ order: vi.fn(() => ({ limit: vi.fn().mockResolvedValue({ data: [], error: null }) })) })) }));
+    installV2Supabase({ event_photos: { insert, select } });
+
+    await addPhoto(EVENT_ID, { kind: 'replace', image: NEW_IMAGE });
+
+    expect(uploadImage).toHaveBeenCalledWith(BUCKETS.events, NEW_IMAGE, `${EVENT_ID}/photos`);
+    expect(insert).toHaveBeenCalled();
+  });
+
+  it('fails without a picture', async () => {
+    await expect(addPhoto(EVENT_ID, { kind: 'keep' })).rejects.toThrow();
+  });
+});
+
+describe('updatePhoto', () => {
+  it('updates the alt text', async () => {
+    const update = vi.fn(() => ({ eq: vi.fn(() => ({ select: vi.fn().mockResolvedValue(SAVED) })) }));
+    installV2Supabase({ event_photos: { update } });
+
+    await updatePhoto(PHOTO, { alt: 'New alt text' });
+
+    expect(update).toHaveBeenCalledWith({ alt: 'New alt text' });
+  });
+});
+
+describe('deletePhoto', () => {
+  it('deletes a photo and removes its file', async () => {
+    const eq = vi.fn(() => ({ select: vi.fn().mockResolvedValue(SAVED) }));
+    installV2Supabase({ event_photos: { delete: vi.fn(() => ({ eq })) } });
+
+    await deletePhoto(PHOTO);
+
+    expect(removeImage).toHaveBeenCalledWith(BUCKETS.events, PHOTO_PATH);
+  });
+});
+
+describe('setCover', () => {
+  it('marks a photo as cover and unmarks the previous one', async () => {
+    const update = vi.fn(() => ({ eq: vi.fn(() => ({ eq: vi.fn(() => ({}) ) })) }));
+    installV2Supabase({ event_photos: { update } });
+
+    await setCover(EVENT_ID, PHOTO_ID);
+
+    expect(update).toHaveBeenCalled();
+  });
+});
+
+describe('reorderPhotos', () => {
+  it('updates sort orders for all photos', async () => {
+    const photos: EventPhoto[] = [
+      { ...PHOTO, sortOrder: 0 },
+      { ...PHOTO, id: '2d8b1e4f-9c6a-4f7d-8e5b-0c1d2e3f4g5h', sortOrder: 1 },
+    ];
+    const update = vi.fn(() => ({ eq: vi.fn(() => ({}) ) }));
+    installV2Supabase({ event_photos: { update } });
+
+    await reorderPhotos(photos);
+
+    expect(update).toHaveBeenCalledTimes(2);
+  });
+});
