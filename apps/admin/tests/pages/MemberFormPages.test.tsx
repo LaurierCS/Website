@@ -37,6 +37,7 @@ const SAM: TeamMember = {
   role: 'VP Engineering',
   department: 'Engineering',
   isPublic: true,
+  photoPath: null,
   pictureUrl: null,
   githubUrl: 'https://github.com/samrivera',
   linkedinUrl: null,

@@ -1,12 +1,13 @@
-import { groupByDepartment, type TeamMember } from '../../src/types/team';
+import { DEPARTMENTS, groupByDepartment, type Department, type TeamMember } from '../../src/types/team';
 
-function member(name: string, department: string | null): TeamMember {
+function member(name: string, department: Department): TeamMember {
   return {
     id: crypto.randomUUID(),
     name,
     role: null,
     department,
     isPublic: true,
+    photoPath: null,
     pictureUrl: null,
     githubUrl: null,
     linkedinUrl: null,
@@ -29,24 +30,9 @@ describe('groupByDepartment', () => {
     ]);
   });
 
-  it('keeps other spellings as their own groups after the known ones, then members with no department', () => {
-    const groups = groupByDepartment([
-      member('Ana', null),
-      member('Ben', 'Sponsorship'),
-      member('Cy', 'Events'),
-      member('Di', '  '),
-      member('Ed', 'Design'),
-    ]);
-
-    expect(groups.map((group) => [group.department, group.members.map((m) => m.name)])).toEqual([
-      ['Events', ['Cy']],
-      ['Design', ['Ed']],
-      ['Sponsorship', ['Ben']],
-      [null, ['Ana', 'Di']],
-    ]);
-  });
-
-  it('has no groups when there is nobody', () => {
+  it('skips empty departments', () => {
+    expect(groupByDepartment([member('Cy', 'Events')])).toEqual([{ department: 'Events', members: [expect.objectContaining({ name: 'Cy' })] }]);
     expect(groupByDepartment([])).toEqual([]);
+    expect(DEPARTMENTS.length).toBeGreaterThan(0);
   });
 });

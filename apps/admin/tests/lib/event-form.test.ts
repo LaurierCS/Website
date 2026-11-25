@@ -6,8 +6,14 @@ const EVENT: Event = {
   title: 'CP312 Midterm Review',
   description: null,
   date: '2026-11-12',
-  time: '7:30PM',
+  category: 'review',
+  startTime: '19:30:00',
+  endTime: null,
   location: 'N2085',
+  willStream: false,
+  streamUrl: null,
+  coverPath: null,
+  coverPhotoId: null,
   pictureUrl: null,
 };
 
@@ -23,34 +29,38 @@ describe('the event form', () => {
   });
 
   it('leaves a time it cannot read out of the picker and reports it as written', () => {
-    const tbd = { ...EVENT, time: 'TBD' };
+    const odd = { ...EVENT, startTime: '25:99:00' };
 
-    expect(formValuesFor(tbd).time).toBe('');
-    expect(unreadableTime(tbd)).toBe('TBD');
+    expect(formValuesFor(odd).time).toBe('');
+    expect(unreadableTime(odd)).toBe('25:99:00');
     expect(unreadableTime(EVENT)).toBeNull();
   });
 
-  it('saves times like 7:30PM and empty text as no value', () => {
+  it('saves times as v2 start_time and empty text as no value', () => {
     expect(toEventFields({ title: ' Hack Night ', date: '2026-12-01', time: '', location: ' ', description: '' })).toEqual({
       title: 'Hack Night',
       date: '2026-12-01',
-      time: null,
+      category: 'social',
+      startTime: null,
+      endTime: null,
       location: null,
       description: null,
+      willStream: false,
+      streamUrl: null,
     });
   });
 
   it('keeps only the fields that were changed', () => {
     const values = { ...formValuesFor(EVENT), location: 'BA201' };
 
-    expect(changedEventFields(values, { location: true })).toEqual({ location: 'BA201' });
-    expect(changedEventFields(values, {})).toEqual({});
+    expect(changedEventFields(values, { location: true }, EVENT.category)).toEqual({ location: 'BA201' });
+    expect(changedEventFields(values, {}, EVENT.category)).toEqual({});
   });
 });
 
 describe('the ticket preview', () => {
   const TODAY = '2026-11-20';
-  const PICTURE = 'https://lcs.supabase.co/storage/v1/object/public/events-images/hack.png';
+  const PICTURE = 'https://lcs.supabase.co/storage/v1/object/public/event-media/hack.png';
 
   it('shows the event as it will be saved', () => {
     const values = { title: ' Hack Night ', date: '2026-12-01', time: '19:30', location: ' BA110 ', description: '' };
@@ -74,7 +84,7 @@ describe('the ticket preview', () => {
   });
 
   it('keeps a saved time the picker cannot show while the time is left empty', () => {
-    const values = formValuesFor({ ...EVENT, time: 'TBD' });
+    const values = formValuesFor({ ...EVENT, startTime: null });
 
     expect(ticketPreview(values, 'TBD', null, TODAY).face.time).toBe('TBD');
   });

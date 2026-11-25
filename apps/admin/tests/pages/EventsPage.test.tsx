@@ -3,7 +3,6 @@ import userEvent from '@testing-library/user-event';
 import { downloadFile } from '../../src/lib/download';
 import { UnavailableError } from '../../src/lib/errors';
 import { deleteEvent, listEvents } from '../../src/lib/events';
-import type { Event } from '../../src/types/event';
 import { mockAccess, SAM_ADMIN } from '../mocks/auth';
 import { renderApp } from '../renderApp';
 
@@ -11,35 +10,29 @@ vi.mock('../../src/lib/auth');
 vi.mock('../../src/lib/events');
 vi.mock('../../src/lib/download');
 
-const HACK_NIGHT: Event = {
+import { sampleEvent } from '../fixtures/events';
+
+const HACK_NIGHT = sampleEvent({
   id: '1c7a0d3f-8b52-4e6c-9f4d-3a2b1c0d9e8f',
   title: 'Hack Night',
-  description: null,
   date: '2026-11-20',
-  time: null,
-  location: null,
-  pictureUrl: null,
-};
+});
 
-const CP312_REVIEW: Event = {
+const CP312_REVIEW = sampleEvent({
   id: '0b6f9c2e-7a41-4d5b-8e3c-2f1a9b8c7d6e',
   title: 'CP312 Midterm Review',
-  description: null,
   date: '2026-11-12',
-  time: '7:30PM',
+  startTime: '19:30:00',
   location: 'N2085',
-  pictureUrl: 'https://lcs.supabase.co/storage/v1/object/public/events-images/cp312.png',
-};
+  category: 'review',
+  pictureUrl: 'https://lcs.supabase.co/storage/v1/object/public/event-media/cp312.png',
+});
 
-const FINAL_REVIEW: Event = {
+const FINAL_REVIEW = sampleEvent({
   id: '5d2e8a1b-3c4f-4a6b-9d7e-1f2a3b4c5d6e',
   title: 'CP312 Final Review',
-  description: null,
   date: '2026-12-03',
-  time: null,
-  location: null,
-  pictureUrl: null,
-};
+});
 
 /** The list item for an event, found by its title. */
 function rowFor(title: string) {

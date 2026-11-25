@@ -67,7 +67,7 @@ function EditForm({ event }: { event: Event }) {
       error={update.isError ? messageFor(update.error) : null}
       onSave={(values, changed, picture) =>
         update.mutate(
-          { changes: changedEventFields(values, changed), picture },
+          { changes: changedEventFields(values, changed, event.category), picture },
           { onSuccess: () => setSavedTitle(values.title) },
         )
       }

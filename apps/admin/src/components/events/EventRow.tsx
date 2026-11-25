@@ -5,6 +5,7 @@ import { Pencil, Trash } from 'lucide-react';
 import { useState } from 'react';
 import { generatePath } from 'react-router';
 import { useDeleteEvent } from '../../hooks/useEvents';
+import { toTicketFace } from '../../lib/event-form';
 import { messageFor } from '../../lib/errors';
 import { PATHS } from '../../paths';
 import type { Event, EventStatus } from '../../types/event';
@@ -25,7 +26,7 @@ export function EventRow({ event, status }: { event: Event; status: EventStatus 
   return (
     <>
       <Ticket
-        face={event}
+        face={toTicketFace(event)}
         status={status}
         actions={
           <div className="col-span-2 grid grid-cols-2 gap-2.5 @3xl:col-span-1 @3xl:flex">

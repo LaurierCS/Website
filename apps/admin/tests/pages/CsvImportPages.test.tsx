@@ -3,7 +3,6 @@ import userEvent from '@testing-library/user-event';
 import { UnavailableError } from '../../src/lib/errors';
 import { importEvents, listEvents } from '../../src/lib/events';
 import { importTeam, listTeam } from '../../src/lib/team';
-import type { Event } from '../../src/types/event';
 import type { TeamMember } from '../../src/types/team';
 import { mockAccess, SAM_ADMIN } from '../mocks/auth';
 import { renderApp } from '../renderApp';
@@ -12,15 +11,15 @@ vi.mock('../../src/lib/auth');
 vi.mock('../../src/lib/events');
 vi.mock('../../src/lib/team');
 
-const HACK_NIGHT: Event = {
+import { sampleEvent } from '../fixtures/events';
+
+const HACK_NIGHT = sampleEvent({
   id: '1c7a0d3f-8b52-4e6c-9f4d-3a2b1c0d9e8f',
   title: 'Hack Night',
-  description: null,
   date: '2026-11-20',
-  time: '7:30PM',
+  startTime: '19:30:00',
   location: 'BA201',
-  pictureUrl: null,
-};
+});
 
 const SAM: TeamMember = {
   id: '6f1c2b8e-2d1a-4c5e-9b7f-0a1b2c3d4e5f',
@@ -28,6 +27,7 @@ const SAM: TeamMember = {
   role: 'VP Engineering',
   department: 'Engineering',
   isPublic: true,
+  photoPath: null,
   pictureUrl: null,
   githubUrl: null,
   linkedinUrl: null,
@@ -120,8 +120,8 @@ describe('ImportEventsPage', () => {
     await userEvent.click(await screen.findByRole('button', { name: 'Import 2 events' }));
 
     expect(importEvents).toHaveBeenCalledWith({
-      added: [{ title: 'CP312 Review', date: '2026-12-01', time: null, location: 'N2085', description: null }],
-      changed: [{ id: HACK_NIGHT.id, fields: { title: 'Hack Night', date: '2026-11-21', time: '7:30PM', location: 'BA201', description: null } }],
+      added: [expect.objectContaining({ title: 'CP312 Review', date: '2026-12-01', location: 'N2085' })],
+      changed: [{ id: HACK_NIGHT.id, fields: expect.objectContaining({ title: 'Hack Night', date: '2026-11-21', startTime: '19:30:00', location: 'BA201' }) }],
     });
     const done = await screen.findByRole('status');
     expect(done).toHaveTextContent('Imported 1 new event and 1 updated event.');

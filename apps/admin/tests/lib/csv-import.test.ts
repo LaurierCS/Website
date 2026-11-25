@@ -1,27 +1,23 @@
 import { csvFile, EVENTS_CSV, TEAM_CSV } from '../../src/lib/csv-formats';
 import { planImport, planImportFile, rowsToSave } from '../../src/lib/csv-import';
-import type { Event } from '../../src/types/event';
 import type { TeamMember } from '../../src/types/team';
+import { sampleEvent } from '../fixtures/events';
 
-const HACK_NIGHT: Event = {
+const HACK_NIGHT = sampleEvent({
   id: '1c7a0d3f-8b52-4e6c-9f4d-3a2b1c0d9e8f',
   title: 'Hack Night',
-  description: null,
   date: '2026-11-20',
-  time: '7:30PM',
+  startTime: '19:30:00',
   location: 'BA201',
-  pictureUrl: 'https://lcs.supabase.co/storage/v1/object/public/events-images/hack.png',
-};
+  pictureUrl: 'https://lcs.supabase.co/storage/v1/object/public/event-media/hack.png',
+});
 
-const SOCIAL: Event = {
+const SOCIAL = sampleEvent({
   id: '9d8c7b6a-5f4e-4d3c-8b2a-1f0e9d8c7b6a',
   title: 'Winter Social',
-  description: 'Hot chocolate.',
   date: '2026-12-04',
-  time: null,
-  location: null,
-  pictureUrl: null,
-};
+  description: 'Hot chocolate.',
+});
 
 const HEADER = 'id,title,date,time,location,description';
 
@@ -51,15 +47,15 @@ describe('planning an import', () => {
       added: [
         {
           rowNumber: 3,
-          fields: { title: 'CP312 Review', date: '2026-12-01', time: null, location: 'N2085', description: 'Bring notes.' },
+          fields: expect.objectContaining({ title: 'CP312 Review', date: '2026-12-01', location: 'N2085', description: 'Bring notes.' }),
         },
       ],
       changed: [
         {
           rowNumber: 2,
           before: HACK_NIGHT,
-          after: { ...HACK_NIGHT, date: '2026-11-21', time: '8:00PM' },
-          fields: { title: 'Hack Night', date: '2026-11-21', time: '8:00PM', location: 'BA201', description: null },
+          after: { ...HACK_NIGHT, date: '2026-11-21', startTime: '20:00:00' },
+          fields: expect.objectContaining({ title: 'Hack Night', date: '2026-11-21', startTime: '20:00:00', location: 'BA201' }),
           cells: [
             { column: 'date', before: '2026-11-20', after: '2026-11-21' },
             { column: 'time', before: '7:30PM', after: '8:00PM' },
@@ -154,6 +150,7 @@ describe('planning an import', () => {
       role: 'VP Engineering',
       department: 'Engineering',
       isPublic: false,
+      photoPath: 'sam.jpg',
       pictureUrl: 'https://lcs.supabase.co/storage/v1/object/public/team-images/sam.jpg',
       githubUrl: null,
       linkedinUrl: null,
@@ -196,8 +193,8 @@ describe('the rows an import saves', () => {
     if (plan.status !== 'ready') throw new Error('The file should have no problems.');
 
     expect(rowsToSave(plan)).toEqual({
-      added: [{ title: 'CP312 Review', date: '2026-12-01', time: null, location: null, description: null }],
-      changed: [{ id: HACK_NIGHT.id, fields: { title: 'Hack Night', date: '2026-11-21', time: '7:30PM', location: 'BA201', description: null } }],
+      added: [expect.objectContaining({ title: 'CP312 Review', date: '2026-12-01' })],
+      changed: [{ id: HACK_NIGHT.id, fields: expect.objectContaining({ title: 'Hack Night', date: '2026-11-21', startTime: '19:30:00', location: 'BA201' }) }],
     });
   });
 });

@@ -1,8 +1,10 @@
 /**
- * An LCS event as the admin works with it, matching today's `events` table. New fields (category, series) are
- * added here when their migration lands.
+ * An LCS event as the admin works with it, matching the v2 `events` table and its cover photo.
  */
 import { z } from 'zod';
+
+export const EVENT_CATEGORIES = ['review', 'social', 'career', 'workshop', 'hackathon', 'meet_the_pros'] as const;
+export type EventCategory = (typeof EVENT_CATEGORIES)[number];
 
 export const EventSchema = z.object({
   id: z.uuid(),
@@ -10,18 +12,27 @@ export const EventSchema = z.object({
   description: z.string().nullable(),
   /** The day, as `YYYY-MM-DD` in the club's time zone. */
   date: z.iso.date('Pick the day of the event.'),
-  /** Free text such as "7:30PM", as entered today. */
-  time: z.string().nullable(),
+  category: z.enum(EVENT_CATEGORIES),
+  /** PostgreSQL `time`, e.g. `17:30:00`. */
+  startTime: z.string().nullable(),
+  endTime: z.string().nullable(),
   location: z.string().nullable(),
+  willStream: z.boolean(),
+  streamUrl: z.url().nullable(),
+  /** Path in the `event-media` bucket for the cover photo, when there is one. */
+  coverPath: z.string().nullable(),
+  coverPhotoId: z.uuid().nullable(),
   pictureUrl: z.url().nullable(),
 });
 export type Event = Readonly<z.infer<typeof EventSchema>>;
 
-/** The parts of an event an exec types in. Their names match the `events` columns, so they are saved as they are. */
-export type EventFields = Pick<Event, 'title' | 'date' | 'time' | 'location' | 'description'>;
+/** The parts of an event an exec types in. Their names mirror the app's fields, then map to v2 columns in `events.ts`. */
+export type EventFields = Readonly<
+  Pick<Event, 'title' | 'date' | 'category' | 'startTime' | 'endTime' | 'location' | 'description' | 'willStream' | 'streamUrl'>
+>;
 
 /** What an event's ticket shows. A ticket for an event still being filled in may not have a day yet. */
-export type TicketFace = Readonly<Pick<Event, 'title' | 'time' | 'location' | 'pictureUrl'> & { date: string | null }>;
+export type TicketFace = Readonly<Pick<Event, 'title' | 'location' | 'pictureUrl'> & { date: string | null; time: string | null }>;
 
 /**
  * Whether an event, saved or about to be, is today or later. `today` is `YYYY-MM-DD` in the club's zone
