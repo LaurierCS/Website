@@ -11,8 +11,8 @@ import { FormPageHeading } from '../components/ui/FormPageHeading';
 import type { ImportView } from '../components/ui/import-view';
 import { StateBlock } from '../components/ui/StateBlock';
 import { useEvents, useImportEvents } from '../hooks/useEvents';
-import { EVENTS_CSV } from '../lib/csv-formats';
-import { messageFor } from '../lib/errors';
+import { EVENTS_CSV } from '../lib/csv/csv-formats';
+import { messageFor } from '../lib/server/errors';
 import { PATHS } from '../paths';
 import type { Event, EventFields } from '../types/event';
 

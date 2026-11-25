@@ -1,8 +1,8 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { checkAccess } from '../../../src/lib/auth';
-import { UnavailableError } from '../../../src/lib/errors';
-import { listEvents } from '../../../src/lib/events';
+import { checkAccess } from '../../../src/lib/auth/auth';
+import { UnavailableError } from '../../../src/lib/server/errors';
+import { listEvents } from '../../../src/lib/data/events';
 import { mockAccess, SAM, SAM_ADMIN } from '../../mocks/auth';
 import { renderApp } from '../../renderApp';
 

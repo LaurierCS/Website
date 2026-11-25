@@ -1,7 +1,7 @@
 /** Event photos loaded and cached by TanStack Query, and the changes that refresh them. */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { addPhoto, deletePhoto, getPhoto, listPhotos, reorderPhotos, setCover, updatePhoto } from '../lib/event-photos';
-import type { PictureChange } from '../lib/images';
+import { addPhoto, deletePhoto, getPhoto, listPhotos, reorderPhotos, setCover, updatePhoto } from '../lib/data/event-photos';
+import type { PictureChange } from '../lib/ui/images';
 import type { EventPhoto, PhotoFields } from '../types/event-photo';
 
 // Every photos query for an event starts with this key.

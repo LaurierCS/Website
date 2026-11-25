@@ -2,7 +2,7 @@
  * How each LCS accent looks: filling a shape (a department label, a member's initial) with dark text on it so it
  * passes contrast, or as text itself. Which accent something gets is decided in `lib/accents.ts`.
  */
-import type { Accent } from '../../lib/accents';
+import type { Accent } from '../../lib/ui/accents';
 
 export const ACCENT_FILLS: Readonly<Record<Accent, string>> = {
   pink: 'bg-pink text-ink',

@@ -16,10 +16,10 @@ import { SavedNotice } from '../components/ui/SavedNotice';
 import { ScrapbookWord } from '../components/ui/ScrapbookWord';
 import { StateBlock } from '../components/ui/StateBlock';
 import { useEvents } from '../hooks/useEvents';
-import { csvFile, EVENTS_CSV } from '../lib/csv-formats';
-import { clubToday } from '../lib/dates';
-import { messageFor } from '../lib/errors';
-import { savedNameFrom } from '../lib/saved-notice';
+import { csvFile, EVENTS_CSV } from '../lib/csv/csv-formats';
+import { clubToday } from '../lib/time/dates';
+import { messageFor } from '../lib/server/errors';
+import { savedNameFrom } from '../lib/ui/saved-notice';
 import { PATHS } from '../paths';
 
 export function EventsPage() {

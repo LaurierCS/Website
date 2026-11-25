@@ -11,9 +11,9 @@ import { ButtonLink } from '../components/ui/ButtonLink';
 import { FormPageHeading } from '../components/ui/FormPageHeading';
 import { StateBlock } from '../components/ui/StateBlock';
 import { useMember, useUpdateMember } from '../hooks/useTeam';
-import { messageFor } from '../lib/errors';
-import { changedMemberFields, formValuesFor } from '../lib/member-form';
-import { savedNotice } from '../lib/saved-notice';
+import { messageFor } from '../lib/server/errors';
+import { changedMemberFields, formValuesFor } from '../lib/form/member-form';
+import { savedNotice } from '../lib/ui/saved-notice';
 import { PATHS } from '../paths';
 import type { TeamMember } from '../types/team';
 

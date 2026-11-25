@@ -7,9 +7,9 @@ import { useNavigate } from 'react-router';
 import { MemberForm } from '../components/team/MemberForm';
 import { FormPageHeading } from '../components/ui/FormPageHeading';
 import { useCreateMember } from '../hooks/useTeam';
-import { messageFor } from '../lib/errors';
-import { EMPTY_MEMBER_FORM, toMemberFields } from '../lib/member-form';
-import { savedNotice } from '../lib/saved-notice';
+import { messageFor } from '../lib/server/errors';
+import { EMPTY_MEMBER_FORM, toMemberFields } from '../lib/form/member-form';
+import { savedNotice } from '../lib/ui/saved-notice';
 import { PATHS } from '../paths';
 
 export function NewMemberPage() {

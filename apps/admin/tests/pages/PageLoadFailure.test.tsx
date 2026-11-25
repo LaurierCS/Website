@@ -2,7 +2,7 @@ import { screen, within } from '@testing-library/react';
 import { mockAccess, SAM_ADMIN } from '../mocks/auth';
 import { renderApp } from '../renderApp';
 
-vi.mock('../../src/lib/auth');
+vi.mock('../../src/lib/auth/auth');
 // The Events page's file can't be loaded, as when a deploy has replaced it under an open tab.
 vi.mock('../../src/pages/EventsPage', () => {
   throw new Error('Failed to fetch dynamically imported module');

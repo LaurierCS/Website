@@ -1,7 +1,7 @@
 /** Event documents loaded and cached by TanStack Query, and the changes that refresh them. */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { addDocument, deleteDocument, getDocument, listDocuments, reorderDocuments, updateDocument } from '../lib/event-documents';
-import type { CheckedImage } from '../lib/images';
+import { addDocument, deleteDocument, getDocument, listDocuments, reorderDocuments, updateDocument } from '../lib/data/event-documents';
+import type { CheckedImage } from '../lib/ui/images';
 import type { EventDocument, DocumentFields } from '../types/event-document';
 
 // Every documents query for an event starts with this key.

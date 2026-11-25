@@ -1,6 +1,6 @@
 /** Event hosts loaded and cached by TanStack Query, and the changes that refresh them. */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { addGuestHost, addTeamHost, deleteHost, getHost, listHosts, reorderHosts, updateHost } from '../lib/event-hosts';
+import { addGuestHost, addTeamHost, deleteHost, getHost, listHosts, reorderHosts, updateHost } from '../lib/data/event-hosts';
 import type { EventHost, HostFields } from '../types/event-host';
 
 // Every hosts query for an event starts with this key.

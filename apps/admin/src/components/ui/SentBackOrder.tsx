@@ -3,7 +3,7 @@
  * and lists every problem by row, and the empty press says what to do next.
  */
 import type { ReactNode } from 'react';
-import type { ImportProblem } from '../../lib/csv-import';
+import type { ImportProblem } from '../../lib/csv/csv-import';
 import { ImportProblems } from './ImportProblems';
 import { OrderRule } from './OrderRule';
 import { OrderTotal } from './OrderTotal';

@@ -5,8 +5,8 @@
  */
 import { useEffect, useId, useRef, useState } from 'react';
 import Cropper from 'react-easy-crop';
-import { type CropArea, cropToSquare } from '../../lib/crop-image';
-import type { CheckedImage } from '../../lib/images';
+import { type CropArea, cropToSquare } from '../../lib/ui/crop-image';
+import type { CheckedImage } from '../../lib/ui/images';
 import { usePreviewUrl } from '../../hooks/usePreviewUrl';
 import { Button } from './Button';
 

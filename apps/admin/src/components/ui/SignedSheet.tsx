@@ -4,7 +4,7 @@
  * below as `children`.
  */
 import type { ReactNode } from 'react';
-import type { Accent } from '../../lib/accents';
+import type { Accent } from '../../lib/ui/accents';
 import { ACCENT_TEXT } from './accent-styles';
 import { Tag, type TagTone } from './Tag';
 

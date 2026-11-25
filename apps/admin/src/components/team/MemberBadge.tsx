@@ -7,7 +7,7 @@ import { motion } from 'motion/react';
 import { useState } from 'react';
 import { generatePath } from 'react-router';
 import { useDeleteMember, useSetMemberPublic } from '../../hooks/useTeam';
-import { messageFor } from '../../lib/errors';
+import { messageFor } from '../../lib/server/errors';
 import { PATHS } from '../../paths';
 import type { TeamMember } from '../../types/team';
 import { Button } from '../ui/Button';

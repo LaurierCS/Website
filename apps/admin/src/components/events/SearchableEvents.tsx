@@ -2,7 +2,7 @@
  * The events with a title search above them, a count of what is shown, and a message when nothing matches.
  */
 import { useState } from 'react';
-import { clubToday } from '../../lib/dates';
+import { clubToday } from '../../lib/time/dates';
 import { type Event, withStatuses } from '../../types/event';
 import { Button } from '../ui/Button';
 import { SearchField } from '../ui/SearchField';

@@ -2,7 +2,7 @@
  * Why a CSV file can't be imported, printed on the order that was sent back: every problem by the row a
  * spreadsheet shows, so they can all be fixed in one go.
  */
-import type { ImportProblem } from '../../lib/csv-import';
+import type { ImportProblem } from '../../lib/csv/csv-import';
 
 export function ImportProblems({ problems }: { problems: readonly ImportProblem[] }) {
   return (

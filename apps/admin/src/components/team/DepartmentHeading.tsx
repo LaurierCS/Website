@@ -2,7 +2,7 @@
  * A department's heading on the crew board: its name on a label in a rotating accent, how many crew it has and
  * how many are hidden, and a rule out to the edge.
  */
-import { accentAt } from '../../lib/accents';
+import { accentAt } from '../../lib/ui/accents';
 import { ACCENT_FILLS } from '../ui/accent-styles';
 
 type DepartmentHeadingProps = {

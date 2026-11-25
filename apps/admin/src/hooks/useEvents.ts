@@ -1,8 +1,8 @@
 /** Events loaded and cached by TanStack Query, and the changes that refresh them: create, update, delete, import. */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { type ReadyImport, rowsToSave } from '../lib/csv-import';
-import { createEvent, deleteEvent, getEvent, importEvents, listEvents, updateEvent } from '../lib/events';
-import type { PictureChange } from '../lib/images';
+import { type ReadyImport, rowsToSave } from '../lib/csv/csv-import';
+import { createEvent, deleteEvent, getEvent, importEvents, listEvents, updateEvent } from '../lib/data/events';
+import type { PictureChange } from '../lib/ui/images';
 import type { Event, EventFields } from '../types/event';
 
 // Every events query starts with this key, so one invalidation refreshes the list and any open event.

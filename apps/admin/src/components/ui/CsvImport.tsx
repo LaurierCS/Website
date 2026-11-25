@@ -6,9 +6,9 @@
  */
 import { Check } from 'lucide-react';
 import { useState } from 'react';
-import type { CsvFormat } from '../../lib/csv-formats';
-import { type ImportPlan, planImportFile, type ReadyImport } from '../../lib/csv-import';
-import { messageFor } from '../../lib/errors';
+import type { CsvFormat } from '../../lib/csv/csv-formats';
+import { type ImportPlan, planImportFile, type ReadyImport } from '../../lib/csv/csv-import';
+import { messageFor } from '../../lib/server/errors';
 import { Button } from './Button';
 import { ButtonLink } from './ButtonLink';
 import { CsvFilePicker } from './CsvFilePicker';

@@ -4,7 +4,7 @@
  * a new list to import into gives one more of these.
  */
 import type { ReactNode } from 'react';
-import type { ChangedItem, NewItem, ReadyImport } from '../../lib/csv-import';
+import type { ChangedItem, NewItem, ReadyImport } from '../../lib/csv/csv-import';
 import type { FieldChange } from './FieldChanges';
 
 /** One item the import adds or updates. Its `kind` is an `ImportKind`, so it picks the item's label. */

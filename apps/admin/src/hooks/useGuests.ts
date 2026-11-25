@@ -1,7 +1,7 @@
 /** Guests loaded and cached by TanStack Query, and the changes that refresh them. */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createGuest, deleteGuest, getGuest, listGuests, updateGuest } from '../lib/guests';
-import type { PictureChange } from '../lib/images';
+import { createGuest, deleteGuest, getGuest, listGuests, updateGuest } from '../lib/data/guests';
+import type { PictureChange } from '../lib/ui/images';
 import type { Guest, GuestFields } from '../types/guest';
 
 // Every guests query starts with this key, so one invalidation refreshes the list and any open guest.

@@ -12,8 +12,8 @@ import { FormPageHeading } from '../components/ui/FormPageHeading';
 import type { ImportView } from '../components/ui/import-view';
 import { StateBlock } from '../components/ui/StateBlock';
 import { useImportTeam, useTeam } from '../hooks/useTeam';
-import { TEAM_CSV } from '../lib/csv-formats';
-import { messageFor } from '../lib/errors';
+import { TEAM_CSV } from '../lib/csv/csv-formats';
+import { messageFor } from '../lib/server/errors';
 import { PATHS } from '../paths';
 import type { MemberFields, TeamMember } from '../types/team';
 

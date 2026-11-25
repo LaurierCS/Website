@@ -2,8 +2,8 @@
  * An event in a CSV import, drawn as the ticket it will be: labelled new or updated, with a highlighter over
  * the values on its face that the import changes. Pictures aren't in a CSV, so a new event has none yet.
  */
-import { clubToday } from '../../lib/dates';
-import { toTicketFace } from '../../lib/event-form';
+import { clubToday } from '../../lib/time/dates';
+import { toTicketFace } from '../../lib/form/event-form';
 import { type Event, type EventFields, isUpcoming, type TicketFace } from '../../types/event';
 import type { ImportEntry } from '../ui/import-view';
 import { importedEvent } from './event-import';

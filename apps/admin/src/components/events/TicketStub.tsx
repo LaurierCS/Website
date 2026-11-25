@@ -4,7 +4,7 @@
  * import also carries its `importKind`: the word beside the date when narrow, a colour tab hanging from the top
  * when wide.
  */
-import { stubDay } from '../../lib/dates';
+import { stubDay } from '../../lib/time/dates';
 import { IMPORT_LABELS, type ImportKind } from '../ui/import-labels';
 
 // What the stub says before a day has been picked, on a ticket still being filled in.

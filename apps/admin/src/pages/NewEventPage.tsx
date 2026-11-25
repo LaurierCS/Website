@@ -7,9 +7,9 @@ import { useNavigate } from 'react-router';
 import { EventForm } from '../components/events/EventForm';
 import { FormPageHeading } from '../components/ui/FormPageHeading';
 import { useCreateEvent } from '../hooks/useEvents';
-import { messageFor } from '../lib/errors';
-import { EMPTY_EVENT_FORM, toEventFields } from '../lib/event-form';
-import { savedNotice } from '../lib/saved-notice';
+import { messageFor } from '../lib/server/errors';
+import { EMPTY_EVENT_FORM, toEventFields } from '../lib/form/event-form';
+import { savedNotice } from '../lib/ui/saved-notice';
 import { PATHS } from '../paths';
 
 export function NewEventPage() {

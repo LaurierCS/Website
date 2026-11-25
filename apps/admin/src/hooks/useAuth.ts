@@ -1,7 +1,7 @@
 /** The visitor's access and the sign-in and sign-out actions, shared by the login page, the route guard and the header. */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
-import { checkAccess, onSignInChange, signIn, signOut } from '../lib/auth';
+import { checkAccess, onSignInChange, signIn, signOut } from '../lib/auth/auth';
 import type { Access, SignInProvider } from '../types/auth';
 
 const ACCESS_KEY = ['access'] as const;
