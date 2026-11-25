@@ -14,7 +14,7 @@ The current `events` table is one picture and a blurb. The redesign needs more:
 | Feature on the new site | What it needs in the database |
 | --- | --- |
 | Calendar, upcoming and past events | A real `start_time` / `end_time` instead of text like `"7:30 PM - 9:00 PM"` |
-| Archive filters, What We Host | `events.category`: `review`, `meet_the_pros`, `workshop`, `hackathon`, `other` |
+| Archive filters, What We Host | `events.category`: `review`, `social`, `career`, `workshop`, `hackathon`, `meet_the_pros` |
 | Photo gallery with a cover for cards | `event_photos`, many per event, exactly one `is_cover` |
 | Slides, review packages and other files on an event | `event_documents` plus files in storage (all public) |
 | Who's running an event, on or off the team | `event_hosts`, each a team member **or** a guest; `guests` for people outside LCS |
@@ -46,7 +46,7 @@ erDiagram
     time start_time "null = TBD"
     time end_time
     text location
-    text category "review | meet_the_pros | workshop | hackathon | other"
+    text category "review | social | career | workshop | hackathon | meet_the_pros"
     boolean will_stream
     text stream_url
     timestamptz created_at
@@ -138,11 +138,12 @@ write rules match `events-images` and `team-images`.
 
 | Today (`public`) | v2 |
 | --- | --- |
-| `events.id`, `title`, `description`, `date`, `location`, `created_at` | Same, same ids |
+| `events.id`, `title`, `description`, `date`, `location`, `created_at` | Same, same ids; a location of `"TBD"` becomes null |
+| `events.kind` | `category`, plus a few events placed by hand (see `03_populate.sql`). Re-runs keep whatever the admin set |
 | `events.time` (text) | `start_time` and `end_time`. `"7:30PM"`, `"7:30 PM"` and `"7:30 PM - 9:00 PM"` are read; anything else (like `"TBD"`) becomes null and is listed by `05_verify.sql` |
 | `events.picture_url` (full URL in `events-images`) | A cover row in `event_photos`; the file is copied to `event-media/<event_id>/photos/` |
-| `team.*` | Same, same ids; `picture_url` becomes `picture_path` (the file stays in `team-images`); blank links become null |
-| (new) | `category` starts as `other`, `will_stream` as false; set them in the admin |
+| `team.*` | Same, same ids; `role` drops the department ("VP of Marketing" becomes "VP"); `picture_url` becomes `picture_path` (the file stays in `team-images`); blank links become null |
+| (new) | `will_stream` starts as false; hosts, documents and related events start empty; set them in the admin |
 
 ## Running it
 
@@ -155,7 +156,8 @@ Run in the Supabase SQL editor (or `psql`), in order. Each step can be checked b
 | 3 | `03_populate.sql` | Copies events and team from `public` into `v2`; safe to re-run | No (reads only) |
 | 4 | `04_copy_event_photos.mjs` | Copies each event's picture into `event-media` (run locally with the service role key; `--dry-run` first) | No (copies only) |
 | 5 | `05_verify.sql` | Read-only: row counts, unreadable times, rows deleted since, photos not copied yet | No |
-| 6 | Dashboard | Settings → API → Exposed schemas: add `v2`, so the site can call `supabase.schema('v2')` | No |
+| 6 | Dashboard | Integrations → Data API → Settings → Exposed schemas: add `v2`, so the site can call `supabase.schema('v2')` with the same publishable key | No |
+| 7 | `06_categories_and_roles.sql` | Only for a database set up before 2026-11-25: new category list, shorter roles | No |
 | undo | `99_rollback.sql` | Drops `v2` and the new bucket rules (empty and delete the two buckets in the dashboard) | No |
 
 Until the new site goes live, the current admin still writes to `public`. **Re-run steps 3 to 5 right before

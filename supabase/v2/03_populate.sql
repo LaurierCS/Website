@@ -2,19 +2,20 @@
 --
 -- Only reads from public.events and public.team; nothing in `public` changes. Keeps every id, so links and
 -- bookmarks still match. Safe to run again (for example right before the new site goes live): rows that already
--- exist are updated from `public`, and fields that only exist in v2 (category, will_stream, stream_url, hosts,
+-- exist are updated from `public`, and fields that only exist in v2 (category after the first copy, will_stream, stream_url, hosts,
 -- documents, related events, extra photos) are left as they are.
 --
 -- Run 04_copy_event_photos.mjs after this to copy the picture files themselves.
 
 begin;
 
--- Team: same rows; picture_url (a full public URL) becomes the path inside team-images.
+-- Team: same rows; picture_url (a full public URL) becomes the path inside team-images. Roles drop the
+-- department ("VP of Marketing" becomes "VP") since department is its own column.
 insert into v2.team (id, name, role, department, picture_path, github_url, linkedin_url, is_public, created_at)
 select
   t.id,
   t.name,
-  t.role,
+  regexp_replace(t.role, '^(VP|Director) of .+$', '\1'),
   t.department,
   nullif(substring(t.picture_url from '/team-images/(.+)$'), ''),
   nullif(trim(t.github_url), ''),
@@ -40,7 +41,7 @@ with parsed as (
       '^\s*(\d{1,2}):(\d{2})\s*(AM|PM)(?:\s*-\s*(\d{1,2}):(\d{2})\s*(AM|PM))?\s*$') as m
   from public.events as e
 )
-insert into v2.events (id, title, description, date, start_time, end_time, location, created_at)
+insert into v2.events (id, title, description, date, start_time, end_time, location, category, created_at)
 select
   p.id,
   p.title,
@@ -48,7 +49,17 @@ select
   p.date,
   case when p.m is not null then to_timestamp(p.m[1] || ':' || p.m[2] || ' ' || p.m[3], 'HH12:MI AM')::time end,
   case when p.m[4] is not null then to_timestamp(p.m[4] || ':' || p.m[5] || ' ' || p.m[6], 'HH12:MI AM')::time end,
-  p.location,
+  nullif(nullif(trim(p.location), ''), 'TBD'),
+  -- Category from the old `kind`, with the calls made on 2026-11-25 for events it doesn't cover. Anything new
+  -- that still doesn't match falls back to social; fix it in the admin.
+  case
+    when p.title in ('Build-A-Portfolio', 'Code Roulette', 'Code Royale', 'Functional Futures') then 'workshop'
+    when p.title in ('Co-op for Dummies', 'Resume Review', 'Professional Headshot Day') then 'career'
+    when p.title ilike 'Meet the Professionals%' then 'meet_the_pros'
+    when p.title = 'Hack to the Future' then 'hackathon'
+    when p.kind in ('review', 'social', 'career', 'workshop', 'hackathon') then p.kind
+    else 'social'
+  end,
   coalesce(p.created_at at time zone 'America/Toronto', now())
 from parsed as p
 on conflict (id) do update set

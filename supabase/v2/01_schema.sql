@@ -15,7 +15,7 @@ create schema v2;
 create table v2.team (
   id uuid primary key default gen_random_uuid(),
   name text not null,
-  role text,
+  role text,                 -- just the title (VP, Director, Software Engineer); the department is its own column
   department text not null
     check (department in ('Admin', 'Finance', 'Marketing', 'Outreach', 'Events', 'Academics', 'Engineering')),
   picture_path text,
@@ -46,8 +46,8 @@ create table v2.events (
   start_time time,           -- null when the time isn't set yet ("TBD")
   end_time time,
   location text,
-  category text not null default 'other'
-    check (category in ('review', 'meet_the_pros', 'workshop', 'hackathon', 'other')),
+  category text not null
+    check (category in ('review', 'social', 'career', 'workshop', 'hackathon', 'meet_the_pros')),
   will_stream boolean not null default false,
   stream_url text,           -- live stream or recording, once there is one
   created_at timestamptz not null default now(),
