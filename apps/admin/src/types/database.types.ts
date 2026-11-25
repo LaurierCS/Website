@@ -41,6 +41,7 @@ export type Database = {
           date: string
           description: string | null
           id: string
+          kind: string | null
           location: string | null
           picture_url: string | null
           time: string | null
@@ -51,6 +52,7 @@ export type Database = {
           date: string
           description?: string | null
           id?: string
+          kind?: string | null
           location?: string | null
           picture_url?: string | null
           time?: string | null
@@ -61,10 +63,26 @@ export type Database = {
           date?: string
           description?: string | null
           id?: string
+          kind?: string | null
           location?: string | null
           picture_url?: string | null
           time?: string | null
           title?: string
+        }
+        Relationships: []
+      }
+      site_data_versions: {
+        Row: {
+          area: string
+          version: number
+        }
+        Insert: {
+          area: string
+          version?: number
+        }
+        Update: {
+          area?: string
+          version?: number
         }
         Relationships: []
       }
@@ -118,6 +136,279 @@ export type Database = {
         Returns: undefined
       }
       is_admin: { Args: never; Returns: boolean }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
+  v2: {
+    Tables: {
+      event_documents: {
+        Row: {
+          created_at: string
+          event_id: string
+          id: string
+          path: string
+          sort_order: number
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          id?: string
+          path: string
+          sort_order?: number
+          title: string
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          id?: string
+          path?: string
+          sort_order?: number
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_documents_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_hosts: {
+        Row: {
+          event_id: string
+          guest_id: string | null
+          id: string
+          sort_order: number
+          team_id: string | null
+        }
+        Insert: {
+          event_id: string
+          guest_id?: string | null
+          id?: string
+          sort_order?: number
+          team_id?: string | null
+        }
+        Update: {
+          event_id?: string
+          guest_id?: string | null
+          id?: string
+          sort_order?: number
+          team_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_hosts_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_hosts_guest_id_fkey"
+            columns: ["guest_id"]
+            isOneToOne: false
+            referencedRelation: "guests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_hosts_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "team"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_photos: {
+        Row: {
+          alt: string | null
+          created_at: string
+          event_id: string
+          id: string
+          is_cover: boolean
+          path: string
+          sort_order: number
+        }
+        Insert: {
+          alt?: string | null
+          created_at?: string
+          event_id: string
+          id?: string
+          is_cover?: boolean
+          path: string
+          sort_order?: number
+        }
+        Update: {
+          alt?: string | null
+          created_at?: string
+          event_id?: string
+          id?: string
+          is_cover?: boolean
+          path?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_photos_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_related: {
+        Row: {
+          event_id: string
+          related_id: string
+          sort_order: number
+        }
+        Insert: {
+          event_id: string
+          related_id: string
+          sort_order?: number
+        }
+        Update: {
+          event_id?: string
+          related_id?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_related_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_related_related_id_fkey"
+            columns: ["related_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      events: {
+        Row: {
+          category: string
+          created_at: string
+          date: string
+          description: string | null
+          end_time: string | null
+          id: string
+          location: string | null
+          start_time: string | null
+          stream_url: string | null
+          title: string
+          will_stream: boolean
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          date: string
+          description?: string | null
+          end_time?: string | null
+          id?: string
+          location?: string | null
+          start_time?: string | null
+          stream_url?: string | null
+          title: string
+          will_stream?: boolean
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          date?: string
+          description?: string | null
+          end_time?: string | null
+          id?: string
+          location?: string | null
+          start_time?: string | null
+          stream_url?: string | null
+          title?: string
+          will_stream?: boolean
+        }
+        Relationships: []
+      }
+      guests: {
+        Row: {
+          created_at: string
+          id: string
+          link_url: string | null
+          name: string
+          picture_path: string | null
+          title: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          link_url?: string | null
+          name: string
+          picture_path?: string | null
+          title?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          link_url?: string | null
+          name?: string
+          picture_path?: string | null
+          title?: string | null
+        }
+        Relationships: []
+      }
+      team: {
+        Row: {
+          created_at: string
+          department: string
+          github_url: string | null
+          id: string
+          is_public: boolean
+          linkedin_url: string | null
+          name: string
+          picture_path: string | null
+          role: string | null
+        }
+        Insert: {
+          created_at?: string
+          department: string
+          github_url?: string | null
+          id?: string
+          is_public?: boolean
+          linkedin_url?: string | null
+          name: string
+          picture_path?: string | null
+          role?: string | null
+        }
+        Update: {
+          created_at?: string
+          department?: string
+          github_url?: string | null
+          id?: string
+          is_public?: boolean
+          linkedin_url?: string | null
+          name?: string
+          picture_path?: string | null
+          role?: string | null
+        }
+        Relationships: []
+      }
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      [_ in never]: never
     }
     Enums: {
       [_ in never]: never
@@ -247,6 +538,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
+    Enums: {},
+  },
+  v2: {
     Enums: {},
   },
 } as const
