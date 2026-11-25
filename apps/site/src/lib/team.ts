@@ -41,17 +41,26 @@ const TeamRowSchema = z.object({
   name: z.string().trim().min(1),
   role: optionalText,
   department: optionalText,
-  picture_url: optionalUrl,
+  // Where their photo is in the team bucket, not its address.
+  picture_path: optionalText,
   linkedin_url: optionalUrl,
   github_url: optionalUrl,
 });
 
-/** A team table row as a `TeamMember`, or null when the row can't be one (a missing name, a bad id). */
-export function toTeamMember(row: unknown): TeamMember | null {
+/**
+ * A team table row as a `TeamMember`, or null when the row can't be one (a missing name, a bad id).
+ * `pictureUrl` turns the photo's path in the team bucket into its address.
+ */
+export function toTeamMember(row: unknown, pictureUrl: (path: string) => string): TeamMember | null {
   const parsed = TeamRowSchema.safeParse(row);
   if (!parsed.success) return null;
-  const { picture_url, linkedin_url, github_url, ...rest } = parsed.data;
-  return { ...rest, pictureUrl: picture_url, linkedinUrl: linkedin_url, githubUrl: github_url };
+  const { picture_path, linkedin_url, github_url, ...rest } = parsed.data;
+  return {
+    ...rest,
+    pictureUrl: picture_path ? pictureUrl(picture_path) : null,
+    linkedinUrl: linkedin_url,
+    githubUrl: github_url,
+  };
 }
 
 /**
@@ -60,7 +69,7 @@ export function toTeamMember(row: unknown): TeamMember | null {
  */
 const SENIORITY = ['president', 'evp', 'vp', 'director'] as const;
 
-/** How senior a role is: its place in `SENIORITY`, or after all of them. "VP of Events" is 2. */
+/** How senior a role is: its place in `SENIORITY`, or after all of them. "VP" is 2. */
 export function seniority(role: string | null): number {
   const words = new Set((role ?? '').toLowerCase().split(/[^a-z]+/));
   const rank = SENIORITY.findIndex((word) => words.has(word));
