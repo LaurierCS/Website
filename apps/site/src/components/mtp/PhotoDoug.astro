@@ -1,0 +1,33 @@
+---
+/**
+ * Doug, in his suit, with a camera, photographing the speakers. Each time a speaker is shown he lines the camera
+ * up and snaps, and a little instant print of them drops into the pile at his feet (`scripts/speaker-spotlight.ts`
+ * makes the prints). Drawn facing left on a phone (he stands to the right of the card) and turned to face right
+ * on a wide screen (he stands under the heading, to the left of it); the pile isn't turned, so the prints never
+ * come out mirrored. The spotlight places him in one spot or the other, and only one shows at a time. Decoration
+ * only, so screen readers skip him.
+ */
+import { Image } from 'astro:assets';
+import { DOUG_IN_A_SUIT, OBJECTS } from '../../assets/brand';
+
+type Props = { class?: string };
+
+const { class: className } = Astro.props;
+---
+
+<div
+  data-photographer
+  aria-hidden="true"
+  class:list={['pointer-events-none w-(--mtp-doug-width) xl:w-(--mtp-doug-width-wide)', className]}
+>
+  {/* The pile of prints he's taken, behind him and a little lower, on the floor. */}
+  <div data-pile class="absolute -bottom-4 left-0 h-1/2 w-full"></div>
+  <div class="relative xl:-scale-x-100">
+    <Image src={DOUG_IN_A_SUIT} alt="" width={180} densities={[1, 2]} class="h-auto w-full" />
+    <div data-camera class="absolute top-1/5 -left-1/4 w-11/20 origin-right">
+      <Image src={OBJECTS.camera} alt="" width={100} densities={[1, 2]} class="h-auto w-full" />
+      {/* The flash, on the front of the camera. */}
+      <span data-flash class="absolute top-1/4 left-0 size-1/2 rounded-full bg-white opacity-0 blur-md"></span>
+    </div>
+  </div>
+</div>

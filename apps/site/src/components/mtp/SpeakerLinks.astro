@@ -1,7 +1,8 @@
 ---
 /**
- * A speaker's buttons: Connect (their LinkedIn) and a round one for their website. A link that isn't in the
- * speakers sheet is left out, and with neither there is nothing to show.
+ * A speaker's buttons: Connect (their LinkedIn), a key with a solid edge like the section's "Apply to speak", and a
+ * round one for their website. A link that isn't in the speakers sheet is left out, and with neither there is
+ * nothing to show.
  */
 import { linkTarget } from '../../lib/links';
 import type { Speaker } from '../../lib/speakers';
@@ -23,10 +24,7 @@ const press =
           href={speaker.linkedin}
           {...linkTarget(speaker.linkedin)}
           aria-label={`Connect with ${speaker.name} on LinkedIn`}
-          class:list={[
-            'inline-flex h-10 items-center gap-2 rounded-full bg-linkedin px-4 font-display text-sm font-extrabold text-white',
-            press,
-          ]}
+          class="inline-flex h-10 items-center gap-2 rounded-full bg-linkedin px-4 font-display text-sm font-extrabold text-white shadow-key shadow-linkedin-ink transition-[translate,box-shadow] duration-(--dur-fast) ease-(--ease-spring) hover:-translate-y-0.5 hover:shadow-key-lifted active:translate-y-1 active:shadow-none motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:active:translate-y-0"
         >
           <LinkedIn class="size-4" aria-hidden="true" />
           Connect

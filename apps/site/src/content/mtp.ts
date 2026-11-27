@@ -16,7 +16,8 @@ export const MTP = {
   edition: 'Fall 2026',
   room: 'LH3094',
   pitch: {
-    title: 'Work in tech? Speak at the next one.',
+    /** The heading, a line each, so it never breaks somewhere awkward on a phone. */
+    title: ['Work in tech?', 'Speak at the next one.'],
     text: 'Twenty minutes about your job and a Q&A with students who want to do it. We handle the room, the snacks and the posters.',
     action: { label: 'Apply to speak', href: 'https://forms.gle/BpvTx7gEzU4M7vwT7' },
   },

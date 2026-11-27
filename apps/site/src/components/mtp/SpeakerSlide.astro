@@ -1,11 +1,9 @@
 ---
 /**
- * One speaker in the Meet the Professionals spotlight. A phone shows them as one instant print
- * (`SpeakerPrint`); a wider screen shows the print with their card over its corner (`SpeakerSpread`). Only one
- * of the two is displayed at a time, so a screen reader and the Tab key only ever meet one.
+ * One speaker in the Meet the Professionals spotlight: their print and their card (`SpeakerSpread`), one layout
+ * for every screen size.
  */
 import type { Speaker } from '../../lib/speakers';
-import SpeakerPrint from './SpeakerPrint.astro';
 import SpeakerSpread from './SpeakerSpread.astro';
 
 type Props = { speaker: Speaker; edition: string; room: string; position: number; count: number; shown: boolean };
@@ -14,9 +12,10 @@ const { speaker, edition, room, position, count, shown } = Astro.props;
 ---
 
 {/*
-  Every speaker sits in the same spot, stacked, so the spot is as tall as the tallest one and stepping never
-  moves the page. Only the shown one is visible; the others are `inert` (out of sight, of the Tab key and of
-  screen readers) until stepped to (`scripts/speaker-spotlight.ts`). `data-name` is what a step announces.
+  Every speaker sits in the same spot, stacked, so the spot is as tall as the tallest one and switching never
+  moves the page. It takes the stage's two rows, the print's and the card's, for its spread. Only the shown one is
+  visible; the others are `inert` (out of sight, of the Tab key and of screen readers) until picked
+  (`scripts/speaker-spotlight.ts`). `data-name` is what a switch announces.
 */}
 <div
   data-speaker
@@ -25,10 +24,7 @@ const { speaker, edition, room, position, count, shown } = Astro.props;
   aria-roledescription="slide"
   aria-label={`${position} of ${count}: ${speaker.name}`}
   inert={!shown}
-  class="col-start-1 row-start-1 inert:invisible"
+  class="col-start-1 row-span-2 row-start-1 grid grid-rows-subgrid inert:invisible"
 >
-  <div class="nav:hidden"><SpeakerPrint speaker={speaker} edition={edition} room={room} shown={shown} /></div>
-  <div class="hidden nav:block">
-    <SpeakerSpread speaker={speaker} edition={edition} room={room} shown={shown} />
-  </div>
+  <SpeakerSpread speaker={speaker} edition={edition} room={room} position={position} count={count} shown={shown} />
 </div>
