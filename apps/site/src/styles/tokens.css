@@ -35,6 +35,7 @@
   --brand-instagram: #e4405f;
   --brand-discord: #5865f2;
   --brand-linkedin: #0a66c2;
+  --brand-linkedin-ink: #064584; /* the solid edge under a LinkedIn button */
   --brand-youtube: #ff0000;
   --brand-github-action: #238636; /* GitHub's green button, on the laptop's GitHub tab */
 
@@ -67,6 +68,16 @@
   /* The Meet the Professionals spotlight: the event photo's print, and the speaker card over its corner. */
   --print-width: 38rem;
   --speaker-card-width: 14.5rem;
+  --speaker-card-width-phone: 13.75rem; /* the speaker card under the print on a phone */
+  /* How thick a speaker card is, front to back, seen at its edges as it turns; each side sits half of it out. */
+  --card-depth: 0.75rem;
+  --card-depth-half: calc(var(--card-depth) / 2);
+  /* Doug photographing the speakers: his width on a phone and on a wide screen. */
+  --mtp-doug-width: 5.625rem;
+  --mtp-doug-width-wide: 10.75rem;
+  /* The row of speakers' faces on a wider screen, under the print and just past the card's right edge. */
+  --faces-beside-card: 12rem;
+  --card-pattern-tile: 9rem; /* one repeat of the icon pattern on the back of a speaker card */
   --viewer-width: 34rem; /* a poster opened big */
   /* The clubroom laptop on a wide screen: the open lid's width and its rounded corners. */
   --laptop-width: 42.5rem;
