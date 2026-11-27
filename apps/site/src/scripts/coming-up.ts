@@ -2,17 +2,28 @@
  * Brings "Coming up" to life. The first time it comes into view, the event days light up (CSS, staggered from
  * `components/events/print-timing.ts`) and the ticket booth prints the tickets: the booth judders and its slot
  * glows, each ticket feeds out of the slot in little jerks and drops onto the pile, and once they are all down
- * the "Next up" stamp slams onto the first. Pointing at, or focusing, a ticket or its day lifts the other one
- * too. The arrows step between months. With reduced motion everything is simply there.
+ * the owl walks over to the booth's right end and leans in as the "Next up" stamp slams onto the first, as if
+ * she stamped it. Pointing at, or focusing, a ticket or its day lifts the other one too. The arrows step between
+ * months. With reduced motion everything is simply there.
  */
 import { gsap } from 'gsap';
-import { DROP_S, FEED_S, FEED_STEPS, PRINT_START_S } from '../components/events/print-timing';
+import {
+  DROP_S,
+  FEED_S,
+  FEED_STEPS,
+  OWL_LEAN_DEG,
+  OWL_WADDLE_S,
+  OWL_WALK_S,
+  PRINT_START_S,
+} from '../components/events/print-timing';
 import { requiredElement } from '../lib/dom';
 
 /** How far the booth judders sideways while it prints, and how fast. */
 const JUDDER_PX = 1.5;
 const JUDDER_S = 0.05;
 const JUDDERS = Math.round(FEED_S / JUDDER_S) - 1;
+/** How far the owl rocks from side to side as she waddles to the stamp, in degrees. */
+const OWL_WADDLE_DEG = 6;
 
 class ComingUp extends HTMLElement {
   connectedCallback(): void {
@@ -110,6 +121,28 @@ class ComingUp extends HTMLElement {
     }
 
     if (stamp) {
+      // The owl walks from the booth's left end to its right end, waddling, to bring the stamp down.
+      const owl = requiredElement<HTMLElement>(this, '[data-booth-owl]');
+      const walk = booth.offsetWidth - owl.offsetWidth - 2 * owl.offsetLeft;
+      timeline
+        .to(owl, { x: walk, duration: OWL_WALK_S, ease: 'power1.inOut' }, '+=0.1')
+        .fromTo(
+          owl,
+          { rotation: -OWL_WADDLE_DEG },
+          {
+            rotation: OWL_WADDLE_DEG,
+            duration: OWL_WADDLE_S,
+            ease: 'sine.inOut',
+            yoyo: true,
+            repeat: Math.round(OWL_WALK_S / OWL_WADDLE_S) - 1,
+          },
+          '<',
+        )
+        .set(owl, { rotation: 0 })
+        .addLabel('stamp', '+=0.15')
+        // She leans in as the stamp lands, then rocks back upright.
+        .to(owl, { rotation: OWL_LEAN_DEG, duration: 0.2, ease: 'power2.in' }, 'stamp')
+        .to(owl, { rotation: 0, duration: 0.45, ease: 'back.out(2)' }, 'stamp+=0.3');
       // Like the admin's stamps: in big and tilted, a little too small on impact, a bounce, then settled at the
       // same 11° its CSS gives it without motion (GSAP takes over the CSS angle, so it is set here in full). The
       // ticket under it gives a little as it lands.
@@ -124,7 +157,7 @@ class ComingUp extends HTMLElement {
               { scale: 1, rotation: 11, duration: 0.08 },
             ],
           },
-          '+=0.15',
+          'stamp',
         )
         .to(tickets[0], { y: 3, duration: 0.06, yoyo: true, repeat: 1 }, '<0.22');
     }
