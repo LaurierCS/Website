@@ -15,6 +15,10 @@ export type Speaker = Readonly<{
   website: string | null;
   photo: ImageMetadata;
   eventPhoto: ImageMetadata;
+  /** Their company's logo, for the back of their card and their spot in the speaker row while they're shown. */
+  logo: ImageMetadata;
+  /** Their company's colour, as `#rrggbb`, for the ribbon on the back of their card. */
+  colour: string;
 }>;
 
 /** One row of the sheet, with its columns exactly as the header names them. */
@@ -30,6 +34,8 @@ const SpeakerRowSchema = z
     website: optionalLink('website'),
     photo: requiredText('photo'),
     event_photo: requiredText('event_photo'),
+    logo: requiredText('logo'),
+    colour: requiredText('colour').regex(/^#[0-9a-f]{6}$/i, 'colour must be a hex colour like #4285f4.'),
   })
   .strict();
 
@@ -55,6 +61,8 @@ export function readSpeakers(csv: string, images: ReadonlyMap<string, ImageMetad
       website: cells.website,
       photo,
       eventPhoto: sheetImage(images, cells.event_photo, where, FOLDER),
+      logo: sheetImage(images, cells.logo, where, FOLDER),
+      colour: cells.colour,
     };
   });
 }
