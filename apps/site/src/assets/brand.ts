@@ -18,6 +18,7 @@ import owl from './mascots/owl.png';
 import cocoFace from './mascots/faces/coco.png';
 import dougFace from './mascots/faces/doug.png';
 import krillFace from './mascots/faces/krill.png';
+import camera from './objects/camera.png';
 import paperPlane from './objects/paper-plane.png';
 import sharedLaptop from './objects/shared-laptop.png';
 import plusBlock from './objects/plus-block.png';
@@ -46,7 +47,8 @@ export const MASCOT_FACES = { doug: dougFace, coco: cocoFace, krill: krillFace }
 export const DOODLES = { asterisk, brackets, jumps, loops, spark, star13, star4 } as const;
 export type DoodleName = keyof typeof DOODLES;
 
-export const OBJECTS = { paperPlane, plusBlock, sharedLaptop } as const;
+/** Things in the scenes. The camera is the one Doug photographs the Meet the Professionals speakers with. */
+export const OBJECTS = { camera, paperPlane, plusBlock, sharedLaptop } as const;
 export type ObjectName = keyof typeof OBJECTS;
 
 /** The clubhouse's isometric floor, drawn as an inline SVG so it stays sharp at any size. */

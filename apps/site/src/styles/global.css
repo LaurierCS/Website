@@ -34,6 +34,7 @@
   --color-instagram: var(--brand-instagram);
   --color-discord: var(--brand-discord);
   --color-linkedin: var(--brand-linkedin);
+  --color-linkedin-ink: var(--brand-linkedin-ink);
   --color-youtube: var(--brand-youtube);
   --color-text-2: var(--text-2);
   --color-muted: var(--muted);
@@ -213,6 +214,21 @@
       animation: doodle-drift linear both;
       animation-timeline: view();
     }
+  }
+
+  /*
+   * The back of a speaker card: the LCS icon pattern, faint, like the back of a trading card set. The pattern
+   * comes in as `--pattern` (a `url(...)`).
+   */
+  .card-pattern {
+    background-image: var(--pattern);
+    background-size: var(--card-pattern-tile) auto;
+    opacity: 0.1;
+  }
+
+  /* A speaker card's edges: their company's colour (`--company`), darker, so they read as the card's sides. */
+  .card-edge {
+    background-color: color-mix(in oklab, var(--company) 60%, black);
   }
 
   @keyframes doodle-drift {
