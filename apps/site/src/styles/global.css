@@ -82,16 +82,9 @@
   /* A doodle in a section's edge, turning round slowly, one way or the other. */
   --animate-turn: turn var(--doodle-turn) linear infinite;
   --animate-turn-back: turn var(--doodle-turn-slow) linear infinite reverse;
-  /* The ticket booth's owl ducking down now and then to check the paper, then popping back up. */
-  --animate-owl-check: owl-check var(--owl-check) var(--ease-out) infinite;
 
   @keyframes turn {
     to { rotate: 1turn; }
-  }
-
-  @keyframes owl-check {
-    0%, 84%, 100% { translate: 0 0; }
-    88%, 94% { translate: 0 45%; }
   }
 
   /*

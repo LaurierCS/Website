@@ -16,3 +16,12 @@ export const FEED_STEPS = 9;
 
 /** How long a ticket takes to drop onto the pile and bounce to a stop. */
 export const DROP_S = 0.55;
+
+/**
+ * Once the last ticket is down, the booth's owl walks over to the booth's right end (waddling as she goes), then
+ * leans in as the "Next up" stamp lands, as if she brought it down: how long the walk takes, each waddle, and how
+ * far she leans, in degrees.
+ */
+export const OWL_WALK_S = 1.1;
+export const OWL_WADDLE_S = 0.14;
+export const OWL_LEAN_DEG = 18;

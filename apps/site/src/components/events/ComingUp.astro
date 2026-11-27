@@ -1,11 +1,11 @@
 ---
 /**
  * The home page's "Coming up": this month's calendar beside the LCS ticket booth (the owl peeking out from behind
- * it, popping up when you point at the booth) and the next three events as ticket stubs. When it comes into view
- * the event days light up with their mascots' stickers, the booth prints the tickets onto the floor, and the next
- * one gets stamped "Next up".
- * Pointing at a ticket lifts its day, and pointing at a day lifts its ticket (`scripts/coming-up.ts`). With
- * nothing coming up, the booth makes way for a note on where to hear about the next one.
+ * it, typing while it prints, then stamping "Next up") and the next three events as ticket stubs. When
+ * it comes into view the event days light up with their mascots' stickers, the booth prints the tickets onto the
+ * floor, and the next one gets stamped "Next up". Pointing at a ticket lifts its day, and pointing at a day lifts
+ * its ticket (`scripts/coming-up.ts`). With nothing coming up, the booth makes way for a note on where to hear
+ * about the next one.
  */
 import { Image } from 'astro:assets';
 import { BOOTH_OWL, MASCOT_FACES } from '../../assets/brand';
@@ -58,17 +58,21 @@ const instagram = socialLink('instagram');
           <div class="flex flex-col">
             <div class="group/booth relative z-10" aria-hidden="true">
               {/*
-                Drawn before the booth's front, so the front hides everything below her shoulders. Now and then
-                she ducks down behind it to check the paper; point at the booth and she pops up to look at you,
-                and jumps while you press.
+                At the booth's left end, facing the slot, drawn before the booth's front so the front hides
+                everything below her shoulders. She taps away at the booth while it prints, as if she's the one
+                printing, then walks over to its right end and leans in as the "Next up" stamp lands, as if she
+                stamped it (`scripts/coming-up.ts`). Point at the booth and she bobs up to look at you.
               */}
-              <div class="absolute right-8 bottom-6 w-18 animate-owl-check group-hover/booth:animate-none motion-reduce:animate-none nav:right-12 nav:w-22">
+              <div
+                data-booth-owl
+                class="absolute bottom-6 left-8 w-18 group-data-printing:animate-tap motion-reduce:animate-none nav:left-12 nav:w-22"
+              >
                 <Image
                   src={BOOTH_OWL}
                   alt=""
                   width={96}
                   densities={[1, 2]}
-                  class="h-auto w-full -rotate-4 transition-[translate,rotate] duration-(--dur-base) ease-(--ease-spring) group-hover/booth:-translate-y-6 group-hover/booth:rotate-3 group-active/booth:-translate-y-10 motion-reduce:transition-none"
+                  class="h-auto w-full -scale-x-100 rotate-4 transition-[translate] duration-(--dur-base) ease-(--ease-spring) group-hover/booth:-translate-y-3 motion-reduce:transition-none"
                 />
               </div>
               <div data-booth class="relative rounded-2xl border-2 border-line-quiet bg-raised px-5 pt-3 pb-4">
