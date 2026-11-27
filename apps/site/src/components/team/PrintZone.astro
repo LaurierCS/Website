@@ -1,11 +1,10 @@
 ---
 /**
- * One side of the rolling credits, where the lit group's prints land (`CREDIT_SPREADS` says which side each
- * person's print goes to). Every group's prints for this side are drawn here, stacked in the same place; only the
- * lit group's show, dropping in one after another and fading away when the next group comes (CSS, on
- * `data-current`, which `scripts/team-credits.ts` sets). The others are `inert`, so their links can't be reached
- * while out of sight. The prints are spread down the side, or, where the side is wide and short (under the
- * heading on a wide screen), across it.
+ * The right side of the rolling credits, where the lit group's prints land, down the side, all the same size, each
+ * at the tilt its spread (`CREDIT_SPREADS`) gives it. Every group's prints are drawn here, stacked in the same
+ * place; only the lit group's show, dropping in one after another and fading away when the next group comes (CSS,
+ * on `data-current`, which `scripts/team-credits.ts` sets). The others are `inert`, so their links can't be
+ * reached while out of sight.
  */
 import type { CreditGroup } from '../../lib/team';
 import { linkTarget } from '../../lib/links';
@@ -13,15 +12,9 @@ import { SOCIAL_ICONS } from '../ui/social-icons';
 import { CREDIT_SPREADS } from './credit-spreads';
 import Headshot from './Headshot.astro';
 
-type Props = {
-  groups: readonly CreditGroup[];
-  side: 'left' | 'right';
-  /** How the prints sit on the widest layout: down the side, or across it. */
-  wide: 'down' | 'across';
-  class?: string;
-};
+type Props = { groups: readonly CreditGroup[]; class?: string };
 
-const { groups, side, wide, class: className } = Astro.props;
+const { groups, class: className } = Astro.props;
 // Gap between one print of a group dropping in and the next, in milliseconds.
 const DROP_STAGGER_MS = 110;
 const LinkedIn = SOCIAL_ICONS.linkedin;
@@ -32,17 +25,16 @@ const GitHub = SOCIAL_ICONS.github;
   {
     groups.map((group, index) => {
       const spread = CREDIT_SPREADS[index % CREDIT_SPREADS.length];
-      const prints = group.members
-        .map((member, slot) => ({ member, slot, ...spread[slot % spread.length] }))
-        .filter((print) => print.side === side);
+      const prints = group.members.map((member, slot) => ({
+        member,
+        slot,
+        ...spread.prints[slot % spread.prints.length],
+      }));
       return (
         <div
           data-group={index}
           inert
-          class:list={[
-            'group/spread pointer-events-none col-start-1 row-start-1 flex flex-col items-center justify-around gap-6',
-            wide === 'across' && 'xl:flex-row xl:items-start',
-          ]}
+          class="group/spread pointer-events-none col-start-1 row-start-1 flex flex-col items-center justify-around gap-6"
         >
           {prints.map(({ member, slot, tilt, nudge }) => (
             <div

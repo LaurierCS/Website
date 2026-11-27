@@ -19,12 +19,8 @@ export const TEAM = {
   play: 'Play the credits',
   /** The bar for jumping between departments on a phone. */
   jumpLabel: 'Jump to a department',
-  /** The card at the end of the credits. */
-  join: {
-    title: 'Want your name up here?',
-    text: 'We take new members every September and January.',
-    action: { label: 'Join the team', href: socialLink('discord').href },
-  },
+  /** The link to join, a yellow pill after the counts. */
+  join: { label: 'Join the team', href: socialLink('discord').href },
 } as const;
 
 /** What a department is credited as, and its name in plain words under that. */

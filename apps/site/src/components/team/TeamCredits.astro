@@ -3,21 +3,27 @@
  * The home page's team section, as a film's end credits (Figma concept T1, with T1 v2's groups).
  *
  * Wherever there's room for them and motion is allowed (`data-rolling`, set by `scripts/team-credits.ts`), the
- * credits roll up by themselves, lighting the group of three to five people passing the middle, whose prints drop
- * in either side of the credits and fade away as the next group comes. Pointing at a name lifts their print, and
- * the other way round. Two layouts:
- * - from `xl`, T1's: the heading, counts and "Want your name up here?" on the left, the credits, and the prints
- *   under the heading and to the right of the credits;
- * - in between: the heading on top, then the prints, the credits and the prints, then the card.
+ * credits roll up by themselves, lighting the group of up to three people passing the middle, whose prints drop
+ * in to the right of the credits, with a big still from an event to the left (landing in a different spot for
+ * each group), and fade away as the next group comes. Pointing at a name lifts their print, and the other way
+ * round. Two layouts:
+ * - from `xl`, T1's: down the left, the heading, the counts with the link to join, the still, and three birds on a
+ *   couch watching the credits; then the credits, and the prints to their right;
+ * - in between: the heading on top, then the still, the credits and the prints, then the couch in the bottom-left
+ *   corner.
+ * The birds react as each group lights up.
  *
  * Where the credits can't roll (a phone, reduced motion, no JavaScript): T1 v2's contact sheet, each department
  * under its credit title with everyone's prints, and a bar at the bottom of the screen to jump between them.
  */
+import { CREDIT_STILLS } from '../../content/credit-stills';
 import { creditFor, type TEAM } from '../../content/team';
+import { linkTarget } from '../../lib/links';
 import { creditGroups, type Crew } from '../../lib/team';
+import CouchCrew from './CouchCrew.astro';
 import CrewSheet from './CrewSheet.astro';
-import JoinCard from './JoinCard.astro';
 import PrintZone from './PrintZone.astro';
+import StillZone from './StillZone.astro';
 import RollingCredits from './RollingCredits.astro';
 import { DOODLE_SPOTS } from '../ui/doodle-spots';
 import Doodles from '../ui/Doodles.astro';
@@ -27,7 +33,7 @@ type Props = { copy: typeof TEAM; crews: readonly Crew[] };
 const { copy, crews } = Astro.props;
 
 /** The most people the credits light at once; a department is shared out evenly into groups no bigger. */
-const MOST_PER_GROUP = 5;
+const MOST_PER_GROUP = 3;
 const credits = crews.map((crew) => creditFor(crew.department));
 const groups = creditGroups(crews, MOST_PER_GROUP);
 // Someone in two departments is one person.
@@ -42,17 +48,39 @@ const people = new Set(crews.flatMap((crew) => crew.members.map((member) => memb
       class="grid grid-cols-1 gap-12 group-data-rolling:grid-cols-[minmax(0,1fr)_var(--credits-width-stacked)_minmax(0,1fr)] group-data-rolling:grid-rows-[auto_var(--credits-height)_auto] group-data-rolling:gap-x-6 group-data-rolling:gap-y-10 xl:group-data-rolling:h-(--credits-height) xl:group-data-rolling:grid-cols-[var(--credits-aside)_var(--credits-width)_minmax(0,1fr)] xl:group-data-rolling:grid-rows-[auto_minmax(0,1fr)_auto] xl:group-data-rolling:gap-x-10 xl:group-data-rolling:gap-y-6"
     >
       <header
-        class="flex flex-col items-start gap-3.5 group-data-rolling:col-span-full group-data-rolling:items-center group-data-rolling:text-center xl:group-data-rolling:col-span-1 xl:group-data-rolling:items-start xl:group-data-rolling:pt-24 xl:group-data-rolling:text-start"
+        class="flex flex-col items-start gap-3.5 group-data-rolling:col-span-full group-data-rolling:items-center group-data-rolling:text-center xl:group-data-rolling:col-span-1 xl:group-data-rolling:items-start xl:group-data-rolling:text-start"
       >
         <p class="font-display text-sm font-bold tracking-label text-yellow uppercase">{copy.label}</p>
         <h2 id="team-title" class="text-4xl leading-none font-extrabold nav:text-6xl">{copy.title}</h2>
         <p class="max-w-prose text-text-2 nav:text-lg">{copy.summary}</p>
-        <ul class="flex flex-wrap gap-2" aria-label="The team in numbers">
-          <li class="rounded-full bg-raised px-3 py-1.5 font-display text-sm font-bold">{copy.people(people)}</li>
-          <li class="rounded-full bg-raised px-3 py-1.5 font-display text-sm font-bold">
-            {copy.departments(crews.length)}
-          </li>
-        </ul>
+        <div
+          class="flex flex-wrap items-center gap-2 group-data-rolling:justify-center xl:group-data-rolling:justify-start"
+        >
+          <ul class="flex flex-wrap gap-2" aria-label="The team in numbers">
+            <li class="rounded-full bg-raised px-3 py-1.5 font-display text-sm font-bold">{copy.people(people)}</li>
+            <li class="rounded-full bg-raised px-3 py-1.5 font-display text-sm font-bold">
+              {copy.departments(crews.length)}
+            </li>
+          </ul>
+          {/* The way in, right after the counts and in yellow, so it stands out from them. */}
+          <a
+            href={copy.join.href}
+            {...linkTarget(copy.join.href)}
+            class="group/join inline-flex items-center gap-1.5 rounded-full bg-yellow px-3.5 py-1.5 font-display text-sm font-bold text-ink transition-[translate,scale] duration-(--dur-fast) ease-(--ease-spring) hover:-translate-y-0.5 active:scale-95 motion-reduce:transition-none"
+          >
+            {copy.join.label}
+            <svg
+              class="size-3.5 transition-[translate] duration-(--dur-fast) ease-(--ease-spring) group-hover/join:translate-x-0.5 motion-reduce:transition-none"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              aria-hidden="true"
+            >
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </a>
+        </div>
         <button
           type="button"
           data-pause
@@ -69,20 +97,17 @@ const people = new Set(crews.flatMap((crew) => crew.members.map((member) => memb
         </button>
       </header>
 
-      {/* Rolling: the credits, and the lit group's prints on either side of them. */}
-      <PrintZone
+      {/* Rolling: the credits, with the lit group's still to the left of them and its prints to the right. */}
+      <StillZone
         groups={groups}
-        side="left"
-        wide="across"
-        class="hidden group-data-rolling:col-start-1 group-data-rolling:row-start-2 group-data-rolling:grid xl:group-data-rolling:items-start"
+        stills={CREDIT_STILLS}
+        class="hidden group-data-rolling:col-start-1 group-data-rolling:row-start-2 group-data-rolling:grid"
       />
       <div class="hidden group-data-rolling:col-start-2 group-data-rolling:row-start-2 group-data-rolling:block xl:group-data-rolling:row-span-3 xl:group-data-rolling:row-start-1">
         <RollingCredits crews={crews} credits={credits} groups={groups} />
       </div>
       <PrintZone
         groups={groups}
-        side="right"
-        wide="down"
         class="hidden group-data-rolling:col-start-3 group-data-rolling:row-start-2 group-data-rolling:grid xl:group-data-rolling:row-span-3 xl:group-data-rolling:row-start-1"
       />
 
@@ -111,10 +136,8 @@ const people = new Set(crews.flatMap((crew) => crew.members.map((member) => memb
         </nav>
       </div>
 
-      <JoinCard
-        join={copy.join}
-        class="group-data-rolling:col-span-full group-data-rolling:mx-auto group-data-rolling:w-full group-data-rolling:max-w-md xl:group-data-rolling:col-span-1 xl:group-data-rolling:row-start-3 xl:group-data-rolling:mx-0"
-      />
+      {/* Rolling: the birds on the couch, bottom left, pulled over against the credits to watch them with us. */}
+      <CouchCrew class="hidden group-data-rolling:col-start-1 group-data-rolling:row-start-3 group-data-rolling:block group-data-rolling:self-end group-data-rolling:justify-self-end xl:group-data-rolling:me-6" />
     </div>
   </section>
 </team-credits>
