@@ -126,6 +126,8 @@ event-media/        public, 20 MB per file, images + PDF + PowerPoint
     docs/<random>.<ext>
 guest-photos/       public, 5 MB per file, images
   <guest_id>/<random>.<ext>
+event-photos/       public, 20 MB per file, images: photos from the camera (v2.photos.path)
+company-logos/      public, 2 MB per file, images (no SVG): company logos (v2.companies.logo_path)
 team-images/        unchanged, still used by v2.team
 events-images/      unchanged, only the live site uses it
 ```
@@ -158,6 +160,8 @@ Run in the Supabase SQL editor (or `psql`), in order. Each step can be checked b
 | 5 | `05_verify.sql` | Read-only: row counts, unreadable times, rows deleted since, photos not copied yet | No |
 | 6 | Dashboard | Integrations → Data API → Settings → Exposed schemas: add `v2`, so the site can call `supabase.schema('v2')` with the same publishable key | No |
 | 7 | `06_categories_and_roles.sql` | Only for a database set up before 2026-11-25: new category list, shorter roles | No |
+| 8 | `07_companies_photos_posters.sql` | Adds `companies`, `guests.company_id`, `photos`, `photo_guests` and `events.poster_path` (filled from the covers), and the `event-photos` and `company-logos` buckets | No |
+| 9 | `08_fall_2026_speakers.sql` | The Fall 2026 Meet the Professionals speakers and their companies, as the event's hosts (upload their headshots and logos first) | No |
 | undo | `99_rollback.sql` | Drops `v2` and the new bucket rules (empty and delete the two buckets in the dashboard) | No |
 
 Until the new site goes live, the current admin still writes to `public`. **Re-run steps 3 to 5 right before
@@ -176,3 +180,5 @@ rollback leaving `public` as it was.
 
 - `site_data_versions` areas for the v2 tables, so the site's cache refreshes when v2 changes.
 - Moving the admin to v2, then retiring `public.events`, `public.team` and `events-images`.
+- Once the admin and the site read posters from `events.poster_path` and photos from `v2.photos`: dropping
+  `v2.event_photos`, and making `03_populate.sql` write `poster_path` instead of cover rows.
