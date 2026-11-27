@@ -1,49 +1,185 @@
 ---
 /**
- * A speaker on a wider screen: their photo from the event as an instant print, and their speaker card laid over
- * its lower corner. On a phone the two become one print instead (`SpeakerPrint`).
+ * A speaker in the Meet the Professionals spotlight: their photo from the event as an instant print, and their
+ * speaker card laid over it (under the print on a phone, over its lower corner on a wider screen). The card is a
+ * thick card edged in their company's colour, with two sides like a trading card: their photo, name, role and
+ * links on the front, and on the back the LCS set's back with a ribbon in their company's colour. Switching
+ * speakers turns it over, and the front's photo is taken through Doug's viewfinder: the camera screen shows over
+ * it while he focuses, then fades to leave the photo (`scripts/speaker-spotlight.ts`). Without that, the card
+ * simply shows the photo.
  */
 import { Image } from 'astro:assets';
+import iconPattern from '../../assets/patterns/icon-pattern.svg?url';
 import type { Speaker } from '../../lib/speakers';
 import SpeakerLinks from './SpeakerLinks.astro';
 
-/** `shown`: the speaker showing when the page opens, whose photos load straight away instead of when needed. */
-type Props = { speaker: Speaker; edition: string; room: string; shown: boolean };
+/**
+ * `position` and `count`: their place in the list, shown as the camera's shot count. `shown`: the speaker
+ * showing when the page opens, whose photos load straight away instead of when needed.
+ */
+type Props = { speaker: Speaker; edition: string; room: string; position: number; count: number; shown: boolean };
 
-const { speaker, edition, room, shown } = Astro.props;
+const { speaker, edition, room, position, count, shown } = Astro.props;
 const loading = shown ? 'eager' : 'lazy';
+
+// The camera screen's four corner marks.
+const CORNERS = [
+  'top-2 left-2 border-t-2 border-l-2',
+  'top-2 right-2 border-t-2 border-r-2',
+  'bottom-2 left-2 border-b-2 border-l-2',
+  'right-2 bottom-2 border-r-2 border-b-2',
+];
+// The rule-of-thirds grid over the picture, two lines each way.
+const THIRDS = [
+  'inset-y-0 left-1/3 w-px',
+  'inset-y-0 left-2/3 w-px',
+  'inset-x-0 top-1/3 h-px',
+  'inset-x-0 top-2/3 h-px',
+];
+// The exposure along the bottom of the screen, the way a camera shows it. Decoration, the same for every shot.
+const EXPOSURE = ['1/125', 'f/2.8', 'ISO 400'];
 ---
 
-<div class="grid">
-  <figure data-print class="rounded-md bg-print p-3.5 pb-0 shadow-(--shadow-float)">
+{/* The print and the card go straight into the two rows of the speaker's slide. */}
+<div class="contents">
+  <figure data-print class="rounded-md bg-print p-2.5 pb-0 shadow-(--shadow-float) nav:p-3.5 nav:pb-0">
     <Image
       src={speaker.eventPhoto}
       alt={`${speaker.name} at Meet the Professionals`}
-      widths={[760, 1200]}
-      sizes="38rem"
+      widths={[400, 760, 1200]}
+      sizes="(min-width: 64rem) 38rem, 100vw"
       loading={loading}
       class="aspect-5/3 w-full rounded-sm bg-window object-cover"
     />
-    <figcaption class="flex items-baseline justify-end gap-3 py-3.5 font-display text-ink">
-      <span class="text-lg font-extrabold">Meet the Professionals · {edition}</span>
-      <span class="text-sm font-bold text-pink-ink">{room}</span>
+    <figcaption class="flex items-baseline justify-end gap-3 py-2.5 font-display text-ink nav:py-3.5">
+      <span class="text-sm font-extrabold nav:text-lg">Meet the Professionals · {edition}</span>
+      <span class="text-xs font-bold text-pink-ink nav:text-sm">{room}</span>
     </figcaption>
   </figure>
 
-  <article
+  {/*
+    Seen in perspective, so its thickness shows when it turns. It turns straight on, and is held at an angle only
+    while Doug takes the photo (`data-card-pose`).
+  */}
+  <div
     data-card
-    class="relative -mt-48 -ms-16 w-(--speaker-card-width) rounded-(--radius-ticket) border-4 border-yellow bg-raised p-3 shadow-(--shadow-card)"
+    class="relative -mt-8 w-(--speaker-card-width-phone) perspective-distant nav:-mt-48 nav:-ms-16 nav:w-(--speaker-card-width)"
   >
-    <Image
-      src={speaker.photo}
-      alt=""
-      width={200}
-      densities={[1, 2]}
-      loading={loading}
-      class="aspect-4/3 w-full rounded-xl bg-window object-cover object-top"
-    />
-    <h3 class="mt-3 font-display text-xl leading-tight font-extrabold text-balance">{speaker.name}</h3>
-    <p class="mt-0.5 text-xs text-text-2">{speaker.role} · {speaker.company}</p>
-    <div class="mt-3 empty:hidden"><SpeakerLinks speaker={speaker} /></div>
-  </article>
+    <div data-card-pose class="transform-3d">
+      <div data-card-turn style={{ '--company': speaker.colour }} class="relative grid transform-3d">
+        <article
+          class="col-start-1 row-start-1 translate-z-(--card-depth-half) overflow-hidden rounded-(--radius-ticket) border-2 border-(--company) bg-raised p-3 backface-hidden"
+        >
+          <div data-viewfinder class="group/finder relative overflow-hidden rounded-xl bg-window">
+            {/*
+              The picture: their headshot, and a blurred copy over it that fades while Doug focuses. The script
+              zooms and moves this as if the camera were held in a hand.
+            */}
+            <div data-frame>
+              <Image
+                data-headshot
+                src={speaker.photo}
+                alt=""
+                width={240}
+                densities={[1, 2]}
+                loading={loading}
+                class="aspect-9/10 w-full object-cover object-top"
+              />
+              <Image
+                data-soft
+                src={speaker.photo}
+                alt=""
+                width={240}
+                densities={[1, 2]}
+                loading={loading}
+                class="absolute inset-0 size-full object-cover object-top opacity-0 blur-sm"
+              />
+            </div>
+            {/* The camera screen over the picture, hidden until Doug lines up a shot. */}
+            <div data-camera-screen class="absolute inset-0 text-white opacity-0" aria-hidden="true">
+              {THIRDS.map((line) => <span class:list={['absolute bg-white/30', line]} />)}
+              {CORNERS.map((corner) => <span class:list={['absolute size-4 border-white', corner]} />)}
+              {/* Battery, top left. */}
+              <span class="absolute top-3.5 left-7 flex items-center">
+                <span class="block h-2.5 w-5 rounded-xs border border-white p-px">
+                  <span class="block h-full w-3/4 bg-white"></span>
+                </span>
+                <span class="block h-1 w-0.5 rounded-r-xs bg-white"></span>
+              </span>
+              <span class="absolute top-2.5 right-7 rounded-sm bg-page/70 px-1.5 font-mono text-xs">
+                {position}/{count}
+              </span>
+              {/* Where their face usually is in a headshot; the box is moved inside this spot while focusing. */}
+              <span class="absolute top-2/5 left-1/2 w-1/3 -translate-1/2">
+                <span
+                  data-focus
+                  class="block aspect-square rounded-sm border-2 border-white transition-colors group-data-locked/finder:border-yellow"
+                ></span>
+              </span>
+              <span
+                class="absolute inset-x-7 bottom-2.5 flex justify-between rounded-sm bg-page/70 px-1.5 font-mono text-xs"
+              >
+                {EXPOSURE.map((reading) => <span>{reading}</span>)}
+              </span>
+            </div>
+            {/* The shutter: black for a blink as the shot is taken, between the camera screen and the photo. */}
+            <span data-shutter class="absolute inset-0 bg-ink opacity-0" aria-hidden="true"></span>
+          </div>
+          <h3 class="mt-3 font-display text-xl leading-tight font-extrabold text-balance">{speaker.name}</h3>
+          <p class="mt-0.5 text-xs text-text-2">{speaker.role} · {speaker.company}</p>
+          <div class="mt-3 empty:hidden"><SpeakerLinks speaker={speaker} /></div>
+        </article>
+
+        {/*
+          The back, the same for every speaker like a trading card set: the LCS icon pattern, a ribbon across it in
+          their company's colour carrying the company's logo, and the set's name. Decoration only, so screen
+          readers skip it.
+        */}
+        <div
+          aria-hidden="true"
+          class="relative col-start-1 row-start-1 grid -translate-z-(--card-depth-half) rotate-y-180 place-items-center overflow-hidden rounded-(--radius-ticket) border-2 border-(--company) bg-raised backface-hidden"
+        >
+          <span class="card-pattern absolute inset-0" style={{ '--pattern': `url(${iconPattern})` }}></span>
+          <span class="relative -mx-6 flex -rotate-8 justify-center self-center justify-self-stretch bg-(--company) py-3">
+            <span class="grid h-16 place-items-center rounded-full bg-white px-6">
+              <Image
+                src={speaker.logo}
+                alt=""
+                height={48}
+                densities={[1, 2]}
+                loading="lazy"
+                class="max-h-12 w-auto max-w-36 object-contain"
+              />
+            </span>
+          </span>
+          <span
+            class="absolute bottom-3 left-3.5 font-display text-xs font-extrabold tracking-label text-yellow uppercase"
+          >
+            Meet the Pros · {edition}
+          </span>
+        </div>
+
+        {/*
+          The card's four edges, joining the front to the back, so it's a solid card rather than two flat sides.
+          They stop short of the rounded corners.
+        */}
+        <span
+          class="card-edge absolute inset-y-(--radius-ticket) left-0 w-(--card-depth) -translate-x-1/2 rotate-y-90"
+          aria-hidden="true"
+        ></span>
+        <span
+          class="card-edge absolute inset-y-(--radius-ticket) right-0 w-(--card-depth) translate-x-1/2 rotate-y-90"
+          aria-hidden="true"
+        ></span>
+        <span
+          class="card-edge absolute inset-x-(--radius-ticket) top-0 h-(--card-depth) -translate-y-1/2 rotate-x-90"
+          aria-hidden="true"
+        ></span>
+        <span
+          class="card-edge absolute inset-x-(--radius-ticket) bottom-0 h-(--card-depth) translate-y-1/2 rotate-x-90"
+          aria-hidden="true"
+        ></span>
+      </div>
+    </div>
+  </div>
 </div>

@@ -1,0 +1,72 @@
+---
+/**
+ * The row of speakers' faces under the spotlight, to pick who to show. The one showing has their face on the big
+ * card, so their spot in the row shows where they work instead: their company's logo inside a dashed ring in
+ * their company's colour, about a third bigger than the others so it's clear who's showing. With more speakers
+ * than fit, the row scrolls (a finger or a mouse can drag it) and a button at its end moves it along, to show
+ * there are more (`scripts/speaker-spotlight.ts`).
+ */
+import { Image } from 'astro:assets';
+import type { Speaker } from '../../lib/speakers';
+
+type Props = { speakers: readonly Speaker[] };
+
+const { speakers } = Astro.props;
+---
+
+<div data-faces-wrap class="group/faces flex items-center gap-2">
+  <ul
+    data-faces
+    aria-label="Pick a speaker"
+    class="flex snap-x gap-5 overflow-x-auto scroll-smooth p-5 [scrollbar-width:none]"
+  >
+    {
+      speakers.map((speaker, index) => (
+        /*
+          The two faces next to the one showing step away from it, one to the left and one to the right, so it
+          stands apart while it stays where it is. Moved rather than spaced out, so the row doesn't reflow.
+        */
+        <li class="shrink-0 snap-start transition-transform duration-(--dur-fast) ease-(--ease-spring) motion-reduce:transition-none has-[+li_[aria-pressed=true]]:-translate-x-2 [li:has([aria-pressed=true])+&]:translate-x-2">
+          <button
+            type="button"
+            data-face={index}
+            aria-label={`Show ${speaker.name}, ${speaker.company}`}
+            aria-pressed={index === 0 ? 'true' : 'false'}
+            style={{ '--company': speaker.colour }}
+            class="group/face relative grid size-13 place-items-center rounded-full bg-window ring-3 ring-line-quiet transition-[translate,scale,background-color] duration-(--dur-fast) ease-(--ease-spring) hover:-translate-y-0.5 active:scale-95 aria-pressed:scale-135 aria-pressed:bg-white aria-pressed:ring-0 motion-reduce:transition-none nav:size-16"
+          >
+            <Image
+              src={speaker.photo}
+              alt=""
+              width={64}
+              densities={[1, 2]}
+              class="size-full rounded-full object-cover object-top transition-opacity duration-(--dur-base) group-aria-pressed/face:opacity-0"
+            />
+            <Image
+              src={speaker.logo}
+              alt=""
+              height={40}
+              densities={[1, 2]}
+              class="absolute inset-0 m-auto h-1/2 w-3/4 object-contain opacity-0 transition-opacity duration-(--dur-base) group-aria-pressed/face:opacity-100"
+            />
+            {/* The dashed ring around the one showing, in their company's colour. */}
+            <span
+              class="pointer-events-none absolute -inset-1.5 rounded-full border-3 border-dashed border-(--company) opacity-0 transition-opacity duration-(--dur-base) group-aria-pressed/face:opacity-100"
+              aria-hidden="true"
+            />
+          </button>
+        </li>
+      ))
+    }
+  </ul>
+  <button
+    type="button"
+    data-faces-more
+    aria-label="More speakers"
+    class="hidden size-11 shrink-0 place-items-center rounded-full bg-yellow text-ink shadow-key shadow-yellow-ink transition-[translate,box-shadow] duration-(--dur-fast) ease-(--ease-spring) group-data-overflow/faces:grid hover:-translate-y-0.5 hover:shadow-key-lifted active:translate-y-1 active:shadow-none motion-reduce:transition-none"
+  >
+    <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+      <path d="M5 12h14M13 6l6 6-6 6" />
+    </svg>
+  </button>
+</div>
