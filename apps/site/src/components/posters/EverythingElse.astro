@@ -2,9 +2,12 @@
 /**
  * The home page's "Everything else we do": one row of event posters per kind of night (review sessions, socials,
  * career, workshops). The rows drift sideways, in turn one way then the other, and slow right down while you
- * point at one; any poster opens big (`scripts/poster-rows.ts`). With reduced motion or without JavaScript the
- * rows stand still and scroll sideways by hand.
+ * point at one or swipe it along; any poster opens big (`scripts/poster-rows.ts`). Coco rides along on top of
+ * the posters (`scripts/poster-rider.ts`). With reduced motion or without JavaScript the rows stand still and
+ * scroll sideways by hand, and Coco stays out of sight.
  */
+import { Image } from 'astro:assets';
+import { MASCOTS } from '../../assets/brand';
 import type { EVERYTHING_ELSE, KIND_NAMES } from '../../content/everything-else';
 import type { PosterRow as Row } from '../../lib/posters';
 import PosterRow from './PosterRow.astro';
@@ -41,6 +44,24 @@ const { copy, names, rows } = Astro.props;
       }
     </ol>
   </section>
+
+  {/*
+    Coco, riding the rows. Drawn above every row and placed by the script on top of her poster. The box is cut off
+    just below her feet, so ducking slides her down out of sight behind the poster.
+  */}
+  <div
+    data-rider
+    class="group/rider pointer-events-none absolute top-0 left-0 z-20 flex h-(--rider-height) w-(--rider-width) items-end overflow-hidden data-up:pointer-events-auto"
+    aria-hidden="true"
+  >
+    <Image
+      src={MASCOTS.coco}
+      alt=""
+      width={80}
+      densities={[1, 2]}
+      class="h-auto w-full translate-y-full transition-[translate] duration-(--dur-base) ease-(--ease-spring) group-data-up/rider:translate-y-0 motion-reduce:transition-none"
+    />
+  </div>
 
   <PosterViewer />
 </poster-rows>
