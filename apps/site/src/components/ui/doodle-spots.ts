@@ -21,6 +21,9 @@ export type DoodleSection = 'events' | 'mtp' | 'everythingElse' | 'resources' | 
 
 export const DOODLE_SPOTS: Readonly<Record<DoodleSection, readonly DoodleSpot[]>> = {
   events: [
+    // The gap between the hero and this section's heading.
+    { doodle: 'jumps', place: { top: '1.5%', left: '30%' }, size: '8rem', motion: 'still' },
+    { doodle: 'star4', place: { top: '2%', left: '58%' }, size: '2.5rem', motion: 'turn' },
     { doodle: 'star13', place: { top: '5%', right: '8%' }, size: '4.5rem', motion: 'turn' },
     { doodle: 'asterisk', place: { bottom: '3%', left: '8%' }, size: '3rem', motion: 'turn-back' },
     { doodle: 'spark', place: { bottom: '3%', right: '30%' }, size: '2.75rem', motion: 'turn' },
