@@ -1,9 +1,9 @@
 /**
  * Coco rides the poster rows like a carousel: she sits on top of a poster, in any row, and goes round with it.
  * She stays ducked down behind it while any of it is near either edge of the row (under the row's label and
- * fades), popping up only once it's wholly in view, so she never slides in or out half-shown. When her poster has gone past the far
- * edge she waits, ducked, on the next poster coming in. Point at her, or tap her, and she ducks and pops up on a
- * poster in another row. She's drawn above every row, so the row above never covers her.
+ * fades), popping up only once it's wholly in view, so she never slides in or out half-shown. When her poster has
+ * gone past the far edge she waits, ducked, on the next poster coming in. Point at her, or tap her, and she ducks
+ * and pops up on a poster in another row. She's drawn above every row, so the row above never covers her.
  */
 import { gsap } from 'gsap';
 import { requiredElement } from '../lib/dom';
