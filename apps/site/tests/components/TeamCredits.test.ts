@@ -47,19 +47,27 @@ describe('TeamCredits', () => {
     expect(within(engineering).getAllByRole('listitem')).toHaveLength(2);
   });
 
-  it('cuts the rolling credits into groups of up to five per department, each with a print per person', async () => {
+  it('cuts the rolling credits into groups of up to three, each with a print per person and one still', async () => {
     const page = await renderSection();
     const lines = [...page.querySelectorAll<HTMLElement>('[data-line]')];
     expect(lines.map((line) => line.dataset.inGroup)).toEqual(['0', '1', '1']);
-    // A group's prints are split between its left and right side.
     const printsOf = (group: number) => page.querySelectorAll(`[data-group="${group}"] [data-person]`).length;
     expect([printsOf(0), printsOf(1)]).toEqual([1, 2]);
+    const stillsOf = (group: number) => page.querySelectorAll(`[data-group="${group}"] figure`).length;
+    expect([stillsOf(0), stillsOf(1)]).toEqual([1, 1]);
   });
 
-  it('ends with the card for joining the team', async () => {
+  it('links to joining the team, right after the counts', async () => {
     const page = await renderSection();
-    const join = getByRole(page, 'link', { name: new RegExp(TEAM.join.action.label) });
-    expect(join.getAttribute('href')).toBe(TEAM.join.action.href);
+    const join = getByRole(page, 'link', { name: new RegExp(TEAM.join.label) });
+    expect(join.getAttribute('href')).toBe(TEAM.join.href);
+  });
+
+  it('seats the three birds on the couch, out of the way of screen readers', async () => {
+    const page = await renderSection();
+    const couch = page.querySelector<HTMLElement>('couch-crew');
+    expect(couch?.getAttribute('aria-hidden')).toBe('true');
+    expect(couch?.querySelectorAll('[data-bird]')).toHaveLength(3);
   });
 
   it('links someone only to the profiles they have, in a new tab', async () => {

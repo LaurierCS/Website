@@ -1,0 +1,61 @@
+---
+/**
+ * The left side of the rolling credits (under the heading on a wide screen): each group's big still from an event
+ * (`content/credit-stills.ts`), with what was said that night under it, the way film credits cut to shots from the
+ * set. Every group's still is drawn here, stacked in the same place; only the lit group's shows, dropping in and
+ * fading away when the next group comes (CSS, on `data-current`, which `scripts/team-credits.ts` sets). Each
+ * group's spread (`CREDIT_SPREADS`) says where in the space its still lands and which way it tilts, so it isn't in
+ * the same spot every time.
+ */
+import { Image } from 'astro:assets';
+import type { CreditStill } from '../../content/credit-stills';
+import type { CreditGroup } from '../../lib/team';
+import { CREDIT_SPREADS, type StillSpot } from './credit-spreads';
+
+type Props = {
+  groups: readonly CreditGroup[];
+  /** Photos from events, one per group in turn. */
+  stills: readonly CreditStill[];
+  class?: string;
+};
+
+const { groups, stills, class: className } = Astro.props;
+// Where in the space the still lands.
+const PLACE: Readonly<Record<StillSpot['at'], string>> = {
+  top: 'justify-start',
+  middle: 'justify-center',
+  bottom: 'justify-end',
+};
+---
+
+<div class:list={['grid', className]}>
+  {
+    groups.map((_, index) => {
+      const spot = CREDIT_SPREADS[index % CREDIT_SPREADS.length].still;
+      const still = stills[index % stills.length];
+      return (
+        <div
+          data-group={index}
+          inert
+          class:list={['group/spread pointer-events-none col-start-1 row-start-1 flex flex-col', PLACE[spot.at]]}
+        >
+          <figure
+            style={{ '--tilt': `${spot.tilt}deg` }}
+            class="w-full -translate-y-6 rotate-(--tilt) rounded-sm bg-print p-2.5 pb-3 text-ink opacity-0 shadow-(--shadow-float) transition-[opacity,translate] duration-(--dur-roll) ease-(--ease-out) group-data-current/spread:translate-y-0 group-data-current/spread:opacity-100"
+          >
+            <Image
+              src={still.image}
+              alt={still.alt}
+              width={480}
+              densities={[1, 2]}
+              class="aspect-video w-full rounded-xs object-cover"
+            />
+            {still.caption && (
+              <figcaption class="mt-2 font-display text-base leading-snug font-bold">{still.caption}</figcaption>
+            )}
+          </figure>
+        </div>
+      );
+    })
+  }
+</div>
