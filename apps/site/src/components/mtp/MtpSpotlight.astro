@@ -1,13 +1,17 @@
 ---
 /**
  * The home page's Meet the Professionals spotlight: what the event is, then one speaker at a time, their photo
- * from the event as an instant print (with their card over its corner on a wider screen). The arrows, or a swipe
- * on a phone, step through the speakers, and each new one is dealt onto the table
- * (`scripts/speaker-spotlight.ts`). Under it, the ask for the next one's speakers. Without JavaScript the first
- * speaker shows and the arrows stay invisible (they still take their space, so nothing moves).
+ * from the event as an instant print with their card on it. The row of faces under it picks the speaker (the one
+ * showing has their company's logo there instead); picking turns the card over to the next speaker, Doug focuses
+ * on them through the viewfinder on the card and takes the shot, dropping a little print into the pile at his feet
+ * (`scripts/speaker-spotlight.ts`). Doug stands beside the card, or on a wide screen in the space under the
+ * heading, between it, the card and the ask below. Under it,
+ * the ask for the next one's speakers. Without JavaScript the first speaker shows.
  */
 import type { MTP } from '../../content/mtp';
 import { speakerCompanies, type Speaker } from '../../lib/speakers';
+import PhotoDoug from './PhotoDoug.astro';
+import SpeakerFaces from './SpeakerFaces.astro';
 import SpeakerPitch from './SpeakerPitch.astro';
 import SpeakerSlide from './SpeakerSlide.astro';
 import { DOODLE_SPOTS } from '../ui/doodle-spots';
@@ -28,15 +32,9 @@ const chips =
         `${companies.slice(0, SHOWN_COMPANIES).join(' · ')}${moreCompanies > 0 ? ` +${moreCompanies} more` : ''}`,
       ]
     : [];
-
-const round =
-  'grid size-11 place-items-center rounded-full transition-[translate,scale,box-shadow,background-color] duration-(--dur-fast) ease-(--ease-spring) active:scale-90 motion-reduce:transition-none';
 ---
 
-{/*
-  Clipped at the sides: a speaker sliding in starts a little past the screen's edge on a phone, and without this
-  the page would widen for that moment (a sideways scrollbar, and the background shifting).
-*/}
+{/* Clipped at the sides, so Doug's pile of prints or a turning card never widens the page. */}
 <speaker-spotlight class="group relative isolate block overflow-x-clip">
   <Doodles spots={DOODLE_SPOTS.mtp} />
   <section
@@ -44,8 +42,17 @@ const round =
     aria-labelledby="mtp-title"
     class="mx-auto flex max-w-(--max) flex-col px-4 py-16 nav:px-16 nav:py-24"
   >
-    <div class="grid items-center gap-10 xl:grid-cols-[1fr_auto] xl:gap-20">
-      <header class="flex flex-col gap-4">
+    {/*
+      On a wide screen: the heading, then Doug in the space under it, on the left; the speakers on the right,
+      as tall as both.
+    */}
+    <div
+      class:list={[
+        'grid gap-10 xl:grid-cols-[1fr_auto] xl:gap-x-20',
+        speakers.length > 0 && 'xl:grid-rows-[auto_1fr]',
+      ]}
+    >
+      <header class="flex flex-col gap-4 xl:col-start-1 xl:row-start-1">
         <p class="font-display text-sm font-bold tracking-label text-yellow uppercase">{copy.label}</p>
         <h2 id="mtp-title" class="text-4xl leading-none font-extrabold text-balance nav:text-6xl">{copy.title}</h2>
         <p class="max-w-prose text-text-2 nav:text-lg">{copy.summary}</p>
@@ -62,77 +69,48 @@ const round =
 
       {
         speakers.length > 0 && (
-          <div
-            role="region"
-            aria-roledescription="carousel"
-            aria-label="Speakers"
-            data-stage
-            class="grid touch-pan-y pb-1 nav:w-(--print-width) nav:justify-self-center xl:justify-self-end"
-          >
-            {speakers.map((speaker, index) => (
-              <SpeakerSlide
-                speaker={speaker}
-                edition={copy.edition}
-                room={copy.room}
-                position={index + 1}
-                count={speakers.length}
-                shown={index === 0}
-              />
-            ))}
-
-            {/*
-              On a phone, a row of its own under the print, with a dot per speaker; on a wider screen, tucked into
-              the corner beside the card. With only one speaker there is nothing to step to.
-            */}
+          /*
+            Two rows shared by every speaker and the faces: the print, then the card hanging below it. The stage
+            and each speaker pass the rows down (`subgrid`), so on a wider screen the faces can sit in the second
+            row, right under the print and beside the card, whatever height the card is.
+          */
+          <div class="grid nav:w-(--print-width) nav:justify-self-center xl:col-start-2 xl:row-span-2 xl:row-start-1 xl:justify-self-end">
+            <div
+              role="region"
+              aria-roledescription="carousel"
+              aria-label="Speakers"
+              data-stage
+              class="relative col-start-1 row-span-2 row-start-1 grid touch-pan-y grid-rows-subgrid"
+            >
+              {speakers.map((speaker, index) => (
+                <SpeakerSlide
+                  speaker={speaker}
+                  edition={copy.edition}
+                  room={copy.room}
+                  position={index + 1}
+                  count={speakers.length}
+                  shown={index === 0}
+                />
+              ))}
+              {/* Beside the card: to its right on a phone, below the print's right end in between. */}
+              <PhotoDoug class="absolute right-2 bottom-28 nav:right-4 nav:bottom-2 xl:hidden" />
+            </div>
             {speakers.length > 1 && (
-              <div class="invisible col-start-1 row-start-2 mt-6 flex items-center justify-between group-data-live:visible nav:row-start-1 nav:mt-0 nav:gap-3 nav:self-end nav:justify-self-end">
-                <button
-                  type="button"
-                  data-speaker-step="-1"
-                  aria-label="Previous speaker"
-                  class:list={[round, 'border-2 border-line text-white hover:bg-chip']}
-                >
-                  <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-                    <path d="M19 12H5M11 6l-6 6 6 6" />
-                  </svg>
-                </button>
-                <div class="flex flex-col items-center gap-2">
-                  <span class="flex items-center gap-1.5 nav:hidden" aria-hidden="true">
-                    {speakers.map((_, index) => (
-                      <span
-                        data-dot
-                        data-current={index === 0 ? '' : undefined}
-                        class="h-2 w-2 rounded-full bg-line transition-[width,background-color] duration-(--dur-base) ease-(--ease-out) data-current:w-5.5 data-current:bg-yellow motion-reduce:transition-none"
-                      />
-                    ))}
-                  </span>
-                  <p class="font-display text-sm font-bold whitespace-nowrap">
-                    {/* A fixed minimum width, so the arrows hold still as the count changes ("9 of 12", "10 of 12"). */}
-                    <span data-count class="inline-block min-w-16 text-center tabular-nums">1 of {speakers.length}</span>
-                    <span class="text-text-2 nav:hidden"> · swipe the print</span>
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  data-speaker-step="1"
-                  aria-label="Next speaker"
-                  class:list={[
-                    round,
-                    'bg-yellow text-ink shadow-key shadow-yellow-ink hover:-translate-y-0.5 hover:shadow-key-lifted active:translate-y-1 active:shadow-none motion-reduce:hover:translate-y-0',
-                  ]}
-                >
-                  <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-                    <path d="M5 12h14M13 6l6 6-6 6" />
-                  </svg>
-                </button>
+              <div class="col-start-1 row-start-3 mt-6 nav:row-start-2 nav:ms-(--faces-beside-card) nav:mt-4 nav:self-start">
+                <SpeakerFaces speakers={speakers} />
               </div>
             )}
           </div>
         )
       }
+      {
+        speakers.length > 0 && (
+          <PhotoDoug class="relative hidden xl:col-start-1 xl:row-start-2 xl:block xl:place-self-center" />
+        )
+      }
     </div>
 
-    {/* Says who is showing after a step, for screen readers; empty at first, so nothing is read out on load. */}
+    {/* Says who is showing after a switch, for screen readers; empty at first, so nothing is read out on load. */}
     <p data-announce class="sr-only" aria-live="polite"></p>
 
     <SpeakerPitch {...copy.pitch} />

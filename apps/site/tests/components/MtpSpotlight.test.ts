@@ -10,10 +10,11 @@ import { readSpeakers, type Speaker } from '../../src/lib/speakers';
 // Real photos from the speakers folder, so the page renders them the way the site does.
 const SPEAKERS = readSpeakers(
   [
-    'name,role,company,linkedin,website,photo,event_photo',
-    'Sam Lee,Software Engineer,Google,https://www.linkedin.com/in/samlee/,,alex-astrum.jpg,event-placeholder.png',
-    'Ria Shah,Analyst,RBC,,https://ria.dev,mahsa-panahi.jpg,event-placeholder.png',
-    'Jo Park,Product Owner,Google,,,kanwar-anand.jpg,event-placeholder.png',
+    'name,role,company,linkedin,website,photo,event_photo,logo,colour',
+    'Sam Lee,Software Engineer,Google,https://www.linkedin.com/in/samlee/,,alex-astrum.jpg,event-placeholder.png,' +
+      'logo-google.png,#4285f4',
+    'Ria Shah,Analyst,RBC,,https://ria.dev,mahsa-panahi.jpg,event-placeholder.png,logo-rbc.png,#005daa',
+    'Jo Park,Product Owner,Google,,,kanwar-anand.jpg,event-placeholder.png,logo-google.png,#4285f4',
   ].join('\n'),
   SPEAKER_IMAGES,
 );
@@ -32,20 +33,33 @@ describe('MtpSpotlight', () => {
     expect(chips.map((chip) => chip.textContent)).toEqual([`3 speakers in ${MTP.edition}`, 'Google · RBC']);
   });
 
-  // Each speaker is in the page twice, as the phone's print and as the wider screen's print and card; the page's
-  // styles display only one. These tests see both, since they don't load the styles.
-  it('shows the first speaker, in the phone layout and the wider one', async () => {
+  it('shows the first speaker, and a face for each speaker to pick from, the first one picked', async () => {
     const page = await renderSpotlight(SPEAKERS);
     const shown = getByRole(page, 'group', { name: '1 of 3: Sam Lee' });
-    expect(within(shown).getAllByRole('heading', { name: 'Sam Lee' })).toHaveLength(2);
-    expect(within(shown).getAllByText('Software Engineer · Google')).toHaveLength(2);
-    expect(getByRole(page, 'button', { name: 'Next speaker' })).toBeDefined();
+    expect(within(shown).getByRole('heading', { name: 'Sam Lee' })).toBeDefined();
+    expect(within(shown).getByText('Software Engineer · Google')).toBeDefined();
+    const faces = within(getByRole(page, 'list', { name: 'Pick a speaker' })).getAllByRole('button');
+    expect(faces.map((face) => [face.getAttribute('aria-label'), face.getAttribute('aria-pressed')])).toEqual([
+      ['Show Sam Lee, Google', 'true'],
+      ['Show Ria Shah, RBC', 'false'],
+      ['Show Jo Park, Google', 'false'],
+    ]);
   });
 
   it('keeps the other speakers out of reach until stepped to', async () => {
     const page = await renderSpotlight(SPEAKERS);
     const slides = [...page.querySelectorAll<HTMLElement>('[data-speaker]')];
     expect(slides.map((slide) => slide.hasAttribute('inert'))).toEqual([false, true, true]);
+  });
+
+  it("counts each speaker's shot in the viewfinder by their place in the list", async () => {
+    const page = await renderSpotlight(SPEAKERS);
+    const slides = [...page.querySelectorAll<HTMLElement>('[data-speaker]')];
+    expect(slides.map((slide) => within(slide).queryByText(/^\d+\/3$/)?.textContent?.trim())).toEqual([
+      '1/3',
+      '2/3',
+      '3/3',
+    ]);
   });
 
   it("links each speaker's LinkedIn and website, and leaves out the ones that aren't in the sheet", async () => {
@@ -62,9 +76,9 @@ describe('MtpSpotlight', () => {
     expect(within(jo).queryAllByRole('link')).toEqual([]);
   });
 
-  it('has no arrows with only one speaker', async () => {
+  it('has no faces to pick from with only one speaker', async () => {
     const page = await renderSpotlight(SPEAKERS.slice(0, 1));
-    expect(queryByRole(page, 'button', { name: 'Next speaker' })).toBeNull();
+    expect(queryByRole(page, 'list', { name: 'Pick a speaker' })).toBeNull();
     expect(getByText(page, `1 speaker in ${MTP.edition}`)).toBeDefined();
   });
 
