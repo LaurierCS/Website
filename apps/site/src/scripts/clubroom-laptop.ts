@@ -6,8 +6,8 @@
  * there is no cursor. "Show solution" on the practice tab opens the solution, and hides it again.
  *
  * The first time the laptop comes into view after the page loads, Krill pops up from behind it, waddles over to
- * its camera and slaps a piece of see-through tape over it (nobody wants to be watched), then stays up there
- * beside it. With reduced motion the tape is simply on and Krill is already beside it.
+ * its camera and puts a piece of see-through tape over it, then stays up there beside it. With reduced motion the
+ * tape is simply on and Krill is already beside it.
  */
 import { gsap } from 'gsap';
 import { requiredData, requiredElement } from '../lib/dom';
