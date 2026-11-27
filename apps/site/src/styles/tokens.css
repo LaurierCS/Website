@@ -105,6 +105,9 @@
   --doodle-turn: 60s;
   --doodle-turn-slow: 90s;
   --doodle-drift: 2.5rem;
+  /* Coco riding the poster rows: her width, and the box she ducks down out of (a little taller than her). */
+  --rider-width: 4.5rem;
+  --rider-height: 5rem;
 
   /* Focus ring: on-brand and always visible. */
   --focus-ring: 0 0 0 3px var(--bg-page), 0 0 0 6px var(--yellow);

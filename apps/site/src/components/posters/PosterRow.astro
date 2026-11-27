@@ -48,6 +48,7 @@ const gap = 'gap-2.5 nav:gap-4';
       {` ${row.posters.length} ${row.posters.length === 1 ? 'event' : 'events'}`}
     </p>
     <span
+      data-label-fade
       class="pointer-events-none absolute inset-y-0 left-full hidden w-30 bg-linear-to-r from-page nav:block"
       aria-hidden="true"
     ></span>
@@ -56,9 +57,13 @@ const gap = 'gap-2.5 nav:gap-4';
   <div class="relative">
     {/*
       Room above and below the posters (taken back with the negative margin) so one growing under the pointer
-      isn't cut off: a sideways scroller clips top and bottom too.
+      isn't cut off: a sideways scroller clips top and bottom too. While the rows drift, a sideways swipe is the
+      script's (it moves the row) and an up-and-down one still scrolls the page.
     */}
-    <div data-viewport class="-my-3 overflow-x-auto [scrollbar-width:none] group-data-drifting:overflow-hidden">
+    <div
+      data-viewport
+      class="-my-3 overflow-x-auto [scrollbar-width:none] group-data-drifting:touch-pan-y group-data-drifting:overflow-hidden"
+    >
       <div data-track class:list={['flex w-max px-4 py-3 nav:ps-57.5 nav:pe-16', gap]}>
         <ul class:list={['flex', gap]} aria-label={`${name} posters`}>
           {tiles.map(({ poster, large }) => (
@@ -73,6 +78,7 @@ const gap = 'gap-2.5 nav:gap-4';
       </div>
     </div>
     <span
+      data-end-fade
       class="pointer-events-none absolute inset-y-0 right-0 w-16 bg-linear-to-l from-page nav:w-64"
       aria-hidden="true"
     ></span>
