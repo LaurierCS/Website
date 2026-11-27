@@ -83,13 +83,17 @@
   --laptop-width: 42.5rem;
   /*
    * The rolling team credits: how tall they are, the heading column beside them on a wide screen, and the
-   * credits column itself, wide and in between (with the prints' columns either side taking the rest).
+   * credits column itself, wide and in between (with the still's column and the prints' column either side taking
+   * the rest).
    */
   --credits-height: 58rem;
   --credits-aside: 25rem;
   --credits-width: 30rem;
   --credits-width-stacked: 26rem;
   --credits-fade: 11rem; /* how far in from the top and bottom the credits fade */
+  /* The birds' couch in the corner of the rolling credits: the widest it shows, and the shape of its picture. */
+  --couch-width: 20rem;
+  --couch-aspect: 1062 / 858;
   --radius-lid: 1.625rem;
   --max: 1280px;
   /* How far a jump to a section stops short of it, so the header that stays at the top doesn't cover its title. */

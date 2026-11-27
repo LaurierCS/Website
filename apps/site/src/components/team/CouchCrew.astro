@@ -1,0 +1,55 @@
+---
+/**
+ * Three birds on a couch, seen from behind, watching the team credits roll with us, with a bucket of popcorn on
+ * the arm. As each new group of names lights up, one of them reacts: a heart over their head, a dip into the
+ * popcorn with kernels flying, or a hop in their seat (`scripts/couch-crew.ts`). The art is drawn looking away to
+ * the left; here it's turned round so they face the credits, up and to the right of them. Decoration only, so
+ * screen readers skip it.
+ */
+import { Image } from 'astro:assets';
+import { COUCH, COUCH_BIRDS, POPCORN } from '../../assets/placeholders';
+import { COUCH_SEATS, POPCORN_SPOT, type Spot } from './couch-seats';
+
+/** `class` places it and shows it (`block`): it has no display of its own, so it can be hidden where not wanted. */
+type Props = { class?: string };
+
+const { class: className } = Astro.props;
+const place = (spot: Spot) => ({ left: `${spot.left}%`, bottom: `${spot.bottom}%`, width: `${spot.width}%` });
+---
+
+<couch-crew
+  aria-hidden="true"
+  class:list={['pointer-events-none relative aspect-(--couch-aspect) w-full max-w-(--couch-width) -scale-x-100', className]}
+>
+  <Image src={COUCH.cushion} alt="" width={340} densities={[1, 2]} class="absolute inset-0 size-full" />
+  {
+    COUCH_SEATS.map((seat) => (
+      <div data-bird class="absolute -translate-x-1/2" style={place(seat)}>
+        {/* A pixel heart, hidden until this bird loves a name on the credits. */}
+        <span class="absolute bottom-full left-1/2 -translate-x-1/2">
+          <svg data-heart viewBox="0 0 7 6" shape-rendering="crispEdges" class="block size-6 text-pink opacity-0">
+            <path fill="currentColor" d="M1 0h2v1h1V0h2v1h1v2H6v1H5v1H4v1H3V5H2V4H1V3H0V1h1z" />
+          </svg>
+        </span>
+        <Image
+          data-body
+          src={COUCH_BIRDS[seat.bird]}
+          alt=""
+          width={100}
+          densities={[1, 2]}
+          class="h-auto w-full origin-bottom"
+        />
+      </div>
+    ))
+  }
+  <Image src={COUCH.frame} alt="" width={340} densities={[1, 2]} class="absolute inset-0 size-full" />
+  <div data-popcorn class="absolute -translate-x-1/2" style={place(POPCORN_SPOT)}>
+    {/* Where kernels fly out from, the top of the bucket. */}
+    <span data-kernels class="absolute top-1/4 left-1/2"></span>
+    <Image src={POPCORN} alt="" width={40} densities={[1, 2]} class="h-auto w-full" />
+  </div>
+</couch-crew>
+
+<script>
+  import '../../scripts/couch-crew';
+</script>
