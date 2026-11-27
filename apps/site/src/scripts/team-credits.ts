@@ -1,8 +1,9 @@
 /**
  * Runs the team credits. Wherever there's room and motion is allowed, the credits roll up slowly and without
- * stopping, like a film's end credits; whichever group is passing the middle is lit, and its prints drop
- * in either side of the credits, fading away as the next group reaches the middle. Once the last group has
- * passed, they rewind quickly to the first and roll again.
+ * stopping, like a film's end credits; whichever group is passing the middle is lit, and its prints and its
+ * still from an event drop in beside the credits, fading away as the next group reaches the middle (and the
+ * credits send `GROUP_LIT`, for the birds on the couch to react to). Once the last group has passed, they rewind
+ * quickly to the first and roll again.
  *
  * With the pointer on the credits, the wheel (or a finger, dragging) moves them up and down, gently, so nobody
  * flies past; at either end the wheel scrolls the page again. Pointing at the names (not the roles beside them)
@@ -14,6 +15,7 @@
  */
 import { gsap } from 'gsap';
 import { requiredData, requiredElement } from '../lib/dom';
+import { GROUP_LIT } from './credits-events';
 
 /** How fast the credits roll, in pixels a second, and how long they take to slow to a stop or get going again. */
 const ROLL_PX_PER_S = 34;
@@ -80,7 +82,7 @@ class TeamCredits extends HTMLElement {
     const away = (): boolean => document.hidden || unfocused;
     const within = (y: number): number => Math.min(ends.first, Math.max(ends.last, y));
 
-    /** Lights group `index`: its lines on the credits, and its prints either side. */
+    /** Lights group `index`: its lines on the credits, and its prints and still beside them. */
     const light = (index: number): void => {
       current = index;
       for (const side of sides) {
@@ -91,6 +93,7 @@ class TeamCredits extends HTMLElement {
       groupLines.forEach((ofGroup, at) => {
         for (const line of ofGroup) line.toggleAttribute('data-lit', at === index);
       });
+      this.dispatchEvent(new CustomEvent(GROUP_LIT));
     };
 
     /** Lights whichever group is passing the middle of the credits. */
