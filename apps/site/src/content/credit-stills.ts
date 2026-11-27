@@ -1,6 +1,6 @@
 /**
- * The stills shown between the team's prints on the rolling credits: photos from events and behind the scenes,
- * the way a film's end credits cut to shots from the set. Each group of names gets the next one, in turn. Only the
+ * The stills shown to the left of the rolling team credits: photos from events and behind the scenes, the way a
+ * film's end credits cut to shots from the set. Each group of names gets the next one, in turn. Only the
  * placeholder for now; a real photo is a file in `assets/` plus an entry here (later, event photos from the admin).
  */
 import type { ImageMetadata } from 'astro';

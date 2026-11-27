@@ -1,5 +1,5 @@
 /**
- * Where everyone sits on the couch under the team credits, as percentages of the couch picture: the middle of
+ * Where everyone sits on the couch beside the team credits, as percentages of the couch picture: the middle of
  * each bird (or the popcorn) from the left, how far up its bottom edge is, and how wide it is. A bird moving seats
  * is changing its numbers here; another bird is one more entry.
  */

@@ -1,5 +1,5 @@
 /**
- * The birds on the couch under the team credits. Each time the credits light a new group of names (`GROUP_LIT`),
+ * The birds on the couch beside the team credits. Each time the credits light a new group of names (`GROUP_LIT`),
  * one bird reacts a moment later, never the same one twice in a row: a heart floats up over their head, they dip
  * into the popcorn and kernels fly out of the bucket, or they hop in their seat. With reduced motion they just
  * watch.
