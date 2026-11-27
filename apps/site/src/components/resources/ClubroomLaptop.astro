@@ -17,12 +17,23 @@ type Props = { content: typeof RESOURCES };
 const { content } = Astro.props;
 ---
 
-<div class="relative nav:w-(--laptop-width)">
+{/* Its full size where there is room, and narrower rather than cut off where there isn't. */}
+<div class="relative w-full nav:max-w-(--laptop-width) xl:w-(--laptop-width)">
   {/* The lid. */}
   <div
+    data-lid
     class="relative rounded-2xl border-6 border-muted bg-window px-2.5 pt-4 pb-2.5 shadow-(--shadow-float) nav:rounded-(--radius-lid) nav:border-8 nav:p-7"
   >
-    <span class="absolute top-1.5 left-1/2 size-1.5 -translate-x-1/2 rounded-full bg-line nav:top-2.5 nav:size-2" aria-hidden="true"
+    <span
+      data-camera
+      class="absolute top-1.5 left-1/2 size-1.5 -translate-x-1/2 rounded-full bg-line nav:top-2.5 nav:size-2"
+      aria-hidden="true"
+    ></span>
+    {/* The see-through tape Krill sticks over the camera, so nobody's watching. Shown by the script. */}
+    <span
+      data-camera-tape
+      class="absolute top-0.5 left-1/2 h-3 w-8 -translate-x-1/2 -rotate-6 rounded-xs bg-print/60 opacity-0 shadow-sm nav:top-1 nav:h-4 nav:w-12"
+      aria-hidden="true"
     ></span>
 
     <div data-screen class="relative overflow-hidden rounded-md bg-screen">
